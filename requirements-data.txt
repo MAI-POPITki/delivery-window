@@ -3,3 +3,7 @@
 -r requirements.txt
 rasterio==1.5.2
 pyproj==3.8.0
+# для М2: вырезки Sentinel-1 (scripts/s1_chips.py)
+pystac-client==0.9.1
+planetary-computer==1.0.0
+matplotlib==3.11.2
