@@ -42,18 +42,37 @@ def season_name(hy):
     return f"{hy - 1}/{str(hy)[2:]}"
 
 
-@st.cache_data(show_spinner=False)
-def fc_cached(pid, hy, day, kind):
+# версия данных входит в ключ кэша: после ежедневного обновления погоды (GitHub Actions)
+# дашборд пересчитает прогнозы сам, без перезапуска
+DATA_VER = FC.data_version()
+
+
+@st.cache_data(show_spinner=False, max_entries=5000)
+def _fc_cached(pid, hy, day, kind, ver):
     try:
         return FC.forecast(pid, hy, day, kind)
     except Exception as e:  # noqa: BLE001 — в дашборде показываем, а не падаем
         return {"error": str(e)}
 
 
-@st.cache_data(show_spinner=False)
-def fc_path(pid, hy, kind, days):
+def fc_cached(pid, hy, day, kind):
+    return _fc_cached(pid, hy, day, kind, DATA_VER)
+
+
+@st.cache_data(show_spinner=False, max_entries=500)
+def _fc_path(pid, hy, kind, days, ver):
     rows = [fc_cached(pid, hy, d, kind) for d in days]
     return pd.DataFrame([r for r in rows if r and "error" not in r])
+
+
+def fc_path(pid, hy, kind, days):
+    return _fc_path(pid, hy, kind, days, DATA_VER)
+
+
+@st.cache_data(show_spinner=False)
+def weather_until(ver):
+    from okno.paths import WEATHER
+    return pd.read_csv(WEATHER / "yakutsk_crossing.csv", usecols=["date"])["date"].max()
 
 
 def p_by(q, t):
@@ -67,6 +86,7 @@ def p_by(q, t):
 # ------------------------------------------------------------------ боковая панель
 st.sidebar.title("🧊 Окно завоза")
 st.sidebar.caption("Прогноз окон сезонных путей Якутии и график завоза. Открытые данные, без датчиков.")
+st.sidebar.caption(f"Погода ERA5 — по {pd.Timestamp(weather_until(DATA_VER)):%d.%m.%Y}, обновляется ежедневно.")
 today = dt.date.today()
 cur_hy = today.year + (1 if today.month >= 9 else 0)
 hy = st.sidebar.selectbox("Сезон", list(range(cur_hy, 1985, -1)), format_func=season_name, index=0)

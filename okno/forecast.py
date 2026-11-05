@@ -12,7 +12,7 @@ import pandas as pd
 
 from . import features as F
 from .ice import from_season_day, load_weather
-from .paths import MODELS, PROCESSED
+from .paths import MODELS, PROCESSED, WEATHER
 
 POINTS = {
     "yakutsk_crossing": {"name": "Переправа Якутск — Нижний Бестях", "lat": 62.0, "lon": 129.82,
@@ -48,23 +48,52 @@ def point_meta(point_id: str) -> dict:
     return {"name": g["name"], "lat": float(g["lat"]), "lon": float(g["lon"]), "is_satellite": 0, "gauge": code}
 
 
-@lru_cache(maxsize=None)
+def _mtime(path) -> float:
+    return path.stat().st_mtime if path.exists() else 0.0
+
+
+def _weather_path(point_id):
+    p = WEATHER / f"{point_id}.csv"
+    return p if p.exists() else WEATHER / "gauges" / f"{point_id}.csv"
+
+
+def data_version() -> float:
+    """Метка свежести данных: меняется, когда ежедневное обновление дописывает погоду
+    или переобучаются модели. Кэши ниже привязаны к ней, поэтому дашборд подхватывает
+    новые данные без перезапуска."""
+    files = list(WEATHER.glob("*.csv")) + list((WEATHER / "gauges").glob("*.csv")) + list(MODELS.glob("*"))
+    return max((_mtime(f) for f in files), default=0.0)
+
+
 def _model(kind):
+    return _model_v(kind, _mtime(MODELS / f"m1_{kind}.cbm"))
+
+
+@lru_cache(maxsize=None)
+def _model_v(kind, _ver):
     from catboost import CatBoostRegressor
     m = CatBoostRegressor()
     m.load_model(str(MODELS / f"m1_{kind}.cbm"))
     return m
 
 
-@lru_cache(maxsize=None)
 def _conformal(kind):
+    return _conformal_v(kind, _mtime(MODELS / f"m1_{kind}_conformal.json"))
+
+
+@lru_cache(maxsize=None)
+def _conformal_v(kind, _ver):
     import json
     p = MODELS / f"m1_{kind}_conformal.json"
     return json.loads(p.read_text())["correction_days"] if p.exists() else 0.0
 
 
-@lru_cache(maxsize=None)
 def _matrices(point_id):
+    return _matrices_v(point_id, _mtime(_weather_path(point_id)))
+
+
+@lru_cache(maxsize=32)
+def _matrices_v(point_id, _ver):
     w = load_weather(point_id)
     T_all = w.pivot_table(index="hydro_year", columns="season_day", values="t").reindex(columns=range(365))
     S_all = w.pivot_table(index="hydro_year", columns="season_day", values="snow_cm").reindex(columns=range(365))

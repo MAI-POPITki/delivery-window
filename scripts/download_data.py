@@ -80,34 +80,50 @@ def _get_weather_chunk(p, start, end, tries=8):
     raise RuntimeError(f"не удалось скачать погоду {p['id']} {start}–{end}")
 
 
+def default_end():
+    # архив Open-Meteo/ERA5 отстаёт от сегодняшнего дня на несколько суток
+    return (dt.date.today() - dt.timedelta(days=7)).isoformat()
+
+
+def update_point(p, out: Path, start: str, end: str):
+    """Скачивает ряд в файл; если файл уже есть — только недостающий хвост (для ежедневного обновления)."""
+    old = pd.read_csv(out) if out.exists() else None
+    p_start = start
+    if old is not None:
+        last = pd.Timestamp(old["date"].max())
+        if last >= pd.Timestamp(end) - pd.Timedelta(days=1):
+            log(f"погода {p['id']}: актуальна (до {last.date()})")
+            return
+        p_start = (last + pd.Timedelta(days=1)).date().isoformat()
+    parts = []
+    for chunk_start in range(int(p_start[:4]), int(end[:4]) + 1, 10):  # куски по 10 лет: длинные запросы сервер обрывает
+        c_start = max(p_start, f"{chunk_start}-01-01")
+        c_end = min(end, f"{chunk_start + 9}-12-31")
+        parts.append(_get_weather_chunk(p, c_start, c_end))
+        time.sleep(3)
+    df = pd.concat(parts, ignore_index=True)
+    df.insert(0, "point_id", p["id"])
+    df["source"] = "ERA5 via Open-Meteo archive API"
+    df = df.dropna(subset=["temperature_2m_mean"])  # самые свежие дни архив иногда отдаёт пустыми
+    if old is not None:
+        df = pd.concat([old, df], ignore_index=True).drop_duplicates("date", keep="last")
+    df.to_csv(out, index=False)
+    log(f"погода {p['id']}: {len(df)} дней, до {df['date'].max()}")
+    time.sleep(2)
+
+
 def download_weather(start="1979-01-01", end=None):
-    end = end or (dt.date.today() - dt.timedelta(days=7)).isoformat()
+    end = end or default_end()
     out_dir = DATA / "weather"
     out_dir.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(POINTS).to_csv(DATA / "points.csv", index=False)
     for p in POINTS:
         if p["kind"] == "city":  # та же ячейка ERA5, что и переправа
             continue
-        out = out_dir / f"{p['id']}.csv"
-        if out.exists():
-            log(f"погода {p['id']}: уже есть, пропускаю")
-            continue
-        parts = []
         # Open-Meteo считает длинные запросы за много вызовов (лимит ~5000 в час с одного IP),
         # поэтому полный ряд с 1979 года берём только для переправы, для районов — с 2000 года
         p_start = start if p["kind"] == "crossing" else "2000-01-01"
-        y0, y1 = int(p_start[:4]), int(end[:4])
-        for chunk_start in range(y0, y1 + 1, 10):  # куски по 10 лет: длинные запросы сервер обрывает
-            c_start = max(p_start, f"{chunk_start}-01-01")
-            c_end = min(end, f"{chunk_start + 9}-12-31")
-            parts.append(_get_weather_chunk(p, c_start, c_end))
-            time.sleep(3)
-        df = pd.concat(parts, ignore_index=True)
-        df.insert(0, "point_id", p["id"])
-        df["source"] = "ERA5 via Open-Meteo archive API"
-        df.to_csv(out, index=False)
-        log(f"погода {p['id']}: {len(df)} дней, {df['date'].min()} — {df['date'].max()}")
-        time.sleep(2)
+        update_point(p, out_dir / f"{p['id']}.csv", p_start, end)
 
 
 HYDRO_DOI = "doi:10.18739/A22Z12Q02"  # новая версия набора doi:10.18739/A2PW9R
@@ -146,30 +162,8 @@ def download_gauge_weather(start="1979-01-01", end=None):
     out_dir = DATA / "weather" / "gauges"
     out_dir.mkdir(parents=True, exist_ok=True)
     for code in GAUGE_PRIORITY:
-        out = out_dir / f"gauge_{code}.csv"
-        old = pd.read_csv(out) if out.exists() else None
-        g_start = start
-        if old is not None:
-            last = pd.Timestamp(old["date"].max())
-            if last >= pd.Timestamp(end) - pd.Timedelta(days=3):
-                log(f"погода поста {code}: уже есть, пропускаю")
-                continue
-            g_start = (last + pd.Timedelta(days=1)).date().isoformat()
         p = {"id": f"gauge_{code}", "lat": float(st.loc[code, "Lat"]), "lon": float(st.loc[code, "Long"])}
-        parts = []
-        for chunk_start in range(int(g_start[:4]), int(end[:4]) + 1, 10):
-            c_start = max(g_start, f"{chunk_start}-01-01")
-            c_end = min(end, f"{chunk_start + 9}-12-31")
-            parts.append(_get_weather_chunk(p, c_start, c_end))
-            time.sleep(3)
-        df = pd.concat(parts, ignore_index=True)
-        df.insert(0, "point_id", p["id"])
-        df["source"] = "ERA5 via Open-Meteo archive API"
-        if old is not None:
-            df = pd.concat([old, df], ignore_index=True).drop_duplicates("date", keep="last")
-        df.to_csv(out, index=False)
-        log(f"погода поста {code}: {len(df)} дней, до {df['date'].max()}")
-        time.sleep(2)
+        update_point(p, out_dir / f"gauge_{code}.csv", start, end)
 
 
 # ---------------------------------------------------------------- лёд (спутник)
