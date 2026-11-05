@@ -1,0 +1,36 @@
+Attributes of gauges		
+Code			Official Roshydromet station code	
+Point_ID		Point_ID in accordance with monthly discharge dataset R-ArcticNET http://www.r-arcticnet.sr.unh.edu/v4.0/index.html	
+Name			Name of river and gauge	
+Lat			Latitude	
+Long			Longitude	
+DArea			Drainage Area	
+Region			Administrative Region	
+BasinName		Basin of Larger River	
+Mean_elevation_watershed		
+DistanceToOutlet	Distance to outlet according to Roshydromet	
+Gauge_altitude		Gauge altitude according to Roshydromet 	
+		
+		
+Data		
+Month	Day 	
+October	5	Ice thickness in centimeters on 5th or 10th days of each month from October to May
+	10	Ice thickness in centimeters on 5th or 10th days of each month from October to May
+	15	Ice thickness in centimeters on 5th or 10th days of each month from October to May
+	20	Ice thickness in centimeters on 5th or 10th days of each month from October to May
+	25	Ice thickness in centimeters on 5th or 10th days of each month from October to May
+	31	Ice thickness in centimeters on 5th or 10th days of each month from October to May
+May	5	Ice thickness in centimeters on 5th or 10th days of each month from October to May
+	10	Ice thickness in centimeters on 5th or 10th days of each month from October to May
+	15	Ice thickness in centimeters on 5th or 10th days of each month from October to May
+	20	Ice thickness in centimeters on 5th or 10th days of each month from October to May
+	25	Ice thickness in centimeters on 5th or 10th days of each month from October to May
+	31	Ice thickness in centimeters on 5th or 10th days of each month from October to May
+
+Start of first ice		DD/MM/YYYY	Date of first ice conditions on river (e.g. frazil ice or other)
+Start of ice cover (freeze-up)	DD/MM/YYYY	Biginning of continuous ice cover (freeze-up)
+Start of ice melt		DD/MM/YYYY	Beginning of ice conditions different from continuous ice cover (e.g open water near banks due to water level rise or other) 
+Start of ice drift		DD/MM/YYYY	Beginning of ice drifting 
+End of ice			DD/MM/YYYY	End of all ice conditions on the river
+			
+Year is given in left colomn 		

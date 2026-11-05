@@ -1,0 +1,9 @@
+pandas==3.1.1
+numpy==2.5.4
+requests==2.34.2
+catboost==1.2.10
+streamlit==1.66.1
+plotly==7.1.0
+# только для пересчёта спутниковых слоёв из GeoTIFF (scripts/download_data.py --extract-only)
+rasterio==1.5.2
+pyproj==3.8.0

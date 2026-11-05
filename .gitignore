@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.streamlit/secrets.toml
+.idea/
+.vscode/
+# большой дневной архив Zenodo, если кто-то скачает
+data/raw/*.zip
+.claude/

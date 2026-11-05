@@ -1,0 +1,32 @@
+Code,Point_ID,Name,Lat,Long,DArea,Region,BasinName,Mean_elevation_watershed,DistanceToOutlet,Gauge_altitude
+11558,7112,Poluy At Poluy,66.03,68.73,15100,Yamalo-Nenetskiy Okrug,Ob,70,189,5.67
+11574,7118,Pyaku-Pur At Tarko-Sale,64.93,77.8,31400,Yamalo-Nenetskiy Okrug,Taz,90,2.9,15.25
+3003,6137,Lena At Kachug,53.97,105.88,17400,Irkutskaya Obl,Lena,880,3968,506.05
+3074,6157,Kuta At Novo-Il'inka (st. ruchei),56.85,105.07,11200,Irkutskaya Obl,Lena,510,52,305.12
+3087,6165,Kirenga At Shorokhovo,57.63,108.12,46500,Irkutskaya Obl,Lena,790,18,254.24
+3156,6209,Nuya At Kurum,60.27,114.73,32600,Respublika Sakha (Yakutiya),Lena,390,132,173.14
+3157,6210,Bolshoi Patom At Patoma,60.17,116.8,27600,Respublika Sakha (Yakutiya),Lena,770,34,162.58
+3198,6222,Zhuya At Svetlui,58.42,116.02,4790,Irkutskaya Obl,Lena,950,252,401
+3202,6224,Namana At Mekimdya,60.9,120.8,16600,Respublika Sakha (Yakutiya),Lena,290,35,139.68
+3210,6228,Botoma At Brolog,61.05,128.65,12200,Respublika Sakha (Yakutiya),Lena,370,39,111.01
+3219,6232,Aldan At Tommot,58.97,126.27,49500,Respublika Sakha (Yakutiya),Lena,810,1604,272.62
+3248,6242,Timpton At Ust'-Timpton,58.65,127.05,43700,Respublika Sakha (Yakutiya),Lena,1010,20,261.12
+3277,6250,Allakh-Un' At Allakh,60.68,135.03,24200,Respublika Sakha (Yakutiya),Lena,900,16,45.46
+3403,6289,Malaya Kuonapka At Dzhalinda,70.13,113.97,20300,Respublika Sakha (Yakutiya),Anabar,182,103,30.97
+3414,6293,Yana At Verkhoyansk,67.34,133.38,45300,Respublika Sakha (Yakutiya),Yana,740,850,124.91
+3483,6302,Butantai At Asar,68.62,134.12,40000,Respublika Sakha (Yakutiya),Yana,750,20,79.74
+3489,6304,Indigirka At Indigirsky,64.53,143.12,83500,Respublika Sakha (Yakutiya),Indigirka,1240,1412,482.01
+3507,6307,Al'gi At 5.0 km above the mouth,64.4,142,17600,Respublika Sakha (Yakutiya),Indigirka,1140,42,593.83
+3518,6308,Nera At Ala-Chubuk,64.43,144.37,22300,Respublika Sakha (Yakutiya),Indigirka,1150,65,568.25
+70043,7345,Kodina At Kodino,63.72,39.62,1800,Arkhangelskaya Obl,Onega,81,86,25
+70047,7346,Solza At Sukhie Porogy,64.38,39.4,1190,Arkhangelskaya Obl,Solza,142,39,77.41
+70275,7421,Vaga At Philyaevskaya,61.12,42.18,13200,Arkhangelskaya Obl,Dvina,164,349,59.7
+70302,7434,Lel' At Zeleninskaya,62.25,42.67,2240,Arkhangelskaya Obl,Dvina,95,42,31.03
+70334,7443,Pinega At Kulogory,64.72,43.48,36700,Arkhangelskaya Obl,Dvina,132,125,12.84
+70366,7462,Kuloy At Kuloy,64.97,43.52,3040,Arkhangelskaya Obl,Dvina,84,209,11.18
+70378,7467,Mezen At Makarib,63.63,49.45,6450,Respublika Komi,Mezen,212,681,102.95
+9372,6606,Bol'shoy Pit At Bryanka,59.12,93.48,15100,Krasnoyarskiy Krai,Yenisei,482,184,144.89
+9380,6609,Kas At Alexandrovskiy,59.42,89.3,7640,Krasnoyarskiy Krai,Yenisei,152,197,89.06
+9384,6610,Syum At Syum,60.35,88.33,22800,Krasnoyarskiy Krai,Yenisei,143,215,71.42
+9422,6631,Yerachimo At Bol'shoy Porog,65.65,90.12,9100,Krasnoyarskiy Krai,Yenisei,375,7,42.81
+9425,6632,Turukhan At Yanov Stan,65.98,84.27,10100,Krasnoyarskiy Krai,Yenisei,70,277,11.92

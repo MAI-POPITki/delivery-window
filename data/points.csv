@@ -1,0 +1,11 @@
+id,name,lat,lon,kind
+yakutsk_crossing,Переправа Якутск — Нижний Бестях,62.0,129.82,crossing
+yakutsk,Якутск,62.03,129.73,city
+zhigansk,Жиганск,66.77,123.37,district
+olenek,Оленёк,68.5,112.43,district
+saskylakh,Саскылах,71.95,114.08,district
+tiksi,Тикси,71.64,128.87,district
+batagay,Батагай,67.65,134.63,district
+chokurdakh,Чокурдах,70.62,147.9,district
+zyryanka,Зырянка,65.73,150.89,district
+chersky,Черский,68.75,161.33,district
