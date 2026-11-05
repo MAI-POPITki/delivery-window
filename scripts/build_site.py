@@ -29,12 +29,12 @@ def fmt(x, nd=0):
     return f"{x:,.{nd}f}".replace(",", " ").replace(".", ",")
 
 
-def fig_html(fig, first=False):
+def fig_html(fig, div_id, first=False):
     fig.update_layout(template="plotly_white", font=dict(family="Inter, Arial, sans-serif", size=13),
                       margin=dict(l=10, r=10, t=40, b=10), height=360,
                       legend=dict(orientation="h", y=-0.18), paper_bgcolor="rgba(0,0,0,0)",
                       plot_bgcolor="rgba(0,0,0,0)")
-    return fig.to_html(full_html=False, include_plotlyjs="cdn" if first else False,
+    return fig.to_html(full_html=False, include_plotlyjs="cdn" if first else False, div_id=div_id,
                        config={"displaylogo": False, "responsive": True})
 
 
@@ -132,14 +132,14 @@ a{{color:var(--accent)}} ul{{padding-left:20px;margin:6px 0}}
 
 <section><h2>Точность прогноза</h2>
 <p class="muted">Проверка на сезонах, которых модель не видела. Календарь — средняя дата за прошлые 10 сезонов: так планируют сейчас.</p>
-{fig_html(g1, first=True)}
+{fig_html(g1, "chart-accuracy", first=True)}
 <p>Открытие (лёд держит 20 т) модель прогнозирует заметно точнее календаря: от года к году эта дата гуляет на ~20 дней,
 и физика морозов это объясняет. Начало таяния гуляет всего на ~7 дней и зависит от погоды апреля — тут модель на уровне календаря.</p>
 </section>
 
 <section><h2>«До» и «после» на прошлых сезонах</h2>
 <p class="muted">Зимник на Батагай (Верхоянский арктический район). Фактические даты закрытия — по замерам гидропоста «Яна — Верхоянск».</p>
-{fig_html(g2)}
+{fig_html(g2, "chart-before-after")}
 <p>Вывод «после лучше, чем до» держится в <b>{robust:.0%}</b> вариантов, когда каждое экономическое допущение меняется на ±30%.</p>
 <div class="note"><b>Честно о результате.</b> Экономию на закрытии даёт переход от одной календарной даты к распределению
 возможных дат: тот же планировщик на разбросе прошлых лет работает не хуже. Тарифы и объёмы — объявленная синтетика,
