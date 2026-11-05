@@ -22,15 +22,18 @@ import okno.calib
 import okno.features
 import okno.forecast
 import okno.ice
+import okno.m1
 import okno.paths
 import okno.planner
+import okno.regions
 import okno.report
 
 # Streamlit перезапускает этот скрипт при каждом изменении, но уже импортированные модули okno
 # остаются в памяти процесса. На Streamlit Cloud после пуша это даёт смесь нового скрипта и
 # старых модулей (AttributeError). Поэтому перезагружаем модули, чьи файлы изменились;
 # порядок — от зависимостей к зависимым.
-_MODS = (okno.paths, okno.report, okno.ice, okno.calib, okno.features, okno.planner, okno.forecast)
+_MODS = (okno.paths, okno.regions, okno.report, okno.ice, okno.calib, okno.features, okno.planner, okno.m1,
+         okno.forecast)
 if any(getattr(m, "_loaded_mtime", None) != os.path.getmtime(m.__file__) for m in _MODS):
     for _mod in _MODS:  # модули берут функции друг у друга по имени — перезагружаем всю цепочку
         importlib.reload(_mod)
@@ -44,18 +47,14 @@ from okno.planner import Params, calendar_plan, plan_week_volumes, sample_quanti
 st.set_page_config(page_title="Окно завоза", page_icon="🧊", layout="wide")
 
 # ------------------------------------------------------------------ данные
-WEATHER_POINTS = ["yakutsk_crossing"] + [
-    f"gauge_{c}" for c in pd.read_csv(PROCESSED / "gauges.csv").query("yakutia").gauge_code
-    if (Path(PROCESSED).parent / "weather" / "gauges" / f"gauge_{c}.csv").exists()
-]
-LABELS = {"yakutsk_crossing": "Переправа Якутск — Нижний Бестях (Лена)",
-          "gauge_3414": "Зимник на Батагай · Яна — Верхоянск"}
+from okno.regions import REGIONS, label  # noqa: E402
 
 
-def label(pid):
-    if pid in LABELS:
-        return LABELS[pid]
-    return "Гидропост · " + FC.point_meta(pid)["name"].replace(" At ", " — ")
+def region_points(key):
+    """Точки региона, для которых есть погода (иначе прогноз не посчитать)."""
+    r = REGIONS[key]
+    pts = list(r["extra_points"]) + [f"gauge_{c}" for c in r["gauges"]]
+    return [p for p in pts if FC._weather_path(p).exists()]
 
 
 def season_name(hy):
@@ -105,7 +104,10 @@ def p_by(q, t):
 
 # ------------------------------------------------------------------ боковая панель
 st.sidebar.title("🧊 Окно завоза")
-st.sidebar.caption("Прогноз окон сезонных путей Якутии и график завоза. Открытые данные, без датчиков.")
+st.sidebar.caption("Прогноз окон сезонных путей и график завоза. Открытые данные, без датчиков.")
+region = st.sidebar.selectbox("Регион", list(REGIONS), format_func=lambda k: REGIONS[k]["name"])
+st.sidebar.caption(REGIONS[region]["note"])
+WEATHER_POINTS = region_points(region)
 st.sidebar.caption(f"Погода ERA5 — по {pd.Timestamp(weather_until(DATA_VER)):%d.%m.%Y}, обновляется ежедневно.")
 today = dt.date.today()
 cur_hy = today.year + (1 if today.month >= 9 else 0)
@@ -115,8 +117,9 @@ default_date = min(today, dt.date(hy, 5, 31)) if hy == cur_hy else dt.date(hy, 3
 issue_date = st.sidebar.date_input("Дата решения", value=default_date,
                                    min_value=dt.date(hy - 1, 10, 1), max_value=dt.date(hy, 6, 15))
 issue_day = int(to_season_day(issue_date, hy))
+_dflt = REGIONS[region]["default"]
 pid = st.sidebar.selectbox("Путь", WEATHER_POINTS, format_func=label,
-                           index=WEATHER_POINTS.index("gauge_3414") if "gauge_3414" in WEATHER_POINTS else 0)
+                           index=WEATHER_POINTS.index(_dflt) if _dflt in WEATHER_POINTS else 0)
 horizon = st.sidebar.slider("Горизонт N, дней", 7, 60, 14, 7)
 margin = st.sidebar.slider("Запас до таяния при закрытии, сут", 0, 35, 21,
                            help="Путь закрывают раньше физического начала таяния: ограничения массы, "
@@ -150,7 +153,8 @@ with tabs[0]:
     fmap = go.Figure(go.Scattermap(
         lat=pts.lat, lon=pts.lon, mode="markers", text=pts.txt, hoverinfo="text",
         marker=dict(size=16, color=pts.color, opacity=0.9)))
-    fmap.update_layout(map=dict(style="carto-voyager", center=dict(lat=65, lon=132), zoom=2.6),
+    _c = REGIONS[region]["center"]
+    fmap.update_layout(map=dict(style="carto-voyager", center=dict(lat=_c[0], lon=_c[1]), zoom=REGIONS[region]["zoom"]),
                        margin=dict(l=0, r=0, t=0, b=0), height=520, showlegend=False)
     st.plotly_chart(fmap, width="stretch", config={"scrollZoom": True, "displaylogo": False})
     st.caption("Цвет: зелёный ≥ 80%, оранжевый 50–80%, красный < 50%, серый — нет данных для прогноза. "

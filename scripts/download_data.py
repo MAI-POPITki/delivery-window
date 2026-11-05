@@ -30,6 +30,9 @@ from pathlib import Path
 import pandas as pd
 import requests
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from okno.regions import all_gauges  # noqa: E402 — посты всех подтверждённых регионов
+
 DATA = Path(__file__).resolve().parent.parent / "data"
 RAW = DATA / "raw"
 
@@ -120,6 +123,18 @@ def update_point(p, out: Path, start: str, end: str):
     time.sleep(2)
 
 
+FAILED = []
+
+
+def safe_update(p, out, start, end):
+    """Сбой на одной точке не останавливает загрузку остальных; недокачанное подтянется в следующий раз."""
+    try:
+        update_point(p, out, start, end)
+    except Exception as e:  # noqa: BLE001
+        FAILED.append(p["id"])
+        log(f"погода {p['id']}: НЕ скачана ({e}); пропускаю, докачается при следующем запуске")
+
+
 def download_weather(start="1979-01-01", end=None):
     end = end or default_end()
     out_dir = DATA / "weather"
@@ -131,7 +146,7 @@ def download_weather(start="1979-01-01", end=None):
         # Open-Meteo считает длинные запросы за много вызовов (лимит ~5000 в час с одного IP),
         # поэтому полный ряд с 1979 года берём только для переправы, для районов — с 2000 года
         p_start = start if p["kind"] == "crossing" else "2000-01-01"
-        update_point(p, out_dir / f"{p['id']}.csv", p_start, end)
+        safe_update(p, out_dir / f"{p['id']}.csv", p_start, end)
 
 
 HYDRO_DOI = "doi:10.18739/A22Z12Q02"  # новая версия набора doi:10.18739/A2PW9R
@@ -176,9 +191,9 @@ def download_gauge_weather(start="1979-01-01", end=None, codes=None):
     st = st.set_index("Code")
     out_dir = DATA / "weather" / "gauges"
     out_dir.mkdir(parents=True, exist_ok=True)
-    for code in (codes or GAUGE_PRIORITY):
+    for code in (codes or all_gauges()):
         p = {"id": f"gauge_{code}", "lat": float(st.loc[code, "Lat"]), "lon": float(st.loc[code, "Long"])}
-        update_point(p, out_dir / f"gauge_{code}.csv", start, end)
+        safe_update(p, out_dir / f"gauge_{code}.csv", start, end)
 
 
 # ---------------------------------------------------------------- лёд (спутник)
@@ -281,4 +296,6 @@ if __name__ == "__main__":
         download_ice()
     if a.ice or a.extract_only or everything:
         extract_ice_points()
+    if FAILED:
+        log(f"не скачано: {', '.join(FAILED)} — остальное обновлено")
     log("готово.")
