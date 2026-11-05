@@ -80,6 +80,30 @@ def main():
     ])
     g2.update_layout(title="Недовезено до закрытия зимника, т (бэктест по прошлым сезонам)", barmode="group")
 
+    # график 3: переносимость — модель обучена только на Якутии
+    transfer_html = ""
+    tf = REPORTS / "transfer_m1.csv"
+    if tf.exists():
+        t = pd.read_csv(tf)
+        t = t[(t["событие"].str.startswith("открытие")) & (t["сценарий"].str.startswith("B"))]
+        t = t[t["регион"] != "все регионы"].sort_values("выигрыш_%")
+        g3 = go.Figure([
+            go.Bar(name="Календарь", y=t["регион"], x=t["MAE_календарь"], orientation="h", marker_color=GREY),
+            go.Bar(name="М1, обученная только на Якутии", y=t["регион"], x=t["MAE_М1"], orientation="h",
+                   marker_color=BLUE),
+        ])
+        g3.update_layout(title="Открытие в других регионах: средняя ошибка за 14 дней, сут", barmode="group")
+        allr = pd.read_csv(tf)
+        allr = allr[(allr["регион"] == "все регионы") & allr["событие"].str.startswith("открытие")
+                    & allr["сценарий"].str.startswith("B")].iloc[0]
+        transfer_html = f"""<section><h2>Работает ли в других регионах</h2>
+<p class="muted">Модель обучена только на Якутии и проверена на гидропостах ЯНАО, Красноярского края, Иркутской и
+Архангельской областей и Коми — без переобучения и без местных замеров толщины льда.</p>
+{fig_html(g3, "chart-transfer")}
+<p>Прогноз открытия в чужих регионах точнее календаря на <b>{fmt(allr['выигрыш_%'])}%</b>. Прогноз закрытия без
+местной донастройки не переносится, а на единственном посту Коми модель хуже календаря — это тоже показываем.
+<a href="{REPO_URL}/blob/main/reports/transferability.md">Подробный разбор</a>.</p></section>"""
+
     kpi_html = "".join(f'<div class="kpi"><div class="v">{html.escape(v)}</div><div class="l">{html.escape(l)}</div></div>'
                        for v, l in kpis)
     dash = (f'<a class="btn" href="{DASHBOARD_URL}">Открыть живой дашборд</a>' if DASHBOARD_URL else
@@ -145,6 +169,8 @@ a{{color:var(--accent)}} ul{{padding-left:20px;margin:6px 0}}
 возможных дат: тот же планировщик на разбросе прошлых лет работает не хуже. Тарифы и объёмы — объявленная синтетика,
 поэтому рубли — иллюстрация, а устойчивый результат — направление и порядок эффекта.</div>
 </section>
+
+{transfer_html}
 
 <section><h2>Чтобы стало рабочим</h2><ul>
 <li>Фактические даты открытия и закрытия зимников из приказов Управтодора РС(Я) за 10–15 лет.</li>

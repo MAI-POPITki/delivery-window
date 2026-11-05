@@ -75,8 +75,16 @@ def _get_weather_chunk(p, start, end, tries=8):
             log(f"  {p['id']} {start[:4]}: лимит запросов, жду")
             time.sleep(30 * (attempt + 1))
             continue
+        if r.status_code >= 500:  # сервер временно недоступен
+            log(f"  {p['id']} {start[:4]}: ошибка сервера {r.status_code}, повтор {attempt + 1}")
+            time.sleep(20 * (attempt + 1))
+            continue
         r.raise_for_status()
-        return pd.DataFrame(r.json()["daily"]).rename(columns={"time": "date"})
+        try:
+            return pd.DataFrame(r.json()["daily"]).rename(columns={"time": "date"})
+        except (ValueError, KeyError):  # пустой или битый ответ — бывает под нагрузкой
+            log(f"  {p['id']} {start[:4]}: битый ответ, повтор {attempt + 1}")
+            time.sleep(20 * (attempt + 1))
     raise RuntimeError(f"не удалось скачать погоду {p['id']} {start}–{end}")
 
 
@@ -153,7 +161,14 @@ def download_hydro():
 GAUGE_PRIORITY = [3414, 3210, 3483, 3219, 3202, 3156, 3157, 3248, 3277, 3403, 3489, 3507, 3518]
 
 
-def download_gauge_weather(start="1979-01-01", end=None):
+# Посты вне Якутии — для проверки переносимости метода на другие регионы
+# (ЯНАО, Красноярский край, Иркутская и Архангельская обл., Коми); ряд только до 2012 —
+# дальше замеров нет.
+GAUGE_OTHER = [11558, 11574, 9425, 9422, 9372, 9380, 9384, 3003, 3074, 3087, 3198,
+               70334, 70378, 70275, 70302, 70366, 70043, 70047]
+
+
+def download_gauge_weather(start="1979-01-01", end=None, codes=None):
     """Погода в точках постов. Если файл уже есть — докачивает только недостающий хвост
     (ряд нужен до сегодняшнего дня для живого прогноза текущего сезона)."""
     end = end or (dt.date.today() - dt.timedelta(days=7)).isoformat()
@@ -161,7 +176,7 @@ def download_gauge_weather(start="1979-01-01", end=None):
     st = st.set_index("Code")
     out_dir = DATA / "weather" / "gauges"
     out_dir.mkdir(parents=True, exist_ok=True)
-    for code in GAUGE_PRIORITY:
+    for code in (codes or GAUGE_PRIORITY):
         p = {"id": f"gauge_{code}", "lat": float(st.loc[code, "Lat"]), "lon": float(st.loc[code, "Long"])}
         update_point(p, out_dir / f"gauge_{code}.csv", start, end)
 
@@ -250,13 +265,16 @@ if __name__ == "__main__":
     ap.add_argument("--extract-only", action="store_true")
     ap.add_argument("--gauges", action="store_true", help="погода ERA5 для якутских гидропостов 1979–2012")
     ap.add_argument("--hydro", action="store_true", help="замеры льда на гидропостах (Arctic Data Center)")
+    ap.add_argument("--gauges-other", action="store_true", help="погода для постов вне Якутии (тест переносимости)")
     a = ap.parse_args()
-    everything = not (a.weather or a.ice or a.extract_only or a.gauges or a.hydro)
+    everything = not (a.weather or a.ice or a.extract_only or a.gauges or a.hydro or a.gauges_other)
     DATA.mkdir(exist_ok=True)
     if a.weather or everything:
         download_weather()
     if a.hydro or everything:
         download_hydro()
+    if a.gauges_other:
+        download_gauge_weather(end="2012-12-31", codes=GAUGE_OTHER)
     if a.gauges or everything:
         download_gauge_weather()
     if a.ice or everything:

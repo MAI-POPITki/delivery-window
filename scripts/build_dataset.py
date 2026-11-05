@@ -62,6 +62,9 @@ def quality_flags(row) -> list[str]:
         f.append("ледоход_вне_мар-июн")
     if pd.notna(fz) and pd.notna(dr) and not (120 <= dr - fz <= 280):
         f.append("длительность_ледостава_вне_120-280")
+    for e, d in present:  # дата вообще не из этого сезона (артефакты вида 1900-01-03, год с опечаткой)
+        if not (-30 <= d <= 330):
+            f.append(f"дата_вне_сезона:{e}")
     for e in order:
         raw = row.get(f"{e}_raw")
         if isinstance(raw, str) and raw.strip() and pd.isna(row.get(f"{e}_day")):

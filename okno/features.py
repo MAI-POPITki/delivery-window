@@ -161,13 +161,17 @@ def point_rows(point_id, meta, targets: pd.DataFrame, alphas: dict, kind: str):
     return rows
 
 
-def build_m1_dataset(kind: str) -> pd.DataFrame:
+def build_m1_dataset(kind: str, codes=None, include_sat: bool = True,
+                     local_alpha: bool = True) -> pd.DataFrame:
+    """codes — гидропосты (по умолчанию все якутские); local_alpha=False — коэффициент Стефана
+    общий по Якутии, как для нового региона без замеров толщины."""
     seasons = pd.read_csv(PROCESSED / "hydro_ice_seasons.csv")
     thick = pd.read_csv(PROCESSED / "hydro_ice_thickness.csv")
     gauges = pd.read_csv(PROCESSED / "gauges.csv")
     col = f"open_{OPEN_LOAD_T}t_day" if kind == "open" else "melt_start_day"
+    sel = gauges[gauges.yakutia] if codes is None else gauges[gauges.gauge_code.isin(codes)]
     rows = []
-    for g in gauges[gauges.yakutia].itertuples():
+    for g in sel.itertuples():
         pid = f"gauge_{g.gauge_code}"
         try:
             load_weather(pid)
@@ -178,9 +182,9 @@ def build_m1_dataset(kind: str) -> pd.DataFrame:
                          index=s["hydro_year"].to_numpy())
         if t["target_day"].notna().sum() < 10:
             continue
-        alphas = alpha_by_year(g.gauge_code, seasons, thick, t.index) if kind == "open" else {}
+        alphas = alpha_by_year(g.gauge_code, seasons, thick, t.index) if kind == "open" and local_alpha else {}
         rows += point_rows(pid, {"lat": g.lat, "lon": g.lon}, t, alphas, kind)
-    if kind == "close":
+    if kind == "close" and include_sat:
         sat = pd.read_csv(PROCESSED / "yakutsk_sat_seasons.csv")
         t = pd.DataFrame({"target_day": sat["sat_breakup_day"].to_numpy(),
                           "freezeup_day": sat["sat_freezeup_day"].to_numpy()}, index=sat["hydro_year"].to_numpy())
