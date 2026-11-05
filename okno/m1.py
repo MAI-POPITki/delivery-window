@@ -74,8 +74,13 @@ LEAD_BUCKETS = {"7": (4, 10), "14": (11, 17), "28": (25, 31)}
 
 def metrics(bt: pd.DataFrame) -> pd.DataFrame:
     rows = []
-    groups = {"гидропосты (замеры)": bt[bt.is_satellite == 0],
+    reg = bt["region"] if "region" in bt.columns else pd.Series("yakutia", index=bt.index)
+    groups = {"гидропосты (замеры)": bt[(bt.is_satellite == 0) & (reg == "yakutia")],
               "переправа Якутск (спутник)": bt[bt.is_satellite == 1]}
+    from .regions import REGIONS
+    for key, r in REGIONS.items():  # остальные регионы — отдельными строками
+        if key != "yakutia":
+            groups[f"{r['name']} (гидропосты)"] = bt[(bt.is_satellite == 0) & (reg == key)]
     for gname, g in groups.items():
         if g.empty:
             continue

@@ -23,6 +23,7 @@ import pandas as pd
 from okno import m1
 from okno.features import build_m1_dataset
 from okno.paths import MODELS, PROCESSED, REPORTS
+from okno.regions import all_gauges, region_of
 from okno.report import md_table
 
 
@@ -31,7 +32,9 @@ def main():
     MODELS.mkdir(exist_ok=True)
     all_metrics = []
     for kind in ("open", "close"):
-        df = build_m1_dataset(kind)
+        # одна общая модель на все подтверждённые регионы (okno/regions.py)
+        df = build_m1_dataset(kind, codes=all_gauges())
+        df["region"] = df.point_id.map(region_of)
         df.to_csv(PROCESSED / f"m1_dataset_{kind}.csv", index=False)
         print(f"{kind}: {len(df)} строк, точек {df.point_id.nunique()}, сезонов {df.hydro_year.nunique()}")
         bt = m1.backtest(df, kind)

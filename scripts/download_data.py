@@ -30,6 +30,9 @@ from pathlib import Path
 import pandas as pd
 import requests
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from okno.regions import all_gauges  # noqa: E402 — посты всех подтверждённых регионов
+
 DATA = Path(__file__).resolve().parent.parent / "data"
 RAW = DATA / "raw"
 
@@ -120,6 +123,18 @@ def update_point(p, out: Path, start: str, end: str):
     time.sleep(2)
 
 
+FAILED = []
+
+
+def safe_update(p, out, start, end):
+    """Сбой на одной точке не останавливает загрузку остальных; недокачанное подтянется в следующий раз."""
+    try:
+        update_point(p, out, start, end)
+    except Exception as e:  # noqa: BLE001
+        FAILED.append(p["id"])
+        log(f"погода {p['id']}: НЕ скачана ({e}); пропускаю, докачается при следующем запуске")
+
+
 def download_weather(start="1979-01-01", end=None):
     end = end or default_end()
     out_dir = DATA / "weather"
@@ -131,7 +146,7 @@ def download_weather(start="1979-01-01", end=None):
         # Open-Meteo считает длинные запросы за много вызовов (лимит ~5000 в час с одного IP),
         # поэтому полный ряд с 1979 года берём только для переправы, для районов — с 2000 года
         p_start = start if p["kind"] == "crossing" else "2000-01-01"
-        update_point(p, out_dir / f"{p['id']}.csv", p_start, end)
+        safe_update(p, out_dir / f"{p['id']}.csv", p_start, end)
 
 
 HYDRO_DOI = "doi:10.18739/A22Z12Q02"  # новая версия набора doi:10.18739/A2PW9R
@@ -176,9 +191,47 @@ def download_gauge_weather(start="1979-01-01", end=None, codes=None):
     st = st.set_index("Code")
     out_dir = DATA / "weather" / "gauges"
     out_dir.mkdir(parents=True, exist_ok=True)
-    for code in (codes or GAUGE_PRIORITY):
+    for code in (codes or all_gauges()):
         p = {"id": f"gauge_{code}", "lat": float(st.loc[code, "Lat"]), "lon": float(st.loc[code, "Long"])}
-        update_point(p, out_dir / f"gauge_{code}.csv", start, end)
+        safe_update(p, out_dir / f"gauge_{code}.csv", start, end)
+
+
+# ---------------------------------------------------------------- оперативная погода
+OPEN_METEO_FORECAST = "https://api.open-meteo.com/v1/forecast"
+
+
+def download_recent(past_days=14, forecast_days=16):
+    """Последние дни (архив ERA5 отстаёт на ~неделю) и прогноз на 16 дней из оперативного API Open-Meteo.
+    Перезаписывается при каждом запуске; в обучении не участвует — только в живом прогнозе."""
+    out_dir = DATA / "weather_recent"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    st = pd.read_csv(RAW / "hydro_ice" / "River_ice_station_attributes.csv").set_index("Code")
+    pts = [p for p in POINTS if p["kind"] != "city"] + [
+        {"id": f"gauge_{c}", "lat": float(st.loc[c, "Lat"]), "lon": float(st.loc[c, "Long"])} for c in all_gauges()]
+    today = dt.date.today().isoformat()
+    for p in pts:
+        params = {"latitude": p["lat"], "longitude": p["lon"], "daily": DAILY_VARS, "timezone": "auto",
+                  "past_days": past_days, "forecast_days": forecast_days}
+        try:
+            for attempt in range(5):
+                r = requests.get(OPEN_METEO_FORECAST, params=params, timeout=60)
+                if r.status_code == 429 or r.status_code >= 500:
+                    time.sleep(20 * (attempt + 1))
+                    continue
+                r.raise_for_status()
+                break
+            df = pd.DataFrame(r.json()["daily"]).rename(columns={"time": "date"})
+        except Exception as e:  # noqa: BLE001
+            FAILED.append(p["id"])
+            log(f"оперативная погода {p['id']}: НЕ скачана ({e})")
+            continue
+        df.insert(0, "point_id", p["id"])
+        df["is_forecast"] = df["date"] > today
+        df["source"] = ["Open-Meteo прогноз" if f else "Open-Meteo оперативный анализ" for f in df["is_forecast"]]
+        df["fetched"] = today
+        df.to_csv(out_dir / f"{p['id']}.csv", index=False)
+        time.sleep(0.5)
+    log(f"оперативная погода: {len(pts) - len([f for f in FAILED])} точек, прогноз до {df['date'].max()}")
 
 
 # ---------------------------------------------------------------- лёд (спутник)
@@ -266,13 +319,16 @@ if __name__ == "__main__":
     ap.add_argument("--gauges", action="store_true", help="погода ERA5 для якутских гидропостов 1979–2012")
     ap.add_argument("--hydro", action="store_true", help="замеры льда на гидропостах (Arctic Data Center)")
     ap.add_argument("--gauges-other", action="store_true", help="погода для постов вне Якутии (тест переносимости)")
+    ap.add_argument("--recent", action="store_true", help="последние дни и прогноз на 16 дней (оперативный API)")
     a = ap.parse_args()
-    everything = not (a.weather or a.ice or a.extract_only or a.gauges or a.hydro or a.gauges_other)
+    everything = not (a.weather or a.ice or a.extract_only or a.gauges or a.hydro or a.gauges_other or a.recent)
     DATA.mkdir(exist_ok=True)
     if a.weather or everything:
         download_weather()
     if a.hydro or everything:
         download_hydro()
+    if a.recent or everything:
+        download_recent()
     if a.gauges_other:
         download_gauge_weather(end="2012-12-31", codes=GAUGE_OTHER)
     if a.gauges or everything:
@@ -281,4 +337,6 @@ if __name__ == "__main__":
         download_ice()
     if a.ice or a.extract_only or everything:
         extract_ice_points()
+    if FAILED:
+        log(f"не скачано: {', '.join(FAILED)} — остальное обновлено")
     log("готово.")

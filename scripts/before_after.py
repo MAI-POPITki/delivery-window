@@ -35,7 +35,10 @@ EXAMPLES = {
 }
 
 
-def run_example(bt: pd.DataFrame, point_id: str, p: Params) -> pd.DataFrame:
+ALL_RULES = ("calendar", "forecast", "asap", "clim_prob")
+
+
+def run_example(bt: pd.DataFrame, point_id: str, p: Params, rules=ALL_RULES) -> pd.DataFrame:
     rows = []
     b = bt[bt.point_id == point_id]
     events = b.groupby("hydro_year").target_day.first()
@@ -52,6 +55,8 @@ def run_example(bt: pd.DataFrame, point_id: str, p: Params) -> pd.DataFrame:
                                 "q10": cal_event - 1.2816 * sd, "q90": cal_event + 1.2816 * sd})
         lead = warning_lead(fc, event, cal_event)
         for rule, rule_fc in (("calendar", None), ("forecast", fc), ("asap", None), ("clim_prob", fc_clim)):
+            if rule not in rules:
+                continue
             r = simulate_season(actual_close, rule_fc, cal_close, p, "forecast" if rule == "clim_prob" else rule)
             r["rule"] = rule
             r.update({"hydro_year": y, "season": f"{y - 1}/{str(y)[2:]}", "actual_close_day": actual_close,
@@ -147,8 +152,42 @@ def main():
                   "<details><summary>По сезонам</summary>", "",
                   md_table(per.reset_index()), "", "</details>", ""]
     pd.concat(sens_all).to_csv(REPORTS / "sensitivity.csv", index=False)
+    reg = regional_summary(bt, p)
+    lines += ["## Все регионы и посты", "",
+              "Тот же расчёт для каждого гидропоста подтверждённых регионов. Чтобы сравнение было честным, "
+              "план каждого поста задан «впритык к окну», как у Батагая: потребность = своя провозная способность × "
+              "средняя длина календарного окна. Остальные параметры те же.", "",
+              md_table(reg), ""]
     (REPORTS / "before_after.md").write_text("\n".join(lines), encoding="utf-8")
+    print(reg.to_string(index=False))
     print("готово:", REPORTS / "before_after.md")
+
+
+def regional_summary(bt: pd.DataFrame, base: Params) -> pd.DataFrame:
+    from okno.regions import REGIONS, region_of
+    rows = []
+    for pid, g in bt[bt.is_satellite == 0].groupby("point_id"):
+        cal_close = (g.groupby("hydro_year").cal_target.first() - base.close_margin_days)
+        weeks = max(1.0, float(((cal_close - base.start_day) / 7).mean()))
+        p = Params(**{**vars(base), "Q_t": round(base.K_t_week * weeks, -2)})
+        r = run_example(bt, pid, p)
+        c, f, k = (r[r.rule == x] for x in ("calendar", "forecast", "clim_prob"))
+        rows.append({"region": region_of(pid), "point_id": pid, "Q_t": p.Q_t,
+                     "недовоз_до": c.undelivered_t.mean(), "недовоз_после": f.undelivered_t.mean(),
+                     "недовоз_М3_без_М1": k.undelivered_t.mean(),
+                     "руб_т_до": c.cost_rub_per_t.mean(), "руб_т_после": f.cost_rub_per_t.mean(),
+                     "руб_т_М3_без_М1": k.cost_rub_per_t.mean(), "сезонов": c.hydro_year.nunique()})
+    d = pd.DataFrame(rows)
+    d.to_csv(REPORTS / "before_after_points.csv", index=False)
+    out = []
+    for key, grp in d.groupby("region"):
+        out.append({"регион": REGIONS[key]["name"], "постов": len(grp), "сезонов": int(grp["сезонов"].max()),
+                    "недовоз_до_%_плана": round(100 * (grp["недовоз_до"] / grp.Q_t).mean(), 1),
+                    "недовоз_после_%_плана": round(100 * (grp["недовоз_после"] / grp.Q_t).mean(), 1),
+                    "₽/т_до": round(grp["руб_т_до"].mean()), "₽/т_после": round(grp["руб_т_после"].mean()),
+                    "экономия_%": round(100 * (1 - grp["руб_т_после"].mean() / grp["руб_т_до"].mean()), 1),
+                    "экономия_М3_без_М1_%": round(100 * (1 - grp["руб_т_М3_без_М1"].mean() / grp["руб_т_до"].mean()), 1)})
+    return pd.DataFrame(out)
 
 
 if __name__ == "__main__":

@@ -38,11 +38,21 @@ def hydro_year(dates: pd.Series) -> pd.Series:
     return d.dt.year + (d.dt.month >= SEASON_START_MONTH).astype(int)
 
 
-def load_weather(point_id: str) -> pd.DataFrame:
-    """Суточная погода ERA5 для точки; ищет в data/weather и data/weather/gauges."""
+def load_weather(point_id: str, live: bool = False) -> pd.DataFrame:
+    """Суточная погода ERA5 для точки; ищет в data/weather и data/weather/gauges.
+    live=True — дописывает после конца архива оперативные данные Open-Meteo (последние дни)
+    и прогноз на 16 дней (колонка is_forecast). Для обучения не используется."""
+    from .paths import RECENT
     for p in (WEATHER / f"{point_id}.csv", WEATHER / "gauges" / f"{point_id}.csv"):
         if p.exists():
             w = pd.read_csv(p, parse_dates=["date"])
+            w["is_forecast"] = False
+            rp = RECENT / f"{point_id}.csv"
+            if live and rp.exists():
+                r = pd.read_csv(rp, parse_dates=["date"])
+                r = r[r["date"] > w["date"].max()]
+                w = pd.concat([w, r[[c for c in w.columns if c in r.columns]]], ignore_index=True)
+                w["is_forecast"] = w["is_forecast"].astype(bool)
             w = w.rename(columns={"temperature_2m_mean": "t", "snowfall_sum": "snow_cm",
                                   "precipitation_sum": "precip_mm"})
             w["hydro_year"] = hydro_year(w["date"])

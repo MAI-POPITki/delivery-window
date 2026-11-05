@@ -70,11 +70,14 @@ def _freezeup_est(t, window=5):
     return float(idx[0]) if len(idx) else np.nan
 
 
-def season_features(T, S, y, d, clim, alpha, fz_obs, theta=np.nan):
+def season_features(T, S, y, d, clim, alpha, fz_obs, theta=np.nan, t_ahead=None):
     """Признаки и физический прогноз для сезона y на дату выпуска d (день сезона)."""
     t_obs = T.loc[y].to_numpy()
     t_proj = clim.copy()
     t_proj[: d + 1] = np.where(np.isnan(t_obs[: d + 1]), clim[: d + 1], t_obs[: d + 1])
+    if t_ahead is not None:  # живой режим: прогноз погоды на ближайшие дни вместо климатологии
+        fut = (np.arange(365) > d) & np.isfinite(t_ahead)
+        t_proj = np.where(fut, t_ahead, t_proj)
     snow = np.nan_to_num(S.loc[y].to_numpy()) if S is not None and y in S.index else np.zeros(365)
     fz_known = fz_obs if (not np.isnan(fz_obs) and fz_obs <= d) else np.nan
     fz = fz_known if not np.isnan(fz_known) else _freezeup_est(t_proj)
