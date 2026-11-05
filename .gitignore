@@ -8,3 +8,6 @@ __pycache__/
 # большой дневной архив Zenodo, если кто-то скачает
 data/raw/*.zip
 .claude/
+
+# вырезки Sentinel-1 для М2 (сотни МБ) — генерируются scripts/s1_chips.py
+data/s1/chips/
