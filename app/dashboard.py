@@ -10,11 +10,31 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import datetime as dt
+import importlib
+import os
 
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
+
+import okno.calib
+import okno.features
+import okno.forecast
+import okno.ice
+import okno.paths
+import okno.planner
+import okno.report
+
+# Streamlit перезапускает этот скрипт при каждом изменении, но уже импортированные модули okno
+# остаются в памяти процесса. На Streamlit Cloud после пуша это даёт смесь нового скрипта и
+# старых модулей (AttributeError). Поэтому перезагружаем модули, чьи файлы изменились;
+# порядок — от зависимостей к зависимым.
+_MODS = (okno.paths, okno.report, okno.ice, okno.calib, okno.features, okno.planner, okno.forecast)
+if any(getattr(m, "_loaded_mtime", None) != os.path.getmtime(m.__file__) for m in _MODS):
+    for _mod in _MODS:  # модули берут функции друг у друга по имени — перезагружаем всю цепочку
+        importlib.reload(_mod)
+        _mod._loaded_mtime = os.path.getmtime(_mod.__file__)
 
 from okno import forecast as FC
 from okno.ice import from_season_day, to_season_day
