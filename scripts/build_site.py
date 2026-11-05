@@ -18,7 +18,7 @@ import plotly.graph_objects as go
 
 from okno.paths import REPORTS, ROOT
 
-REPO_URL = "https://github.com/gneh3/delivery-window"
+REPO_URL = "https://github.com/MAI-POPITki/delivery-window"
 DASHBOARD_URL = "https://okno-zavoza.streamlit.app/"
 DOCS = ROOT / "docs"
 
