@@ -1,0 +1,5 @@
+# дополнительно к requirements.txt — только для пересчёта спутниковых слоёв из GeoTIFF
+# (python scripts/download_data.py --ice / --extract-only)
+-r requirements.txt
+rasterio==1.5.2
+pyproj==3.8.0

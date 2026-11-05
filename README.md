@@ -12,7 +12,7 @@
 ```bash
 python -m venv .venv
 .venv\Scripts\activate            # Linux/macOS: source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.txt     # requirements-data.txt — если пересчитывать спутниковые слои
 python run_all.py                 # сборка данных → проверки → М1 → «до/после»
 streamlit run app/dashboard.py    # дашборд
 ```
