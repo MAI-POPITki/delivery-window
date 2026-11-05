@@ -35,7 +35,10 @@ EXAMPLES = {
 }
 
 
-def run_example(bt: pd.DataFrame, point_id: str, p: Params) -> pd.DataFrame:
+ALL_RULES = ("calendar", "forecast", "asap", "clim_prob")
+
+
+def run_example(bt: pd.DataFrame, point_id: str, p: Params, rules=ALL_RULES) -> pd.DataFrame:
     rows = []
     b = bt[bt.point_id == point_id]
     events = b.groupby("hydro_year").target_day.first()
@@ -52,6 +55,8 @@ def run_example(bt: pd.DataFrame, point_id: str, p: Params) -> pd.DataFrame:
                                 "q10": cal_event - 1.2816 * sd, "q90": cal_event + 1.2816 * sd})
         lead = warning_lead(fc, event, cal_event)
         for rule, rule_fc in (("calendar", None), ("forecast", fc), ("asap", None), ("clim_prob", fc_clim)):
+            if rule not in rules:
+                continue
             r = simulate_season(actual_close, rule_fc, cal_close, p, "forecast" if rule == "clim_prob" else rule)
             r["rule"] = rule
             r.update({"hydro_year": y, "season": f"{y - 1}/{str(y)[2:]}", "actual_close_day": actual_close,

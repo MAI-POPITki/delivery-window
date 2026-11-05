@@ -90,8 +90,14 @@ def fc_path(pid, hy, kind, days):
 
 @st.cache_data(show_spinner=False)
 def weather_until(ver):
-    from okno.paths import WEATHER
-    return pd.read_csv(WEATHER / "yakutsk_crossing.csv", usecols=["date"])["date"].max()
+    """(конец архива ERA5, конец оперативных наблюдений, конец прогноза погоды)."""
+    from okno.paths import RECENT, WEATHER
+    era5 = pd.read_csv(WEATHER / "yakutsk_crossing.csv", usecols=["date"])["date"].max()
+    rp = RECENT / "yakutsk_crossing.csv"
+    if not rp.exists():
+        return era5, None, None
+    r = pd.read_csv(rp, usecols=["date", "is_forecast"])
+    return era5, r[~r.is_forecast]["date"].max(), r[r.is_forecast]["date"].max()
 
 
 def p_by(q, t):
@@ -108,7 +114,10 @@ st.sidebar.caption("Прогноз окон сезонных путей и гр�
 region = st.sidebar.selectbox("Регион", list(REGIONS), format_func=lambda k: REGIONS[k]["name"])
 st.sidebar.caption(REGIONS[region]["note"])
 WEATHER_POINTS = region_points(region)
-st.sidebar.caption(f"Погода ERA5 — по {pd.Timestamp(weather_until(DATA_VER)):%d.%m.%Y}, обновляется ежедневно.")
+_era5, _obs, _fut = weather_until(DATA_VER)
+st.sidebar.caption(f"Погода: архив ERA5 по {pd.Timestamp(_era5):%d.%m}"
+                   + (f", оперативные данные по {pd.Timestamp(_obs):%d.%m}, прогноз до {pd.Timestamp(_fut):%d.%m.%Y}"
+                      if _obs else "") + ". Обновляется ежедневно.")
 today = dt.date.today()
 cur_hy = today.year + (1 if today.month >= 9 else 0)
 hy = st.sidebar.selectbox("Сезон", list(range(cur_hy, 1985, -1)), format_func=season_name, index=0)
@@ -286,7 +295,9 @@ with tabs[3]:
 with tabs[4]:
     st.subheader("Бэктест на прошлых сезонах")
     for name, f in (("М1: точность прогноза", REPORTS / "m1_metrics.md"),
-                    ("«До/после» для А3", REPORTS / "before_after.md")):
+                    ("«До/после» для А3", REPORTS / "before_after.md"),
+                    ("Стресс-тест допущений", REPORTS / "stress_test.md"),
+                    ("Журнал прогнозов: проверка вперёд", REPORTS / "forecast_journal.md")):
         if f.exists():
             with st.expander(name, expanded=True):
                 st.markdown(f.read_text(encoding="utf-8"), unsafe_allow_html=True)

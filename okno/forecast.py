@@ -12,7 +12,7 @@ import pandas as pd
 
 from . import features as F
 from .ice import from_season_day, load_weather
-from .paths import MODELS, PROCESSED, WEATHER
+from .paths import MODELS, PROCESSED, RECENT, WEATHER
 
 POINTS = {
     "yakutsk_crossing": {"name": "Переправа Якутск — Нижний Бестях", "lat": 62.0, "lon": 129.82,
@@ -61,7 +61,8 @@ def data_version() -> float:
     """Метка свежести данных: меняется, когда ежедневное обновление дописывает погоду
     или переобучаются модели. Кэши ниже привязаны к ней, поэтому дашборд подхватывает
     новые данные без перезапуска."""
-    files = list(WEATHER.glob("*.csv")) + list((WEATHER / "gauges").glob("*.csv")) + list(MODELS.glob("*"))
+    files = (list(WEATHER.glob("*.csv")) + list((WEATHER / "gauges").glob("*.csv")) + list(MODELS.glob("*"))
+             + list(RECENT.glob("*.csv")))
     return max((_mtime(f) for f in files), default=0.0)
 
 
@@ -89,16 +90,27 @@ def _conformal_v(kind, _ver):
 
 
 def _matrices(point_id):
-    return _matrices_v(point_id, _mtime(_weather_path(point_id)))
+    """(T_all, S_all, T_full): наблюдения (архив ERA5 + оперативные последние дни) и полные сезоны."""
+    return _matrices_v(point_id, _mtime(_weather_path(point_id)), _mtime(RECENT / f"{point_id}.csv"))[:3]
+
+
+def _ahead(point_id):
+    """Прогноз погоды на ближайшие 16 дней: таблица сезон × день (только прогнозные дни)."""
+    return _matrices_v(point_id, _mtime(_weather_path(point_id)), _mtime(RECENT / f"{point_id}.csv"))[3]
 
 
 @lru_cache(maxsize=32)
-def _matrices_v(point_id, _ver):
-    w = load_weather(point_id)
-    T_all = w.pivot_table(index="hydro_year", columns="season_day", values="t").reindex(columns=range(365))
-    S_all = w.pivot_table(index="hydro_year", columns="season_day", values="snow_cm").reindex(columns=range(365))
+def _matrices_v(point_id, _ver, _ver_recent):
+    w = load_weather(point_id, live=True)
+    obs, fut = w[~w["is_forecast"]], w[w["is_forecast"]]
+
+    def mat(d, col):
+        return d.pivot_table(index="hydro_year", columns="season_day", values=col).reindex(columns=range(365))
+
+    T_all, S_all = mat(obs, "t"), mat(obs, "snow_cm")
     full = T_all.notna().sum(axis=1) > 330
-    return T_all, S_all, T_all[full]
+    T_ahead = mat(fut, "t") if len(fut) else pd.DataFrame(columns=range(365))
+    return T_all, S_all, T_all[full], T_ahead
 
 
 @lru_cache(maxsize=None)
@@ -157,7 +169,13 @@ def forecast(point_id: str, hydro_year: int, issue_day: int, kind: str) -> dict 
         if np.isnan(theta):
             vals = [v for y, v in th.items() if y < hydro_year and not np.isnan(v)]
             theta = vals[-1] if vals else np.nan
-    f = F.season_features(T_all, S_all, hydro_year, int(issue_day), clim, alpha, fz_obs, theta)
+    # живой режим (прогноз выпускается на последний день наблюдений): ближайшие 16 дней берём из
+    # прогноза погоды, а не из климатологии. В обучении прогнозов не было — это улучшает физическую часть.
+    T_ahead = _ahead(point_id)
+    ahead = None
+    if last is not None and issue_day >= last and hydro_year in T_ahead.index:
+        ahead = T_ahead.loc[hydro_year].to_numpy(dtype=float)
+    f = F.season_features(T_all, S_all, hydro_year, int(issue_day), clim, alpha, fz_obs, theta, t_ahead=ahead)
     phys = f.pop("phys_open") if kind == "open" else f.pop("phys_close")
     f.pop("phys_close" if kind == "open" else "phys_open")
     phys = phys if not np.isnan(phys) else cal
@@ -167,10 +185,12 @@ def forecast(point_id: str, hydro_year: int, issue_day: int, kind: str) -> dict 
     q = np.sort(np.asarray(_model(kind).predict(X))[0]) + cal
     corr = _conformal(kind)
     q[0], q[2] = q[0] - corr, q[2] + corr
+    q = np.maximum(q, issue_day)  # событие ещё не наступило — раньше даты прогноза его быть не может
     out = {"point_id": point_id, "hydro_year": hydro_year, "issue_day": int(issue_day), "kind": kind,
            "q10": q[0], "q50": q[1], "q90": q[2], "calendar": cal, "physics": phys,
            "actual": float(hist.loc[hydro_year, f"{kind}_day"]) if hydro_year in hist.index else np.nan,
-           "h_stefan_now_cm": f["h_stefan_now"]}
+           "h_stefan_now_cm": f["h_stefan_now"],
+           "forecast_days_used": int(np.isfinite(ahead).sum()) if ahead is not None else 0}
     for k in ("q10", "q50", "q90", "calendar", "physics", "actual"):
         out[f"{k}_date"] = from_season_day(out[k], hydro_year).date() if not np.isnan(out[k]) else None
     return out
