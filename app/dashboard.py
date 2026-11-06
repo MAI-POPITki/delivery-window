@@ -184,10 +184,12 @@ with tabs[0]:
         import json as _json
         _lat, _lon, _txt = [], [], []
         for r in _json.loads(_roads_file.read_text(encoding="utf-8")):
+            if r.get("region", region) != region:  # только выбранный регион — карта легче
+                continue
             nm = r["name"] or ("ледовая переправа" if r["kind"] == "ice_road" else "зимник")
             _lat += r["lat"] + [None]
             _lon += r["lon"] + [None]
-            _txt += [f"{nm}<br><span style='font-size:11px'>OpenStreetMap</span>"] * len(r["lat"]) + [None]
+            _txt += [nm] * len(r["lat"]) + [None]
         fmap.add_trace(go.Scattermap(lat=_lat, lon=_lon, mode="lines", text=_txt, hoverinfo="text",
                                      line=dict(width=2.5, color="#2b6cb0"), name="зимники OSM", opacity=0.75))
     # 2) Лена по снимкам Sentinel-1 (М2): белое кольцо + цвет состояния
@@ -226,8 +228,7 @@ with tabs[0]:
                        legend=dict(x=0.01, y=0.99, bgcolor="rgba(255,255,255,0.85)", font=dict(size=11, color="#222")))
     st.plotly_chart(fmap, width="stretch", config={"scrollZoom": True, "displaylogo": False})
     st.caption("Цвет точки пути — вероятность, что путь открыт через N дней: P(лёд уже держит 20 т) × P(путь ещё не "
-               "закрыт); серый — нет данных. Синие линии — зимники и ледовые переправы из OpenStreetMap (район пилота "
-               "Якутск — Батагай). Светлые точки на Лене — лёд, тёмные — вода по последнему снимку Sentinel-1 (М2).")
+               "закрыт); серый — нет данных. Синие линии — зимники и ледовые переправы региона из OpenStreetMap. Светлые точки на Лене — лёд, тёмные — вода по последнему снимку Sentinel-1 (М2).")
 
 # ------------------------------------------------------------------ 2. карточка пути
 with tabs[1]:
