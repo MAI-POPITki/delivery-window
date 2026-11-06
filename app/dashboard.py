@@ -166,9 +166,9 @@ with tabs[0]:
         color = ("#9e9e9e" if np.isnan(p_ok) else
                  "#2e7d32" if p_ok >= 0.8 else "#ef8c00" if p_ok >= 0.5 else "#c62828")
         point_type = "Опорная точка переправы" if p == "yakutsk_crossing" else "Гидропост"
-        txt = f"<b>{label(p)}</b><br>{point_type}<br>P(открыт через {horizon} дн.) = " + ("н/д" if np.isnan(p_ok) else f"{p_ok:.0%}")
+        txt = f"{label(p)}\n{point_type}\nP(открыт через {horizon} дн.) = " + ("н/д" if np.isnan(p_ok) else f"{p_ok:.0%}")
         if qc and "error" not in qc:
-            txt += f"<br>Таяние (М1, 50%): {qc['q50_date']:%d.%m}, диапазон {qc['q10_date']:%d.%m}–{qc['q90_date']:%d.%m}"
+            txt += f"\nТаяние (М1, 50%): {qc['q50_date']:%d.%m}, диапазон {qc['q10_date']:%d.%m}–{qc['q90_date']:%d.%m}"
         rows.append({"point_id": p, "lat": meta["lat"], "lon": meta["lon"], "color": color, "txt": txt})
 
     routes = schematic_routes(region)

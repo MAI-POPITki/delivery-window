@@ -105,8 +105,18 @@ class RouteMapAppTests(unittest.TestCase):
         app.run()
         self.assertEqual([e.message for e in app.exception], [])
         chart = app.get("deck_gl_json_chart")[0]
-        self.assertEqual(json.loads(chart.proto.tooltip)["html"], "{tooltip}")
+        tooltip_config = json.loads(chart.proto.tooltip)
+        self.assertEqual(tooltip_config["text"], "{tooltip}")
+        self.assertNotIn("html", tooltip_config)
+        self.assertEqual(tooltip_config["style"]["whiteSpace"], "pre-line")
         spec = json.loads(chart.proto.json)
+        # Регрессия: подписи точек, линий и концов схем не показывают HTML-теги.
+        for layer in spec["layers"]:
+            if layer.get("pickable"):
+                for row in layer["data"]:
+                    with self.subTest(layer=layer["id"], tooltip=row["tooltip"]):
+                        self.assertNotRegex(row["tooltip"], r"</?b>|<br\s*/?>")
+                        self.assertIn("\n", row["tooltip"])
         paths = next(layer for layer in spec["layers"] if layer["id"] == "schematic-routes")
         self.assertEqual(len(paths["data"]), 2)
         self.assertTrue(all("схема" in row["tooltip"] for row in paths["data"]))

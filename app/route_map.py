@@ -6,7 +6,6 @@
 
 import csv
 from dataclasses import dataclass
-from html import escape
 
 import pydeck as pdk
 
@@ -67,8 +66,8 @@ def build_route_map(region, points, routes, *, selected_point=None, focus_route=
     anchors = []
     for route in routes:
         highlighted = route.id == focus_route or (focus_route is None and route.point_id == selected_point)
-        tooltip = (f"<b>{escape(route.name)} · схема</b><br>{escape(route.note)}"
-                   f"<br>Прогноз рассчитывается в точке: {escape(label(route.point_id))}.")
+        tooltip = (f"{route.name} · схема\n{route.note}"
+                   f"\nПрогноз рассчитывается в точке: {label(route.point_id)}.")
         paths.append({
             "path": route.path,
             "color": route.color,
@@ -79,7 +78,7 @@ def build_route_map(region, points, routes, *, selected_point=None, focus_route=
             anchors.append({
                 "position": position,
                 "color": route.color,
-                "tooltip": f"{tooltip}<br><b>Опорная точка схемы:</b> {escape(name)}",
+                "tooltip": f"{tooltip}\nОпорная точка схемы: {name}",
             })
 
     if paths:
@@ -134,8 +133,9 @@ def build_route_map(region, points, routes, *, selected_point=None, focus_route=
         map_provider="carto",
         map_style="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json",
         tooltip={
-            "html": "{tooltip}",
+            "text": "{tooltip}",
             "style": {"backgroundColor": "#ffffff", "color": "#17212c", "maxWidth": "340px",
-                      "fontSize": "13px", "padding": "12px", "borderRadius": "8px"},
+                      "fontSize": "13px", "padding": "12px", "borderRadius": "8px",
+                      "whiteSpace": "pre-line"},
         },
     )
