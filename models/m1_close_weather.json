@@ -1,0 +1,50 @@
+{
+  "features": [
+    "issue_day",
+    "lat",
+    "is_satellite",
+    "cal_target",
+    "phys_pred",
+    "phys_minus_cal",
+    "fdd_to_date",
+    "fdd_anom",
+    "t_last14",
+    "t_last30",
+    "t_anom30",
+    "snow_to_date",
+    "freezeup_known",
+    "freezeup_used",
+    "h_stefan_now",
+    "tdd_to_date",
+    "tdd_anom",
+    "h_stefan_max",
+    "thaw_days_14",
+    "t_anom_spring",
+    "weather_days",
+    "weather_mean_6d",
+    "weather_anomaly_6d",
+    "weather_tdd_6d",
+    "weather_thaw_days_6d"
+  ],
+  "point_ids": [
+    "yakutsk_crossing"
+  ],
+  "trained_through_season": 2024,
+  "correction_days": 7.373755846603757,
+  "forecast_days": 6,
+  "experimental": true,
+  "default_enabled": false,
+  "source": "https://previous-runs-api.open-meteo.com/v1/forecast",
+  "baseline_data_sha256": "6591de14179210553e3846be2b01ea14384262d3f4ec22deed8de1ce3d7f3937",
+  "archive_seasons": [
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "validation_seasons": [
+    2022,
+    2023,
+    2024
+  ]
+}

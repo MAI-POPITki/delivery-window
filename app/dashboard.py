@@ -37,13 +37,14 @@ import okno.paths
 import okno.planner
 import okno.regions
 import okno.report
+import okno.weather_forecast
 
 # Streamlit перезапускает этот скрипт при каждом изменении, но уже импортированные модули okno
 # остаются в памяти процесса. На Streamlit Cloud после пуша это даёт смесь нового скрипта и
 # старых модулей (AttributeError). Поэтому перезагружаем модули, чьи файлы изменились;
 # порядок — от зависимостей к зависимым.
 _MODS = (okno.paths, okno.regions, okno.report, okno.ice, okno.calib, okno.features, okno.planner, okno.m1,
-         okno.forecast)
+         okno.weather_forecast, okno.forecast)
 if any(getattr(m, "_loaded_mtime", None) != os.path.getmtime(m.__file__) for m in _MODS):
     for _mod in _MODS:  # модули берут функции друг у друга по имени — перезагружаем всю цепочку
         importlib.reload(_mod)
@@ -74,26 +75,26 @@ def season_name(hy):
 DATA_VER = FC.data_version()
 
 
-@st.cache_data(show_spinner=False, max_entries=5000)
-def _fc_cached(pid, hy, day, kind, ver):
+@st.cache_data(show_spinner=False, max_entries=5000, ttl=3600)
+def _fc_cached(pid, hy, day, kind, ver, use_weather):
     try:
-        return FC.forecast(pid, hy, day, kind)
+        return FC.forecast(pid, hy, day, kind, use_weather=use_weather)
     except Exception as e:  # noqa: BLE001 — в дашборде показываем, а не падаем
         return {"error": str(e)}
 
 
 def fc_cached(pid, hy, day, kind):
-    return _fc_cached(pid, hy, day, kind, DATA_VER)
+    return _fc_cached(pid, hy, day, kind, DATA_VER, use_weather_close)
 
 
-@st.cache_data(show_spinner=False, max_entries=500)
-def _fc_path(pid, hy, kind, days, ver):
-    rows = [fc_cached(pid, hy, d, kind) for d in days]
+@st.cache_data(show_spinner=False, max_entries=500, ttl=3600)
+def _fc_path(pid, hy, kind, days, ver, use_weather):
+    rows = [_fc_cached(pid, hy, d, kind, ver, use_weather) for d in days]
     return pd.DataFrame([r for r in rows if r and "error" not in r])
 
 
 def fc_path(pid, hy, kind, days):
-    return _fc_path(pid, hy, kind, days, DATA_VER)
+    return _fc_path(pid, hy, kind, days, DATA_VER, use_weather_close)
 
 
 @st.cache_data(show_spinner=False)
@@ -143,6 +144,14 @@ horizon = st.sidebar.slider("Горизонт N, дней", 7, 60, 14, 7)
 margin = st.sidebar.slider("Запас до таяния при закрытии, сут", 0, 35, 21,
                            help="Путь закрывают раньше физического начала таяния: ограничения массы, "
                                 "дорожный режим. Допущение, проверяется на чувствительность.")
+use_weather_close = st.sidebar.checkbox(
+    "Погодная модель закрытия (эксперимент)", value=False, key="weather_close_enabled",
+    help="Модель обучена на архиве прогнозов GFS. Пилот — переправа Якутск — Нижний Бестях. "
+         "При отсутствии данных используется обычная М1. Прогноз открытия не меняется.",
+)
+if use_weather_close:
+    st.sidebar.caption("Эксперимент: прогноз GFS на 6 дней. Выигрыш за 7/14 дней не подтверждён, "
+                       "диапазон пока ненадёжен. Результаты — во вкладке «До / после».")
 last = FC.last_weather_day(pid, hy)
 if last is not None and last < issue_day:
     st.sidebar.warning(f"Погода есть до {from_season_day(last, hy).date():%d.%m.%Y}: прогноз выпускается на эту дату.")
@@ -195,10 +204,16 @@ with tabs[1]:
             close_note = f" (закрытие пути ≈ на {margin} сут раньше)" if kind == "close" else ""
             st.metric("Медиана прогноза М1", f"{q['q50_date']:%d.%m.%Y}",
                       delta=f"{q['q50'] - q['calendar']:+.0f} сут к календарю", delta_color="inverse")
-            st.write(f"80%-диапазон: **{q['q10_date']:%d.%m} – {q['q90_date']:%d.%m}**{close_note}")
+            range_name = "Экспериментальный диапазон" if q.get("weather_model_applied") else "80%-диапазон"
+            st.write(f"{range_name}: **{q['q10_date']:%d.%m} – {q['q90_date']:%d.%m}**{close_note}")
             st.write(f"Календарь (средняя за прошлые сезоны): {q['calendar_date']:%d.%m}; "
                      f"физика: {q['physics_date']:%d.%m}")
             st.write(f"Расчётная толщина льда на дату решения: **{q['h_stefan_now_cm']:.0f} см**")
+            if kind == "close" and use_weather_close:
+                st.caption(q["weather_model_message"])
+                if q["weather_model_applied"]:
+                    st.write(f"Сдвиг к обычной М1: **{q['weather_delta_days']:+.1f} сут**. "
+                             f"Прогноз погоды учтён на {q['forecast_days_used']} дней.")
             if q["actual_date"]:
                 st.success(f"Факт: {q['actual_date']:%d.%m.%Y}")
     # как менялся прогноз закрытия в течение сезона
@@ -305,6 +320,7 @@ with tabs[3]:
 with tabs[4]:
     st.subheader("Бэктест на прошлых сезонах")
     for name, f in (("М1: точность прогноза", REPORTS / "m1_metrics.md"),
+                    ("Погодная модель закрытия: эксперимент", REPORTS / "weather_close.md"),
                     ("«До/после» для А3", REPORTS / "before_after.md"),
                     ("Стресс-тест допущений", REPORTS / "stress_test.md"),
                     ("Журнал прогнозов: проверка вперёд", REPORTS / "forecast_journal.md")):
