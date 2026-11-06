@@ -1,0 +1,25 @@
+parameter,label,variation,param_value,before_mln_rub,after_mln_rub,saving_mln_rub,saving_pct,yak_storage_delta_mln_rub,effect_positive
+yak_holding_cost_per_ton_day,Хранение на ТЛЦ Якутска (h_yak),-30%,154.0,41.01,27.35,13.66,33.3,1.87,True
+yak_holding_cost_per_ton_day,Хранение на ТЛЦ Якутска (h_yak),база,220.0,41.95,28.94,13.0,31.0,2.52,True
+yak_holding_cost_per_ton_day,Хранение на ТЛЦ Якутска (h_yak),+30%,286.0,42.88,30.53,12.35,28.8,3.18,True
+yak_overflow_cost_per_ton_day,Аренда при переполнении ТЛЦ (h_over),-30%,420.0,41.91,28.8,13.1,31.3,2.42,True
+yak_overflow_cost_per_ton_day,Аренда при переполнении ТЛЦ (h_over),база,600.0,41.95,28.94,13.0,31.0,2.52,True
+yak_overflow_cost_per_ton_day,Аренда при переполнении ТЛЦ (h_over),+30%,780.0,41.98,29.08,12.9,30.7,2.62,True
+nb_holding_cost_per_ton_day,Простой в Нижнем Бестяхе (h_nb),-30%,315.0,40.94,28.94,12.0,29.3,2.52,True
+nb_holding_cost_per_ton_day,Простой в Нижнем Бестяхе (h_nb),база,450.0,41.95,28.94,13.0,31.0,2.52,True
+nb_holding_cost_per_ton_day,Простой в Нижнем Бестяхе (h_nb),+30%,585.0,42.95,28.94,14.0,32.6,2.52,True
+crossing_cost_alt,Аварийный тариф СВП / авиа (c_alt),-30%,24500.0,40.37,28.94,11.43,28.3,2.52,True
+crossing_cost_alt,Аварийный тариф СВП / авиа (c_alt),база,35000.0,41.95,28.94,13.0,31.0,2.52,True
+crossing_cost_alt,Аварийный тариф СВП / авиа (c_alt),+30%,45500.0,43.52,28.94,14.58,33.5,2.52,True
+shortage_penalty_per_ton_day,Штраф за дефицит / срыв SLA (p_def),-30%,8400.0,39.79,28.94,10.84,27.3,2.52,True
+shortage_penalty_per_ton_day,Штраф за дефицит / срыв SLA (p_def),база,12000.0,41.95,28.94,13.0,31.0,2.52,True
+shortage_penalty_per_ton_day,Штраф за дефицит / срыв SLA (p_def),+30%,15600.0,44.11,28.94,15.16,34.4,2.52,True
+crossing_cap_normal_tons,Пропускная способность переправы (Q_max),-30%,42.0,42.77,36.57,6.2,14.5,1.86,True
+crossing_cap_normal_tons,Пропускная способность переправы (Q_max),база,60.0,41.95,28.94,13.0,31.0,2.52,True
+crossing_cap_normal_tons,Пропускная способность переправы (Q_max),+30%,78.0,41.5,28.34,13.15,31.7,1.38,True
+crossing_cap_alt_tons,Лимит СВП / вертолётов в распутицу (Q_alt),-30%,5.6,41.88,28.94,12.94,30.9,2.52,True
+crossing_cap_alt_tons,Лимит СВП / вертолётов в распутицу (Q_alt),база,8.0,41.95,28.94,13.0,31.0,2.52,True
+crossing_cap_alt_tons,Лимит СВП / вертолётов в распутицу (Q_alt),+30%,10.4,41.8,28.94,12.86,30.8,2.52,True
+yak_warehouse_cap_tons,Свободная ёмкость склада Якутска (V_max),-30%,455.0,42.81,30.21,12.6,29.4,2.92,True
+yak_warehouse_cap_tons,Свободная ёмкость склада Якутска (V_max),база,650.0,41.95,28.94,13.0,31.0,2.52,True
+yak_warehouse_cap_tons,Свободная ёмкость склада Якутска (V_max),+30%,845.0,41.86,28.65,13.22,31.6,2.31,True
