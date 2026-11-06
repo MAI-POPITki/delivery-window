@@ -28,27 +28,23 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 
-import okno.calib
-import okno.features
-import okno.forecast
-import okno.ice
-import okno.m1
-import okno.paths
-import okno.planner
-import okno.regions
-import okno.report
-import okno.weather_forecast
-
 # Streamlit перезапускает этот скрипт при каждом изменении, но уже импортированные модули okno
-# остаются в памяти процесса. На Streamlit Cloud после пуша это даёт смесь нового скрипта и
-# старых модулей (AttributeError). Поэтому перезагружаем модули, чьи файлы изменились;
-# порядок — от зависимостей к зависимым.
-_MODS = (okno.paths, okno.regions, okno.report, okno.ice, okno.calib, okno.features, okno.planner, okno.m1,
-         okno.weather_forecast, okno.forecast)
-if any(getattr(m, "_loaded_mtime", None) != os.path.getmtime(m.__file__) for m in _MODS):
-    for _mod in _MODS:  # модули берут функции друг у друга по имени — перезагружаем всю цепочку
-        importlib.reload(_mod)
-        _mod._loaded_mtime = os.path.getmtime(_mod.__file__)
+# остаются в памяти процесса. Сначала обновляем зависимости, затем импортируем зависимые
+# модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
+_MODULE_NAMES = (
+    "okno.paths", "okno.regions", "okno.report", "okno.ice", "okno.calib", "okno.features",
+    "okno.planner", "okno.m1", "okno.weather_forecast", "okno.forecast",
+)
+_cached_modules = [sys.modules.get(name) for name in _MODULE_NAMES]
+_needs_reload = any(module is None or getattr(module, "_loaded_mtime_ns", None)
+                    != os.stat(module.__file__).st_mtime_ns for module in _cached_modules)
+for _name in _MODULE_NAMES:
+    _mod = sys.modules.get(_name)
+    if _mod is None:
+        _mod = importlib.import_module(_name)
+    elif _needs_reload:
+        _mod = importlib.reload(_mod)
+    _mod._loaded_mtime_ns = os.stat(_mod.__file__).st_mtime_ns
 
 from okno import forecast as FC
 from okno.ice import from_season_day, to_season_day
