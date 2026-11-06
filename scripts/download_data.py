@@ -196,6 +196,30 @@ def download_gauge_weather(start="1979-01-01", end=None, codes=None):
         safe_update(p, out_dir / f"gauge_{code}.csv", start, end)
 
 
+def lena_basin_points():
+    """Точки бассейна Лены (data/lena_points.csv, scripts/lena_points.py)."""
+    f = DATA / "lena_points.csv"
+    if not f.exists():
+        return []
+    return [{"id": r.point_id, "lat": r.lat, "lon": r.lon} for r in pd.read_csv(f).itertuples()]
+
+
+def download_lena_weather(start="1995-01-01", end=None, max_new=8):
+    """Погода в точках бассейна Лены: остальным — хвост до сегодня; новых (полная история с 1995) — не больше
+    max_new за запуск, чтобы ежедневная задача не упёрлась в лимит Open-Meteo; остальные докачаются в следующие дни."""
+    end = end or default_end()
+    out_dir = DATA / "weather" / "lena"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    new = 0
+    for p in lena_basin_points():
+        out = out_dir / f"{p['id']}.csv"
+        if not out.exists():
+            if new >= max_new:
+                continue
+            new += 1
+        safe_update(p, out, start, end)
+
+
 # ---------------------------------------------------------------- оперативная погода
 OPEN_METEO_FORECAST = "https://api.open-meteo.com/v1/forecast"
 
@@ -207,7 +231,7 @@ def download_recent(past_days=14, forecast_days=16):
     out_dir.mkdir(parents=True, exist_ok=True)
     st = pd.read_csv(RAW / "hydro_ice" / "River_ice_station_attributes.csv").set_index("Code")
     pts = [p for p in POINTS if p["kind"] != "city"] + [
-        {"id": f"gauge_{c}", "lat": float(st.loc[c, "Lat"]), "lon": float(st.loc[c, "Long"])} for c in all_gauges()]
+        {"id": f"gauge_{c}", "lat": float(st.loc[c, "Lat"]), "lon": float(st.loc[c, "Long"])} for c in all_gauges()] +         lena_basin_points()
     today = dt.date.today().isoformat()
     for p in pts:
         params = {"latitude": p["lat"], "longitude": p["lon"], "daily": DAILY_VARS, "timezone": "auto",
@@ -320,13 +344,16 @@ if __name__ == "__main__":
     ap.add_argument("--hydro", action="store_true", help="замеры льда на гидропостах (Arctic Data Center)")
     ap.add_argument("--gauges-other", action="store_true", help="погода для постов вне Якутии (тест переносимости)")
     ap.add_argument("--recent", action="store_true", help="последние дни и прогноз на 16 дней (оперативный API)")
+    ap.add_argument("--lena", action="store_true", help="погода в точках бассейна Лены (data/lena_points.csv)")
     a = ap.parse_args()
-    everything = not (a.weather or a.ice or a.extract_only or a.gauges or a.hydro or a.gauges_other or a.recent)
+    everything = not (a.weather or a.ice or a.extract_only or a.gauges or a.hydro or a.gauges_other or a.recent or a.lena)
     DATA.mkdir(exist_ok=True)
     if a.weather or everything:
         download_weather()
     if a.hydro or everything:
         download_hydro()
+    if a.lena or everything:
+        download_lena_weather()
     if a.recent or everything:
         download_recent()
     if a.gauges_other:

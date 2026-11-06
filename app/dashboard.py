@@ -57,9 +57,8 @@ from okno.regions import REGIONS, label  # noqa: E402
 
 def region_points(key):
     """Точки региона, для которых есть погода (иначе прогноз не посчитать)."""
-    r = REGIONS[key]
-    pts = list(r["extra_points"]) + [f"gauge_{c}" for c in r["gauges"]]
-    return [p for p in pts if FC._weather_path(p).exists()]
+    from okno.regions import points_of
+    return [p for p in points_of(key) if FC._weather_path(p).exists()]
 
 
 def season_name(hy):
@@ -160,8 +159,16 @@ with tabs[0]:
     st.subheader(f"Вероятность, что путь открыт через {horizon} дн. — {season_name(hy)}")
     t = issue_day + horizon
     rows = []
+    basin_rows = []
     for p in WEATHER_POINTS:
         meta = FC.point_meta(p)
+        if FC.is_basin(p):  # притоки Лены: только прогноз вскрытия — отдельный слой
+            qc = fc_cached(p, hy, issue_day, "close")
+            if qc and "error" not in qc:
+                basin_rows.append({"lat": meta["lat"], "lon": meta["lon"],
+                                   "txt": f"<b>{label(p)}</b><br>Вскрытие (М1 для притоков, 50%): {qc['q50_date']:%d.%m}, "
+                                          f"диапазон {qc['q10_date']:%d.%m}–{qc['q90_date']:%d.%m}"})
+            continue
         qo, qc = fc_cached(p, hy, issue_day, "open"), fc_cached(p, hy, issue_day, "close")
         p_open = p_by(qo, t)
         p_open = 1.0 if np.isnan(p_open) and issue_day > 120 else p_open
@@ -177,6 +184,7 @@ with tabs[0]:
     _l1, _l2 = st.columns(2)
     show_roads = _l1.checkbox("Зимники и ледовые переправы (OpenStreetMap)", value=True, key="layer_roads")
     show_s1 = _l2.checkbox("Лена по радарным снимкам (М2)", value=region == "yakutia", key="layer_s1")
+    show_basin = st.checkbox("Притоки Лены: прогноз вскрытия (отдельная модель)", value=True, key="layer_basin")
     fmap = go.Figure()
     # 1) реальные зимники из OpenStreetMap (scripts/osm_roads.py) — одной линией с разрывами, так быстрее
     _roads_file = Path(PROCESSED).parent / "osm" / "winter_roads.json"
@@ -207,6 +215,12 @@ with tabs[0]:
                                      marker=dict(size=17, color="#ffffff"), showlegend=False))
         fmap.add_trace(go.Scattermap(lat=_s.lat, lon=_s.lon, mode="markers", text=_t, hoverinfo="text",
                                      marker=dict(size=12, color=list(_col)), name="Лена по снимкам: лёд / вода"))
+    # 2б) притоки Лены — прогноз вскрытия по отдельной модели (спутниковые даты Qiu 2001–2024)
+    if show_basin and basin_rows:
+        _b = pd.DataFrame(basin_rows)
+        fmap.add_trace(go.Scattermap(lat=_b.lat, lon=_b.lon, mode="markers", text=_b.txt, hoverinfo="text",
+                                     marker=dict(size=10, color="#0f9d8a", opacity=0.9),
+                                     name=f"притоки Лены: прогноз вскрытия ({len(_b)})"))
     # 3) пути: цвет — вероятность «путь открыт через N дней» по непрерывной шкале
     ok = pts[pts.p_ok.notna()]
     na = pts[pts.p_ok.isna()]
@@ -240,8 +254,8 @@ with tabs[1]:
             st.markdown(f"**{title}**")
             if not q or "error" in q:
                 st.info("Нет прогноза для этой точки и вида события"
-                        + (" (у переправы нет замеров толщины — только спутниковые даты вскрытия)."
-                           if pid == "yakutsk_crossing" and kind == "open" else "."))
+                        + (" (здесь нет замеров толщины льда — только спутниковые даты вскрытия)."
+                           if (pid == "yakutsk_crossing" or FC.is_basin(pid)) and kind == "open" else "."))
                 continue
             close_note = f" (закрытие пути ≈ на {margin} сут раньше)" if kind == "close" else ""
             st.metric("Медиана прогноза М1", f"{q['q50_date']:%d.%m.%Y}",
