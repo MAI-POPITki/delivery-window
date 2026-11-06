@@ -52,16 +52,16 @@ _STYLES = """
     font-weight: 600;
 }
 .st-key-welcome_actions [data-testid="stBaseButton-primary"] {
-    background-color: #176786;
-    border-color: #176786;
+    background-color: #ff4b4b;
+    border-color: #ff4b4b;
     color: white;
 }
 .st-key-welcome_actions [data-testid="stBaseButton-primary"]:hover {
-    background-color: #10516b;
-    border-color: #10516b;
+    background-color: #e03e3e;
+    border-color: #e03e3e;
 }
 .st-key-welcome_actions button:focus-visible {
-    outline: 3px solid #5ab9d0;
+    outline: 3px solid #ff4b4b;
     outline-offset: 3px;
 }
 @media (max-width: 640px) {
