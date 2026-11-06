@@ -11,8 +11,9 @@ import numpy as np
 import pandas as pd
 
 from . import features as F
+from . import weather_forecast as WF
 from .ice import from_season_day, load_weather
-from .paths import MODELS, PROCESSED, RECENT, WEATHER
+from .paths import MODELS, PROCESSED, RECENT, WEATHER, WEATHER_FORECASTS
 
 POINTS = {
     "yakutsk_crossing": {"name": "Переправа Якутск — Нижний Бестях", "lat": 62.0, "lon": 129.82,
@@ -62,7 +63,7 @@ def data_version() -> float:
     или переобучаются модели. Кэши ниже привязаны к ней, поэтому дашборд подхватывает
     новые данные без перезапуска."""
     files = (list(WEATHER.glob("*.csv")) + list((WEATHER / "gauges").glob("*.csv")) + list(MODELS.glob("*"))
-             + list(RECENT.glob("*.csv")))
+             + list(RECENT.glob("*.csv")) + list(WEATHER_FORECASTS.glob("*.csv")))
     return max((_mtime(f) for f in files), default=0.0)
 
 
@@ -147,7 +148,7 @@ def calendar_day(point_id, hydro_year, kind):
     return cal
 
 
-def forecast(point_id: str, hydro_year: int, issue_day: int, kind: str) -> dict | None:
+def forecast(point_id: str, hydro_year: int, issue_day: int, kind: str, *, use_weather=False) -> dict | None:
     T_all, S_all, T_full = _matrices(point_id)
     if hydro_year not in T_all.index:
         return None
@@ -186,11 +187,33 @@ def forecast(point_id: str, hydro_year: int, issue_day: int, kind: str) -> dict 
     corr = _conformal(kind)
     q[0], q[2] = q[0] - corr, q[2] + corr
     q = np.maximum(q, issue_day)  # событие ещё не наступило — раньше даты прогноза его быть не может
+    weather_message, weather_applied, weather_delta = "", False, None
+    days_used = int(((np.arange(365) > issue_day) & np.isfinite(ahead)).sum()) if ahead is not None else 0
+    if kind == "close" and use_weather:
+        # Эксперимент обучен с климатологической физикой и отдельными признаками GFS.
+        # Не подмешиваем сюда оперативный best_match, которого не было в обучении.
+        wf = F.season_features(T_all, S_all, hydro_year, int(issue_day), clim, alpha, fz_obs, theta)
+        wf_phys = wf.pop("phys_close")
+        wf.pop("phys_open")
+        wf_phys = wf_phys if np.isfinite(wf_phys) else cal
+        wf_row = {"issue_day": issue_day, "lat": meta["lat"], "is_satellite": meta["is_satellite"],
+                  "cal_target": cal, "phys_pred": wf_phys, "phys_minus_cal": wf_phys - cal, **wf}
+        try:
+            result = WF.predict_close(point_id, hydro_year, int(issue_day), wf_row, clim)
+        except (OSError, ValueError, KeyError):
+            result = {"message": "Архив или погодная модель недоступны; используется обычная М1."}
+        weather_message = result["message"]
+        if "quantiles" in result:
+            weather_delta = float(result["quantiles"][1] - q[1])
+            q = result["quantiles"]
+            phys = wf_phys
+            days_used, weather_applied = result["days"], True
     out = {"point_id": point_id, "hydro_year": hydro_year, "issue_day": int(issue_day), "kind": kind,
            "q10": q[0], "q50": q[1], "q90": q[2], "calendar": cal, "physics": phys,
            "actual": float(hist.loc[hydro_year, f"{kind}_day"]) if hydro_year in hist.index else np.nan,
            "h_stefan_now_cm": f["h_stefan_now"],
-           "forecast_days_used": int(np.isfinite(ahead).sum()) if ahead is not None else 0}
+           "forecast_days_used": days_used, "weather_model_applied": weather_applied,
+           "weather_model_message": weather_message, "weather_delta_days": weather_delta}
     for k in ("q10", "q50", "q90", "calendar", "physics", "actual"):
         out[f"{k}_date"] = from_season_day(out[k], hydro_year).date() if not np.isnan(out[k]) else None
     return out

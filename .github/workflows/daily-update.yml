@@ -41,6 +41,10 @@ jobs:
       - name: Свежая погода ERA5 (докачка хвоста)
         run: python scripts/download_data.py --weather --gauges --recent
 
+      - name: Архив прогнозов GFS для погодной модели закрытия
+        continue-on-error: true   # при недоступности архива дашборд использует обычную М1
+        run: python scripts/download_weather_forecasts.py --live
+
       - name: Новые снимки Sentinel-1 над Леной (для М2)
         continue-on-error: true   # недоступность сервиса снимков не должна ломать обновление погоды
         run: |
