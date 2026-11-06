@@ -28,6 +28,7 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 
+import app.route_map
 import okno.calib
 import okno.features
 import okno.forecast
@@ -43,7 +44,7 @@ import okno.report
 # старых модулей (AttributeError). Поэтому перезагружаем модули, чьи файлы изменились;
 # порядок — от зависимостей к зависимым.
 _MODS = (okno.paths, okno.regions, okno.report, okno.ice, okno.calib, okno.features, okno.planner, okno.m1,
-         okno.forecast)
+         okno.forecast, app.route_map)
 if any(getattr(m, "_loaded_mtime", None) != os.path.getmtime(m.__file__) for m in _MODS):
     for _mod in _MODS:  # модули берут функции друг у друга по имени — перезагружаем всю цепочку
         importlib.reload(_mod)
@@ -53,6 +54,7 @@ from okno import forecast as FC
 from okno.ice import from_season_day, to_season_day
 from okno.paths import PROCESSED, REPORTS
 from okno.planner import Params, calendar_plan, plan_week_volumes, sample_quantiles, simulate_season
+from app.route_map import build_route_map, schematic_routes
 
 # ------------------------------------------------------------------ данные
 from okno.regions import REGIONS, label  # noqa: E402
@@ -163,20 +165,33 @@ with tabs[0]:
         p_ok = p_open * (1 - p_closed) if not (np.isnan(p_open) or np.isnan(p_closed)) else np.nan
         color = ("#9e9e9e" if np.isnan(p_ok) else
                  "#2e7d32" if p_ok >= 0.8 else "#ef8c00" if p_ok >= 0.5 else "#c62828")
-        txt = f"<b>{label(p)}</b><br>P(открыт через {horizon} дн.) = " + ("н/д" if np.isnan(p_ok) else f"{p_ok:.0%}")
+        point_type = "Опорная точка переправы" if p == "yakutsk_crossing" else "Гидропост"
+        txt = f"<b>{label(p)}</b><br>{point_type}<br>P(открыт через {horizon} дн.) = " + ("н/д" if np.isnan(p_ok) else f"{p_ok:.0%}")
         if qc and "error" not in qc:
             txt += f"<br>Таяние (М1, 50%): {qc['q50_date']:%d.%m}, диапазон {qc['q10_date']:%d.%m}–{qc['q90_date']:%d.%m}"
-        rows.append({"lat": meta["lat"], "lon": meta["lon"], "color": color, "txt": txt})
-    pts = pd.DataFrame(rows)
-    # Plotly + MapLibre GL (открытый движок, рисует на видеокарте); подложка CARTO по данным OSM
-    fmap = go.Figure(go.Scattermap(
-        lat=pts.lat, lon=pts.lon, mode="markers", text=pts.txt, hoverinfo="text",
-        marker=dict(size=16, color=pts.color, opacity=0.9)))
-    _c = REGIONS[region]["center"]
-    fmap.update_layout(map=dict(style="carto-voyager", center=dict(lat=_c[0], lon=_c[1]), zoom=REGIONS[region]["zoom"]),
-                       margin=dict(l=0, r=0, t=0, b=0), height=520, showlegend=False)
-    st.plotly_chart(fmap, width="stretch", config={"scrollZoom": True, "displaylogo": False})
-    st.caption("Цвет: зелёный ≥ 80%, оранжевый 50–80%, красный < 50%, серый — нет данных для прогноза. "
+        rows.append({"point_id": p, "lat": meta["lat"], "lon": meta["lon"], "color": color, "txt": txt})
+
+    routes = schematic_routes(region)
+    focus_route = None
+    if routes:
+        route_names = {route.id: f"{route.name} · схема" for route in routes}
+        focus_route = st.selectbox(
+            "Масштаб карты", [None] + list(route_names),
+            format_func=lambda route_id: route_names.get(route_id, "Весь регион"),
+            key=f"map_focus_{region}",
+            help="Выберите путь, чтобы приблизить схему. Наведите на линию, чтобы увидеть название.",
+        )
+        st.caption("Синяя линия — зимник на Батагай; фиолетовая — переправа Якутск — Нижний Бестях. "
+                   "Наведите на линию, чтобы увидеть название.")
+        st.info("Линии — схемы по опорным точкам. Точные трассы зимника и въезды на переправу "
+                "в данных отсутствуют; у Якутска показан отрезок от города до опорной точки переправы.")
+    else:
+        st.caption("Для этого региона показаны гидропосты. Данных о трассах путей в проекте пока нет.")
+
+    fmap = build_route_map(region, rows, routes, selected_point=pid, focus_route=focus_route)
+    st.pydeck_chart(fmap, width="stretch", height=520, key=f"routes_map_{region}",
+                    alt="Карта прогнозов: гидропосты и схемы пилотных сезонных путей с названиями при наведении.")
+    st.caption("Цвет точек: зелёный ≥ 80%, оранжевый 50–80%, красный < 50%, серый — нет данных для прогноза. "
                "Вероятность = P(лёд уже держит 20 т) × P(путь ещё не закрыт).")
 
 # ------------------------------------------------------------------ 2. карточка пути
