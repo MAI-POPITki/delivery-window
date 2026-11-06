@@ -9,6 +9,17 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+import streamlit as st
+
+from app.welcome import render_welcome, show_welcome
+
+st.set_page_config(page_title="Окно завоза", page_icon="🧊", layout="wide")
+
+# Главная страница не загружает данные и модели до перехода в дашборд.
+if not st.session_state.get("dashboard_open", False):
+    render_welcome()
+    st.stop()
+
 import datetime as dt
 import importlib
 import os
@@ -16,7 +27,6 @@ import os
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-import streamlit as st
 
 import okno.calib
 import okno.features
@@ -43,8 +53,6 @@ from okno import forecast as FC
 from okno.ice import from_season_day, to_season_day
 from okno.paths import PROCESSED, REPORTS
 from okno.planner import Params, calendar_plan, plan_week_volumes, sample_quantiles, simulate_season
-
-st.set_page_config(page_title="Окно завоза", page_icon="🧊", layout="wide")
 
 # ------------------------------------------------------------------ данные
 from okno.regions import REGIONS, label  # noqa: E402
@@ -110,6 +118,8 @@ def p_by(q, t):
 
 # ------------------------------------------------------------------ боковая панель
 st.sidebar.title("🧊 Окно завоза")
+st.sidebar.button("О проекте", key="show_welcome", on_click=show_welcome,
+                  icon=":material/arrow_back:", width="stretch")
 st.sidebar.caption("Прогноз окон сезонных путей и график завоза. Открытые данные, без датчиков.")
 region = st.sidebar.selectbox("Регион", list(REGIONS), format_func=lambda k: REGIONS[k]["name"])
 st.sidebar.caption(REGIONS[region]["note"])
