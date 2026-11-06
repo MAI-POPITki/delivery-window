@@ -95,6 +95,28 @@ class WelcomeTests(unittest.TestCase):
         self.assertEqual(len(app.download_button), 0)
         self.assertEqual(len(app.warning), 1)
 
+    def test_planner_accepts_small_order_and_fractional_parameters(self):
+        app = self.new_app()
+        app.button(key="open_dashboard").click().run()
+        values = {
+            "Осталось вывезти на дату решения, т": 45.0,
+            "Своя техника, т/нед": 28.0,
+            "Доп. техника максимум, т/нед": 18.7,
+            "Зимник, ₽/т": 22447.50,
+            "Надбавка за доп. технику, ₽/т": 4489.50,
+            "Дорогой канал (авиа/СВП), ₽/т": 500000.0,
+            "Хранение, ₽/т·нед": 149.80,
+        }
+        for widget in app.number_input:
+            widget.set_value(values[widget.label])
+        app.run()
+        self.assertEqual([e.message for e in app.exception], [])
+        for widget in app.number_input:
+            self.assertAlmostEqual(widget.value, values[widget.label])
+            self.assertLessEqual(widget.min, widget.value)
+            self.assertGreaterEqual(widget.max, widget.value)
+        self.assertTrue(any("Рекомендация: своей техникой" in item.value for item in app.markdown))
+
     def test_document_path_is_independent_of_working_directory(self):
         previous_directory = Path.cwd()
         with tempfile.TemporaryDirectory() as directory:
