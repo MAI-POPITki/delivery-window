@@ -1,0 +1,7 @@
+point_id,hydro_year,kind,date,source,comment
+yakutsk_crossing,2017,close,2017-05-22,авто: Sentinel-1 (М2),между снимками 2017-05-16 и 2017-05-28
+yakutsk_crossing,2018,close,2018-05-17,авто: Sentinel-1 (М2),между снимками 2018-05-11 и 2018-05-23
+yakutsk_crossing,2019,close,2019-05-24,авто: Sentinel-1 (М2),между снимками 2019-05-18 и 2019-05-30
+yakutsk_crossing,2020,close,2020-05-06,авто: Sentinel-1 (М2),между снимками 2020-04-30 и 2020-05-12
+yakutsk_crossing,2021,close,2021-05-16,авто: Sentinel-1 (М2),между снимками 2021-05-14 и 2021-05-19
+yakutsk_crossing,2026,close,2026-05-23,авто: Sentinel-1 (М2),между снимками 2026-05-18 и 2026-05-29
