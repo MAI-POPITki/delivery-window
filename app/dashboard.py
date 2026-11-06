@@ -172,18 +172,62 @@ with tabs[0]:
         txt = f"<b>{label(p)}</b><br>P(открыт через {horizon} дн.) = " + ("н/д" if np.isnan(p_ok) else f"{p_ok:.0%}")
         if qc and "error" not in qc:
             txt += f"<br>Таяние (М1, 50%): {qc['q50_date']:%d.%m}, диапазон {qc['q10_date']:%d.%m}–{qc['q90_date']:%d.%m}"
-        rows.append({"lat": meta["lat"], "lon": meta["lon"], "color": color, "txt": txt})
+        rows.append({"lat": meta["lat"], "lon": meta["lon"], "color": color, "txt": txt, "p_ok": p_ok})
     pts = pd.DataFrame(rows)
-    # Plotly + MapLibre GL (открытый движок, рисует на видеокарте); подложка CARTO по данным OSM
-    fmap = go.Figure(go.Scattermap(
-        lat=pts.lat, lon=pts.lon, mode="markers", text=pts.txt, hoverinfo="text",
-        marker=dict(size=16, color=pts.color, opacity=0.9)))
+    _l1, _l2 = st.columns(2)
+    show_roads = _l1.checkbox("Зимники и ледовые переправы (OpenStreetMap)", value=True, key="layer_roads")
+    show_s1 = _l2.checkbox("Лена по радарным снимкам (М2)", value=region == "yakutia", key="layer_s1")
+    fmap = go.Figure()
+    # 1) реальные зимники из OpenStreetMap (scripts/osm_roads.py) — одной линией с разрывами, так быстрее
+    _roads_file = Path(PROCESSED).parent / "osm" / "winter_roads.json"
+    if show_roads and _roads_file.exists():
+        import json as _json
+        _lat, _lon, _txt = [], [], []
+        for r in _json.loads(_roads_file.read_text(encoding="utf-8")):
+            nm = r["name"] or ("ледовая переправа" if r["kind"] == "ice_road" else "зимник")
+            _lat += r["lat"] + [None]
+            _lon += r["lon"] + [None]
+            _txt += [f"{nm}<br><span style='font-size:11px'>OpenStreetMap</span>"] * len(r["lat"]) + [None]
+        fmap.add_trace(go.Scattermap(lat=_lat, lon=_lon, mode="lines", text=_txt, hoverinfo="text",
+                                     line=dict(width=2.5, color="#2b6cb0"), name="зимники OSM", opacity=0.75))
+    # 2) Лена по снимкам Sentinel-1 (М2): белое кольцо + цвет состояния
+    _pp = Path(PROCESSED).parent / "s1" / "predictions.csv"
+    if show_s1 and _pp.exists():
+        from okno.s1_points import LENA_NAMES
+        _p = pd.read_csv(_pp, parse_dates=["date"]).dropna(subset=["p_ice"])
+        _idx = pd.read_csv(Path(PROCESSED).parent / "s1" / "index.csv", usecols=["item_id", "lat", "lon"])
+        _s = _p.merge(_idx, on="item_id").sort_values("date").groupby("point").tail(1)
+        _state = np.where(_s.p_ice >= 0.8, "лёд", np.where(_s.p_ice <= 0.2, "вода", "неясно"))
+        _col = np.where(_s.p_ice >= 0.8, "#cfeeff", np.where(_s.p_ice <= 0.2, "#0b3d91", "#8aa5c8"))
+        _t = [f"<b>{LENA_NAMES.get(a, a)}</b><br>Sentinel-1, {d:%d.%m.%Y}: <b>{st_}</b> (P(лёд) = {pi:.2f})"
+              for a, d, st_, pi in zip(_s.point, _s.date, _state, _s.p_ice)]
+        fmap.add_trace(go.Scattermap(lat=_s.lat, lon=_s.lon, mode="markers", hoverinfo="skip",
+                                     marker=dict(size=17, color="#ffffff"), showlegend=False))
+        fmap.add_trace(go.Scattermap(lat=_s.lat, lon=_s.lon, mode="markers", text=_t, hoverinfo="text",
+                                     marker=dict(size=12, color=list(_col)), name="Лена по снимкам: лёд / вода"))
+    # 3) пути: цвет — вероятность «путь открыт через N дней» по непрерывной шкале
+    ok = pts[pts.p_ok.notna()]
+    na = pts[pts.p_ok.isna()]
+    if len(na):
+        fmap.add_trace(go.Scattermap(lat=na.lat, lon=na.lon, mode="markers", text=na.txt, hoverinfo="text",
+                                     marker=dict(size=15, color="#9e9e9e"), name="нет данных для прогноза"))
+    if len(ok):
+        fmap.add_trace(go.Scattermap(lat=ok.lat, lon=ok.lon, mode="markers", hoverinfo="skip",
+                                     marker=dict(size=22, color="#ffffff"), showlegend=False))
+        fmap.add_trace(go.Scattermap(
+            lat=ok.lat, lon=ok.lon, mode="markers", text=ok.txt, hoverinfo="text", name="пути: прогноз",
+            marker=dict(size=17, color=ok.p_ok, cmin=0, cmax=1, colorscale="RdYlGn",
+                        colorbar=dict(title=dict(text="P(путь<br>открыт)", font=dict(size=11)), tickformat=".0%",
+                                      thickness=12, len=0.6, x=0.99, xanchor="right", y=0.5,
+                                      bgcolor="rgba(255,255,255,0.75)"))))
     _c = REGIONS[region]["center"]
     fmap.update_layout(map=dict(style="carto-voyager", center=dict(lat=_c[0], lon=_c[1]), zoom=REGIONS[region]["zoom"]),
-                       margin=dict(l=0, r=0, t=0, b=0), height=520, showlegend=False)
+                       margin=dict(l=0, r=0, t=0, b=0), height=560, showlegend=True,
+                       legend=dict(x=0.01, y=0.99, bgcolor="rgba(255,255,255,0.85)", font=dict(size=11, color="#222")))
     st.plotly_chart(fmap, width="stretch", config={"scrollZoom": True, "displaylogo": False})
-    st.caption("Цвет: зелёный ≥ 80%, оранжевый 50–80%, красный < 50%, серый — нет данных для прогноза. "
-               "Вероятность = P(лёд уже держит 20 т) × P(путь ещё не закрыт).")
+    st.caption("Цвет точки пути — вероятность, что путь открыт через N дней: P(лёд уже держит 20 т) × P(путь ещё не "
+               "закрыт); серый — нет данных. Синие линии — зимники и ледовые переправы из OpenStreetMap (район пилота "
+               "Якутск — Батагай). Светлые точки на Лене — лёд, тёмные — вода по последнему снимку Sentinel-1 (М2).")
 
 # ------------------------------------------------------------------ 2. карточка пути
 with tabs[1]:

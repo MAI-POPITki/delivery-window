@@ -32,7 +32,7 @@ a{color:var(--accent)} ul{padding-left:20px;margin:6px 0}
 <a class="btn ghost" href="project.pdf">Документ проекта (PDF)</a>
 <a class="btn ghost" href="https://github.com/MAI-POPITki/delivery-window">Код и данные</a></div>
 </header>
-<div class="kpis"><div class="kpi"><div class="v">580 → 108 т</div><div class="l">недовоз за сезон на зимнике до Батагая</div></div><div class="kpi"><div class="v">28,8 → 26,0 тыс. ₽/т</div><div class="l">расходы с учётом дорогих каналов</div></div><div class="kpi"><div class="v">−14%</div><div class="l">ошибка прогноза открытия за 14 дней</div></div><div class="kpi"><div class="v">47 / 47</div><div class="l">проверок данных пройдено</div></div></div>
+<div class="kpis"><div class="kpi"><div class="v">580 → 108 т</div><div class="l">недовоз за сезон на зимнике до Батагая</div></div><div class="kpi"><div class="v">28,7 → 25,9 тыс. ₽/т</div><div class="l">расходы с учётом дорогих каналов</div></div><div class="kpi"><div class="v">−14%</div><div class="l">ошибка прогноза открытия за 14 дней</div></div><div class="kpi"><div class="v">47 / 47</div><div class="l">проверок данных пройдено</div></div></div>
 
 <section><h2>Как это работает</h2><div class="steps">
 <div class="step"><b>1. Данные</b>Замеры льда на 13 гидропостах Якутии, спутниковые даты льда Лены, погода ERA5 с 1979 года.
@@ -59,6 +59,19 @@ a{color:var(--accent)} ul{padding-left:20px;margin:6px 0}
 возможных дат: тот же планировщик на разбросе прошлых лет работает не хуже. Тарифы и объёмы — объявленная синтетика,
 поэтому рубли — иллюстрация, а устойчивый результат — направление и порядок эффекта.</div>
 </section>
+
+<section><h2>М2: спутник видит лёд</h2>
+<p>Нейросетевой блок проекта: по радарным снимкам Sentinel-1 (видят сквозь облака и полярную ночь) модель определяет,
+что сейчас на Лене — <b>лёд или вода</b>. 7 точек от Ленска до Кюсюра, снимки обновляются каждый день.</p>
+<div class="kpis"><div class="kpi"><div class="v">95%</div><div class="l">точность на годах вне обучения</div></div>
+<div class="kpi"><div class="v">1 557</div><div class="l">снимков 2015–2026 размечено и проверено</div></div>
+<div class="kpi"><div class="v">±9 сут</div><div class="l">дата вскрытия по ряду снимков</div></div></div>
+<table style="width:100%;border-collapse:collapse"><tr><th align="left">Точка на Лене</th><th align="left">Снимок</th>
+<th align="left">Состояние</th><th align="left">P(лёд)</th></tr><tr><td>Жиганск</td><td>04.11.2026</td><td><b>лёд</b></td><td>0.98</td></tr><tr><td>Кюсюр</td><td>04.11.2026</td><td><b>лёд</b></td><td>1.00</td></tr><tr><td>Сангар</td><td>27.10.2026</td><td><b>лёд</b></td><td>0.97</td></tr><tr><td>Олёкминск</td><td>23.10.2026</td><td><b>вода</b></td><td>0.19</td></tr><tr><td>Переправа Якутск — Нижний Бестях</td><td>15.10.2026</td><td><b>неясно</b></td><td>0.23</td></tr><tr><td>Покровск</td><td>15.10.2026</td><td><b>вода</b></td><td>0.02</td></tr><tr><td>Ленск</td><td>27.09.2026</td><td><b>вода</b></td><td>0.01</td></tr></table>
+<p><img src="s1_preview.png" alt="Примеры вырезок Sentinel-1" style="max-width:100%;border-radius:10px"></p>
+<p class="muted">Метки для обучения — спутниковые даты льда (Qiu et al. 2026); проверка — сезон целиком вне обучения.
+Честно: как поправка к прогнозу вскрытия М2 точности не добавила — её ценность в факте события там, где нет гидропоста,
+и в живом состоянии реки. <a href="https://github.com/MAI-POPITki/delivery-window/blob/main/reports/m2_metrics.md">Отчёт об эффективности М2</a>.</p></section>
 
 <section><h2>Работает ли в других регионах</h2>
 <p class="muted">Модель обучена только на Якутии и проверена на гидропостах ЯНАО, Красноярского края, Иркутской и
