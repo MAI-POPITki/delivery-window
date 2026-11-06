@@ -38,6 +38,39 @@ def fig_html(fig, div_id, first=False):
                        config={"displaylogo": False, "responsive": True})
 
 
+def m2_section() -> str:
+    """Раздел М2: точность классификатора, состояние Лены по последним снимкам, примеры вырезок."""
+    import shutil
+    met, pred = REPORTS / "m2_metrics.csv", ROOT / "data" / "s1" / "predictions.csv"
+    if not (met.exists() and pred.exists()):
+        return ""
+    from okno.s1_points import LENA_NAMES
+    m = pd.read_csv(met).iloc[0]
+    p = pd.read_csv(pred, parse_dates=["date"]).dropna(subset=["p_ice"])
+    last = p.sort_values("date").groupby("point").tail(1).sort_values("date", ascending=False)
+    rows = "".join(
+        f"<tr><td>{html.escape(LENA_NAMES.get(r.point, r.point))}</td><td>{r.date:%d.%m.%Y}</td>"
+        f"<td><b>{'лёд' if r.p_ice >= 0.8 else 'вода' if r.p_ice <= 0.2 else 'неясно'}</b></td>"
+        f"<td>{r.p_ice:.2f}</td></tr>" for r in last.itertuples())
+    img = ""
+    if (REPORTS / "s1_preview.png").exists():
+        DOCS.mkdir(exist_ok=True)
+        shutil.copy(REPORTS / "s1_preview.png", DOCS / "s1_preview.png")
+        img = '<p><img src="s1_preview.png" alt="Примеры вырезок Sentinel-1" style="max-width:100%;border-radius:10px"></p>'
+    return f"""<section><h2>М2: спутник видит лёд</h2>
+<p>Нейросетевой блок проекта: по радарным снимкам Sentinel-1 (видят сквозь облака и полярную ночь) модель определяет,
+что сейчас на Лене — <b>лёд или вода</b>. 7 точек от Ленска до Кюсюра, снимки обновляются каждый день.</p>
+<div class="kpis"><div class="kpi"><div class="v">{fmt(100 * m['точность'])}%</div><div class="l">точность на годах вне обучения</div></div>
+<div class="kpi"><div class="v">{fmt(len(p))}</div><div class="l">снимков 2015–2026 размечено и проверено</div></div>
+<div class="kpi"><div class="v">±9 сут</div><div class="l">дата вскрытия по ряду снимков</div></div></div>
+<table style="width:100%;border-collapse:collapse"><tr><th align="left">Точка на Лене</th><th align="left">Снимок</th>
+<th align="left">Состояние</th><th align="left">P(лёд)</th></tr>{rows}</table>
+{img}
+<p class="muted">Метки для обучения — спутниковые даты льда (Qiu et al. 2026); проверка — сезон целиком вне обучения.
+Честно: как поправка к прогнозу вскрытия М2 точности не добавила — её ценность в факте события там, где нет гидропоста,
+и в живом состоянии реки. <a href="{REPO_URL}/blob/main/reports/m2_metrics.md">Отчёт об эффективности М2</a>.</p></section>"""
+
+
 def main():
     met = pd.read_csv(REPORTS / "m1_metrics.csv")
     ba = pd.read_csv(REPORTS / "before_after_arctic.csv")
@@ -81,6 +114,7 @@ def main():
     g2.update_layout(title="Недовезено до закрытия зимника, т (бэктест по прошлым сезонам)", barmode="group")
 
     # график 3: переносимость — модель обучена только на Якутии
+    m2_html = m2_section()
     transfer_html = ""
     tf = REPORTS / "transfer_m1.csv"
     if tf.exists():
@@ -171,6 +205,8 @@ a{{color:var(--accent)}} ul{{padding-left:20px;margin:6px 0}}
 возможных дат: тот же планировщик на разбросе прошлых лет работает не хуже. Тарифы и объёмы — объявленная синтетика,
 поэтому рубли — иллюстрация, а устойчивый результат — направление и порядок эффекта.</div>
 </section>
+
+{m2_html}
 
 {transfer_html}
 

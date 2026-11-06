@@ -37,6 +37,8 @@ class Params:
     c_hold_week: float = 400         # ₽/т·нед хранения при раннем завозе (допущение)
     close_margin_days: float = 21    # закрытие пути = начало таяния − запас (допущение)
     start_day: int = 150             # начало завоза ≈ 29 января (день сезона; 0 = 1 сентября)
+    transit_days: float = 7          # рейс по зимнику от базы до склада, сут: груз «успел», если доехал до закрытия (допущение)
+    backup_arrival_day: int = 317    # недовезённое приходит запасным каналом (летняя навигация) ≈ 15 июля (допущение)
     n_scenarios: int = 1000
     seed: int = 42
 
@@ -48,7 +50,7 @@ class Params:
 
 SOURCE_TYPE = {"Q_t": "синтетика", "K_t_week": "синтетика", "K_extra_t_week": "синтетика",
                "c_road": "допущение", "c_extra": "допущение", "c_exp": "допущение",
-               "c_hold_week": "допущение", "close_margin_days": "допущение"}
+               "c_hold_week": "допущение", "close_margin_days": "допущение", "transit_days": "допущение"}
 SENSITIVE = list(SOURCE_TYPE)
 WEEK = 7
 
@@ -79,7 +81,7 @@ def plan_week_volumes(weeks, p_closed, remaining, p: Params, R):
 
 
 def calendar_plan(weeks, cal_close, p: Params):
-    n = max(1, int(np.sum(weeks + WEEK <= cal_close)))
+    n = max(1, int(np.sum(weeks + p.transit_days <= cal_close)))
     per = p.Q_t / n
     base, extra = np.zeros(len(weeks)), np.zeros(len(weeks))
     left = p.Q_t
@@ -100,7 +102,9 @@ def simulate_season(actual_close, forecasts, cal_close, p: Params, rule: str) ->
     """
     rng = np.random.default_rng(p.seed)
     weeks = np.arange(p.start_day, 300, WEEK, dtype=float)
-    R = max(cal_close, actual_close) + 14  # опорная дата начала расхода запаса
+    # опорная дата начала расхода запаса — задаётся заранее, по календарю; фактическая дата закрытия
+    # в момент планирования неизвестна и в план не попадает
+    R = cal_close + 14
     base, extra = np.zeros(len(weeks)), np.zeros(len(weeks))
     if rule == "asap":
         left = p.Q_t
@@ -118,22 +122,25 @@ def simulate_season(actual_close, forecasts, cal_close, p: Params, rule: str) ->
                 break
             avail = fc[fc.index <= w]
             if avail.empty:
-                p_closed = (weeks[i:] + WEEK > cal_close).astype(float)
+                p_closed = (weeks[i:] + p.transit_days > cal_close).astype(float)
             else:
                 f = avail.iloc[-1]
                 sc = sample_quantiles(f.q10, f.q50, f.q90, p.n_scenarios, rng) - p.close_margin_days
                 sc = np.maximum(sc, w)  # путь сегодня точно открыт — мы на нём
-                p_closed = np.array([(sc < ww + WEEK).mean() for ww in weeks[i:]])
+                p_closed = np.array([(sc < ww + p.transit_days).mean() for ww in weeks[i:]])
             xb, xe = plan_week_volumes(weeks[i:], p_closed, remaining, p, R)
             base[i], extra[i] = xb[0], xe[0]
             remaining -= xb[0] + xe[0]
-    ok = weeks + WEEK <= actual_close  # неделя «успела»: груз выехал и доехал до закрытия
+    ok = weeks + p.transit_days <= actual_close  # рейс «успел»: груз выехал и доехал до закрытия
     delivered = float((base + extra)[ok].sum())
     extra_used = float(extra[ok].sum())
     undelivered = p.Q_t - delivered
     hold = float(((base + extra)[ok] * np.maximum(R - weeks[ok], 0) / WEEK).sum()) * p.c_hold_week
     cost = delivered * p.c_road + extra_used * p.c_extra + hold + undelivered * p.c_exp
+    # весь путь до получателя: недовезённое по зимнику приходит запасным каналом позже, чем нужно складу
+    wait_days = max(0.0, p.backup_arrival_day - R)
     return {"rule": rule, "delivered_t": delivered, "share_delivered": delivered / p.Q_t,
+            "recipient_wait_t_days": undelivered * wait_days, "avg_wait_days": undelivered * wait_days / p.Q_t,
             "undelivered_t": undelivered, "extra_t": extra_used,
             "late_shipped_t": float((base + extra)[~ok].sum()),
             "cost_rub": cost, "cost_rub_per_t": cost / p.Q_t, "hold_rub": hold}

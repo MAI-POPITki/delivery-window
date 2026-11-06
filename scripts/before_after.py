@@ -91,6 +91,8 @@ def summarize(res: pd.DataFrame, bt_point: pd.DataFrame) -> pd.DataFrame:
          **{col: round(x.extra_t.mean()) for col, x in ((C, c), (F, f), (K, k), (A, a))}},
         {"показатель": "Расходы на хранение при раннем завозе", "единица": "₽/т",
          **{col: hold(x) for col, x in ((C, c), (F, f), (K, k), (A, a))}},
+        {"показатель": "Ожидание получателя: недовезённое приходит летней навигацией", "единица": "т·сут",
+         **{col: round(x.recipient_wait_t_days.mean()) for col, x in ((C, c), (F, f), (K, k), (A, a))}},
         {"показатель": "Расходы на тонну с учётом дорогих каналов и хранения", "единица": "₽/т",
          **{col: round(x.cost_rub_per_t.mean()) for col, x in ((C, c), (F, f), (K, k), (A, a))}},
         {"показатель": "Заблаговременность предупреждения о раннем закрытии", "единица": "сут",
