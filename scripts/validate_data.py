@@ -176,10 +176,7 @@ def main():
     pooled, per = stefan_check()
     comp = satellite_checks(seasons, gauges)
     write_report(comp, pooled, per)
-    from src.validate_data import main as run_a3_validation
-    run_a3_validation()
 
 
 if __name__ == "__main__":
     main()
-

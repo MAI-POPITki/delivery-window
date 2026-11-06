@@ -21,7 +21,7 @@ from app.welcome import PROJECT_PDF
 
 DASHBOARD = ROOT / "app" / "dashboard.py"
 UPLOADED_PDF_SHA256 = "f3ec3a496c8df257080519da8a886eccbc02ee60294b0ef51ef28dabec0d6cb8"  # паспорт v3 после ревью А3 (одна версия с docs/project.pdf)
-DASHBOARD_TABS = ["Карта путей", "Карточка пути", "Сквозной коридор (А3)", "Планировщик",
+DASHBOARD_TABS = ["Карта путей", "Карточка пути", "Планировщик",
                   "Рейтинг риска", "До / после", "О данных"]
 
 
