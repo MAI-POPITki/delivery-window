@@ -13,6 +13,78 @@ import streamlit as st
 
 from app.welcome import render_welcome, show_welcome
 
+def _px(lat, lon, zoom):
+    """Координаты в пикселях веб-меркатора при стартовом масштабе карты."""
+    import math
+    k = 512 * 2 ** zoom / 360  # плитка maplibre — 512 px
+    return lon * k, -math.degrees(math.log(math.tan(math.pi / 4 + math.radians(lat) / 2))) * k
+
+
+def place_labels(df, zoom, obstacles=()):
+    """Подписи путей без наложений (карта сама прячет подпись, которая задевает другую).
+    1) Точки вплотную (< 34 px) получают одну общую подпись — имена столбиком.
+    2) Для каждой подписи пробуем места «сверху», «снизу», «справа», «слева» и берём то, где она меньше всего
+       задевает чужие точки, точки и подписи Лены и другие подписи; несколько проходов, пока расстановка меняется.
+    obstacles — прямоугольники (x0, y0, x1, y1) в пикселях стартового масштаба."""
+    gap, th = 14, 16  # отступ от центра точки и высота строки, px
+    df = df.sort_values("lat", ascending=False).copy()
+    xy = {i: _px(r.lat, r.lon, zoom) for i, r in zip(df.index, df.itertuples())}
+    heads, names = [], {}
+    for i, r in zip(df.index, df.itertuples()):
+        x, y = xy[i]
+        h = next((j for j, hx, hy in heads if (x - hx) ** 2 + (y - hy) ** 2 < 34 ** 2), None)
+        if h is None:
+            heads.append((i, x, y))
+            names[i] = [r.short]
+        else:
+            names[h].append(r.short)
+    # неразрывные пробелы и по одному имени в строке: короткую строку карта не переносит сама
+    df["label_txt"] = ["<br>".join(n.replace(" ", " ") for n in names[i]) if i in names else "" for i in df.index]
+
+    def cands(i):
+        x, y = xy[i]
+        lines = names[i]
+        w, hh = 9 * max(map(len, lines)) + 4, th * len(lines)
+        c = {"top center": (x - w / 2, y - gap - hh, x + w / 2, y - gap),
+             "bottom center": (x - w / 2, y + gap, x + w / 2, y + gap + hh),
+             "middle right": (x + gap, y - hh / 2, x + gap + w, y + hh / 2),
+             "middle left": (x - gap - w, y - hh / 2, x - gap, y + hh / 2)}
+        if len(lines) > 1:  # несколько строк карта ровно ставит только сбоку: сверху/снизу текст ложится на кружок
+            c = {k: v for k, v in c.items() if k.startswith("middle")}
+        return c
+
+    def area(b, o):
+        return max(0, min(b[2], o[2]) - max(b[0], o[0])) * max(0, min(b[3], o[3]) - max(b[1], o[1]))
+
+    fixed = [tuple(b) for b in obstacles]
+    dots = {i: (x - 11, y - 11, x + 11, y + 11) for i, (x, y) in xy.items()}
+    order = sorted(names, key=lambda i: -len(names[i]))  # сначала многострочные: у них меньше вариантов
+    C = {i: cands(i) for i in order}
+    pos = {i: next(iter(C[i])) for i in order}
+
+    def cost(i, k):
+        b = C[i][k]
+        return (sum(area(b, o) for o in fixed) + sum(area(b, d) for j, d in dots.items() if j != i)
+                + sum(area(b, C[j][pos[j]]) for j in order if j != i))
+
+    placed = set()
+    for i in order:  # жадно, потом улучшение
+        pos[i] = min(C[i], key=lambda k: sum(area(C[i][k], o) for o in fixed)
+                     + sum(area(C[i][k], d) for j, d in dots.items() if j != i)
+                     + sum(area(C[i][k], C[j][pos[j]]) for j in placed))
+        placed.add(i)
+    for _ in range(4):
+        moved = False
+        for i in order:
+            k = min(C[i], key=lambda k: cost(i, k))
+            if cost(i, k) < cost(i, pos[i]):
+                pos[i], moved = k, True
+        if not moved:
+            break
+    df["textpos"] = [pos.get(i, "top center") for i in df.index]
+    return df[df.label_txt != ""]
+
+
 LEGEND_HTML = '\n<style>.okno-legend{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 10px}\n.okno-legend div{flex:1 1 220px;border:1px solid rgba(128,128,128,.25);border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.35}\n.okno-legend b{font-size:14px}.okno-sw{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle;margin:0 3px 0 0;border:2px solid #fff;box-shadow:0 0 0 1px #999}\n.okno-bar{display:inline-block;width:70px;height:10px;border-radius:5px;vertical-align:middle;background:linear-gradient(90deg,#a50026,#fdae61,#ffffbf,#a6d96a,#006837)}</style>\n<div class="okno-legend">\n<div>🚚 <b>Пути с прогнозом</b><br>крупные точки с подписью; цвет — вероятность, что путь открыт через N дней<br>\n<span class="okno-bar"></span> 0% → 100% &nbsp; <span class="okno-sw" style="background:#9e9e9e"></span>нет данных</div>\n<div>🛰️ <b>Лена со спутника (М2)</b><br>что на реке по последнему радарному снимку<br>\n<span class="okno-sw" style="background:#bfe9ff"></span>лёд &nbsp; <span class="okno-sw" style="background:#0b3d91"></span>вода &nbsp;\n<span class="okno-sw" style="background:#0b3d91;opacity:.35"></span>снимок старше 14 дней</div>\n<div>🌊 <b>Притоки Лены</b><br>мелкие бирюзовые точки — прогноз даты вскрытия (отдельная модель)<br>\n<span class="okno-sw" style="background:#0f9d8a"></span>точка на реке</div>\n<div>🛣️ <b>Зимники и переправы</b><br>линии из OpenStreetMap: где проходят сезонные пути региона</div>\n</div>'
 
 st.set_page_config(page_title="Окно завоза", page_icon="🧊", layout="wide")
@@ -184,8 +256,12 @@ with tabs[0]:
         rows.append({"lat": meta["lat"], "lon": meta["lon"], "color": color, "txt": txt, "p_ok": p_ok})
     pts = pd.DataFrame(rows)
     if len(pts):
-        pts["short"] = [label(p).split(" (")[0].split(" — ")[-1] if p != "yakutsk_crossing" else "Переправа Якутск"
-                        for p in WEATHER_POINTS if not FC.is_basin(p)]
+        def _short(p):
+            if p == "yakutsk_crossing":
+                return "Переправа Якутск"
+            parts = label(p).split(" (")[0].split(" — ")
+            return parts[-1] if parts[-1][:1].isupper() else parts[0]  # «Алгий — устье» → «Алгий»
+        pts["short"] = [_short(p) for p in WEATHER_POINTS if not FC.is_basin(p)]
 
     # ---- легенда с иконками: значки рисует браузер, на самой карте — цвет, размер и подписи
     st.markdown(LEGEND_HTML, unsafe_allow_html=True)
@@ -226,7 +302,7 @@ with tabs[0]:
         _s["col"] = np.where(_s.p_ice >= 0.8, "#bfe9ff", np.where(_s.p_ice <= 0.2, "#0b3d91", "#8aa5c8"))
         _s["hover"] = [f"<b>{LENA_NAMES.get(a, a)}</b><br>Sentinel-1, снимок {d:%d.%m.%Y} ({ag} дн. назад): <b>{st_}</b>"
                        f"<br>P(лёд) = {pi:.2f}" for a, d, ag, st_, pi in zip(_s.point, _s.date, _s.age, _s.state, _s.p_ice)]
-        _s["lbl"] = [f"{st_} · {d:%d.%m}" for st_, d in zip(_s.state, _s.date)]
+        _s["lbl"] = [f"\u00a0\u00a0\u00a0{st_} · {d:%d.%m}" for st_, d in zip(_s.state, _s.date)]
         for fresh, g in _s.groupby(_s.age <= 14):
             op = 1.0 if fresh else 0.35
             fmap.add_trace(go.Scattermap(lat=g.lat, lon=g.lon, mode="markers", hoverinfo="skip", showlegend=False,
@@ -240,19 +316,35 @@ with tabs[0]:
     ok = pts[pts.p_ok.notna()] if len(pts) else pts
     na = pts[pts.p_ok.isna()] if len(pts) else pts
     if len(na):
-        fmap.add_trace(go.Scattermap(lat=na.lat, lon=na.lon, mode="markers+text", text=na.short, hovertext=na.txt,
-                                     hoverinfo="text", textposition="top center", textfont=dict(size=11, color="#555"),
+        fmap.add_trace(go.Scattermap(lat=na.lat, lon=na.lon, mode="markers", hovertext=na.txt, hoverinfo="text",
                                      marker=dict(size=15, color="#9e9e9e"), name="🚚 путь: нет данных"))
     if len(ok):
         fmap.add_trace(go.Scattermap(lat=ok.lat, lon=ok.lon, mode="markers", hoverinfo="skip", showlegend=False,
                                      marker=dict(size=24, color="#ffffff")))
         fmap.add_trace(go.Scattermap(
-            lat=ok.lat, lon=ok.lon, mode="markers+text", text=ok.short, hovertext=ok.txt, hoverinfo="text",
-            textposition="top center", textfont=dict(size=12, color="#1b2a3a"), name="🚚 пути: прогноз",
+            lat=ok.lat, lon=ok.lon, mode="markers", hovertext=ok.txt, hoverinfo="text", name="🚚 пути: прогноз",
             marker=dict(size=19, color=ok.p_ok, cmin=0, cmax=1, colorscale="RdYlGn",
                         colorbar=dict(title=dict(text="P(путь открыт<br>через N дн.)", font=dict(size=11)),
                                       tickformat=".0%", thickness=12, len=0.55, x=0.99, xanchor="right", y=0.5,
                                       bgcolor="rgba(255,255,255,0.8)"))))
+    # подписи путей — отдельными текстовыми слоями «над» и «под» точкой (слой не принимает разные позиции)
+    if len(pts):
+        _z = REGIONS[region]["zoom"]
+        _obst = []
+        if show_basin and basin_rows:  # мелкие точки притоков
+            for la, lo in zip(_b.lat, _b.lon):
+                x, y = _px(la, lo, _z)
+                _obst.append((x - 5, y - 5, x + 5, y + 5))
+        if show_s1 and _pp.exists():  # точки Лены и их подписи справа
+            for la, lo, t in zip(_s.lat, _s.lon, _s.lbl):
+                x, y = _px(la, lo, _z)
+                _obst += [(x - 8, y - 8, x + 8, y + 8), (x + 8, y - 8, x + 8 + 7 * len(t), y + 8)]
+        _lab = place_labels(pts, _z, _obst)
+        for where, g in _lab.groupby("textpos"):
+            fmap.add_trace(go.Scattermap(lat=g.lat, lon=g.lon, mode="markers+text", text=g.label_txt, textposition=where,
+                                         marker=dict(size=26, color="rgba(0,0,0,0)"),  # прозрачная точка задаёт отступ
+                                         textfont=dict(size=13, color="#14243a", weight="bold"),
+                                         hoverinfo="skip", showlegend=False))
     _c = REGIONS[region]["center"]
     fmap.update_layout(map=dict(style="carto-voyager", center=dict(lat=_c[0], lon=_c[1]), zoom=REGIONS[region]["zoom"]),
                        margin=dict(l=0, r=0, t=0, b=0), height=600, showlegend=True,
