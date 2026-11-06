@@ -39,7 +39,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Свежая погода ERA5 (докачка хвоста)
-        run: python scripts/download_data.py --weather --gauges --recent
+        run: python scripts/download_data.py --weather --gauges --lena --recent
 
       - name: Архив прогнозов GFS для погодной модели закрытия
         continue-on-error: true   # при недоступности архива дашборд использует обычную М1
@@ -50,11 +50,12 @@ jobs:
         run: |
           pip install -r requirements-data.txt
           python scripts/s1_chips.py --days 10 --no-preview
+          python scripts/m2_predict.py   # М2: лёд/вода на новых снимках, автодаты событий, автофакты журнала
 
       - name: Есть ли новые данные
         id: diff
         run: |
-          if git diff --quiet -- data/weather; then
+          if git diff --quiet -- data/weather && [ -z "$(git ls-files --others --exclude-standard data/weather)" ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "Новых данных о погоде нет"
           else

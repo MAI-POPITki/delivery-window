@@ -27,8 +27,25 @@ def _gauges():
 
 
 @lru_cache(maxsize=None)
+@lru_cache(maxsize=None)
+def _lena_points():
+    from .paths import DATA
+    f = DATA / "lena_points.csv"
+    return pd.read_csv(f).set_index("point_id") if f.exists() else pd.DataFrame(columns=["lat", "lon"])
+
+
+def is_basin(point_id: str) -> bool:
+    """Точка бассейна Лены (притоки) — свой прогноз закрытия (models/m1_close_lena.cbm), открытия нет."""
+    return point_id.startswith("lena_")
+
+
 def history(point_id: str) -> pd.DataFrame:
     """Фактические даты прошлых сезонов: index = hydro_year; open_day, close_day, freezeup_day."""
+    if is_basin(point_id):
+        s = pd.read_csv(PROCESSED / "lena_sat_seasons.csv")
+        s = s[s.point_id == point_id]
+        return pd.DataFrame({"open_day": np.nan, "close_day": s["sat_breakup_day"].to_numpy(),
+                             "freezeup_day": s["sat_freezeup_day"].to_numpy()}, index=s["hydro_year"].to_numpy())
     if point_id == "yakutsk_crossing":
         s = pd.read_csv(PROCESSED / "yakutsk_sat_seasons.csv")
         return pd.DataFrame({"open_day": np.nan, "close_day": s["sat_breakup_day"].to_numpy(),
@@ -44,6 +61,9 @@ def history(point_id: str) -> pd.DataFrame:
 def point_meta(point_id: str) -> dict:
     if point_id in POINTS:
         return POINTS[point_id]
+    if is_basin(point_id):
+        r = _lena_points().loc[point_id]
+        return {"name": point_id, "lat": float(r["lat"]), "lon": float(r["lon"]), "is_satellite": 1, "gauge": None}
     code = int(point_id.split("_")[1])
     g = _gauges().set_index("gauge_code").loc[code]
     return {"name": g["name"], "lat": float(g["lat"]), "lon": float(g["lon"]), "is_satellite": 0, "gauge": code}
@@ -54,8 +74,10 @@ def _mtime(path) -> float:
 
 
 def _weather_path(point_id):
-    p = WEATHER / f"{point_id}.csv"
-    return p if p.exists() else WEATHER / "gauges" / f"{point_id}.csv"
+    for p in (WEATHER / f"{point_id}.csv", WEATHER / "gauges" / f"{point_id}.csv", WEATHER / "lena" / f"{point_id}.csv"):
+        if p.exists():
+            return p
+    return WEATHER / "gauges" / f"{point_id}.csv"
 
 
 def data_version() -> float:
@@ -149,6 +171,9 @@ def calendar_day(point_id, hydro_year, kind):
 
 
 def forecast(point_id: str, hydro_year: int, issue_day: int, kind: str, *, use_weather=False) -> dict | None:
+    if is_basin(point_id) and kind == "open":
+        return None  # в бассейне Лены нет замеров толщины — прогнозируем только вскрытие
+    model_key = "close_lena" if is_basin(point_id) and kind == "close" else kind
     T_all, S_all, T_full = _matrices(point_id)
     if hydro_year not in T_all.index:
         return None
@@ -183,8 +208,8 @@ def forecast(point_id: str, hydro_year: int, issue_day: int, kind: str, *, use_w
     row = {"issue_day": issue_day, "lat": meta["lat"], "is_satellite": meta["is_satellite"],
            "cal_target": cal, "phys_pred": phys, "phys_minus_cal": phys - cal, **f}
     X = pd.DataFrame([row])[F.FEATURES[kind]]
-    q = np.sort(np.asarray(_model(kind).predict(X))[0]) + cal
-    corr = _conformal(kind)
+    q = np.sort(np.asarray(_model(model_key).predict(X))[0]) + cal
+    corr = _conformal(model_key)
     q[0], q[2] = q[0] - corr, q[2] + corr
     q = np.maximum(q, issue_day)  # событие ещё не наступило — раньше даты прогноза его быть не может
     weather_message, weather_applied, weather_delta = "", False, None

@@ -57,9 +57,8 @@ from okno.regions import REGIONS, label  # noqa: E402
 
 def region_points(key):
     """Точки региона, для которых есть погода (иначе прогноз не посчитать)."""
-    r = REGIONS[key]
-    pts = list(r["extra_points"]) + [f"gauge_{c}" for c in r["gauges"]]
-    return [p for p in pts if FC._weather_path(p).exists()]
+    from okno.regions import points_of
+    return [p for p in points_of(key) if FC._weather_path(p).exists()]
 
 
 def season_name(hy):
@@ -141,8 +140,8 @@ margin = st.sidebar.slider("Запас до таяния при закрытии
                            help="Путь закрывают раньше физического начала таяния: ограничения массы, "
                                 "дорожный режим. Допущение, проверяется на чувствительность.")
 use_weather_close = st.sidebar.checkbox(
-    # Новый ключ включает эксперимент и в уже открытых сессиях после обновления.
-    "Погодная модель закрытия (эксперимент)", value=True, key="weather_close_enabled_v2",
+    # Выключено по умолчанию: на проверке выигрыш 1,3%, на горизонтах 7 и 14 дней — без улучшения.
+    "Погодная модель закрытия (эксперимент)", value=False, key="weather_close_enabled_v3",
     help="Модель обучена на архиве прогнозов GFS. Пилот — переправа Якутск — Нижний Бестях. "
          "При отсутствии данных используется обычная М1. Прогноз открытия не меняется.",
 )
@@ -160,8 +159,16 @@ with tabs[0]:
     st.subheader(f"Вероятность, что путь открыт через {horizon} дн. — {season_name(hy)}")
     t = issue_day + horizon
     rows = []
+    basin_rows = []
     for p in WEATHER_POINTS:
         meta = FC.point_meta(p)
+        if FC.is_basin(p):  # притоки Лены: только прогноз вскрытия — отдельный слой
+            qc = fc_cached(p, hy, issue_day, "close")
+            if qc and "error" not in qc:
+                basin_rows.append({"lat": meta["lat"], "lon": meta["lon"],
+                                   "txt": f"<b>{label(p)}</b><br>Вскрытие (М1 для притоков, 50%): {qc['q50_date']:%d.%m}, "
+                                          f"диапазон {qc['q10_date']:%d.%m}–{qc['q90_date']:%d.%m}"})
+            continue
         qo, qc = fc_cached(p, hy, issue_day, "open"), fc_cached(p, hy, issue_day, "close")
         p_open = p_by(qo, t)
         p_open = 1.0 if np.isnan(p_open) and issue_day > 120 else p_open
@@ -172,18 +179,70 @@ with tabs[0]:
         txt = f"<b>{label(p)}</b><br>P(открыт через {horizon} дн.) = " + ("н/д" if np.isnan(p_ok) else f"{p_ok:.0%}")
         if qc and "error" not in qc:
             txt += f"<br>Таяние (М1, 50%): {qc['q50_date']:%d.%m}, диапазон {qc['q10_date']:%d.%m}–{qc['q90_date']:%d.%m}"
-        rows.append({"lat": meta["lat"], "lon": meta["lon"], "color": color, "txt": txt})
+        rows.append({"lat": meta["lat"], "lon": meta["lon"], "color": color, "txt": txt, "p_ok": p_ok})
     pts = pd.DataFrame(rows)
-    # Plotly + MapLibre GL (открытый движок, рисует на видеокарте); подложка CARTO по данным OSM
-    fmap = go.Figure(go.Scattermap(
-        lat=pts.lat, lon=pts.lon, mode="markers", text=pts.txt, hoverinfo="text",
-        marker=dict(size=16, color=pts.color, opacity=0.9)))
+    _l1, _l2 = st.columns(2)
+    show_roads = _l1.checkbox("Зимники и ледовые переправы (OpenStreetMap)", value=True, key="layer_roads")
+    show_s1 = _l2.checkbox("Лена по радарным снимкам (М2)", value=region == "yakutia", key="layer_s1")
+    show_basin = st.checkbox("Притоки Лены: прогноз вскрытия (отдельная модель)", value=True, key="layer_basin")
+    fmap = go.Figure()
+    # 1) реальные зимники из OpenStreetMap (scripts/osm_roads.py) — одной линией с разрывами, так быстрее
+    _roads_file = Path(PROCESSED).parent / "osm" / "winter_roads.json"
+    if show_roads and _roads_file.exists():
+        import json as _json
+        _lat, _lon, _txt = [], [], []
+        for r in _json.loads(_roads_file.read_text(encoding="utf-8")):
+            if r.get("region", region) != region:  # только выбранный регион — карта легче
+                continue
+            nm = r["name"] or ("ледовая переправа" if r["kind"] == "ice_road" else "зимник")
+            _lat += r["lat"] + [None]
+            _lon += r["lon"] + [None]
+            _txt += [nm] * len(r["lat"]) + [None]
+        fmap.add_trace(go.Scattermap(lat=_lat, lon=_lon, mode="lines", text=_txt, hoverinfo="text",
+                                     line=dict(width=2.5, color="#2b6cb0"), name="зимники OSM", opacity=0.75))
+    # 2) Лена по снимкам Sentinel-1 (М2): белое кольцо + цвет состояния
+    _pp = Path(PROCESSED).parent / "s1" / "predictions.csv"
+    if show_s1 and _pp.exists():
+        from okno.s1_points import LENA_NAMES
+        _p = pd.read_csv(_pp, parse_dates=["date"]).dropna(subset=["p_ice"])
+        _idx = pd.read_csv(Path(PROCESSED).parent / "s1" / "index.csv", usecols=["item_id", "lat", "lon"])
+        _s = _p.merge(_idx, on="item_id").sort_values("date").groupby("point").tail(1)
+        _state = np.where(_s.p_ice >= 0.8, "лёд", np.where(_s.p_ice <= 0.2, "вода", "неясно"))
+        _col = np.where(_s.p_ice >= 0.8, "#cfeeff", np.where(_s.p_ice <= 0.2, "#0b3d91", "#8aa5c8"))
+        _t = [f"<b>{LENA_NAMES.get(a, a)}</b><br>Sentinel-1, {d:%d.%m.%Y}: <b>{st_}</b> (P(лёд) = {pi:.2f})"
+              for a, d, st_, pi in zip(_s.point, _s.date, _state, _s.p_ice)]
+        fmap.add_trace(go.Scattermap(lat=_s.lat, lon=_s.lon, mode="markers", hoverinfo="skip",
+                                     marker=dict(size=17, color="#ffffff"), showlegend=False))
+        fmap.add_trace(go.Scattermap(lat=_s.lat, lon=_s.lon, mode="markers", text=_t, hoverinfo="text",
+                                     marker=dict(size=12, color=list(_col)), name="Лена по снимкам: лёд / вода"))
+    # 2б) притоки Лены — прогноз вскрытия по отдельной модели (спутниковые даты Qiu 2001–2024)
+    if show_basin and basin_rows:
+        _b = pd.DataFrame(basin_rows)
+        fmap.add_trace(go.Scattermap(lat=_b.lat, lon=_b.lon, mode="markers", text=_b.txt, hoverinfo="text",
+                                     marker=dict(size=10, color="#0f9d8a", opacity=0.9),
+                                     name=f"притоки Лены: прогноз вскрытия ({len(_b)})"))
+    # 3) пути: цвет — вероятность «путь открыт через N дней» по непрерывной шкале
+    ok = pts[pts.p_ok.notna()]
+    na = pts[pts.p_ok.isna()]
+    if len(na):
+        fmap.add_trace(go.Scattermap(lat=na.lat, lon=na.lon, mode="markers", text=na.txt, hoverinfo="text",
+                                     marker=dict(size=15, color="#9e9e9e"), name="нет данных для прогноза"))
+    if len(ok):
+        fmap.add_trace(go.Scattermap(lat=ok.lat, lon=ok.lon, mode="markers", hoverinfo="skip",
+                                     marker=dict(size=22, color="#ffffff"), showlegend=False))
+        fmap.add_trace(go.Scattermap(
+            lat=ok.lat, lon=ok.lon, mode="markers", text=ok.txt, hoverinfo="text", name="пути: прогноз",
+            marker=dict(size=17, color=ok.p_ok, cmin=0, cmax=1, colorscale="RdYlGn",
+                        colorbar=dict(title=dict(text="P(путь<br>открыт)", font=dict(size=11)), tickformat=".0%",
+                                      thickness=12, len=0.6, x=0.99, xanchor="right", y=0.5,
+                                      bgcolor="rgba(255,255,255,0.75)"))))
     _c = REGIONS[region]["center"]
     fmap.update_layout(map=dict(style="carto-voyager", center=dict(lat=_c[0], lon=_c[1]), zoom=REGIONS[region]["zoom"]),
-                       margin=dict(l=0, r=0, t=0, b=0), height=520, showlegend=False)
+                       margin=dict(l=0, r=0, t=0, b=0), height=560, showlegend=True,
+                       legend=dict(x=0.01, y=0.99, bgcolor="rgba(255,255,255,0.85)", font=dict(size=11, color="#222")))
     st.plotly_chart(fmap, width="stretch", config={"scrollZoom": True, "displaylogo": False})
-    st.caption("Цвет: зелёный ≥ 80%, оранжевый 50–80%, красный < 50%, серый — нет данных для прогноза. "
-               "Вероятность = P(лёд уже держит 20 т) × P(путь ещё не закрыт).")
+    st.caption("Цвет точки пути — вероятность, что путь открыт через N дней: P(лёд уже держит 20 т) × P(путь ещё не "
+               "закрыт); серый — нет данных. Синие линии — зимники и ледовые переправы региона из OpenStreetMap. Светлые точки на Лене — лёд, тёмные — вода по последнему снимку Sentinel-1 (М2).")
 
 # ------------------------------------------------------------------ 2. карточка пути
 with tabs[1]:
@@ -195,8 +254,8 @@ with tabs[1]:
             st.markdown(f"**{title}**")
             if not q or "error" in q:
                 st.info("Нет прогноза для этой точки и вида события"
-                        + (" (у переправы нет замеров толщины — только спутниковые даты вскрытия)."
-                           if pid == "yakutsk_crossing" and kind == "open" else "."))
+                        + (" (здесь нет замеров толщины льда — только спутниковые даты вскрытия)."
+                           if (pid == "yakutsk_crossing" or FC.is_basin(pid)) and kind == "open" else "."))
                 continue
             close_note = f" (закрытие пути ≈ на {margin} сут раньше)" if kind == "close" else ""
             st.metric("Медиана прогноза М1", f"{q['q50_date']:%d.%m.%Y}",
@@ -235,6 +294,23 @@ with tabs[1]:
         f2 = go.Figure(go.Bar(x=h.index, y=h.close_day, name="начало таяния (день сезона)"))
         f2.update_layout(title="История прошлых сезонов: начало таяния, дней от 1 сентября", height=300)
         st.plotly_chart(f2, width="stretch")
+
+    # состояние Лены по последним радарным снимкам (М2)
+    if region == "yakutia":
+        _pp = Path(PROCESSED).parent / "s1" / "predictions.csv"
+        if _pp.exists():
+            from okno.s1_points import LENA_NAMES
+            _p = pd.read_csv(_pp, parse_dates=["date"]).dropna(subset=["p_ice"])
+            _last = _p.sort_values("date").groupby("point").tail(1).copy()
+            _last["точка на Лене"] = _last.point.map(LENA_NAMES)
+            _last["снимок"] = _last.date.dt.strftime("%d.%m.%Y")
+            _last["состояние"] = np.where(_last.p_ice >= 0.8, "лёд", np.where(_last.p_ice <= 0.2, "вода", "неясно"))
+            _last["P(лёд)"] = _last.p_ice.round(2)
+            st.markdown("**Лена по радарным снимкам Sentinel-1 (М2)** — что на реке по последнему снимку")
+            st.dataframe(_last.sort_values("date", ascending=False)[["точка на Лене", "снимок", "состояние", "P(лёд)"]],
+                         hide_index=True, width="stretch")
+            st.caption("Классификатор лёд/вода: точность 0,95 на годах вне обучения. Снимок примерно раз в 12 дней; "
+                       "даты вскрытия по ряду снимков — с точностью ≈ 9 сут.")
 
 # ------------------------------------------------------------------ 3. планировщик
 with tabs[2]:

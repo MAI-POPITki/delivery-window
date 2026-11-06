@@ -45,8 +45,9 @@ def log_today(today: dt.date):
     hy = int(hydro_year(pd.Series([pd.Timestamp(today)])).iloc[0])
     d = int(to_season_day(today, hy))
     rows = []
+    from okno.regions import points_of
     for key, r in REGIONS.items():
-        for pid in list(r["extra_points"]) + [f"gauge_{c}" for c in r["gauges"]]:
+        for pid in points_of(key):
             if not FC._weather_path(pid).exists():
                 continue
             for kind in ("open", "close"):
@@ -78,6 +79,12 @@ def log_today(today: dt.date):
 
 def verify(log: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     facts = pd.read_csv(FACTS, dtype=str) if FACTS.exists() else pd.DataFrame(columns=FACT_COLS)
+    auto = LOG / "facts_auto.csv"  # даты со спутника (М2, scripts/m2_predict.py); ручные факты важнее
+    if auto.exists():
+        a = pd.read_csv(auto, dtype=str)
+        key = ["point_id", "hydro_year", "kind"]
+        a = a[~a.set_index(key).index.isin(facts.set_index(key).index)]
+        facts = pd.concat([facts, a], ignore_index=True)
     if facts.empty:
         return pd.DataFrame(), pd.DataFrame()
     m = log.merge(facts[["point_id", "hydro_year", "kind", "date"]], on=["point_id", "hydro_year", "kind"])

@@ -165,7 +165,7 @@ def point_rows(point_id, meta, targets: pd.DataFrame, alphas: dict, kind: str):
 
 
 def build_m1_dataset(kind: str, codes=None, include_sat: bool = True,
-                     local_alpha: bool = True) -> pd.DataFrame:
+                     local_alpha: bool = True, lena: bool = False) -> pd.DataFrame:
     """codes — гидропосты (по умолчанию все якутские); local_alpha=False — коэффициент Стефана
     общий по Якутии, как для нового региона без замеров толщины."""
     seasons = pd.read_csv(PROCESSED / "hydro_ice_seasons.csv")
@@ -187,9 +187,33 @@ def build_m1_dataset(kind: str, codes=None, include_sat: bool = True,
             continue
         alphas = alpha_by_year(g.gauge_code, seasons, thick, t.index) if kind == "open" and local_alpha else {}
         rows += point_rows(pid, {"lat": g.lat, "lon": g.lon}, t, alphas, kind)
+    if kind == "close" and lena:  # точки по всему руслу Лены и притокам (scripts/lena_points.py)
+        rows += lena_rows(kind)
     if kind == "close" and include_sat:
         sat = pd.read_csv(PROCESSED / "yakutsk_sat_seasons.csv")
         t = pd.DataFrame({"target_day": sat["sat_breakup_day"].to_numpy(),
                           "freezeup_day": sat["sat_freezeup_day"].to_numpy()}, index=sat["hydro_year"].to_numpy())
         rows += point_rows("yakutsk_crossing", {"lat": 62.0, "lon": 129.82, "is_satellite": 1}, t, {}, kind)
     return pd.DataFrame(rows)
+
+
+def lena_rows(kind="close"):
+    """Спутниковые сезоны вскрытия в точках бассейна Лены (Qiu et al. 2026), где есть погода."""
+    from .paths import DATA
+    pts_f, sat_f = DATA / "lena_points.csv", PROCESSED / "lena_sat_seasons.csv"
+    if not (pts_f.exists() and sat_f.exists()):
+        return []
+    pts, sat = pd.read_csv(pts_f), pd.read_csv(sat_f)
+    rows = []
+    for p in pts.itertuples():
+        try:
+            load_weather(p.point_id)
+        except FileNotFoundError:
+            continue
+        s = sat[sat.point_id == p.point_id]
+        t = pd.DataFrame({"target_day": s["sat_breakup_day"].to_numpy(), "freezeup_day": s["sat_freezeup_day"].to_numpy()},
+                         index=s["hydro_year"].to_numpy())
+        if t["target_day"].notna().sum() < 10:
+            continue
+        rows += point_rows(p.point_id, {"lat": p.lat, "lon": p.lon, "is_satellite": 1}, t, {}, kind)
+    return rows

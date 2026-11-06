@@ -43,7 +43,7 @@ def load_weather(point_id: str, live: bool = False) -> pd.DataFrame:
     live=True — дописывает после конца архива оперативные данные Open-Meteo (последние дни)
     и прогноз на 16 дней (колонка is_forecast). Для обучения не используется."""
     from .paths import RECENT
-    for p in (WEATHER / f"{point_id}.csv", WEATHER / "gauges" / f"{point_id}.csv"):
+    for p in (WEATHER / f"{point_id}.csv", WEATHER / "gauges" / f"{point_id}.csv", WEATHER / "lena" / f"{point_id}.csv"):
         if p.exists():
             w = pd.read_csv(p, parse_dates=["date"])
             w["is_forecast"] = False
