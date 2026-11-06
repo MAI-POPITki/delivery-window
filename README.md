@@ -6,7 +6,7 @@
 | Ресурс | Описание |
 | :--- | :--- |
 | 🌐 **Страница проекта** | https://mai-popitki.github.io/delivery-window/ — ключевые цифры, графики, паспорт |
-| 📊 **Живой дашборд** | https://okno-zavoza.streamlit.app/ — карта, прогнозы, планировщик, сквозной коридор А3 (первое открытие после «сна» ~30–60 с) |
+| 📊 **Живой дашборд** | https://okno-zavoza-dmitrii.streamlit.app/ — карта, прогнозы, планировщик, сквозной коридор А3 (первое открытие после «сна» ~30–60 с) |
 | 📄 **Документ проекта** | [docs/project.pdf](docs/project.pdf) |
 | ✅ **Валидация данных А3** | [docs/validation_report.md](docs/validation_report.md) (7/7 проверок А3) и [reports/data_checks.md](reports/data_checks.md) (47/47 базовых проверок) |
 | 📈 **Модель окна и физика Стефана** | [reports/window_model_report.md](reports/window_model_report.md) — 5-квантильный `CatBoost` + уравнение Стефана (2001–2024) |
