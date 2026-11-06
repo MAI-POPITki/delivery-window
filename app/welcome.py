@@ -14,9 +14,9 @@ _STYLES = """
 }
 .st-key-welcome_intro {
     padding: 3.2rem;
-    border: 1px solid #294a60;
+    border: 1px solid #ff4b4b;
     border-radius: 24px;
-    background: radial-gradient(ellipse at top right, #28596b 0%, #102f46 65%);
+    background: #ff4b4b;
     color: #f4f9fc;
 }
 .st-key-welcome_intro h1 {
