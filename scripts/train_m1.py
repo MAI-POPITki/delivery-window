@@ -27,6 +27,37 @@ from okno.regions import all_gauges, region_of
 from okno.report import md_table
 
 
+def train_lena_model() -> pd.DataFrame:
+    """Отдельная модель закрытия для точек бассейна Лены (притоки, спутниковые даты Qiu 2001–2024).
+    Обучается на гидропостах + переправе + точках Лены, применяется ТОЛЬКО к точкам Лены: эксперимент
+    (reports/lena_experiment.md) показал, что старым точкам такие данные не помогают."""
+    df = build_m1_dataset("close", codes=all_gauges(), lena=True)
+    if not df.point_id.str.startswith("lena_").any():
+        return pd.DataFrame()
+    bt = m1.backtest(df, "close")
+    lena = bt[bt.point_id.str.startswith("lena_")].copy()
+    lena["region"] = "lena_basin"
+    rows = []
+    for lead, (lo, hi) in {**m1.LEAD_BUCKETS, "все": (0, 400)}.items():
+        s = lena[lena.lead_days.between(lo, hi)]
+        if s.empty:
+            continue
+        e_cal, e_m1 = (s.cal_target - s.target_day).abs().mean(), (s.q50 - s.target_day).abs().mean()
+        rows.append({"kind": "close", "группа": "бассейн Лены (спутник, отдельная модель)", "за_сколько_дней": lead,
+                     "n": len(s), "сезонов": s.hydro_year.nunique(), "MAE_календарь": round(e_cal, 1),
+                     "MAE_физика": round((s.phys_pred - s.target_day).abs().mean(), 1), "MAE_М1": round(e_m1, 1),
+                     "выигрыш_к_календарю_%": round(100 * (1 - e_m1 / e_cal), 1),
+                     "покрытие_10_90": round(((s.target_day >= s.q10) & (s.target_day <= s.q90)).mean(), 2),
+                     "ширина_10_90_сут": round((s.q90 - s.q10).mean(), 1)})
+    model = m1.fit(df, "close")
+    model.save_model(str(MODELS / "m1_close_lena.cbm"))
+    score = np.maximum(bt["q10_raw"] - bt["target_day"], bt["target_day"] - bt["q90_raw"])
+    (MODELS / "m1_close_lena_conformal.json").write_text(
+        json.dumps({"correction_days": m1.conformal_correction(score), "coverage": m1.TARGET_COVERAGE}))
+    print(f"модель для бассейна Лены: точек {lena.point_id.nunique()}, строк {len(lena)}")
+    return pd.DataFrame(rows)
+
+
 def main():
     REPORTS.mkdir(exist_ok=True)
     MODELS.mkdir(exist_ok=True)
@@ -49,6 +80,7 @@ def main():
             json.dumps({"correction_days": m1.conformal_correction(score), "coverage": m1.TARGET_COVERAGE}))
         imp = pd.Series(model.get_feature_importance(), index=model.feature_names_).sort_values(ascending=False)
         imp.round(1).to_csv(REPORTS / f"m1_importance_{kind}.csv", header=["importance"])
+    all_metrics.append(train_lena_model())
     met = pd.concat(all_metrics, ignore_index=True)
     met.to_csv(REPORTS / "m1_metrics.csv", index=False)
     names = {"open": "Открытие: лёд держит 20 т (гидропосты, замеры толщины)",

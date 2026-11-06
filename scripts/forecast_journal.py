@@ -45,8 +45,9 @@ def log_today(today: dt.date):
     hy = int(hydro_year(pd.Series([pd.Timestamp(today)])).iloc[0])
     d = int(to_season_day(today, hy))
     rows = []
+    from okno.regions import points_of
     for key, r in REGIONS.items():
-        for pid in list(r["extra_points"]) + [f"gauge_{c}" for c in r["gauges"]]:
+        for pid in points_of(key):
             if not FC._weather_path(pid).exists():
                 continue
             for kind in ("open", "close"):

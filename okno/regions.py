@@ -54,11 +54,37 @@ GAUGE_NAMES = {
 POINT_NAMES = {"yakutsk_crossing": "Переправа Якутск — Нижний Бестях (Лена)"}
 
 
+def basin_points() -> dict:
+    """Точки бассейна Лены (data/lena_points.csv) → регион. Верховья Лены в Иркутской обл., остальное — Якутия
+    (граница приближённая: западнее 119,5° в.д. и южнее 59,5° с.ш. — Иркутская обл.)."""
+    from pathlib import Path
+    import csv
+    f = Path(__file__).resolve().parent.parent / "data" / "lena_points.csv"
+    if not f.exists():
+        return {}
+    out = {}
+    for r in csv.DictReader(open(f, encoding="utf-8")):
+        la, lo = float(r["lat"]), float(r["lon"])
+        out[r["point_id"]] = {"lat": la, "lon": lo,
+                              "region": "irkutsk" if (lo < 119.5 and la < 59.5) else "yakutia"}
+    return out
+
+
+def points_of(key: str) -> list[str]:
+    """Все точки региона: переправы, гидропосты, точки бассейна Лены."""
+    r = REGIONS[key]
+    basin = [p for p, v in basin_points().items() if v["region"] == key]
+    return list(r["extra_points"]) + [f"gauge_{c}" for c in r["gauges"]] + basin
+
+
 def all_gauges() -> list[int]:
     return [g for r in REGIONS.values() for g in r["gauges"]]
 
 
 def region_of(point_id: str) -> str | None:
+    if point_id.startswith("lena_"):
+        b = basin_points().get(point_id)
+        return b["region"] if b else None
     for key, r in REGIONS.items():
         if point_id in r["extra_points"]:
             return key
@@ -70,5 +96,9 @@ def region_of(point_id: str) -> str | None:
 def label(point_id: str) -> str:
     if point_id in POINT_NAMES:
         return POINT_NAMES[point_id]
+    if point_id.startswith("lena_"):
+        b = basin_points().get(point_id, {})
+        la, lo = f"{b.get('lat', 0):.1f}".replace(".", ","), f"{b.get('lon', 0):.1f}".replace(".", ",")
+        return f"Бассейн Лены · {la}° с.ш., {lo}° в.д."
     code = int(point_id.split("_")[1])
     return GAUGE_NAMES.get(code, f"Гидропост {code}")
