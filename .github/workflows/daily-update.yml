@@ -50,6 +50,7 @@ jobs:
         run: |
           pip install -r requirements-data.txt
           python scripts/s1_chips.py --days 10 --no-preview
+          python scripts/m2_predict.py   # М2: лёд/вода на новых снимках, автодаты событий, автофакты журнала
 
       - name: Есть ли новые данные
         id: diff

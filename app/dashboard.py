@@ -141,8 +141,8 @@ margin = st.sidebar.slider("Запас до таяния при закрытии
                            help="Путь закрывают раньше физического начала таяния: ограничения массы, "
                                 "дорожный режим. Допущение, проверяется на чувствительность.")
 use_weather_close = st.sidebar.checkbox(
-    # Новый ключ включает эксперимент и в уже открытых сессиях после обновления.
-    "Погодная модель закрытия (эксперимент)", value=True, key="weather_close_enabled_v2",
+    # Выключено по умолчанию: на проверке выигрыш 1,3%, на горизонтах 7 и 14 дней — без улучшения.
+    "Погодная модель закрытия (эксперимент)", value=False, key="weather_close_enabled_v3",
     help="Модель обучена на архиве прогнозов GFS. Пилот — переправа Якутск — Нижний Бестях. "
          "При отсутствии данных используется обычная М1. Прогноз открытия не меняется.",
 )
@@ -235,6 +235,23 @@ with tabs[1]:
         f2 = go.Figure(go.Bar(x=h.index, y=h.close_day, name="начало таяния (день сезона)"))
         f2.update_layout(title="История прошлых сезонов: начало таяния, дней от 1 сентября", height=300)
         st.plotly_chart(f2, width="stretch")
+
+    # состояние Лены по последним радарным снимкам (М2)
+    if region == "yakutia":
+        _pp = Path(PROCESSED).parent / "s1" / "predictions.csv"
+        if _pp.exists():
+            from okno.s1_points import LENA_NAMES
+            _p = pd.read_csv(_pp, parse_dates=["date"]).dropna(subset=["p_ice"])
+            _last = _p.sort_values("date").groupby("point").tail(1).copy()
+            _last["точка на Лене"] = _last.point.map(LENA_NAMES)
+            _last["снимок"] = _last.date.dt.strftime("%d.%m.%Y")
+            _last["состояние"] = np.where(_last.p_ice >= 0.8, "лёд", np.where(_last.p_ice <= 0.2, "вода", "неясно"))
+            _last["P(лёд)"] = _last.p_ice.round(2)
+            st.markdown("**Лена по радарным снимкам Sentinel-1 (М2)** — что на реке по последнему снимку")
+            st.dataframe(_last.sort_values("date", ascending=False)[["точка на Лене", "снимок", "состояние", "P(лёд)"]],
+                         hide_index=True, width="stretch")
+            st.caption("Классификатор лёд/вода: точность 0,95 на годах вне обучения. Снимок примерно раз в 12 дней; "
+                       "даты вскрытия по ряду снимков — с точностью ≈ 9 сут.")
 
 # ------------------------------------------------------------------ 3. планировщик
 with tabs[2]:
