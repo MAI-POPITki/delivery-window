@@ -107,7 +107,7 @@ def main():
     correction = max(0.0, m1.conformal_correction(backtest.loc[backtest["mode"].eq("weather"), "raw_score"]))
     metadata = {"features": MODEL_FEATURES, "point_ids": supported,
                 "trained_through_season": int(frame.hydro_year.max()), "correction_days": correction,
-                "forecast_days": HORIZON, "experimental": True, "default_enabled": False,
+                "forecast_days": HORIZON, "experimental": True, "default_enabled": True,
                 "source": API_URL, "baseline_data_sha256": hashlib.sha256(base_path.read_bytes()).hexdigest(),
                 "archive_seasons": sorted(int(year) for year in forecasts.hydro_year.unique()),
                 "validation_seasons": sorted(int(year) for year in backtest.hydro_year.unique())}
@@ -133,7 +133,8 @@ def main():
              "Мало независимых сезонов: обещание улучшения на 5–10% не подтверждается одной такой проверкой. "
              "Покрытие интервала оценивается по таблице: это экспериментальный диапазон, "
              "его нельзя считать проверенным 80%-интервалом. "
-             "Эксперимент выключен по умолчанию, исходные модели и их отчёты сохранены. "
+             "В интерфейсе ветки kirill эксперимент включён по умолчанию и может быть выключен переключателем. "
+             "Исходные модели и их отчёты сохранены. "
              "При отсутствии полного прогноза, неподдерживаемой точке или дате из обучения применяется обычная М1.", "",
              "Воспроизведение: `python scripts/download_weather_forecasts.py --start-year 2021 --end-year 2024`, "
              "затем `python scripts/train_weather_close.py`. Обновление текущих прогнозов: "

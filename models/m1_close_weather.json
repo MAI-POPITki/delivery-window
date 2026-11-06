@@ -33,7 +33,7 @@
   "correction_days": 7.373755846603757,
   "forecast_days": 6,
   "experimental": true,
-  "default_enabled": false,
+  "default_enabled": true,
   "source": "https://previous-runs-api.open-meteo.com/v1/forecast",
   "baseline_data_sha256": "6591de14179210553e3846be2b01ea14384262d3f4ec22deed8de1ce3d7f3937",
   "archive_seasons": [

@@ -41,7 +41,8 @@ class ImportReloadTests(unittest.TestCase):
             assert forecast.WF is importlib.import_module('okno.weather_forecast')
             prediction = forecast.forecast('yakutsk_crossing', 2027, 65, 'close', use_weather=True)
             assert prediction['weather_model_applied']
-            app.sidebar.checkbox(key='weather_close_enabled').check().run()
+            assert app.sidebar.checkbox(key='weather_close_enabled_v2').value
+            app.sidebar.checkbox(key='weather_close_enabled_v2').uncheck().run()
             assert not app.exception, [error.message for error in app.exception]
             print('OK: старые зависимости обновлены до импорта нового модуля')
         """)
