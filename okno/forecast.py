@@ -54,8 +54,10 @@ def _mtime(path) -> float:
 
 
 def _weather_path(point_id):
-    p = WEATHER / f"{point_id}.csv"
-    return p if p.exists() else WEATHER / "gauges" / f"{point_id}.csv"
+    for p in (WEATHER / f"{point_id}.csv", WEATHER / "gauges" / f"{point_id}.csv", WEATHER / "lena" / f"{point_id}.csv"):
+        if p.exists():
+            return p
+    return WEATHER / "gauges" / f"{point_id}.csv"
 
 
 def data_version() -> float:
