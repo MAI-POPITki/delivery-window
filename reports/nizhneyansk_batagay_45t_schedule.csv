@@ -1,9 +1,0 @@
-case,rule,week_day,completion_day,base_t,extra_t,p_closed,week_date,completion_date
-dashboard,calendar,203.0,210.0,11.25,0.0,0.0,2024-03-22,2024-03-29
-dashboard,calendar,210.0,217.0,11.25,0.0,0.0,2024-03-29,2024-04-05
-dashboard,calendar,217.0,224.0,11.25,0.0,0.1,2024-04-05,2024-04-12
-dashboard,calendar,224.0,231.0,11.25,0.0,0.544,2024-04-12,2024-04-19
-dashboard,forecast,203.0,210.0,17.0,0.0,0.0,2024-03-22,2024-03-29
-dashboard,forecast,210.0,217.0,28.0,0.0,0.0,2024-03-29,2024-04-05
-order_deadline,calendar,203.0,210.0,28.0,17.0,0.0,2024-03-22,2024-03-29
-order_deadline,forecast,203.0,210.0,28.0,17.0,0.0,2024-03-22,2024-03-29

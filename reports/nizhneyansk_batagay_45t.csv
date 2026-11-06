@@ -1,5 +1,0 @@
-case,rule,base_t,extra_t,expected_road_t,expected_shortage_t,road_rub,extra_rub,holding_rub,expensive_rub,total_rub
-dashboard,calendar,45.0,0.0,37.755,7.245,847505.3624999999,0.0,27475.641899999995,3622500.0,4497481.0044
-dashboard,forecast,45.0,0.0,45.0,0.0,1010137.5,0.0,36925.7,0.0,1047063.2
-order_deadline,calendar,28.0,17.0,45.0,0.0,1010137.5,76321.5,41120.09999999999,0.0,1127579.1
-order_deadline,forecast,28.0,17.0,45.0,0.0,1010137.5,76321.5,41120.09999999999,0.0,1127579.1

@@ -4,7 +4,6 @@
 """
 
 import hashlib
-import datetime as dt
 import os
 from pathlib import Path
 import sys
@@ -117,32 +116,6 @@ class WelcomeTests(unittest.TestCase):
             self.assertLessEqual(widget.min, widget.value)
             self.assertGreaterEqual(widget.max, widget.value)
         self.assertTrue(any("Рекомендация: своей техникой" in item.value for item in app.markdown))
-
-    def test_small_order_example_loads_all_inputs_and_keeps_filters_working(self):
-        app = self.new_app()
-        app.button(key="open_dashboard").click().run()
-        app.sidebar.button(key="load_nizhneyansk_batagay").click().run()
-        self.assertEqual([e.message for e in app.exception], [])
-        self.assertEqual(app.sidebar.selectbox(key="region").value, "yakutia")
-        self.assertEqual(app.sidebar.selectbox(key="hydro_year").value, 2024)
-        self.assertEqual(app.sidebar.date_input(key="decision_date").value, dt.date(2024, 3, 22))
-        self.assertEqual(app.sidebar.selectbox(key="point_id").value, "gauge_3414")
-        self.assertFalse(app.sidebar.checkbox(key="weather_close_enabled_v2").value)
-        self.assertEqual(app.number_input(key="Q_t").value, 45.0)
-        self.assertEqual(app.number_input(key="K_t_week").value, 28.0)
-        self.assertEqual(app.number_input(key="K_extra_t_week").value, 18.7)
-        self.assertEqual(app.number_input(key="c_road").value, 22447.50)
-        self.assertEqual(app.number_input(key="c_extra").value, 4489.50)
-        self.assertEqual(app.number_input(key="c_exp").value, 500000.0)
-        self.assertEqual(app.number_input(key="c_hold_week").value, 149.80)
-        self.assertTrue(any("не ограничивает отправки 31 марта" in item.value for item in app.info))
-
-        app.sidebar.selectbox(key="hydro_year").select(2023).run()
-        self.assertEqual([e.message for e in app.exception], [])
-        self.assertEqual(app.sidebar.date_input(key="decision_date").value, dt.date(2023, 3, 1))
-        app.sidebar.selectbox(key="region").select("yanao").run()
-        self.assertEqual([e.message for e in app.exception], [])
-        self.assertEqual(app.sidebar.selectbox(key="point_id").value, "gauge_11558")
 
     def test_document_path_is_independent_of_working_directory(self):
         previous_directory = Path.cwd()

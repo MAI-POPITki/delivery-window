@@ -12,7 +12,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import streamlit as st
 
 from app.welcome import render_welcome, show_welcome
-from app.examples import load_nizhneyansk_batagay
 
 st.set_page_config(page_title="Окно завоза", page_icon="🧊", layout="wide")
 
@@ -119,9 +118,7 @@ st.sidebar.title("🧊 Окно завоза")
 st.sidebar.button("О проекте", key="show_welcome", on_click=show_welcome,
                   icon=":material/arrow_back:", width="stretch")
 st.sidebar.caption("Прогноз окон сезонных путей и график завоза. Открытые данные, без датчиков.")
-st.sidebar.button("Пример: Нижнеянск → Батагай, 45 т", key="load_nizhneyansk_batagay",
-                  on_click=load_nizhneyansk_batagay)
-region = st.sidebar.selectbox("Регион", list(REGIONS), format_func=lambda k: REGIONS[k]["name"], key="region")
+region = st.sidebar.selectbox("Регион", list(REGIONS), format_func=lambda k: REGIONS[k]["name"])
 st.sidebar.caption(REGIONS[region]["note"])
 WEATHER_POINTS = region_points(region)
 _era5, _obs, _fut = weather_until(DATA_VER)
@@ -130,25 +127,17 @@ st.sidebar.caption(f"Погода: архив ERA5 по {pd.Timestamp(_era5):%d.
                       if _obs else "") + ". Обновляется ежедневно.")
 today = dt.date.today()
 cur_hy = today.year + (1 if today.month >= 9 else 0)
-hy = st.sidebar.selectbox("Сезон", list(range(cur_hy, 1985, -1)), format_func=season_name, index=0,
-                         key="hydro_year")
+hy = st.sidebar.selectbox("Сезон", list(range(cur_hy, 1985, -1)), format_func=season_name, index=0)
 season_start = dt.date(hy - 1, 9, 1)
 default_date = min(today, dt.date(hy, 5, 31)) if hy == cur_hy else dt.date(hy, 3, 1)
-if "decision_date" in st.session_state and not (
-        dt.date(hy - 1, 10, 1) <= st.session_state.decision_date <= dt.date(hy, 6, 15)):
-    st.session_state.decision_date = default_date
-issue_date = st.sidebar.date_input("Дата решения", value=None if "decision_date" in st.session_state else default_date,
-                                   min_value=dt.date(hy - 1, 10, 1), max_value=dt.date(hy, 6, 15),
-                                   key="decision_date")
+issue_date = st.sidebar.date_input("Дата решения", value=default_date,
+                                   min_value=dt.date(hy - 1, 10, 1), max_value=dt.date(hy, 6, 15))
 issue_day = int(to_season_day(issue_date, hy))
 _dflt = REGIONS[region]["default"]
-if st.session_state.get("point_id", _dflt) not in WEATHER_POINTS:
-    st.session_state.point_id = _dflt if _dflt in WEATHER_POINTS else WEATHER_POINTS[0]
 pid = st.sidebar.selectbox("Путь", WEATHER_POINTS, format_func=label,
-                           index=WEATHER_POINTS.index(_dflt) if _dflt in WEATHER_POINTS else 0, key="point_id")
-horizon = st.sidebar.slider("Горизонт N, дней", 7, 60, 14, 7, key="horizon")
+                           index=WEATHER_POINTS.index(_dflt) if _dflt in WEATHER_POINTS else 0)
+horizon = st.sidebar.slider("Горизонт N, дней", 7, 60, 14, 7)
 margin = st.sidebar.slider("Запас до таяния при закрытии, сут", 0, 35, 21,
-                           key="close_margin_days",
                            help="Путь закрывают раньше физического начала таяния: ограничения массы, "
                                 "дорожный режим. Допущение, проверяется на чувствительность.")
 use_weather_close = st.sidebar.checkbox(
@@ -251,26 +240,18 @@ with tabs[1]:
 with tabs[2]:
     st.subheader("Планировщик отправок (М3)")
     st.caption("Экономические параметры — синтетика и допущения; вывод проверен на ±30% (вкладка «До / после»).")
-    if pid == "gauge_3414" and hy == 2024:
-        st.info("Для примера Нижнеянск → Батагай: план заказа — 45 т, срок 22–31 марта 2024 г. "
-                "Планировщик ниже учитывает прогноз закрытия, но не ограничивает отправки 31 марта. "
-                "Гидропост — приближение для направления, не модель всего маршрута. "
-                "Провозная способность, надбавка и авиационный тариф заданы как допущения.")
     c1, c2, c3 = st.columns(3)
     P = Params(Q_t=c1.number_input("Осталось вывезти на дату решения, т", 0.1, 100000.0, 12000.0, 1.0,
-                                  format="%.1f", key="Q_t"),
-               K_t_week=c1.number_input("Своя техника, т/нед", 0.1, 20000.0, 1000.0, 1.0, format="%.1f",
-                                        key="K_t_week"),
+                                  format="%.1f"),
+               K_t_week=c1.number_input("Своя техника, т/нед", 0.1, 20000.0, 1000.0, 1.0, format="%.1f"),
                K_extra_t_week=c1.number_input("Доп. техника максимум, т/нед", 0.0, 20000.0, 600.0, 1.0,
-                                             format="%.1f", key="K_extra_t_week"),
-               c_road=c2.number_input("Зимник, ₽/т", 1000.0, 200000.0, 20000.0, 1000.0, format="%.2f",
-                                      key="c_road"),
+                                             format="%.1f"),
+               c_road=c2.number_input("Зимник, ₽/т", 1000.0, 200000.0, 20000.0, 1000.0, format="%.2f"),
                c_extra=c2.number_input("Надбавка за доп. технику, ₽/т", 0.0, 200000.0, 10000.0, 1000.0,
-                                       format="%.2f", key="c_extra"),
+                                       format="%.2f"),
                c_exp=c3.number_input("Дорогой канал (авиа/СВП), ₽/т", 10000.0, 1000000.0, 120000.0, 5000.0,
-                                     format="%.2f", key="c_exp"),
-               c_hold_week=c3.number_input("Хранение, ₽/т·нед", 0.0, 10000.0, 400.0, 50.0, format="%.2f",
-                                           key="c_hold_week"),
+                                     format="%.2f"),
+               c_hold_week=c3.number_input("Хранение, ₽/т·нед", 0.0, 10000.0, 400.0, 50.0, format="%.2f"),
                close_margin_days=margin)
     q = fc_cached(pid, hy, max(issue_day, 150), "close")
     if not q or "error" in q:
@@ -339,9 +320,7 @@ with tabs[3]:
 # ------------------------------------------------------------------ 5. до/после
 with tabs[4]:
     st.subheader("Бэктест на прошлых сезонах")
-    for name, f in (("Нижнеянск → Батагай, 45 т: разбор фиксированного примера",
-                     REPORTS / "nizhneyansk_batagay_45t.md"),
-                    ("М1: точность прогноза", REPORTS / "m1_metrics.md"),
+    for name, f in (("М1: точность прогноза", REPORTS / "m1_metrics.md"),
                     ("Погодная модель закрытия: эксперимент", REPORTS / "weather_close.md"),
                     ("«До/после» для А3", REPORTS / "before_after.md"),
                     ("Стресс-тест допущений", REPORTS / "stress_test.md"),
