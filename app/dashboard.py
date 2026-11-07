@@ -108,6 +108,7 @@ import plotly.graph_objects as go
 _MODULE_NAMES = (
     "okno.paths", "okno.regions", "okno.report", "okno.ice", "okno.calib", "okno.features",
     "okno.planner", "okno.m1", "okno.weather_forecast", "okno.forecast",
+    "okno.yakutsk_replay", "app.yakutsk_experiment",
 )
 _cached_modules = [sys.modules.get(name) for name in _MODULE_NAMES]
 _needs_reload = any(module is None or getattr(module, "_loaded_mtime_ns", None)
@@ -191,24 +192,60 @@ st.sidebar.title("🧊 Окно завоза")
 st.sidebar.button("О проекте", key="show_welcome", on_click=show_welcome,
                   icon=":material/arrow_back:", width="stretch")
 st.sidebar.caption("Прогноз окон сезонных путей и график завоза. Открытые данные, без датчиков.")
-region = st.sidebar.selectbox("Регион", list(REGIONS), format_func=lambda k: REGIONS[k]["name"])
+def _activate_replay():
+    st.session_state.update(replay_active=True, filter_region="yakutia", filter_season=2026,
+                            filter_date=dt.date(2026, 3, 16), filter_point="yakutsk_crossing")
+
+
+def _leave_replay():
+    st.session_state["replay_active"] = False
+
+
+st.sidebar.button("Эксперимент: весна 2026", key="activate_replay", on_click=_activate_replay,
+                  help="Условный заказ 5 000 т, реальные ограничения переправы, сравнение пяти способов завоза.")
+replay_active = st.session_state.get("replay_active", False)
+if replay_active:
+    st.sidebar.caption("Открыт сценарный эксперимент весны 2026 года.")
+    st.sidebar.button("Вернуться к обычному планировщику", key="leave_replay", on_click=_leave_replay)
+if st.session_state.get("filter_region") not in REGIONS:
+    st.session_state.filter_region = next(iter(REGIONS))
+region = st.sidebar.selectbox("Регион", list(REGIONS), format_func=lambda k: REGIONS[k]["name"],
+                             index=None, key="filter_region", disabled=replay_active)
 st.sidebar.caption(REGIONS[region]["note"])
 WEATHER_POINTS = region_points(region)
-_era5, _obs, _fut = weather_until(DATA_VER)
-st.sidebar.caption(f"Погода: архив ERA5 по {pd.Timestamp(_era5):%d.%m}"
-                   + (f", оперативные данные по {pd.Timestamp(_obs):%d.%m}, прогноз до {pd.Timestamp(_fut):%d.%m.%Y}"
-                      if _obs else "") + ". Обновляется ежедневно.")
+if not replay_active:
+    _era5, _obs, _fut = weather_until(DATA_VER)
+    st.sidebar.caption(f"Погода: архив ERA5 по {pd.Timestamp(_era5):%d.%m}"
+                       + (f", оперативные данные по {pd.Timestamp(_obs):%d.%m}, прогноз до {pd.Timestamp(_fut):%d.%m.%Y}"
+                          if _obs else "") + ". Обновляется ежедневно.")
 today = dt.date.today()
 cur_hy = today.year + (1 if today.month >= 9 else 0)
-hy = st.sidebar.selectbox("Сезон", list(range(cur_hy, 1985, -1)), format_func=season_name, index=0)
+if st.session_state.get("filter_season") not in range(cur_hy, 1985, -1):
+    st.session_state.filter_season = cur_hy
+hy = st.sidebar.selectbox("Сезон", list(range(cur_hy, 1985, -1)), format_func=season_name, index=None,
+                         key="filter_season", disabled=replay_active)
 season_start = dt.date(hy - 1, 9, 1)
 default_date = min(today, dt.date(hy, 5, 31)) if hy == cur_hy else dt.date(hy, 3, 1)
-issue_date = st.sidebar.date_input("Дата решения", value=default_date,
-                                   min_value=dt.date(hy - 1, 10, 1), max_value=dt.date(hy, 6, 15))
+if st.session_state.get("filter_date") is None or not dt.date(hy - 1, 10, 1) <= st.session_state.filter_date <= dt.date(hy, 6, 15):
+    st.session_state.filter_date = default_date
+issue_date = st.sidebar.date_input("Дата решения", value=None,
+                                   min_value=dt.date(hy - 1, 10, 1), max_value=dt.date(hy, 6, 15),
+                                   key="filter_date", disabled=replay_active)
 issue_day = int(to_season_day(issue_date, hy))
 _dflt = REGIONS[region]["default"]
+if st.session_state.get("filter_point") not in WEATHER_POINTS:
+    st.session_state.filter_point = _dflt if _dflt in WEATHER_POINTS else WEATHER_POINTS[0]
 pid = st.sidebar.selectbox("Путь", WEATHER_POINTS, format_func=label,
-                           index=WEATHER_POINTS.index(_dflt) if _dflt in WEATHER_POINTS else 0)
+                           index=None,
+                           key="filter_point", disabled=replay_active)
+if replay_active:
+    st.sidebar.caption("Первое решение: погода ERA5 только по 11.03.2026. "
+                       "Далее — ежедневный пересчёт с задержкой погоды пять суток.")
+    st.title("Сценарная проверка завоза")
+    from app.yakutsk_experiment import render_experiment
+    render_experiment()
+    st.stop()
+
 horizon = st.sidebar.slider("Горизонт N, дней", 7, 60, 14, 7)
 margin = st.sidebar.slider("Запас до таяния при закрытии, сут", 0, 35, 21,
                            help="Путь закрывают раньше физического начала таяния: ограничения массы, "

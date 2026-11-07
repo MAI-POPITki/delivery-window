@@ -1,0 +1,56 @@
+{
+  "scenario": {
+    "Q_t": 5000.0,
+    "base_trucks": 10.0,
+    "extra_trucks": 5.0,
+    "tare_t": 12.0,
+    "max_payload_t": 28.0,
+    "trips_per_workday": 1.0,
+    "weekdays": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "c_road": 4000.0,
+    "c_extra": 1500.0,
+    "c_backup": 20000.0,
+    "c_hold_week": 100.0,
+    "start_date": "2026-03-16",
+    "demand_date": "2026-04-16",
+    "backup_date": "2026-05-26",
+    "hydro_year": 2026,
+    "close_margin_days": 21.0,
+    "phase30_days": 14.0,
+    "phase20_days": 7.0,
+    "climatology_halfwidth_days": 9.0,
+    "n_scenarios": 1000,
+    "m2_max_age_days": 14
+  },
+  "announced_schedule": {
+    "date30": "2026-04-01",
+    "date20": "2026-04-08",
+    "last_open_date": "2026-04-15"
+  },
+  "actual_schedule_evaluation_only": {
+    "date30": "2026-03-27",
+    "date20": "2026-04-08",
+    "last_open_date": "2026-04-15"
+  },
+  "sources": {
+    "announced": "https://ysia.ru/gruzopodemnost-perepravy-yakutsk-nizhnij-bestyah-snizyat-s-1-aprelya/",
+    "actual_30t": "https://gtrksakha.ru/amp/2026/03/27/dosrochno-snizhena-gruzopoduemnost-na-pereprave-yakutsk-nizhnij-bestyah/",
+    "actual_20t": "https://yakutiamedia.ru/news/2456829/",
+    "actual_closure": "https://hotu.su/ru/news/20260416/30731.html",
+    "satellite": "https://planetarycomputer.microsoft.com/dataset/sentinel-1-rtc",
+    "weather": "https://open-meteo.com/en/docs/historical-weather-api"
+  },
+  "parameter_status": "Order, fleet, turnaround and economics are assumptions authorized by user; no operator savings claimed.",
+  "input_and_code_sha256": {
+    "data/scenarios/yakutsk_spring_2026_forecasts.csv": "cbb05436f36ea030be0a10e10b2f4c154cae8593f64a213cfeb8cd42f64b4a1e",
+    "data/scenarios/yakutsk_spring_2026_observations.csv": "386d478e3922d9ee95a0990e0a6cd56dceb883119d608cd2119916cc67256705",
+    "okno/yakutsk_replay.py": "d0ad4e8080d5e9fe459aa29f54e8bbfcee2cd8f532e9c4fa88925a17daebd566",
+    "scripts/prepare_yakutsk_replay.py": "a6183022dfbef10b6c8208f67a8586e750822ea4527ddec3be2117af8170381b"
+  }
+}

@@ -1,0 +1,156 @@
+rule,date,forecast_issue_date,image_date,image_available_date,p_ice,m2_applied,forecast_fallback,q10,q50,q90
+calendar,2026-03-16,,,,,False,False,,,
+calendar,2026-03-17,,,,,False,False,,,
+calendar,2026-03-18,,,,,False,False,,,
+calendar,2026-03-19,,,,,False,False,,,
+calendar,2026-03-20,,,,,False,False,,,
+calendar,2026-03-21,,,,,False,False,,,
+calendar,2026-03-22,,,,,False,False,,,
+calendar,2026-03-23,,,,,False,False,,,
+calendar,2026-03-24,,,,,False,False,,,
+calendar,2026-03-25,,,,,False,False,,,
+calendar,2026-03-26,,,,,False,False,,,
+calendar,2026-03-27,,,,,False,False,,,
+calendar,2026-03-28,,,,,False,False,,,
+calendar,2026-03-29,,,,,False,False,,,
+calendar,2026-03-30,,,,,False,False,,,
+calendar,2026-03-31,,,,,False,False,,,
+calendar,2026-04-01,,,,,False,False,,,
+calendar,2026-04-02,,,,,False,False,,,
+calendar,2026-04-03,,,,,False,False,,,
+calendar,2026-04-04,,,,,False,False,,,
+calendar,2026-04-05,,,,,False,False,,,
+calendar,2026-04-06,,,,,False,False,,,
+calendar,2026-04-07,,,,,False,False,,,
+calendar,2026-04-08,,,,,False,False,,,
+calendar,2026-04-09,,,,,False,False,,,
+calendar,2026-04-10,,,,,False,False,,,
+calendar,2026-04-11,,,,,False,False,,,
+calendar,2026-04-12,,,,,False,False,,,
+calendar,2026-04-13,,,,,False,False,,,
+calendar,2026-04-14,,,,,False,False,,,
+calendar,2026-04-15,,,,,False,False,,,
+climatology,2026-03-16,,,,,False,False,238.00000000,247.00000000,256.00000000
+climatology,2026-03-17,,,,,False,False,238.00000000,247.00000000,256.00000000
+climatology,2026-03-18,,,,,False,False,238.00000000,247.00000000,256.00000000
+climatology,2026-03-19,,,,,False,False,238.00000000,247.00000000,256.00000000
+climatology,2026-03-20,,,,,False,False,238.00000000,247.00000000,256.00000000
+climatology,2026-03-21,,,,,False,False,,,
+climatology,2026-03-22,,,,,False,False,,,
+climatology,2026-03-23,,,,,False,False,238.00000000,247.00000000,256.00000000
+climatology,2026-03-24,,,,,False,False,238.00000000,247.00000000,256.00000000
+climatology,2026-03-25,,,,,False,False,238.00000000,247.00000000,256.00000000
+climatology,2026-03-26,,,,,False,False,238.00000000,247.00000000,256.00000000
+climatology,2026-03-27,,,,,False,False,238.00000000,247.00000000,256.00000000
+climatology,2026-03-28,,,,,False,False,,,
+climatology,2026-03-29,,,,,False,False,,,
+climatology,2026-03-30,,,,,False,False,238.00000000,247.00000000,256.00000000
+climatology,2026-03-31,,,,,False,False,238.00000000,247.00000000,256.00000000
+climatology,2026-04-01,,,,,False,False,238.00000000,247.00000000,256.00000000
+climatology,2026-04-02,,,,,False,False,238.00000000,247.00000000,256.00000000
+climatology,2026-04-03,,,,,False,False,238.00000000,247.00000000,256.00000000
+climatology,2026-04-04,,,,,False,False,,,
+climatology,2026-04-05,,,,,False,False,,,
+climatology,2026-04-06,,,,,False,False,,,
+climatology,2026-04-07,,,,,False,False,,,
+climatology,2026-04-08,,,,,False,False,,,
+climatology,2026-04-09,,,,,False,False,,,
+climatology,2026-04-10,,,,,False,False,,,
+climatology,2026-04-11,,,,,False,False,,,
+climatology,2026-04-12,,,,,False,False,,,
+climatology,2026-04-13,,,,,False,False,,,
+climatology,2026-04-14,,,,,False,False,,,
+climatology,2026-04-15,,,,,False,False,,,
+forecast,2026-03-16,2026-03-16 00:00:00,,,,False,False,232.34841867,241.41819104,251.81043451
+forecast,2026-03-17,2026-03-17 00:00:00,,,,False,False,232.31294545,241.46724849,251.89022384
+forecast,2026-03-18,2026-03-18 00:00:00,,,,False,False,232.40372782,241.50911494,251.90700413
+forecast,2026-03-19,2026-03-19 00:00:00,,,,False,False,232.38380581,241.50965280,251.94553093
+forecast,2026-03-20,2026-03-20 00:00:00,,,,False,False,232.40050914,241.51625034,251.95190976
+forecast,2026-03-21,,,,,False,False,,,
+forecast,2026-03-22,,,,,False,False,,,
+forecast,2026-03-23,2026-03-23 00:00:00,,,,False,False,232.50299284,241.62790895,252.03639453
+forecast,2026-03-24,2026-03-24 00:00:00,,,,False,False,232.54852459,241.67504460,252.06034573
+forecast,2026-03-25,2026-03-25 00:00:00,,,,False,False,232.54852459,241.67504460,252.06034573
+forecast,2026-03-26,2026-03-26 00:00:00,,,,False,False,232.54431785,241.68222070,252.04880279
+forecast,2026-03-27,2026-03-27 00:00:00,,,,False,False,232.54852459,241.67504460,252.06034573
+forecast,2026-03-28,,,,,False,False,,,
+forecast,2026-03-29,,,,,False,False,,,
+forecast,2026-03-30,2026-03-30 00:00:00,,,,False,False,232.45445810,241.51161955,251.99691134
+forecast,2026-03-31,2026-03-31 00:00:00,,,,False,False,232.50021277,241.54127511,252.03914793
+forecast,2026-04-01,2026-04-01 00:00:00,,,,False,False,232.64437431,241.55466287,252.18125959
+forecast,2026-04-02,2026-04-02 00:00:00,,,,False,False,232.82514192,241.62446442,252.22373272
+forecast,2026-04-03,,,,,False,False,,,
+forecast,2026-04-04,,,,,False,False,,,
+forecast,2026-04-05,,,,,False,False,,,
+forecast,2026-04-06,,,,,False,False,,,
+forecast,2026-04-07,,,,,False,False,,,
+forecast,2026-04-08,,,,,False,False,,,
+forecast,2026-04-09,,,,,False,False,,,
+forecast,2026-04-10,,,,,False,False,,,
+forecast,2026-04-11,,,,,False,False,,,
+forecast,2026-04-12,,,,,False,False,,,
+forecast,2026-04-13,,,,,False,False,,,
+forecast,2026-04-14,,,,,False,False,,,
+forecast,2026-04-15,,,,,False,False,,,
+forecast_m2,2026-03-16,2026-03-16 00:00:00,,,,False,False,232.34841867,241.41819104,251.81043451
+forecast_m2,2026-03-17,2026-03-17 00:00:00,,,,False,False,232.31294545,241.46724849,251.89022384
+forecast_m2,2026-03-18,2026-03-18 00:00:00,,,,False,False,232.40372782,241.50911494,251.90700413
+forecast_m2,2026-03-19,2026-03-19 00:00:00,,,,False,False,232.38380581,241.50965280,251.94553093
+forecast_m2,2026-03-20,2026-03-20 00:00:00,2026-03-18 00:00:00,2026-03-20 00:00:00,0.99800000,False,False,232.40050914,241.51625034,251.95190976
+forecast_m2,2026-03-21,,,,,False,False,,,
+forecast_m2,2026-03-22,,,,,False,False,,,
+forecast_m2,2026-03-23,2026-03-23 00:00:00,2026-03-18 00:00:00,2026-03-20 00:00:00,0.99800000,False,False,232.50299284,241.62790895,252.03639453
+forecast_m2,2026-03-24,2026-03-24 00:00:00,2026-03-18 00:00:00,2026-03-20 00:00:00,0.99800000,False,False,232.54852459,241.67504460,252.06034573
+forecast_m2,2026-03-25,2026-03-25 00:00:00,2026-03-18 00:00:00,2026-03-20 00:00:00,0.99800000,False,False,232.54852459,241.67504460,252.06034573
+forecast_m2,2026-03-26,2026-03-26 00:00:00,2026-03-18 00:00:00,2026-03-20 00:00:00,0.99800000,False,False,232.54431785,241.68222070,252.04880279
+forecast_m2,2026-03-27,2026-03-27 00:00:00,2026-03-18 00:00:00,2026-03-20 00:00:00,0.99800000,False,False,232.54852459,241.67504460,252.06034573
+forecast_m2,2026-03-28,,,,,False,False,,,
+forecast_m2,2026-03-29,,,,,False,False,,,
+forecast_m2,2026-03-30,2026-03-30 00:00:00,2026-03-18 00:00:00,2026-03-20 00:00:00,0.99800000,False,False,232.45445810,241.51161955,251.99691134
+forecast_m2,2026-03-31,2026-03-31 00:00:00,2026-03-18 00:00:00,2026-03-20 00:00:00,0.99800000,False,False,232.50021277,241.54127511,252.03914793
+forecast_m2,2026-04-01,2026-04-01 00:00:00,2026-03-18 00:00:00,2026-03-20 00:00:00,0.99800000,False,False,232.64437431,241.55466287,252.18125959
+forecast_m2,2026-04-02,2026-04-02 00:00:00,,,,False,False,232.82514192,241.62446442,252.22373272
+forecast_m2,2026-04-03,,,,,False,False,,,
+forecast_m2,2026-04-04,,,,,False,False,,,
+forecast_m2,2026-04-05,,,,,False,False,,,
+forecast_m2,2026-04-06,,,,,False,False,,,
+forecast_m2,2026-04-07,,,,,False,False,,,
+forecast_m2,2026-04-08,,,,,False,False,,,
+forecast_m2,2026-04-09,,,,,False,False,,,
+forecast_m2,2026-04-10,,,,,False,False,,,
+forecast_m2,2026-04-11,,,,,False,False,,,
+forecast_m2,2026-04-12,,,,,False,False,,,
+forecast_m2,2026-04-13,,,,,False,False,,,
+forecast_m2,2026-04-14,,,,,False,False,,,
+forecast_m2,2026-04-15,,,,,False,False,,,
+asap,2026-03-16,,,,,False,False,,,
+asap,2026-03-17,,,,,False,False,,,
+asap,2026-03-18,,,,,False,False,,,
+asap,2026-03-19,,,,,False,False,,,
+asap,2026-03-20,,,,,False,False,,,
+asap,2026-03-21,,,,,False,False,,,
+asap,2026-03-22,,,,,False,False,,,
+asap,2026-03-23,,,,,False,False,,,
+asap,2026-03-24,,,,,False,False,,,
+asap,2026-03-25,,,,,False,False,,,
+asap,2026-03-26,,,,,False,False,,,
+asap,2026-03-27,,,,,False,False,,,
+asap,2026-03-28,,,,,False,False,,,
+asap,2026-03-29,,,,,False,False,,,
+asap,2026-03-30,,,,,False,False,,,
+asap,2026-03-31,,,,,False,False,,,
+asap,2026-04-01,,,,,False,False,,,
+asap,2026-04-02,,,,,False,False,,,
+asap,2026-04-03,,,,,False,False,,,
+asap,2026-04-04,,,,,False,False,,,
+asap,2026-04-05,,,,,False,False,,,
+asap,2026-04-06,,,,,False,False,,,
+asap,2026-04-07,,,,,False,False,,,
+asap,2026-04-08,,,,,False,False,,,
+asap,2026-04-09,,,,,False,False,,,
+asap,2026-04-10,,,,,False,False,,,
+asap,2026-04-11,,,,,False,False,,,
+asap,2026-04-12,,,,,False,False,,,
+asap,2026-04-13,,,,,False,False,,,
+asap,2026-04-14,,,,,False,False,,,
+asap,2026-04-15,,,,,False,False,,,

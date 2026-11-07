@@ -1,0 +1,61 @@
+{
+  "point_id": "yakutsk_crossing",
+  "hydro_year": 2026,
+  "decision_period": [
+    "2026-03-16",
+    "2026-04-15"
+  ],
+  "decision_time": "00:00 UTC; daily decision dates are not local Yakutsk dates",
+  "weather_lag_days_assumption": 5,
+  "weather_source": "ERA5 reanalysis through the cutoff; future observations physically masked",
+  "operational_weather_archive": false,
+  "weather_limitation": "Ex-post reanalysis. Five-day publication lag is nominal, not verified per record; historical weather revisions are not reconstructed.",
+  "model_target": "physical river-ice breakup, NOT legal load restrictions or truck-bearing ice strength",
+  "m1_last_training_target_hydro_year": 2024,
+  "m2_last_labelled_target_hydro_year": 2024,
+  "model_limitation": "Current repository model artifacts are held fixed; they were not deployed historically in March 2026.",
+  "satellite_source": "Existing repository M2 results independently recomputed from stored radar features",
+  "satellite_publication_lag_assumption_hours": 24,
+  "satellite_max_age_days": 14,
+  "satellite_first_publication_verified": false,
+  "raw_sar_download": "Metadata and signing succeeded; Azure asset read failed: proxy tunnel HTTP 403. No alternate network route used.",
+  "scene_previews": [
+    {
+      "date": "2026-03-18",
+      "scene_preview_file": "docs/replay_yakutsk_2026/20260318_scene_preview.png"
+    },
+    {
+      "date": "2026-04-11",
+      "scene_preview_file": "docs/replay_yakutsk_2026/20260411_scene_preview.png"
+    }
+  ],
+  "preview_limitation": "Rendered full-scene overview, not raw 3 km classification chips and not an ice-thickness measurement",
+  "m2_fusion": "Existing M2 truncation with matched-sample quantile reconstruction error subtracted; no truncation gives exactly zero effect",
+  "factual_load_restrictions_used_for_evaluation_only": [
+    {
+      "date": "2026-03-27",
+      "gross_mass_t": 30
+    },
+    {
+      "date": "2026-04-08",
+      "gross_mass_t": 20
+    },
+    {
+      "date": "2026-04-15",
+      "event": "closed in the evening"
+    }
+  ],
+  "source_sha256": {
+    "models/m1_close.cbm": "4a466e92ae5c90ef89208bd25bde3dadaa071431ede4c1ac65b5aad7250b7222",
+    "models/m1_close_conformal.json": "536e680cc8a06cdbbfa9023df4f96b8181d00ecfd513c10d6710dc6e9537035e",
+    "models/m2_ice.cbm": "c7109f320dd8f3b9db5297f017841b18e1fd278e1ca079100a0bd820a033c4b5",
+    "reports/stefan_calibration.csv": "98ba9fa255d6c4374706966233470ef54b320c757bef0853c7315e85c54a2aa1",
+    "data/processed/m1_dataset_close.csv": "6591de14179210553e3846be2b01ea14384262d3f4ec22deed8de1ce3d7f3937",
+    "data/processed/yakutsk_sat_seasons.csv": "99f4716ee90c938b101f252ff2fca3b704f775a98f3336ddedcaac17edcbe098",
+    "data/weather/yakutsk_crossing.csv": "188144f07b55d0cbd33539afaec797017ba797c201193e488ec06bbe42bb56dd",
+    "data/s1/predictions.csv": "645cba283f6cb35d5c8e4150be79e373c607cd81ba9c11de90031d945245abeb",
+    "data/s1/index.csv": "4898b9f367fd18eb425ad74f808ab445ca13c0a6136c6ef73132caa88d35befd"
+  },
+  "catalog": "https://planetarycomputer.microsoft.com/dataset/sentinel-1-rtc",
+  "weather_documentation": "https://open-meteo.com/en/docs/historical-weather-api"
+}
