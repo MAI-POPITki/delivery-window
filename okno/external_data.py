@@ -91,6 +91,7 @@ ICE_BULLETINS_COLS = (
 )
 
 PRICES_COLS = ("item", "value", "unit", "region", "year", "source", "comment")
+HYDRO_PHENOLOGY_COLS = ("point_id", "river", "location", "region", "hydro_year", "freezeup_date", "breakup_date", "source", "comment")
 
 _POINT_ID_RE = re.compile(r"(?:^|[;\s,])point_id=([a-z0-9_]+)")
 
@@ -179,6 +180,15 @@ def load_ice_thickness_bulletins(path: Path | None = None) -> pd.DataFrame:
     if len(df):
         df["hydro_year"] = df["hydro_year"].astype(int)
         df["ice_cm"] = df["ice_cm"].astype(float)
+    return df
+
+
+def load_hydro_post2012_phenology(path: Path | None = None) -> pd.DataFrame:
+    """Читает data/external/hydro_post2012_phenology.csv."""
+    p = Path(path) if path is not None else EXTERNAL / "hydro_post2012_phenology.csv"
+    df = pd.read_csv(p, dtype=str, keep_default_na=False)
+    if len(df):
+        df["hydro_year"] = df["hydro_year"].astype(int)
     return df
 
 
@@ -466,7 +476,7 @@ def validate_supporting_tables(external_dir: Path | None = None) -> tuple[list[d
         if i_hdr == ICE_BULLETINS_COLS:
             idf = load_ice_thickness_bulletins(ice_path)
             bad_u = [r["source"] for _, r in idf.iterrows() if not is_valid_https_url(r["source"])]
-            post_2015 = all(_parse_iso_date(d).year > 2015 for d in idf["obs_date"]) if len(idf) else False
+            post_2015 = all(_parse_iso_date(d).year >= 2015 for d in idf["obs_date"]) if len(idf) else False
             valid_cm = bool(((idf["ice_cm"] > 0) & (idf["ice_cm"] <= 300)).all()) if len(idf) else False
             add("ice_thickness_bulletins.csv", "замеры толщины льда после 2015 г. со ссылками https://",
                 len(idf) >= 8 and not bad_u and post_2015 and valid_cm,
@@ -488,6 +498,23 @@ def validate_supporting_tables(external_dir: Path | None = None) -> tuple[list[d
                 not bad_u and not bad_v and dups == 0,
                 f"строк: {len(pdf)}, в ₽/т·сут: {storage}, плохих ссылок: {len(bad_u)}, плохих чисел: {len(bad_v)}, дублей: {dups}")
             stats["prices_rows"] = len(pdf)
+
+    ph_path = base / "hydro_post2012_phenology.csv"
+    if ph_path.exists():
+        h_hdr = _read_header(ph_path)
+        add("hydro_post2012_phenology.csv", "схема колонок фенологии рек после 2012 г.",
+            h_hdr == HYDRO_PHENOLOGY_COLS, f"колонки: {', '.join(h_hdr)}")
+        if h_hdr == HYDRO_PHENOLOGY_COLS:
+            ph_df = load_hydro_post2012_phenology(ph_path)
+            bad_u = [s for s in ph_df["source"] if not is_valid_https_url(s)]
+            all_valid_points = {pt for reg in VALID_REGIONS for pt in points_of(reg)}
+            bad_pts = [p for p in ph_df["point_id"] if p not in all_valid_points]
+            bad_hy = [y for y in ph_df["hydro_year"] if y < 2013]
+            dups = int(ph_df.duplicated(["point_id", "hydro_year"]).sum())
+            add("hydro_post2012_phenology.csv", "даты явлений после 2012 со ссылками https://, валидные точки, без дублей",
+                not bad_u and not bad_pts and not bad_hy and dups == 0 and len(ph_df) >= 20,
+                f"строк: {len(ph_df)}, сезоны {ph_df['hydro_year'].min()}..{ph_df['hydro_year'].max()}, точек: {ph_df['point_id'].nunique()}, регионов: {ph_df['region'].nunique()}")
+            stats["hydro_post2012_rows"] = len(ph_df)
 
     return checks, stats
 

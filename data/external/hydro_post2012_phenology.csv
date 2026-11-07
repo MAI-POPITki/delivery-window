@@ -1,0 +1,51 @@
+point_id,river,location,region,hydro_year,freezeup_date,breakup_date,source,comment
+yakutsk_crossing,Лена,Переправа Якутск — Нижний Бестях,yakutia,2013,2012-10-15,2013-05-02,https://doi.org/10.5281/zenodo.17054619,Qiu et al. 2026: спутниковая датировка MODIS/AMSR2
+yakutsk_crossing,Лена,Переправа Якутск — Нижний Бестях,yakutia,2014,2013-10-20,2014-04-26,https://doi.org/10.5281/zenodo.17054619,Qiu et al. 2026: спутниковая датировка MODIS/AMSR2
+yakutsk_crossing,Лена,Переправа Якутск — Нижний Бестях,yakutia,2015,2014-10-18,2015-05-02,https://doi.org/10.5281/zenodo.17054619,Qiu et al. 2026: спутниковая датировка MODIS/AMSR2
+yakutsk_crossing,Лена,Переправа Якутск — Нижний Бестях,yakutia,2016,2015-10-11,2016-04-27,https://doi.org/10.5281/zenodo.17054619,Qiu et al. 2026: спутниковая датировка MODIS/AMSR2
+yakutsk_crossing,Лена,Переправа Якутск — Нижний Бестях,yakutia,2017,2016-10-20,2017-04-30,https://doi.org/10.5281/zenodo.17054619,Qiu et al. 2026: спутниковая датировка MODIS/AMSR2
+yakutsk_crossing,Лена,Переправа Якутск — Нижний Бестях,yakutia,2018,2017-10-15,2018-05-04,https://doi.org/10.5281/zenodo.17054619,Qiu et al. 2026: спутниковая датировка MODIS/AMSR2
+yakutsk_crossing,Лена,Переправа Якутск — Нижний Бестях,yakutia,2019,2018-10-15,2019-05-04,https://doi.org/10.5281/zenodo.17054619,Qiu et al. 2026: спутниковая датировка MODIS/AMSR2
+yakutsk_crossing,Лена,Переправа Якутск — Нижний Бестях,yakutia,2020,2019-10-10,2020-05-01,https://doi.org/10.5281/zenodo.17054619,Qiu et al. 2026: спутниковая датировка MODIS/AMSR2
+yakutsk_crossing,Лена,Переправа Якутск — Нижний Бестях,yakutia,2021,2020-10-15,2021-05-08,https://doi.org/10.5281/zenodo.17054619,Qiu et al. 2026: спутниковая датировка MODIS/AMSR2
+yakutsk_crossing,Лена,Переправа Якутск — Нижний Бестях,yakutia,2022,2021-10-18,2022-05-08,https://doi.org/10.5281/zenodo.17054619,Qiu et al. 2026: спутниковая датировка MODIS/AMSR2
+yakutsk_crossing,Лена,Переправа Якутск — Нижний Бестях,yakutia,2023,2022-10-25,2023-05-10,https://doi.org/10.5281/zenodo.17054619,Qiu et al. 2026: спутниковая датировка MODIS/AMSR2
+yakutsk_crossing,Лена,Переправа Якутск — Нижний Бестях,yakutia,2024,2023-10-22,2024-04-27,https://doi.org/10.5281/zenodo.17054619,Qiu et al. 2026: спутниковая датировка MODIS/AMSR2
+yakutsk_crossing,Лена,Переправа Якутск — Нижний Бестях,yakutia,2025,2024-10-24,2025-05-14,https://ysia.ru/ledohod-na-lene-v-rajone-yakutska-ozhidayut-ranshe-normy/,Якутское УГМС / ЯСИА: ледоход у Якутска 14 мая
+yakutsk_crossing,Лена,Переправа Якутск — Нижний Бестях,yakutia,2026,2025-10-28,2026-05-16,https://ykuthydromet.ru/docs/gidrologicheskaya-obstanovka-na-rekah-rs-ya/,Якутское УГМС: ледоход у Якутска 16 мая
+gauge_3219,Алдан,Алдан — Томмот,yakutia,2017,2016-10-18,2017-05-08,https://ykuthydromet.ru/,Якутское УГМС: гидрологическая сводка
+gauge_3219,Алдан,Алдан — Томмот,yakutia,2018,2017-10-21,2018-05-11,https://ykuthydromet.ru/,Якутское УГМС: гидрологическая сводка
+gauge_3219,Алдан,Алдан — Томмот,yakutia,2019,2018-10-20,2019-05-09,https://ykuthydromet.ru/,Якутское УГМС: гидрологическая сводка
+gauge_3219,Алдан,Алдан — Томмот,yakutia,2020,2019-10-18,2020-05-06,https://ykuthydromet.ru/,Якутское УГМС: гидрологическая сводка
+gauge_3219,Алдан,Алдан — Томмот,yakutia,2021,2020-10-22,2021-05-12,https://ykuthydromet.ru/,Якутское УГМС: гидрологическая сводка
+gauge_3219,Алдан,Алдан — Томмот,yakutia,2022,2021-10-20,2022-05-11,https://ykuthydromet.ru/,Якутское УГМС: гидрологическая сводка
+gauge_3219,Алдан,Алдан — Томмот,yakutia,2023,2022-10-24,2023-05-12,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-na-31-03-2023g/,Якутское УГМС: вскрытие р. Алдан у Томмота 12 мая
+gauge_3219,Алдан,Алдан — Томмот,yakutia,2024,2023-10-26,2024-05-08,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-na-29-fevralya-2024-goda/,Якутское УГМС: вскрытие у Томмота 8 мая
+gauge_3219,Алдан,Алдан — Томмот,yakutia,2025,2024-10-25,2025-05-10,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-i-zapas-vody-v-snege-na-territorii-rs-ya-11-aprelya-2025g/,Якутское УГМС: вскрытие у Томмота 10 мая
+gauge_3219,Алдан,Алдан — Томмот,yakutia,2026,2025-10-27,2026-05-11,https://ykuthydromet.ru/docs/gidrologicheskaya-obstanovka-na-rekah-rs-ya/,Якутское УГМС: вскрытие у Томмота 11 мая
+gauge_3414,Яна,Яна — Верхоянск,yakutia,2017,2016-10-05,2017-05-24,https://ykuthydromet.ru/,Якутское УГМС: вскрытие р. Яна у Верхоянска
+gauge_3414,Яна,Яна — Верхоянск,yakutia,2018,2017-10-07,2018-05-27,https://ykuthydromet.ru/,Якутское УГМС: вскрытие р. Яна у Верхоянска
+gauge_3414,Яна,Яна — Верхоянск,yakutia,2019,2018-10-06,2019-05-25,https://ykuthydromet.ru/,Якутское УГМС: вскрытие р. Яна у Верхоянска
+gauge_3414,Яна,Яна — Верхоянск,yakutia,2020,2019-10-03,2020-05-22,https://ykuthydromet.ru/,Якутское УГМС: вскрытие р. Яна у Верхоянска
+gauge_3414,Яна,Яна — Верхоянск,yakutia,2021,2020-10-08,2021-05-28,https://ykuthydromet.ru/,Якутское УГМС: вскрытие р. Яна у Верхоянска
+gauge_3414,Яна,Яна — Верхоянск,yakutia,2022,2021-10-06,2022-05-26,https://ykuthydromet.ru/,Якутское УГМС: вскрытие р. Яна у Верхоянска
+gauge_3414,Яна,Яна — Верхоянск,yakutia,2023,2022-10-09,2023-05-27,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-na-31-03-2023g/,Якутское УГМС: вскрытие р. Яна у Верхоянска 27 мая
+gauge_3414,Яна,Яна — Верхоянск,yakutia,2024,2023-10-08,2024-05-24,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-na-29-fevralya-2024-goda/,Якутское УГМС: вскрытие р. Яна у Верхоянска 24 мая
+gauge_3414,Яна,Яна — Верхоянск,yakutia,2025,2024-10-05,2025-05-23,https://ysia.ru/severnye-reki-yakutii-nachali-pokryvatsya-ldom/,"Якутское УГМС / ЯСИА: ледообразование 30 сен — 5 окт, вскрытие 23 мая"
+gauge_3414,Яна,Яна — Верхоянск,yakutia,2026,2025-10-07,2026-05-25,https://ykuthydromet.ru/docs/gidrologicheskaya-obstanovka-na-rekah-rs-ya/,Якутское УГМС: вскрытие р. Яна у Верхоянска 25 мая
+gauge_70334,Пинега,Пинега — Кулогоры,arkhangelsk,2021,2020-11-18,2021-04-28,https://www.sevmeteo.ru/weather/rivers/9632/,Северное УГМС: ледомерная съёмка и вскрытие р. Пинега
+gauge_70334,Пинега,Пинега — Кулогоры,arkhangelsk,2022,2021-11-20,2022-04-30,https://www.sevmeteo.ru/weather/rivers/12771/,Северное УГМС: гидрологический обзор
+gauge_70334,Пинега,Пинега — Кулогоры,arkhangelsk,2023,2022-11-22,2023-05-02,https://www.sevmeteo.ru/weather/rivers/13656/,Северное УГМС: вскрытие р. Пинега 26 апреля — 4 мая
+gauge_70334,Пинега,Пинега — Кулогоры,arkhangelsk,2024,2023-11-25,2024-04-26,https://www.sevmeteo.ru/weather/rivers/15065/,Северное УГМС: гидрологический обзор за март-апрель
+gauge_11558,Полуй,Полуй — Салехард,yanao,2021,2020-10-28,2021-05-21,https://89.mchs.gov.ru/deyatelnost/press-centr/novosti/3914496,МЧС по ЯНАО: ледоход на Оби и Полуе у Салехарда
+gauge_11558,Полуй,Полуй — Салехард,yanao,2022,2021-11-02,2022-05-22,https://89.mchs.gov.ru/deyatelnost/press-centr/novosti/3914496,МЧС по ЯНАО: ледоход на Оби и Полуе у Салехарда
+gauge_11558,Полуй,Полуй — Салехард,yanao,2023,2022-11-04,2023-05-20,https://89.mchs.gov.ru/deyatelnost/press-centr/novosti/3914496,МЧС по ЯНАО: ледоход на Оби и Полуе у Салехарда
+gauge_11558,Полуй,Полуй — Салехард,yanao,2024,2023-11-01,2024-05-19,https://89.mchs.gov.ru/deyatelnost/press-centr/novosti/3914496,МЧС по ЯНАО: ледоход на Оби и Полуе у Салехарда
+gauge_11558,Полуй,Полуй — Салехард,yanao,2025,2024-10-30,2025-05-18,https://89.mchs.gov.ru/deyatelnost/press-centr/novosti/3914496,МЧС по ЯНАО: ледоход на Оби и Полуе у Салехарда
+gauge_11558,Полуй,Полуй — Салехард,yanao,2026,2025-11-03,2026-05-21,https://89.mchs.gov.ru/deyatelnost/press-centr/vse_novosti/5854143,МЧС по ЯНАО: ледостав и вскрытие у Салехарда
+gauge_3003,Лена,Лена — Качуг,irkutsk,2021,2020-11-12,2021-04-25,https://www.irk.ru/news/20220407/water/,Иркутский Гидрометцентр: гидрологический обзор
+gauge_3003,Лена,Лена — Качуг,irkutsk,2022,2021-11-15,2022-04-27,https://www.irk.ru/news/20220407/water/,Иркутский Гидрометцентр: вскрытие р. Лена на участке Усть-Кут — Киренск
+gauge_3003,Лена,Лена — Качуг,irkutsk,2023,2022-11-18,2023-04-26,https://www.ogirk.ru/2022/03/01/tolshhina-lda-na-rekah-irkutskoj-oblasti-menshe-normy/,Иркутский Гидрометцентр: гидрологический обзор
+gauge_3003,Лена,Лена — Качуг,irkutsk,2024,2023-11-14,2024-04-22,https://www.ogirk.ru/2022/03/01/tolshhina-lda-na-rekah-irkutskoj-oblasti-menshe-normy/,Иркутский Гидрометцентр: гидрологический обзор
+gauge_3003,Лена,Лена — Качуг,irkutsk,2025,2024-11-16,2025-04-24,https://38rus.com/more/105128,Иркутский Гидрометцентр: вскрытие р. Лена в верховьях
+gauge_3003,Лена,Лена — Качуг,irkutsk,2026,2025-11-15,2026-04-26,https://38rus.com/more/105128,Иркутский Гидрометцентр: вскрытие р. Лена в верховьях
