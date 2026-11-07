@@ -107,7 +107,7 @@ import plotly.graph_objects as go
 # модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
 _MODULE_NAMES = (
     "okno.paths", "okno.regions", "okno.report", "okno.ice", "okno.calib", "okno.features",
-    "okno.planner", "okno.corridor", "okno.corridor_data", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
+    "okno.planner", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
     "okno.yakutsk_replay", "app.yakutsk_experiment",
 )
 _cached_modules = [sys.modules.get(name) for name in _MODULE_NAMES]
@@ -559,6 +559,7 @@ with tabs[4]:
 with tabs[5]:
     st.subheader("Бэктест на прошлых сезонах")
     for name, f in (("Сквозной коридор 4 звеньев: «До и После» (Кейс А3)", REPORTS / "corridor_before_after.md"),
+                    ("Экономический планировщик: сравнение подходов", REPORTS / "economic_planner.md"),
                     ("Квантильная модель окна CatBoost (2001–2024)", REPORTS / "window_model_report.md"),
                     ("М1: точность прогноза", REPORTS / "m1_metrics.md"),
                     ("Погодная модель закрытия: эксперимент", REPORTS / "weather_close.md"),

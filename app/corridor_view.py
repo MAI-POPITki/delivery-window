@@ -24,8 +24,8 @@ def render_corridor():
     st.subheader("Сквозной логистический коридор из 4 звеньев (Кейс А3)")
     st.caption("Хаб → железная дорога → Нижний Бестях → переправа → склад Якутска. "
                "Сезон коридора выбирается ниже. "
-               "Ежедневный пересчёт исполняет только текущие отправки. Это эвристика управления запасом, "
-               "а не доказанный глобальный минимум затрат.")
+               "Старые правила предзавоза сохранены. Новые экономические планы выбирают суточную загрузку "
+               "ж/д и переправы по минимуму затрат при известных на день решения данных.")
     options=sorted(verified_years(),reverse=True)+['synthetic']
     case=st.selectbox("Сценарий / подтверждённый сезон",options,key='corr_scenario',
                       format_func=lambda y:'Искусственный сценарий (не CatBoost)' if y=='synthetic' else f'{y}: реальные даты переправы')
@@ -50,7 +50,7 @@ def render_corridor():
     cfg=CorridorConfig(**vals)
     if min(cfg.crossing_cap_normal_tons,cfg.rail_cap_tons)<=cfg.daily_demand_tons:
         st.warning('Пропускная способность ж/д или переправы не превышает суточное потребление: резерва под предзавоз нет.')
-    version=tuple(p.stat().st_mtime_ns if p.exists() else 0 for p in [ROOT/'okno/corridor.py',ROOT/'okno/corridor_data.py',
+    version=tuple(p.stat().st_mtime_ns if p.exists() else 0 for p in [ROOT/'okno/corridor.py',ROOT/'okno/economic_planner.py',ROOT/'okno/corridor_data.py',
         ROOT/'data/rosstat_prices/yakutsk_mchs_crossing_dates.csv',ROOT/'reports/window_forecasts_a3.csv'])
     want_sens=st.checkbox('Рассчитать чувствительность ±30%',key='corr_sensitivity')
     if case=='synthetic':
@@ -62,6 +62,7 @@ def render_corridor():
     names=dict(POLICY_LABELS)
     if case=='synthetic':
         names['ml']='Предзавоз: ручное предупреждение'
+        names['economic_ml']='Экономический: ручное предупреждение'
     st.info(c['note'])
     if not c['model_available']:
         st.warning('ML для этого сезона заменён календарным q20. Его результат нельзя считать выигрышем модели.')
@@ -73,41 +74,58 @@ def render_corridor():
         for i,url in enumerate(c['sources']):
             st.markdown(f"[Источник {'закрытия' if i==0 else 'открытия'}]({url})")
     summary=pd.DataFrame([dict(policy=p,**r[0]) for p,r in results.items()]).set_index('policy')
-    before,after=summary.loc['calendar'],summary.loc['ml']
+    focus=st.selectbox('Подход для подробного сравнения',list(results),index=list(results).index('economic_ml'),
+                       format_func=names.get,key='corr_focus')
+    before,after=summary.loc['calendar'],summary.loc[focus]
+    st.write(f'**Выбран: {names[focus]}**')
+    if focus.startswith('economic_'):
+        st.caption('Экономический план минимизирует перевозку, хранение и стоимость ожидания до конца общего горизонта. '
+                   'Он обязан выполнить спрос к сроку, если это физически возможно; иначе сначала минимизирует недовоз. '
+                   'Исполняется только решение на сегодня. Ошибка прогноза может ухудшить фактический результат; '
+                   'это не гарантия минимальных расходов в реальности. Страховой запас старых правил в эту цель не входит.')
+    if not after.terminal_service_complete:
+        st.warning(f'К концу расчёта не выполнено {after.terminal_backlog_tons:,.1f} т заказов. Сравнивайте расходы вместе с объёмом и ожиданием.')
     m1,m2,m3,m4=st.columns(4)
-    m1.metric('Ручной сценарий: расходы' if case=='synthetic' else 'ML: расходы всей цепочки',f'{after.total_cost_rub/1e6:.2f} млн ₽',
+    m1.metric('Расходы с оценкой довоза остатка',f'{after.total_cost_rub/1e6:.2f} млн ₽',
         delta=f'{(after.total_cost_rub-before.total_cost_rub)/1e6:+.2f} млн ₽ ({100*(after.total_cost_rub/before.total_cost_rub-1):+.2f}%) к медиане',delta_color='inverse')
-    m2.metric('Разница с календарным q20',f"{(after.total_cost_rub-summary.loc['calendar_q20','total_cost_rub'])/1e6:+.2f} млн ₽")
+    m2.metric('Разница со старым предзавозом ML',f"{(after.total_cost_rub-summary.loc['ml','total_cost_rub'])/1e6:+.2f} млн ₽")
     m3.metric('Дни с невыполненными заказами',f'{after.days_with_deficit:.0f}',delta=f'{after.days_with_deficit-before.days_with_deficit:+.0f}',delta_color='inverse')
     m4.metric('Хранение в Якутске',f'{after.cost_holding_yak_rub/1e6:.2f} млн ₽',delta=f'{(after.cost_holding_yak_rub-before.cost_holding_yak_rub)/1e6:+.2f} млн ₽',delta_color='off')
-    view=summary[['total_cost_rub','served_tons','terminal_backlog_tons','shortage_ton_days','tons_stuck_nb_ton_days']].copy()
+    view=summary[['total_cost_rub','cash_cost_rub','terminal_commitment_rub','served_tons','terminal_backlog_tons','shortage_ton_days','tons_stuck_nb_ton_days']].copy()
     view.index=view.index.map(names)
     view.index.name='Способ'
-    view.columns=['Расходы, ₽','Получено потребителем, т','Не выполнено к концу, т','Ожидание, т·сут','Хранение Н.Бестях, т·сут']
+    view.columns=['Расходы с довозом, ₽','Расходы за период, ₽','Оценка довоза остатка, ₽','Получено потребителем, т','Не выполнено к концу, т','Ожидание, т·сут','Хранение Н.Бестях, т·сут']
     st.dataframe(view.round(2),width='stretch',key='corr_summary',column_config={
         col:st.column_config.NumberColumn(format='localized') for col in view.columns})
     st.caption(f'Потребность за {cfg.horizon_days} суток: {cfg.daily_demand_tons*cfg.horizon_days:,.0f} т. '
                f'Начальный запас у всех: {after.initial_yak_tons:,.0f} т; отправки прибывают через {cfg.rail_lead_time_days} сут. '
                f'Дополнительное место на складе: {cfg.yak_overflow_capacity_tons:g} т. '
                'Неисполненные заказы сохраняются; штраф считается за каждый день их ожидания.')
+    st.caption('Чтобы уменьшение запаса к концу периода не выдавало себя за экономию, у всех способов одинаково '
+               'оценён будущий довоз оставшегося заказанного груза: ж/д для остатка в хабе и штатная переправа '
+               'для груза в хабе, в пути и в Нижнем Бестяхе. Это расчётная оценка без будущего хранения, '
+               'а не выполненные рейсы. Расходы за период показаны отдельно.')
     chart=go.Figure()
     for col,title in [('cost_rail_rub','Ж/д'),('cost_holding_nb_rub','Хранение Н.Бестях'),
         ('cost_crossing_normal_rub','Штатная переправа'),('cost_crossing_alt_rub','Резерв'),
-        ('cost_holding_yak_rub','Склад Якутска'),('cost_shortage_rub','Ожидание')]:
+        ('cost_holding_yak_rub','Склад Якутска'),('cost_shortage_rub','Ожидание'),
+        ('terminal_commitment_rub','Оценка довоза остатка')]:
         chart.add_bar(x=[names[p] for p in summary.index],y=summary[col]/1e6,name=title)
     chart.update_layout(barmode='stack',title='Все звенья и издержки ожидания',yaxis_title='млн ₽',height=430)
     st.plotly_chart(chart,width='stretch')
     chart=go.Figure()
-    for p in ('calendar','calendar_q20','ml'):
+    for p in ('calendar','ml','economic_calendar','economic_ml'):
         daily=results[p][1]
         chart.add_scatter(x=daily.day,y=daily.inv_yak_t,name=names[p])
-    chart.add_scatter(x=results['ml'][1].day,y=results['ml'][1].inv_nb_t,name='Правый берег: проверяемый план',line=dict(dash='dot'))
+    chart.add_scatter(x=results[focus][1].day,y=results[focus][1].inv_nb_t,name='Правый берег: выбранный подход',line=dict(dash='dot'))
     chart.add_vrect(x0=c['ac'],x1=c['ao'],fillcolor='red',opacity=.08,line_width=0)
     chart.add_hline(y=cfg.yak_warehouse_cap_tons+cfg.yak_overflow_capacity_tons,line_dash='dash',annotation_text='всё доступное место')
     chart.update_layout(title='Запасы и фактическая распутица',height=400,xaxis_title='день от начала расчёта',yaxis_title='т')
     st.plotly_chart(chart,width='stretch')
     with st.expander('Проверить даты решений, отправки и грузы в пути'):
-        st.dataframe(results['ml'][1],hide_index=True,width='stretch')
+        st.caption('Журнал выбранного подхода. optimal означает минимум по известному тогда прогнозу; '
+                   'optimal_with_unavoidable_shortfall — выполнить весь спрос при таком прогнозе невозможно.')
+        st.dataframe(results[focus][1],hide_index=True,width='stretch')
         st.dataframe(summary[['terminal_hub_tons','terminal_in_transit_tons','terminal_nb_tons','terminal_yak_tons','terminal_backlog_tons','mass_balance_error_tons']],width='stretch')
     if sens is not None:
         st.caption(f'Проверено {len(sens)} различных конфигураций; знак эффекта не задан заранее. Это не вероятность успеха.')
