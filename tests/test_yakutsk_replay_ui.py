@@ -30,7 +30,7 @@ class ReplayDashboardTests(unittest.TestCase):
         self.assertEqual(app.number_input(key='replay_extra').value, 5)
         self.assertEqual(app.number_input(key='replay_tare').value, 12.)
         frame=self.summary(app)
-        self.assertEqual(len(frame),5)
+        self.assertEqual(len(frame),8)
         self.assertAlmostEqual(frame.loc['Календарь с пересчётом','По зимней дороге, т'],5000.)
         self.assertGreater(frame.loc['М1 + спутник + планировщик','Расходы, ₽'],
                            frame.loc['Календарь с пересчётом','Расходы, ₽'])

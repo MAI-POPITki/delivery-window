@@ -26,7 +26,8 @@
     "phase20_days": 7.0,
     "climatology_halfwidth_days": 9.0,
     "n_scenarios": 1000,
-    "m2_max_age_days": 14
+    "m2_max_age_days": 14,
+    "official_margin_days": 11.0
   },
   "announced_schedule": {
     "date30": "2026-04-01",
@@ -47,21 +48,21 @@
     "weather": "https://open-meteo.com/en/docs/historical-weather-api"
   },
   "season_volume_assumption": {
-    "route": "РЇРєСѓС‚СЃРє вЂ” РќРёР¶РЅРёР№ Р‘РµСЃС‚СЏС…",
+    "route": "Якутск — Нижний Бестях",
     "hydro_year": 2026,
     "season_total_t": 400000.0,
     "value_status": "user_assumption",
-    "scope": "РћР±С‰РёР№ РѕР±СЉС‘Рј Р·Р° СЃРµР·РѕРЅ 2025/26 РЅР° СѓРєР°Р·Р°РЅРЅРѕРј РЅР°РїСЂР°РІР»РµРЅРёРё; РЅРµ РїРѕРґС‚РІРµСЂР¶РґС‘РЅРЅР°СЏ СЃС‚Р°С‚РёСЃС‚РёРєР° Рё РЅРµ РѕСЃС‚Р°С‚РѕРє РЅР° 16 РјР°СЂС‚Р°.",
+    "scope": "Общий объём за сезон 2025/26 на указанном направлении; не подтверждённая статистика и не остаток на 16 марта.",
     "remaining_on_2026_03_16_t": null,
     "direction_split": null,
-    "note": "РћСЃС‚Р°С‚РѕРє РЅР° РґР°С‚Сѓ СЂРµС€РµРЅРёСЏ Рё СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµ РїРѕ РЅР°РїСЂР°РІР»РµРЅРёСЏРј РЅРµРёР·РІРµСЃС‚РЅС‹. РџСЂРµР¶РЅСЏСЏ РїР°СЂС‚РёСЏ 5 000 С‚ РѕСЃС‚Р°С‘С‚СЃСЏ РѕС‚РґРµР»СЊРЅС‹Рј РёР»Р»СЋСЃС‚СЂР°С‚РёРІРЅС‹Рј СЂР°СЃС‡С‘С‚РѕРј."
+    "note": "Остаток на дату решения и распределение по направлениям неизвестны. Прежняя партия 5 000 т остаётся отдельным иллюстративным расчётом."
   },
   "parameter_status": "Order, fleet, turnaround and economics are assumptions authorized by user; no operator savings claimed.",
   "input_and_code_sha256": {
-    "data/scenarios/yakutsk_spring_2026_forecasts.csv": "cbb05436f36ea030be0a10e10b2f4c154cae8593f64a213cfeb8cd42f64b4a1e",
-    "data/scenarios/yakutsk_spring_2026_observations.csv": "386d478e3922d9ee95a0990e0a6cd56dceb883119d608cd2119916cc67256705",
-    "data/scenarios/yakutsk_spring_2026_volume.json": "ef967d9bd18b39340d3407d254e1de4d05603d3f231024dfeb396c889ad18ba2",
-    "okno/yakutsk_replay.py": "d0ad4e8080d5e9fe459aa29f54e8bbfcee2cd8f532e9c4fa88925a17daebd566",
-    "scripts/prepare_yakutsk_replay.py": "a6183022dfbef10b6c8208f67a8586e750822ea4527ddec3be2117af8170381b"
+    "data\\scenarios\\yakutsk_spring_2026_forecasts.csv": "3af412d8ce5b9b020585953a60006238dffdf07b751174a2cca24fddd369e36a",
+    "data\\scenarios\\yakutsk_spring_2026_observations.csv": "f9e491775ee724384fb4488f14f2a8c1208e1f9ded9a4e60a4d61922a2553252",
+    "data\\scenarios\\yakutsk_spring_2026_volume.json": "0e5234280d245a19d9ebca1b90ea3827a4d4fb56e6dd4476b194de25d3447c23",
+    "okno\\yakutsk_replay.py": "ad918f7bea30a6bc3df554ba6536cb3e08a30d841b63ddc17cf880758e4e7880",
+    "scripts\\prepare_yakutsk_replay.py": "7066d53b2ca9e340e280f2721726620a131e019e92b9f8d9a09322bc7485a976"
   }
 }

@@ -61,7 +61,7 @@ class ReplayTests(unittest.TestCase):
     def test_adaptive_calendar_uses_actual_today_but_not_future_truth(self):
         # Prior to 27 March, both worlds have identical observations.
         changed = replace(ACTUAL, date30='2026-03-25', date20='2026-04-02')
-        for name in RULES:
+        for name in [r for r in RULES if r != 'oracle']:  # oracle по построению знает фактический график
             with self.subTest(name=name):
                 a = self.results[name].schedule
                 b = simulate(name, self.f, self.o, actual_schedule=changed).schedule

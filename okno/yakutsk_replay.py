@@ -47,6 +47,9 @@ class Scenario:
     climatology_halfwidth_days: float = 9.0
     n_scenarios: int = 1000
     m2_max_age_days: int = 14
+    # Наименьший разрыв «спутниковое вскрытие − первый закрытый день» среди подтверждённых сезонов ДО 2026:
+    # 2019: 19 сут, 2023: 25 сут, 2024: 11 сут → 11 (осторожно). Для 2026 не подбирался.
+    official_margin_days: float = 11.0
 
     def __post_init__(self):
         positive = ("Q_t", "base_trucks", "max_payload_t", "trips_per_workday", "c_backup")
@@ -86,13 +89,16 @@ class RestrictionSchedule:
 
 ANNOUNCED = RestrictionSchedule()
 ACTUAL = RestrictionSchedule(date30="2026-03-27")
-RULES = ("calendar", "climatology", "forecast", "forecast_m2", "asap")
+RULES = ("calendar", "climatology", "forecast", "forecast_m2", "official_m1", "official_m1_m2", "asap", "oracle")
 RULE_LABELS = {
     "calendar": "Календарь с пересчётом",
     "climatology": "Планировщик + календарь ±9 сут",
     "forecast": "М1 + планировщик",
     "forecast_m2": "М1 + спутник + планировщик",
     "asap": "Максимально быстрый завоз",
+    "official_m1": "Официальный график + М1 (предупреждение)",
+    "official_m1_m2": "Официальный график + М1 + спутник",
+    "oracle": "Идеальное знание графика (верхняя граница)",
 }
 
 
@@ -162,7 +168,7 @@ def _quantiles(day, forecasts, observations, rule, scenario, announced):
         f = available.iloc[-1]
         q = f[["q10", "q50", "q90"]].to_numpy(dtype=float)
         info["forecast_issue_date"] = f.issue_date
-    if rule == "forecast_m2":
+    if rule in ("forecast_m2", "official_m1_m2"):
         obs = observations[(observations.available_date <= day) & (observations.date <= day)
                            & (observations.date >= day - pd.Timedelta(days=scenario.m2_max_age_days))]
         if len(obs):
@@ -190,14 +196,20 @@ def fuse_observation(quantiles, obs_day, p_ice):
     return updated, bool(not np.allclose(q, updated))
 
 
-def _probabilistic_today(dates, today_limit, remaining, q, scenario):
+def _probabilistic_today(dates, today_limit, remaining, q, scenario, official_close_day=None):
     """M3 linear cost slots, split by payload tiers supported by each limit.
 
     Upper payload tiers have their own probability of being permitted. Thus a
     20 t gross limit leaves 8 t on a 12 t truck, rather than treating its entire
     original 28 t payload as delivered. Only today's chosen slots are executed.
     """
-    samples = sample_quantiles(*q, scenario.n_scenarios, np.random.default_rng(42)) - scenario.close_margin_days
+    if official_close_day is None:
+        samples = sample_quantiles(*q, scenario.n_scenarios, np.random.default_rng(42)) - scenario.close_margin_days
+    else:
+        # Официальный график — основа: закрыть раньше объявленного переправу может только физика льда.
+        # М1 сдвигает закрытие раньше лишь в сценариях, где вскрытие ближе official_margin_days к нему.
+        samples = np.minimum(sample_quantiles(*q, scenario.n_scenarios, np.random.default_rng(42))
+                             - scenario.official_margin_days, official_close_day)
     ds = np.array([to_season_day(d, scenario.hydro_year) for d in dates])
     limits = np.select([ds[:, None] > samples,
                         ds[:, None] >= samples - scenario.phase20_days,
@@ -253,8 +265,10 @@ def simulate(rule, forecasts=None, observations=None, scenario=None, *, actual_s
             if rule == "asap":
                 xb = min(remaining, r.base_capacity_t)
                 xe = min(remaining-xb, r.extra_capacity_t)
-            elif rule == "calendar":
-                limits = np.minimum(announced_schedule.limit(future_dates), current_limit)
+            elif rule in ("calendar", "oracle"):
+                # oracle — тот же календарный алгоритм, но с фактическим графиком (недостижимый максимум)
+                plan = actual_schedule if rule == "oracle" else announced_schedule
+                limits = np.minimum(plan.limit(future_dates), current_limit)
                 limits[0] = current_limit
                 loads = payload(limits, s) * s.trips_per_workday * np.isin(future_dates.day_of_week, s.weekdays)
                 base = loads * s.base_trucks
@@ -266,7 +280,9 @@ def simulate(rule, forecasts=None, observations=None, scenario=None, *, actual_s
                 xe = min(remaining-xb, extra[0] * min(1., shortfall/extra.sum())) if extra.sum() else 0.
             else:
                 q, info = _quantiles(day, forecasts, observations, rule, s, announced_schedule)
-                xb, xe = _probabilistic_today(future_dates, current_limit, remaining, q, s)
+                official = (to_season_day(announced_schedule.last_open_date, s.hydro_year)
+                            if rule.startswith("official") else None)
+                xb, xe = _probabilistic_today(future_dates, current_limit, remaining, q, s, official)
             xb = min(xb, r.base_capacity_t, remaining)
             xe = min(xe, r.extra_capacity_t, remaining-xb)
         delivered = xb + xe
