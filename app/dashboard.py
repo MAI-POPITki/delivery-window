@@ -107,7 +107,7 @@ import plotly.graph_objects as go
 # модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
 _MODULE_NAMES = (
     "okno.paths", "okno.regions", "okno.report", "okno.ice", "okno.calib", "okno.features",
-    "okno.planner", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
+    "okno.planner", "okno.truck_load", "app.truck_load_view", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
     "okno.yakutsk_replay", "app.yakutsk_experiment",
 )
 _cached_modules = [sys.modules.get(name) for name in _MODULE_NAMES]
@@ -535,6 +535,8 @@ with tabs[3]:
     from app.planner_view import render_planner
     q = fc_cached(pid, hy, issue_day, "close")
     P = render_planner(q, hy, issue_day, margin, label(pid))
+    from app.truck_load_view import render_truck_load
+    render_truck_load(pid, issue_date)
     if q and 'error' not in q and np.isfinite(q.get('actual', np.nan)):
         with st.expander('Прежний ретроспективный тест М3: календарь и пересчёт по прогнозу'):
             st.caption('Отдельная проверка на фактическом закрытии. Здесь введённый объём считается заказом '
