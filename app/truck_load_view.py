@@ -12,10 +12,22 @@ def render_truck_load(point_id, decision_date):
         if frame.empty:
             st.info('Для выбранной точки нет привязанных дорог в реестре. Ограничение неизвестно.')
             return
+        available=frame.groupby('hydro_year').actual_date.agg(['min','max']).reset_index()
+        available.columns=['Сезон (год окончания)','Первая запись','Последняя запись']
+        st.caption('Доступные периоды реестра для этой точки:')
+        st.dataframe(available, hide_index=True, width='stretch')
+        original_date=decision_date
+        decision_date=st.date_input('Дата проверки ограничения',decision_date,
+            key=f'truck_date_{point_id}_{original_date.isoformat()}')
+        if decision_date!=original_date:
+            st.warning('Проверяется другая дата. Это отдельная проверка ограничения; дата и расчёт М3 не изменены. '
+                       'Историческое ограничение не переносится на сегодняшний день.')
         season=decision_date.year+int(decision_date.month>=9)
         roads=sorted(frame.loc[frame.hydro_year.eq(season),'road'].unique())
         if not roads:
-            st.info('В реестре нет записей по дорогам этой точки за выбранный сезон. Ограничение неизвестно.')
+            st.info(f'Для сезона {season-1}/{str(season)[2:]} записей нет. '
+                    'Выберите дату внутри доступных периодов выше для исторической проверки. '
+                    'Для текущей поездки требуется актуальная сводка дорожного ведомства: прошлогодние ограничения не применяются автоматически.')
             return
         road=st.selectbox('Дорога из реестра',roads,index=None,
                           placeholder='Выберите дорогу — гидропост не определяет её однозначно',key='truck_road')
