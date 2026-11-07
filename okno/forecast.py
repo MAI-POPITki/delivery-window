@@ -171,6 +171,10 @@ def calendar_day(point_id, hydro_year, kind):
 
 
 def forecast(point_id: str, hydro_year: int, issue_day: int, kind: str, *, use_weather=False) -> dict | None:
+    from .regions import REGIONS, region_of
+    settings = REGIONS.get(region_of(point_id), {})
+    if kind in settings.get('disabled_kinds', []):
+        return None
     if is_basin(point_id) and kind == "open":
         return None  # в бассейне Лены нет замеров толщины — прогнозируем только вскрытие
     model_key = "close_lena" if is_basin(point_id) and kind == "close" else kind
