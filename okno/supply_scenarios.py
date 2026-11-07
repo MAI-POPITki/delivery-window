@@ -1,8 +1,8 @@
-"""Declared availability scenarios, not predictions of legal transport access.
+"""Сценарии заданной доступности, а не разрешение движения.
 
-All calendars are assumed known on day zero. Historical facts must never be
-silently used as an operational forecast. The two-leg continuous-tonne model
-does not represent individual sailings, vessel turnaround or vehicle fleets.
+Календарь предполагается известным на старте. Исторические факты нельзя
+выдавать за оперативный прогноз. Модель делимых тонн не описывает
+отдельные рейсы, оборот судов и парк техники.
 """
 from dataclasses import dataclass
 from typing import Protocol
@@ -23,7 +23,7 @@ class SeasonalWindow:
 
     def calendar(self, horizon):
         if not 0 <= self.start < self.end <= horizon:
-            raise ValueError('Window must be nonempty and within the horizon')
+            raise ValueError('Период должен быть непустым и находиться внутри горизонта')
         days = np.arange(horizon)
         return (days >= self.start) & (days < self.end)
 
@@ -43,42 +43,42 @@ class ServiceDays:
 
     def calendar(self, horizon):
         if not self.days or any(d < 0 or d >= horizon for d in self.days):
-            raise ValueError('Service dates must be within the horizon')
+            raise ValueError('Дни обслуживания должны находиться внутри горизонта')
         return np.isin(np.arange(horizon), self.days)
 
 
 @dataclass(frozen=True)
 class DeclaredCalendar:
-    """External timetable explicitly known at the start, not a future fact log."""
+    """Внешний календарь, заданный на старте; не журнал будущих фактов."""
     available: tuple[bool, ...]
 
     def calendar(self, horizon):
         if len(self.available) != horizon or any(type(v) is not bool for v in self.available):
-            raise ValueError('Calendar requires one boolean per day of the horizon')
+            raise ValueError('На каждый день горизонта требуется одно логическое значение')
         return np.array(self.available, dtype=bool)
 
 
 def calendar_from_frame(frame, horizon):
-    """Import day/available CSV; refuse missing days, duplicates and coercion.
+    """Импорт CSV day/available с проверкой пропусков и дублей.
 
-    Caller must mark the input as a declared scenario, not an as-of forecast.
+    Вход должен быть обозначен как заданный сценарий, а не исторический прогноз.
     """
     if not {'day', 'available'} <= set(frame):
-        raise ValueError('Required columns: day, available (0 or 1)')
+        raise ValueError('Нужны столбцы day и available (0 или 1)')
     ordered = frame.sort_values('day')
     if len(ordered) != horizon or ordered.day.tolist() != list(range(horizon)):
-        raise ValueError('Days must cover 0..horizon-1 exactly once')
+        raise ValueError('Нужен каждый день от 0 до конца горизонта без дублей')
     if not ordered.available.isin([0, 1]).all():
-        raise ValueError('Availability must be 0 or 1')
+        raise ValueError('Доступность должна быть 0 или 1')
     return DeclaredCalendar(tuple(bool(v) for v in ordered.available))
 
 
 def compare_supply(cfg, schedule: Availability):
-    """Same known calendar and costs for reactive and anticipatory policies.
+    """Общие календарь и затраты для пополнения по остатку и оптимизатора.
 
-    Baseline: existing stock-replenishment rule, no seasonal prestocking.
-    Optimiser: existing LP, with declared daily availability. Neither receives
-    an ML forecast or a claim of measured economic benefit.
+    База — прежнее правило пополнения без сезонного предзавоза.
+    Оптимизатор — прежняя линейная программа с календарём доступности.
+    ML здесь не используется; фактическая экономия не заявляется.
     """
     mask = schedule.calendar(cfg.horizon_days)
     return {

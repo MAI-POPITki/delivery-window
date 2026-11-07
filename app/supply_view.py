@@ -1,7 +1,8 @@
-"""Portable planning scenarios with explicit evidence boundaries for A3."""
+"""Переносимые сценарии планирования с явными ограничениями доказательств А3."""
 import pandas as pd
 import streamlit as st
 from pathlib import Path
+import json
 
 from okno.corridor import CorridorConfig
 from okno.regions import REGIONS
@@ -10,8 +11,46 @@ from okno.supply_scenarios import Closure, SeasonalWindow, ServiceDays, compare_
 
 def render_supply():
     st.subheader('Расширение применения — сценарная лаборатория')
-    st.warning('Все параметры и даты ниже — допущения. Это проверка переносимости расчёта, '
-               'а не подтверждённый маршрут или экономия. ML льда не переносится на навигацию автоматически.')
+    st.caption('Ветка ZXC · новые календари, региональные источники и воспроизводимые проверки')
+    cases_path = Path(__file__).resolve().parents[1] / 'data/external/expansion_cases.json'
+    cases = json.loads(cases_path.read_text(encoding='utf-8'))
+    selected = st.selectbox('Пример с найденными данными', ['manual']+[c['id'] for c in cases],
+        format_func=lambda key: 'Собственный сценарий' if key == 'manual' else next(c['name'] for c in cases if c['id']==key),
+        key='supply_evidence_case')
+    case = next((c for c in cases if c['id']==selected), None)
+    if case:
+        st.markdown(f"**Источник:** [{case['source_type']}]({case['source']})")
+        st.write(case['facts'])
+        st.warning(case['limits'])
+        st.info('Пока не найдены: '+case['missing'])
+        if case['id'] == 'ob_navigation_2025':
+            st.markdown('**Пересчёт опубликованного тарифа:** 1250 ₽ за грузовой автомобиль общей массой 7–20 т.')
+            payload = st.number_input('Полезный груз в машине, т — ваше условие', 0.1, 19., 10., key='supply_payload')
+            tare = st.number_input('Масса пустой машины, т — ваше условие', 0.1, 19., 8., key='supply_tare')
+            if not 7 < payload+tare <= 20:
+                st.error('Суммарная масса не попадает в выбранную тарифную категорию свыше 7 до 20 т.')
+            else:
+                st.write(f'Производная ставка: 1250 / {payload:g} = {1250/payload:.2f} ₽/т груза.')
+                st.caption('Тариф — из справочника за 2025 год; загрузка и масса машины — ваши допущения. '
+                           'Не включает автомобильный участок, обратный рейс, погрузку и хранение. '
+                           'Не является котировкой перевозчика на доставку тонны груза.')
+                if st.button('Подставить производную ставку парома', key='supply_apply_rate'):
+                    st.session_state['supply_normal'] = 1250/payload
+        if st.button('Подставить маршрут и даты из источника', key='supply_apply_case'):
+            origin = pd.Timestamp(case['start_date'])
+            if 'closure_date' in case:
+                window = ((pd.Timestamp(case['closure_date'])-origin).days, case['horizon'])
+                kind_value = '1. Другой регион: сезонный путь'
+            else:
+                window = ((pd.Timestamp(case['window_start'])-origin).days,
+                          (pd.Timestamp(case['window_end'])-origin).days)
+                kind_value = '2. Речной завоз'
+            st.session_state.update(supply_kind=kind_value, supply_region=case['region'],
+                supply_route=case['route'], supply_horizon=case['horizon'], supply_window=window,
+                supply_loaded_case=case['id'])
+    st.warning('Экономические параметры — допущения. Даты имеют источники только после подстановки примера; '
+               'непрерывная доступность между границами остаётся упрощением. '
+               'Расчёт с фактическими датами — сценарий с известным календарём, не проверка исторического прогноза.')
     kind = st.selectbox('Применение', ['1. Другой регион: сезонный путь',
         '2. Речной завоз', '3. Снабжение удалённого объекта'], key='supply_kind')
     region = st.selectbox('Регион сценария', list(REGIONS),
@@ -32,7 +71,7 @@ def render_supply():
     route = st.text_input('Маршрут: откуда → промежуточный пункт → получатель',
                          'База → терминал → склад получателя', key='supply_route')
     c1, c2 = st.columns(2)
-    horizon = c1.number_input('Горизонт расчёта, суток', 14, 180, 60, key='supply_horizon')
+    horizon = c1.number_input('Горизонт расчёта, суток', 14, 366, 60, key='supply_horizon')
     start, end = c1.slider('Период [начало, конец), дни от начала расчёта',
                            0, int(horizon), (int(horizon)//3, 2*int(horizon)//3), key='supply_window')
     if kind.startswith('1'):
@@ -99,6 +138,8 @@ def render_supply():
                    'базовое правило не является подтверждённой практикой оператора.')
         daily = pd.concat([frame.assign(policy=name, region=region, route=route,
             calendar_assumed_known=True) for name, (_, frame) in results.items()], ignore_index=True)
+        daily['source_case'] = st.session_state.get('supply_loaded_case', '')
+        daily['calendar_source_note'] = 'Ссылка относится к подставленному примеру; текущие даты могут быть изменены пользователем'
         st.line_chart(daily.pivot(index='day', columns='policy', values='backlog_t'))
         st.download_button('Скачать дневной расчёт CSV', daily.to_csv(index=False).encode('utf-8-sig'),
                            'supply-scenario.csv', 'text/csv')

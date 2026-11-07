@@ -110,7 +110,7 @@ def simulate_corridor(cfg,actual_close_day,actual_open_day,planned_close_day,pla
     if availability is not None:
         availability = np.asarray(availability, dtype=bool).copy()
         if availability.shape != (cfg.horizon_days,):
-            raise ValueError("Availability must cover the full horizon")
+            raise ValueError("Календарь должен покрывать весь горизонт")
     f=_forecast_table(forecasts)
     d,H,lag=cfg.daily_demand_tons,cfg.horizon_days,cfg.rail_lead_time_days
     space=cfg.yak_warehouse_cap_tons+cfg.yak_overflow_capacity_tons

@@ -1,6 +1,6 @@
-"""Reproduce synthetic transfer checks. Does not fit or calibrate any model.
+"""Повторение модельных проверок переноса без обучения и калибровки.
 
-Run: python scripts/verify_expansion.py --output reports/expansion
+Запуск: python scripts/verify_expansion.py --output reports/expansion
 """
 import argparse
 from dataclasses import asdict
@@ -33,7 +33,7 @@ def run(output):
     for case, schedule in cases:
         mask = schedule.calendar(cfg.horizon_days)
         manifests.append(dict(case=case, parameters=asdict(cfg), calendar=mask.astype(int).tolist(),
-            assumption='Synthetic parameters; full calendar known at start; no calibration'))
+            assumption='Модельные параметры; календарь известен на старте; без калибровки'))
         for policy, (summary, daily) in compare_supply(cfg, schedule).items():
             assert abs(summary['mass_balance_error_tons']) < 1e-5
             assert (daily.loc[~mask, 'shipped_norm_t'].abs() < 1e-6).all()

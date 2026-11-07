@@ -36,7 +36,7 @@ class EconomicPlanner:
         self.cfg = cfg
         self.availability = None if availability is None else np.asarray(availability, dtype=bool).copy()
         if self.availability is not None and self.availability.shape != (cfg.horizon_days,):
-            raise ValueError("Availability must cover the full horizon")
+            raise ValueError("Календарь должен покрывать весь горизонт")
         self._plan = {}
         self._token = None
         self.solves = 0

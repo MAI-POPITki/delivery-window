@@ -82,7 +82,7 @@
       1,
       1
     ],
-    "assumption": "Synthetic parameters; full calendar known at start; no calibration"
+    "assumption": "Модельные параметры; календарь известен на старте; без калибровки"
   },
   {
     "case": "yanao",
@@ -167,7 +167,7 @@
       1,
       1
     ],
-    "assumption": "Synthetic parameters; full calendar known at start; no calibration"
+    "assumption": "Модельные параметры; календарь известен на старте; без калибровки"
   },
   {
     "case": "krasnoyarsk",
@@ -252,7 +252,7 @@
       1,
       1
     ],
-    "assumption": "Synthetic parameters; full calendar known at start; no calibration"
+    "assumption": "Модельные параметры; календарь известен на старте; без калибровки"
   },
   {
     "case": "irkutsk",
@@ -337,7 +337,7 @@
       1,
       1
     ],
-    "assumption": "Synthetic parameters; full calendar known at start; no calibration"
+    "assumption": "Модельные параметры; календарь известен на старте; без калибровки"
   },
   {
     "case": "arkhangelsk",
@@ -422,7 +422,7 @@
       1,
       1
     ],
-    "assumption": "Synthetic parameters; full calendar known at start; no calibration"
+    "assumption": "Модельные параметры; календарь известен на старте; без калибровки"
   },
   {
     "case": "navigation",
@@ -507,7 +507,7 @@
       0,
       0
     ],
-    "assumption": "Synthetic parameters; full calendar known at start; no calibration"
+    "assumption": "Модельные параметры; календарь известен на старте; без калибровки"
   },
   {
     "case": "remote",
@@ -592,6 +592,6 @@
       0,
       0
     ],
-    "assumption": "Synthetic parameters; full calendar known at start; no calibration"
+    "assumption": "Модельные параметры; календарь известен на старте; без калибровки"
   }
 ]

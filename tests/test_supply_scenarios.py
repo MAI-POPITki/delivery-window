@@ -16,8 +16,8 @@ class SupplyTests(unittest.TestCase):
         np.testing.assert_array_equal(calendar.calendar(2), [True, False])
 
     def test_optimizer_matches_independent_enumeration_for_all_three_day_calendars(self):
-        # Integer transport network: independently enumerate every dispatch and
-        # final-leg shipment. Check service first, then complete cost ledger.
+        # Целочисленная транспортная сеть: независимый перебор отправок.
+        # Сначала сравнивается выполнение спроса, затем полные расходы.
         cfg = self.cfg(horizon_days=3, rail_lead_time_days=0, rail_cap_tons=2,
             crossing_cap_normal_tons=2, initial_yak_tons=0, yak_warehouse_cap_tons=3,
             rail_cost_per_ton=3, crossing_cost_normal=5,
