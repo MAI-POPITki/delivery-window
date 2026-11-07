@@ -134,10 +134,11 @@ python scripts/download_weather_forecasts.py --live
 | --- | --- |
 | `scripts/download_data.py` | загрузка: ERA5 (Open-Meteo), спутниковые даты льда Лены (Zenodo), замеры гидропостов (Arctic Data Center) |
 | `scripts/build_dataset.py` | сырые файлы → единый набор `data/processed/` с `source_type` и ссылкой на источник |
-| `scripts/validate_data.py` | проверки валидности → `reports/data_checks.md` |
+| `scripts/validate_data.py` | проверки валидности базовых рядов → `reports/data_checks.md` |
+| `scripts/validate_external_data.py` | строгие проверки внешних данных раздела 3 [docs/VALIDATION_PLAN.md](docs/VALIDATION_PLAN.md) → [reports/external_data_summary.md](reports/external_data_summary.md) |
 | `scripts/train_m1.py` | М1: CatBoost-квантили, бэктест leave-one-season-out → `reports/m1_metrics.md`, `models/` |
 | `scripts/before_after.py` | М3 на прошлых сезонах, «до/после», чувствительность ±30% → `reports/before_after.md` |
-| `okno/` | код моделей: физика льда (`ice.py`, `calib.py`), признаки (`features.py`), М1 (`m1.py`), М3 (`planner.py`), прогноз на дату (`forecast.py`) |
+| `okno/` | код моделей и загрузчиков: физика льда (`ice.py`, `calib.py`), признаки (`features.py`), М1 (`m1.py`), М3 (`planner.py`), прогноз на дату (`forecast.py`), внешние данные (`external_data.py`) |
 | `app/dashboard.py` | дашборд: карта, карточка пути, планировщик, рейтинг риска |
 | `reports/` | все результаты, которые идут в паспорт и презентацию |
 
@@ -163,10 +164,14 @@ python scripts/download_weather_forecasts.py --live
 | `data/processed/hydro_ice_seasons.csv` | пост × сезон | даты `first_ice`, `freezeup`, `melt_start`, `drift_start`, `ice_end`; `open_{10,20,30}t_*` — лёд достиг нормативной толщины; `valid`, `flags` | дата / день сезона | замер |
 | `data/processed/yakutsk_sat_seasons.csv` | сезон | `sat_freezeup_*`, `sat_breakup_*`, `sat_ice_duration_days` | дата / день сезона / сут | спутник |
 | `data/processed/m1_dataset_*.csv` | точка × сезон × дата выпуска | признаки М1, `target_day`, `cal_target`, `lead_days` | — | производные |
+| `data/external/road_events.csv` | дорога × сезон × событие | `kind` (`open`/`close`/`limit30`/`limit20`), `announced_date`, `actual_date`, `source_*` (`https://`), `point_id` | ISO-дата | официальные сводки (184 события, 5 регионов) |
+| `data/external/tariffs.csv` | контракт / тариф | `route`, `mode` (`зимник`/`авиа`/`река`/`ж/д`/`СВП`), `price_rub_per_t`, `deadline`, `penalty`, `url` | ₽/т | ЕИС Закупки / тарифные комитеты (30 записей) |
+| `data/external/incidents.csv` | срыв завоза | `year`, `road`, `what`, `tonnage`, `extra_cost`, `source` | т, ₽ | СМИ / отчёты ведомств (21 кейс) |
+| `data/external/northern_supply_volumes.csv`, `ice_thickness_bulletins.csv` | регион × год / пост × дата | `plan_thousand_t`, `fact_thousand_t` / `ice_cm`, `norm_cm`, `source` | тыс. т / см | отчёты регионов и УГМС/МЧС (>2015 г.) |
 
 Нормативная толщина для нагрузки P т — допущение `h = 11·√P` см (10 т → 35 см, 20 т → 49 см),
-сверить с ОДН 218.010-98. Экономика М3 (объёмы, тарифы, хранение) — синтетика/допущения,
-не участвует в оценке точности М1.
+сверить с ОДН 218.010-98. Экономика базового М3 (объёмы, тарифы, хранение) — допущения,
+не участвует в оценке точности М1; собранные реальные контракты и тарифы для пересчётов R3 лежат в `data/external/tariffs.csv`.
 
 ## Источники
 
