@@ -79,6 +79,25 @@ def main():
              f"**Честных выигрышей (дешевле и ожидание не дольше): {len(honest)} из {len(d)} сочетаний; "
              f"экономия в них — от {honest['экономия, %'].min():.1f}% до {honest['экономия, %'].max():.1f}%.**"
              if len(honest) else "**Честных выигрышей нет.**", ""]
+    # режим «сервис»: минимум расходов оператора при заданном ожидании (цена ожидания в расходы не входит)
+    from okno.corridor import service_frontier, service_plan
+    from okno.corridor_data import case_inputs
+    srows = []
+    for sname, (yak, nb) in list(STORAGE.items())[:2]:
+        cfg = replace(CorridorConfig(), **TRANSPORT, yak_holding_cost_per_ton_day=yak, nb_holding_cost_per_ton_day=nb)
+        for y in (2019, 2023, 2024):
+            c = case_inputs(y)
+            _, base = service_frontier(cfg, c, penalties=(0.,))
+            row = {"хранение": sname, "сезон": y, "ожидание привычной схемы, т·сут": base["shortage_ton_days"]}
+            for share, label in ((1.0, "при том же ожидании"), (0.5, "при вдвое меньшем ожидании")):
+                plan, _ = service_plan(cfg, c, base["shortage_ton_days"] * share)
+                row[f"расходы {label}, %"] = round(100 * (plan["operating_cost_rub"] / base["operating_cost_rub"] - 1), 1)
+            srows.append(row)
+    sv = pd.DataFrame(srows)
+    lines += ["## Режим «сервис»: без допущения о цене ожидания", "",
+              "Оптимизатор ищет минимум расходов на перевозку и хранение при ожидании получателя не больше, чем у "
+              "привычной схемы (или вдвое меньше). Внутренняя цена ожидания — только рычаг, в расходы не входит. "
+              "Отрицательное — дешевле привычной схемы.", "", md_table(sv), ""]
     (ROOT / "reports" / "real_prices_check.md").write_text("\n".join(lines), encoding="utf-8")
     print(s.to_string(index=False))
     print(lines[-2])
