@@ -330,7 +330,7 @@ with tabs[0]:
             continue
         qo, qc = fc_map(p, hy, issue_day, "open"), fc_map(p, hy, issue_day, "close")
         p_open = p_by(qo, t)
-        p_open = 1.0 if np.isnan(p_open) and issue_day > 120 and 'open' not in REGIONS[region].get('disabled_kinds', []) else p_open
+        p_open = 1.0 if np.isnan(p_open) and issue_day > 120 else p_open
         p_closed = p_by(qc, t + margin)
         p_ok = p_open * (1 - p_closed) if not (np.isnan(p_open) or np.isnan(p_closed)) else np.nan
         color = ("#9e9e9e" if np.isnan(p_ok) else
@@ -452,14 +452,12 @@ with tabs[1]:
             if not q or "error" in q:
                 st.info("Нет прогноза для этой точки и вида события"
                         + (" (здесь нет замеров толщины льда — только спутниковые даты вскрытия)."
-                           if (pid == "yakutsk_crossing" or FC.is_basin(pid)) and kind == "open" else
-                           " (прогноз открытия отключён: перенос в этот регион не подтверждён)."
-                           if kind in REGIONS[region].get('disabled_kinds', []) else "."))
+                           if (pid == "yakutsk_crossing" or FC.is_basin(pid)) and kind == "open" else "."))
                 continue
             close_note = f" (закрытие пути ≈ на {margin} сут раньше)" if kind == "close" else ""
             st.metric("Медиана прогноза М1", f"{q['q50_date']:%d.%m.%Y}",
                       delta=f"{q['q50'] - q['calendar']:+.0f} сут к календарю", delta_color="inverse")
-            range_name = "Экспериментальный диапазон" if q.get("weather_model_applied") or not REGIONS[region].get("include_training", True) else "80%-диапазон"
+            range_name = "Экспериментальный диапазон" if q.get("weather_model_applied") else "80%-диапазон"
             st.write(f"{range_name}: **{q['q10_date']:%d.%m} – {q['q90_date']:%d.%m}**{close_note}")
             st.write(f"Календарь (средняя за прошлые сезоны): {q['calendar_date']:%d.%m}; "
                      f"физика: {q['physics_date']:%d.%m}")
