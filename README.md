@@ -7,7 +7,7 @@
 | | |
 | --- | --- |
 | 🌐 **Страница проекта** | https://mai-popitki.github.io/delivery-window/ — ключевые цифры, графики, документ |
-| 📊 **Живой дашборд** | https://okno-zavoza.streamlit.app/ — карта, прогнозы, планировщик (если «спит» — первое открытие ~30–60 с) |
+| 📊 **Живой дашборд** | https://okno-zavoza-dmitrii.streamlit.app/ — карта, прогнозы, планировщик (если «спит» — первое открытие ~30–60 с) |
 | 📄 **Документ проекта** | [docs/project.pdf](docs/project.pdf) |
 | 🧪 **Фичи на пробу для команды** | [docs/FEATURES.md](docs/FEATURES.md) — идеи, как проверять, таблица результатов |
 | 🛰️ **М2: снимки Sentinel-1** | [docs/M2_sentinel1.md](docs/M2_sentinel1.md) — лёд/вода с точностью 0,95, отчёт [reports/m2_metrics.md](reports/m2_metrics.md) |
