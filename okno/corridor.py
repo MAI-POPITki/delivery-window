@@ -66,7 +66,6 @@ SENSITIVITY_PARAMS=(
     ("initial_yak_tons","Начальный запас"))
 POLICY_LABELS={"reactive":"Без предзавоза","calendar":"Предзавоз: календарная медиана",
                "calendar_q20":"Предзавоз: календарный q20","ml":"Предзавоз: ML q20",
-               "economic_calendar":"Экономический: календарная медиана",
                "economic_ml":"Экономический: ML q20"}
 
 
@@ -215,7 +214,35 @@ def compare_policies(cfg,ac,ao,cc,co,q20_close=None,q20_open=None,forecasts=None
                                   economic=name.startswith('economic_'))
             for name,pc,po,pre in (("reactive",cc,co,False),("calendar",cc,co,True),
                                    ("calendar_q20",qc,qo,True),("ml",qc,qo,True),
-                                   ("economic_calendar",cc,co,False),("economic_ml",qc,qo,False))}
+                                   ("economic_ml",qc,qo,False))}
+
+
+def weekly_dispatch_comparison(results,start_date):
+    """Compare the old and economic ML policies in seven-day reporting periods.
+
+    Flows and incurred costs are summed; stocks and backlog are end-of-week
+    values. The last period ends on the last simulated day, even if incomplete.
+    This aggregates sequential daily decisions, not a forecast issued on day 0.
+    """
+    start=pd.Timestamp(start_date) if start_date is not None else None
+    frames=[]
+    flows=('hub_dispatched_t','rail_arrived_nb_t','shipped_norm_t','shipped_alt_t',
+           'demanded_t','served_t')
+    stocks=('inv_nb_t','inv_yak_t','backlog_t','in_transit_t','hub_remaining_t')
+    for policy in ('ml','economic_ml'):
+        daily=results[policy][1].sort_values('day').copy()
+        daily['week']=daily.day//7+1
+        daily['weekly_cost_rub']=daily[[c for c in daily if c.startswith('cost_')]].sum(axis=1)
+        weekly=daily.groupby('week',sort=True).agg(
+            day_start=('day','min'),day_end=('day','max'),days=('day','size'),
+            **{col:(col,'sum') for col in flows},
+            **{col:(col,'last') for col in stocks},
+            weekly_cost_rub=('weekly_cost_rub','sum')).reset_index()
+        for column,day_column in (('week_start_date','day_start'),('week_end_date','day_end')):
+            weekly[column]=(start+pd.to_timedelta(weekly[day_column],unit='D')).dt.strftime('%Y-%m-%d') if start is not None else ''
+        weekly['shipped_total_t']=weekly.shipped_norm_t+weekly.shipped_alt_t
+        frames.append(weekly.assign(policy=policy))
+    return pd.concat(frames,ignore_index=True).sort_values(['week','policy']).reset_index(drop=True)
 
 
 def run_sensitivity_check(base_cfg=None,actual_close_day=30,actual_open_day=57,cal_close_day=36,
@@ -233,18 +260,16 @@ def run_sensitivity_check(base_cfg=None,actual_close_day=30,actual_open_day=57,c
     for name,label,fac,c in variants:
         results=compare_policies(c,actual_close_day,actual_open_day,cal_close_day,cal_open_day,q20_close,q20_open,forecasts)
         b,a=results["calendar"][0],results["ml"][0]
-        ec,em=results['economic_calendar'][0],results['economic_ml'][0]
+        em=results['economic_ml'][0]
         rows.append(dict(parameter=name,label=label,variation="база" if name=="base" else f"{(fac-1)*100:+.0f}%",
             param_value=getattr(c,name) if name!="base" else np.nan,before_mln_rub=b["total_cost_rub"]/1e6,
             after_mln_rub=a["total_cost_rub"]/1e6,saving_mln_rub=(b["total_cost_rub"]-a["total_cost_rub"])/1e6,
             saving_pct=100*(b["total_cost_rub"]-a["total_cost_rub"])/b["total_cost_rub"],
             yak_storage_delta_mln_rub=(a["cost_holding_yak_rub"]-b["cost_holding_yak_rub"])/1e6,
             effect_positive=a["total_cost_rub"]<b["total_cost_rub"],
-            economic_calendar_mln_rub=ec['total_cost_rub']/1e6,
             economic_ml_mln_rub=em['total_cost_rub']/1e6,
             economic_saving_vs_calendar_pct=100*(b['total_cost_rub']-em['total_cost_rub'])/b['total_cost_rub'],
             economic_saving_vs_ml_pct=100*(a['total_cost_rub']-em['total_cost_rub'])/a['total_cost_rub'],
-            economic_forecast_effect_pct=100*(ec['total_cost_rub']-em['total_cost_rub'])/ec['total_cost_rub'],
             economic_terminal_backlog_tons=em['terminal_backlog_tons'],
             economic_shortage_ton_days=em['shortage_ton_days'],
             economic_effect_positive=em['total_cost_rub']<b['total_cost_rub']))

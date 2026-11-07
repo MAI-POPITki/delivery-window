@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
-from okno.corridor import CorridorConfig,POLICY_LABELS,compare_policies,compute_prestock_schedule,run_sensitivity_check
+from okno.corridor import CorridorConfig,POLICY_LABELS,compare_policies,run_sensitivity_check,weekly_dispatch_comparison
 from okno.corridor_data import case_inputs,verified_years
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -20,11 +20,49 @@ def calculate(config,case,version,sensitivity=False):
     return c,results,sens
 
 
+def render_weekly_dispatches(results,case,names):
+    st.subheader('План отправок по неделям')
+    st.caption(f"Существующий способ — {names['ml']}; экономический — {names['economic_ml']}. "
+               'Оба используют одинаковые прогнозы. Неделя — 7 дней с начала расчёта; последняя может быть короче. '
+               'Здесь собраны последовательные решения по мере обновления прогноза в течение сезона.')
+    stages={'hub_dispatched_t':'Отправка из хаба',
+            'rail_arrived_nb_t':'Прибытие в Нижний Бестях',
+            'shipped_total_t':'Перевозка через Лену',
+            'served_t':'Выдача потребителю'}
+    stage=st.selectbox('Этап перевозки для недельного сравнения',list(stages),
+                        format_func=stages.get,key='corr_weekly_stage')
+    weekly=weekly_dispatch_comparison(results,case['start_date'])
+    old=weekly[weekly.policy.eq('ml')].set_index('week')
+    economic=weekly[weekly.policy.eq('economic_ml')].set_index('week')
+    if case['start_date'] is None:
+        periods='Дни '+(old.day_start+1).astype(str)+' — '+(old.day_end+1).astype(str)
+    else:
+        periods=(pd.to_datetime(old.week_start_date).dt.strftime('%d.%m.%Y')+' — '+
+                 pd.to_datetime(old.week_end_date).dt.strftime('%d.%m.%Y'))
+    view=pd.DataFrame({'Неделя':old.index,'Период':periods,
+        'Существующий способ, т':old[stage],'Экономический способ, т':economic[stage],
+        'Разница, т':economic[stage]-old[stage]}).reset_index(drop=True)
+    st.dataframe(view.round(2),hide_index=True,width='stretch',key='corr_weekly',column_config={
+        col:st.column_config.NumberColumn(format='localized') for col in view if col!='Период'})
+    chart=go.Figure()
+    for col in ('Существующий способ, т','Экономический способ, т'):
+        chart.add_bar(x=view.Неделя,y=view[col],name=col,customdata=view.Период,
+                      hovertemplate='Неделя %{x}<br>%{customdata}<br>%{y:,.2f} т<extra>%{fullData.name}</extra>')
+    chart.update_layout(barmode='group',title=f'{stages[stage]} по неделям',
+                        xaxis_title='Неделя с начала расчёта',yaxis_title='т',height=360)
+    st.plotly_chart(chart,width='stretch',key='corr_weekly_chart')
+    st.caption('Разница = экономический − существующий. Меньшая отправка за одну неделю может означать перенос '
+               'на другую; выполнение спроса и общие расходы показаны в итоговом сравнении. '
+               'Прибытие по ж/д учитывает время в пути. Перевозка через Лену включает штатный и резервный каналы.')
+    st.download_button('Скачать недельные отправки',weekly.to_csv(index=False).encode('utf-8-sig'),
+                        'corridor-weekly.csv','text/csv',key='corr_weekly_download')
+
+
 def render_corridor():
     st.subheader("Сквозной логистический коридор из 4 звеньев (Кейс А3)")
     st.caption("Хаб → железная дорога → Нижний Бестях → переправа → склад Якутска. "
                "Сезон коридора выбирается ниже. "
-               "Старые правила предзавоза сохранены. Новые экономические планы выбирают суточную загрузку "
+               "Старые правила предзавоза сохранены. Экономический план выбирает суточную загрузку "
                "ж/д и переправы по минимуму затрат при известных на день решения данных.")
     options=sorted(verified_years(),reverse=True)+['synthetic']
     case=st.selectbox("Сценарий / подтверждённый сезон",options,key='corr_scenario',
@@ -74,6 +112,8 @@ def render_corridor():
         for i,url in enumerate(c['sources']):
             st.markdown(f"[Источник {'закрытия' if i==0 else 'открытия'}]({url})")
     summary=pd.DataFrame([dict(policy=p,**r[0]) for p,r in results.items()]).set_index('policy')
+    if st.session_state.get('corr_focus') not in results:
+        st.session_state['corr_focus']='economic_ml'
     focus=st.selectbox('Подход для подробного сравнения',list(results),index=list(results).index('economic_ml'),
                        format_func=names.get,key='corr_focus')
     before,after=summary.loc['calendar'],summary.loc[focus]
@@ -105,6 +145,7 @@ def render_corridor():
                'оценён будущий довоз оставшегося заказанного груза: ж/д для остатка в хабе и штатная переправа '
                'для груза в хабе, в пути и в Нижнем Бестяхе. Это расчётная оценка без будущего хранения, '
                'а не выполненные рейсы. Расходы за период показаны отдельно.')
+    render_weekly_dispatches(results,c,names)
     chart=go.Figure()
     for col,title in [('cost_rail_rub','Ж/д'),('cost_holding_nb_rub','Хранение Н.Бестях'),
         ('cost_crossing_normal_rub','Штатная переправа'),('cost_crossing_alt_rub','Резерв'),
@@ -114,7 +155,7 @@ def render_corridor():
     chart.update_layout(barmode='stack',title='Все звенья и издержки ожидания',yaxis_title='млн ₽',height=430)
     st.plotly_chart(chart,width='stretch')
     chart=go.Figure()
-    for p in ('calendar','ml','economic_calendar','economic_ml'):
+    for p in ('calendar','ml','economic_ml'):
         daily=results[p][1]
         chart.add_scatter(x=daily.day,y=daily.inv_yak_t,name=names[p])
     chart.add_scatter(x=results[focus][1].day,y=results[focus][1].inv_nb_t,name='Правый берег: выбранный подход',line=dict(dash='dot'))

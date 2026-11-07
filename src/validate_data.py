@@ -84,7 +84,7 @@ def run_validation():
              and abs(s['total_cost_rub']-s['cash_cost_rub']-s['terminal_commitment_rub'])<1e-5
              for s,d in res.values())
     record('V8_FLOW_LEDGER','PASS' if good else 'FAIL',
-           'Шесть подходов: баланс груза, задержка ж/д, жёсткая ёмкость склада и сумма затрат с оценкой довоза. Остатки и заказы в ожидании показываются отдельно.')
+           'Пять подходов: баланс груза, задержка ж/д, жёсткая ёмкость склада и сумма затрат с оценкой довоза. Остатки и заказы в ожидании показываются отдельно.')
     return pd.DataFrame(checks),dict(shifts=shift,shift_stats=stats)
 
 

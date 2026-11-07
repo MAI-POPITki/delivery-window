@@ -6,7 +6,7 @@ import unittest
 import numpy as np
 import pandas as pd
 
-from okno.corridor import CorridorConfig, compare_policies, simulate_corridor
+from okno.corridor import CorridorConfig, compare_policies, simulate_corridor, weekly_dispatch_comparison
 
 
 def config(**kwargs):
@@ -143,9 +143,38 @@ class EconomicPlannerTests(unittest.TestCase):
     def test_equal_information_has_equal_economic_results(self):
         forecast = pd.DataFrame([dict(issue_day=0, planned_close_day=1, planned_open_day=3)])
         results = compare_policies(config(), 1, 3, 1, 3, 1, 3, forecast)
-        a = results['economic_calendar'][1].drop(columns='forecast_issue_day')
+        _, calendar = self.run_plan(config(), 1, 3)
+        a = calendar.drop(columns='forecast_issue_day')
         b = results['economic_ml'][1].drop(columns='forecast_issue_day')
         pd.testing.assert_frame_equal(a, b)
+
+    def test_weekly_flows_reconcile_without_summing_inventory_or_extra_days(self):
+        cfg = config(horizon_days=8, rail_lead_time_days=1, initial_yak_tons=1)
+        results = compare_policies(cfg, 2, 5, 2, 5)
+        weekly = weekly_dispatch_comparison(results, '2024-02-27')
+        self.assertEqual(len(weekly), 4)
+        for policy in ('ml', 'economic_ml'):
+            with self.subTest(policy=policy):
+                summary, daily = results[policy]
+                rows = weekly[weekly.policy.eq(policy)].reset_index(drop=True)
+                self.assertEqual(rows.days.tolist(), [7, 1])
+                self.assertEqual(rows.week_start_date.tolist(), ['2024-02-27', '2024-03-05'])
+                self.assertEqual(rows.week_end_date.tolist(), ['2024-03-04', '2024-03-05'])
+                for column in ('hub_dispatched_t', 'rail_arrived_nb_t', 'shipped_norm_t',
+                               'shipped_alt_t', 'demanded_t', 'served_t'):
+                    self.assertAlmostEqual(rows[column].sum(), daily[column].sum())
+                self.assertAlmostEqual(rows.shipped_total_t.sum(), summary['tons_normal_transport']+summary['tons_alt_transport'])
+                self.assertAlmostEqual(rows.weekly_cost_rub.sum(), summary['cash_cost_rub'])
+                for column in ('inv_nb_t', 'inv_yak_t', 'backlog_t', 'in_transit_t', 'hub_remaining_t'):
+                    np.testing.assert_allclose(rows[column], daily[column].iloc[[6, 7]])
+
+    def test_synthetic_weekly_comparison_does_not_invent_calendar_dates(self):
+        results = compare_policies(config(horizon_days=8), 2, 5, 2, 5)
+        weekly = weekly_dispatch_comparison(results, None)
+        self.assertTrue(weekly.week_start_date.eq('').all())
+        self.assertTrue(weekly.week_end_date.eq('').all())
+        self.assertEqual(weekly.day_start.tolist(), [0, 0, 7, 7])
+        self.assertEqual(set(results), {'reactive', 'calendar', 'calendar_q20', 'ml', 'economic_ml'})
 
 
 if __name__ == '__main__':
