@@ -1,10 +1,55 @@
 import unittest
 import numpy as np
+import pandas as pd
+from itertools import product
 from okno.corridor import CorridorConfig, simulate_corridor
-from okno.supply_scenarios import Closure, SeasonalWindow, ServiceDays, compare_supply
+from okno.supply_scenarios import Closure, SeasonalWindow, ServiceDays, DeclaredCalendar, calendar_from_frame, compare_supply
 
 
 class SupplyTests(unittest.TestCase):
+    def test_external_calendar_rejects_missing_duplicate_and_invalid_values(self):
+        for days, values in [([0, 0], [0, 1]), ([0, 2], [0, 1]),
+                             ([0, 1], [1, 2]), ([0, 1], [1, np.nan])]:
+            with self.assertRaises(ValueError):
+                calendar_from_frame(pd.DataFrame({'day': days, 'available': values}), 2)
+        calendar = calendar_from_frame(pd.DataFrame({'day': [1, 0], 'available': [0, 1]}), 2)
+        np.testing.assert_array_equal(calendar.calendar(2), [True, False])
+
+    def test_optimizer_matches_independent_enumeration_for_all_three_day_calendars(self):
+        # Integer transport network: independently enumerate every dispatch and
+        # final-leg shipment. Check service first, then complete cost ledger.
+        cfg = self.cfg(horizon_days=3, rail_lead_time_days=0, rail_cap_tons=2,
+            crossing_cap_normal_tons=2, initial_yak_tons=0, yak_warehouse_cap_tons=3,
+            rail_cost_per_ton=3, crossing_cost_normal=5,
+            nb_holding_cost_per_ton_day=2, yak_holding_cost_per_ton_day=1,
+            shortage_penalty_per_ton_day=7)
+        for mask in product([False, True], repeat=3):
+            best = (float('inf'), float('inf'))
+            for decisions in product(range(3), repeat=6):
+                hub, nb, yak, pending, cost = 3, 0, 0, 0, 0
+                feasible = True
+                for day in range(3):
+                    dispatch, shipment = decisions[2*day:2*day+2]
+                    if dispatch > hub or shipment > nb+dispatch or (shipment and not mask[day]):
+                        feasible = False
+                        break
+                    hub -= dispatch
+                    nb += dispatch-shipment
+                    yak += shipment
+                    pending += 1
+                    served = min(yak, pending)
+                    yak -= served
+                    pending -= served
+                    if yak > 3:
+                        feasible = False
+                        break
+                    cost += dispatch*3+shipment*5+nb*2+yak+pending*7
+                if feasible:
+                    best = min(best, (pending, cost+hub*3+(hub+nb)*5))
+            result = compare_supply(cfg, DeclaredCalendar(mask))['Экономический план'][0]
+            self.assertAlmostEqual(result['terminal_backlog_tons'], best[0], places=5)
+            self.assertAlmostEqual(result['total_cost_rub'], best[1], places=3)
+
     def cfg(self, **kw):
         values = dict(horizon_days=14, daily_demand_tons=1,
             rail_lead_time_days=1, rail_cap_tons=10, crossing_cap_normal_tons=10,

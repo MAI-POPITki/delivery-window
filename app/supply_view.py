@@ -5,7 +5,7 @@ from pathlib import Path
 
 from okno.corridor import CorridorConfig
 from okno.regions import REGIONS
-from okno.supply_scenarios import Closure, SeasonalWindow, ServiceDays, compare_supply
+from okno.supply_scenarios import Closure, SeasonalWindow, ServiceDays, compare_supply, calendar_from_frame
 
 
 def render_supply():
@@ -46,6 +46,16 @@ def render_supply():
         schedule = ServiceDays(tuple(range(start, end, int(interval))))
         st.caption('Внутри выбранного периода основной канал работает в дни обслуживания. '
                    'Мощность означает объём доставки за такой день.')
+    custom = st.file_uploader('Свой календарь CSV: day,available (дни 0…H−1; доступность 0/1)',
+                             type=['csv'], key='supply_calendar_csv')
+    if custom is not None:
+        try:
+            schedule = calendar_from_frame(pd.read_csv(custom), int(horizon))
+        except (ValueError, pd.errors.ParserError) as exc:
+            st.error(f'Календарь не принят: {exc}')
+            return
+        st.warning('Используется импортированный календарь, предполагаемый известным на старте. '
+                   'Это не проверка прогноза на исторических фактах.')
     demand = c1.number_input('Потребность, т/сут', 0.1, 1000., 10., key='supply_demand')
     stock = c1.number_input('Начальный запас, т', 0., 100000., 100., key='supply_stock')
     capacity = c1.number_input('Ёмкость склада получателя, т', 1., 100000., 600., key='supply_space')
@@ -96,3 +106,7 @@ def render_supply():
             'календарь, мощности и цены источниками; сравните весь путь при одинаковом спросе. '
             'Для навигации дополнительно нужны рейсы, осадка и ограничения воды; '
             'для удалённого объекта — потребление и доступность резерва.')
+    verification = Path(__file__).resolve().parents[1] / 'reports/expansion/verification.md'
+    if verification.exists():
+        with st.expander('Воспроизводимая проверка реализации'):
+            st.markdown(verification.read_text(encoding='utf-8'))

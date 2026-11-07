@@ -1,0 +1,15 @@
+case,policy,total_cost_rub,served_tons,backlog_tons,waiting_ton_days,mass_error_tons,csv,sha256
+yakutia,baseline,6807300.0,600.0,0.0,1346.0,0.0,yakutia_baseline.csv,0e6fe727c2a3cf53bc228d61d7812b4157c930bd2179286682f84bbe94fac1d6
+yakutia,economic,4333000.0,600.0,0.0,10.0,0.0,yakutia_economic.csv,369487f125ccf5e3d3caa44d1ed2c90df7b0e75214c51e8b0f5eaa9552e1685d
+yanao,baseline,6807300.0,600.0,0.0,1346.0,0.0,yanao_baseline.csv,0e6fe727c2a3cf53bc228d61d7812b4157c930bd2179286682f84bbe94fac1d6
+yanao,economic,4333000.0,600.0,0.0,10.0,0.0,yanao_economic.csv,369487f125ccf5e3d3caa44d1ed2c90df7b0e75214c51e8b0f5eaa9552e1685d
+krasnoyarsk,baseline,6807300.0,600.0,0.0,1346.0,0.0,krasnoyarsk_baseline.csv,0e6fe727c2a3cf53bc228d61d7812b4157c930bd2179286682f84bbe94fac1d6
+krasnoyarsk,economic,4333000.0,600.0,0.0,10.0,0.0,krasnoyarsk_economic.csv,369487f125ccf5e3d3caa44d1ed2c90df7b0e75214c51e8b0f5eaa9552e1685d
+irkutsk,baseline,6807300.0,600.0,0.0,1346.0,0.0,irkutsk_baseline.csv,0e6fe727c2a3cf53bc228d61d7812b4157c930bd2179286682f84bbe94fac1d6
+irkutsk,economic,4333000.0,600.0,0.0,10.0,0.0,irkutsk_economic.csv,369487f125ccf5e3d3caa44d1ed2c90df7b0e75214c51e8b0f5eaa9552e1685d
+arkhangelsk,baseline,6807300.0,600.0,0.0,1346.0,0.0,arkhangelsk_baseline.csv,0e6fe727c2a3cf53bc228d61d7812b4157c930bd2179286682f84bbe94fac1d6
+arkhangelsk,economic,4333000.0,600.0,0.0,10.0,0.0,arkhangelsk_economic.csv,369487f125ccf5e3d3caa44d1ed2c90df7b0e75214c51e8b0f5eaa9552e1685d
+navigation,baseline,7846800.0,460.0,140.0,1696.0,0.0,navigation_baseline.csv,09d69e39db33dd70eb5cdb150bfe80d68360a8b23e69a8660c9a95381de4f39e
+navigation,economic,4894000.0,600.0,0.0,560.0,0.0,navigation_economic.csv,07acffad2b4285f89447c2280ef299b279998938edbc9c948eaebf3276bb9cbe
+remote,baseline,7790800.0,508.0,92.0,896.0,0.0,remote_baseline.csv,23c6e6418f86590a2a562f5982217bac48787e3f584bce7141c6235b583992d3
+remote,economic,4352000.0,600.0,0.0,0.0,0.0,remote_economic.csv,f06d1e05e4997faa67e6e38136390048d501822a01d090eb7057294688b97f5c
