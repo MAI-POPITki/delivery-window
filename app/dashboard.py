@@ -107,7 +107,7 @@ import plotly.graph_objects as go
 # модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
 _MODULE_NAMES = (
     "okno.paths", "okno.regions", "okno.report", "okno.ice", "okno.calib", "okno.features",
-    "okno.planner", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "app.corridor_view", "okno.supply_scenarios", "okno.navigation", "app.navigation_view", "app.supply_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
+    "okno.planner", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
     "okno.yakutsk_replay", "app.yakutsk_experiment",
 )
 _cached_modules = [sys.modules.get(name) for name in _MODULE_NAMES]
@@ -307,7 +307,6 @@ tabs = st.tabs([
     "Рейтинг риска",
     "До / после",
     "О данных",
-    "Расширение применения",
 ], key="main_tab", on_change="rerun")
 # Streamlit выполняет код всех вкладок сразу; тяжёлые (коридор, рейтинг риска) считаем только когда
 # вкладка открыта — первое открытие дашборда не ждёт расчётов, которые пользователь может и не смотреть.
@@ -598,9 +597,3 @@ with tabs[6]:
         st.divider()
     f = REPORTS / "data_checks.md"
     st.markdown(f.read_text(encoding="utf-8") if f.exists() else "Запустите scripts/validate_data.py")
-
-
-with tabs[7]:
-    if _tab_open(7):
-        from app.supply_view import render_supply
-        render_supply()

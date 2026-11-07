@@ -23,7 +23,7 @@ from app.welcome import PROJECT_PDF
 DASHBOARD = ROOT / "app" / "dashboard.py"
 UPLOADED_PDF_SHA256 = "49c9a37957633d593af31ff1b12c8faa31276c0528ba06b9cff3c30dd3ff6884"  # паспорт v4: проверка на реальных данных (одна версия с docs/project.pdf)
 DASHBOARD_TABS = ["Карта путей", "Карточка пути", "Сквозной коридор (А3)", "Планировщик",
-                  "Рейтинг риска", "До / после", "О данных", "Расширение применения"]
+                  "Рейтинг риска", "До / после", "О данных"]
 
 
 class WelcomeTests(unittest.TestCase):
