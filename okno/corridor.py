@@ -1,4 +1,4 @@
-"""Causal daily hub → rail → Lena → Yakutsk inventory heuristic.
+"""Causal daily hub → rail → Lena → Yakutsk dispatch comparison.
 
 Today's dispatch sees only dated forecasts already available and today's river
 status. Costs, demand, allocated capacities and overflow space are assumptions.
@@ -7,6 +7,7 @@ from dataclasses import asdict, dataclass
 import math
 import numpy as np
 import pandas as pd
+from .economic_planner import EconomicPlanner
 
 
 @dataclass(frozen=True)
@@ -64,7 +65,8 @@ SENSITIVITY_PARAMS=(
     ("shortage_penalty_per_ton_day","Штраф ожидания"),("safety_days","Страховой запас"),
     ("initial_yak_tons","Начальный запас"))
 POLICY_LABELS={"reactive":"Без предзавоза","calendar":"Предзавоз: календарная медиана",
-               "calendar_q20":"Предзавоз: календарный q20","ml":"Предзавоз: ML q20"}
+               "calendar_q20":"Предзавоз: календарный q20","ml":"Предзавоз: ML q20",
+               "economic_ml":"Экономический: ML q20"}
 
 
 def compute_prestock_schedule(cfg,planned_close_day,planned_open_day):
@@ -96,7 +98,7 @@ def _forecast_table(frame):
 
 
 def simulate_corridor(cfg,actual_close_day,actual_open_day,planned_close_day,planned_open_day,
-                      use_prestock=True,return_daily=False,*,forecasts=None):
+                      use_prestock=True,return_daily=False,*,forecasts=None,economic=False):
     """Execute only current hub dispatch. Arrival is dispatch + rail lead.
 
     Unsatisfied demand persists as backlog; penalty is its daily area in t·days.
@@ -113,6 +115,7 @@ def simulate_corridor(cfg,actual_close_day,actual_open_day,planned_close_day,pla
     arrivals=np.zeros(H+lag+1)
     in_transit=0.
     seen_closed=False
+    planner=EconomicPlanner(cfg) if economic else None
     records=[]
     for t in range(H):
         river_open=t<actual_close_day or t>=actual_open_day
@@ -125,6 +128,11 @@ def simulate_corridor(cfg,actual_close_day,actual_open_day,planned_close_day,pla
             fc=avail.iloc[-1]
             close,op=float(fc.planned_close_day),float(fc.planned_open_day)
             forecast_issue=float(fc.issue_day)
+        action=None
+        if planner is not None:
+            action=planner.action(t,hub=hub,nb=nb,yak=yak,backlog=backlog,in_transit=in_transit,
+                arrivals=arrivals[t:],river_open=river_open,reopened=reopened,close=close,opening=op,
+                forecast_issue=None if np.isnan(forecast_issue) else forecast_issue)
         if not river_open:
             close=min(close,float(t))
             op=max(op,float(t+1))
@@ -139,7 +147,7 @@ def simulate_corridor(cfg,actual_close_day,actual_open_day,planned_close_day,pla
                 extra_target=max(0.,op-future_arrival-1)*d
         target=min(space,d*cfg.safety_days+extra_target)+lag*d
         position=yak+nb+in_transit-backlog
-        dispatch=min(hub,cfg.rail_cap_tons,max(0.,target-position))
+        dispatch=min(hub,cfg.rail_cap_tons,max(0.,action.dispatch if action else target-position))
         hub-=dispatch
         arrivals[t+lag]+=dispatch
         in_transit+=dispatch
@@ -148,8 +156,9 @@ def simulate_corridor(cfg,actual_close_day,actual_open_day,planned_close_day,pla
         nb+=arrived
         backlog+=d
         receiving=max(0.,space-yak+backlog)
-        norm=min(nb,cfg.crossing_cap_normal_tons,receiving) if river_open else 0.
-        alt=min(nb,cfg.crossing_cap_alt_tons,receiving,max(0.,backlog+d*cfg.safety_days-yak)) if not river_open else 0.
+        norm=min(nb,cfg.crossing_cap_normal_tons,receiving,action.normal if action else np.inf) if river_open else 0.
+        alt=min(nb,cfg.crossing_cap_alt_tons,receiving,
+                action.alternative if action else max(0.,backlog+d*cfg.safety_days-yak)) if not river_open else 0.
         nb-=norm+alt
         yak+=norm+alt
         served=min(yak,backlog)
@@ -160,6 +169,9 @@ def simulate_corridor(cfg,actual_close_day,actual_open_day,planned_close_day,pla
             shipped_norm_t=norm,shipped_alt_t=alt,inv_nb_t=nb,inv_yak_t=yak,
             demanded_t=d,served_t=served,backlog_t=backlog,unmet_demand_t=backlog,
             forecast_issue_day=forecast_issue,planned_close_day=close,planned_open_day=op,
+            economic_replanned=int(action.replanned) if action else 0,
+            optimizer_status=action.status if action else 'heuristic',
+            forecast_terminal_shortfall_t=action.terminal_shortfall if action else np.nan,
             cost_rail_rub=dispatch*cfg.rail_cost_per_ton,
             cost_normal_rub=norm*cfg.crossing_cost_normal,cost_alt_rub=alt*cfg.crossing_cost_alt,
             cost_nb_rub=nb*cfg.nb_holding_cost_per_ton_day,
@@ -167,10 +179,19 @@ def simulate_corridor(cfg,actual_close_day,actual_open_day,planned_close_day,pla
             cost_overflow_rub=max(0.,yak-cfg.yak_warehouse_cap_tons)*cfg.yak_overflow_cost_per_ton_day,
             cost_shortage_rub=backlog*cfg.shortage_penalty_per_ton_day))
     daily=pd.DataFrame(records)
-    cost=float(daily[[c for c in daily if c.startswith("cost_")]].to_numpy().sum())
+    cash=float(daily[[c for c in daily if c.startswith("cost_")]].to_numpy().sum())
+    # Same end valuation for all policies: unpaid regular transport of the
+    # remaining committed order. This is an estimate, not a simulated shipment.
+    terminal_rail=hub*cfg.rail_cost_per_ton
+    terminal_crossing=(hub+in_transit+nb)*cfg.crossing_cost_normal
+    terminal_commitment=terminal_rail+terminal_crossing
+    cost=cash+terminal_commitment
     def total(name):
         return float(daily[name].sum())
-    summary=dict(total_cost_rub=cost,cost_per_ton_rub=cost/total_order,
+    summary=dict(total_cost_rub=cost,cash_cost_rub=cash,cost_per_ton_rub=cost/total_order,
+        terminal_commitment_rub=terminal_commitment,terminal_rail_rub=terminal_rail,
+        terminal_crossing_rub=terminal_crossing,economic_plan_count=planner.solves if planner else 0,
+        terminal_service_complete=backlog<1e-6,
         cost_rail_rub=total("cost_rail_rub"),cost_crossing_normal_rub=total("cost_normal_rub"),
         cost_crossing_alt_rub=total("cost_alt_rub"),cost_holding_nb_rub=total("cost_nb_rub"),
         cost_holding_yak_base_rub=total("cost_yak_rub"),cost_holding_yak_overflow_rub=total("cost_overflow_rub"),
@@ -189,9 +210,39 @@ def simulate_corridor(cfg,actual_close_day,actual_open_day,planned_close_day,pla
 def compare_policies(cfg,ac,ao,cc,co,q20_close=None,q20_open=None,forecasts=None):
     qc,qo=(cc if q20_close is None else q20_close),(co if q20_open is None else q20_open)
     return {name:simulate_corridor(cfg,ac,ao,pc,po,use_prestock=pre,return_daily=True,
-                                  forecasts=forecasts if name=="ml" else None)
+                                  forecasts=forecasts if name in ('ml','economic_ml') else None,
+                                  economic=name.startswith('economic_'))
             for name,pc,po,pre in (("reactive",cc,co,False),("calendar",cc,co,True),
-                                   ("calendar_q20",qc,qo,True),("ml",qc,qo,True))}
+                                   ("calendar_q20",qc,qo,True),("ml",qc,qo,True),
+                                   ("economic_ml",qc,qo,False))}
+
+
+def weekly_dispatch_comparison(results,start_date):
+    """Compare the old and economic ML policies in seven-day reporting periods.
+
+    Flows and incurred costs are summed; stocks and backlog are end-of-week
+    values. The last period ends on the last simulated day, even if incomplete.
+    This aggregates sequential daily decisions, not a forecast issued on day 0.
+    """
+    start=pd.Timestamp(start_date) if start_date is not None else None
+    frames=[]
+    flows=('hub_dispatched_t','rail_arrived_nb_t','shipped_norm_t','shipped_alt_t',
+           'demanded_t','served_t')
+    stocks=('inv_nb_t','inv_yak_t','backlog_t','in_transit_t','hub_remaining_t')
+    for policy in ('ml','economic_ml'):
+        daily=results[policy][1].sort_values('day').copy()
+        daily['week']=daily.day//7+1
+        daily['weekly_cost_rub']=daily[[c for c in daily if c.startswith('cost_')]].sum(axis=1)
+        weekly=daily.groupby('week',sort=True).agg(
+            day_start=('day','min'),day_end=('day','max'),days=('day','size'),
+            **{col:(col,'sum') for col in flows},
+            **{col:(col,'last') for col in stocks},
+            weekly_cost_rub=('weekly_cost_rub','sum')).reset_index()
+        for column,day_column in (('week_start_date','day_start'),('week_end_date','day_end')):
+            weekly[column]=(start+pd.to_timedelta(weekly[day_column],unit='D')).dt.strftime('%Y-%m-%d') if start is not None else ''
+        weekly['shipped_total_t']=weekly.shipped_norm_t+weekly.shipped_alt_t
+        frames.append(weekly.assign(policy=policy))
+    return pd.concat(frames,ignore_index=True).sort_values(['week','policy']).reset_index(drop=True)
 
 
 def run_sensitivity_check(base_cfg=None,actual_close_day=30,actual_open_day=57,cal_close_day=36,
@@ -209,10 +260,17 @@ def run_sensitivity_check(base_cfg=None,actual_close_day=30,actual_open_day=57,c
     for name,label,fac,c in variants:
         results=compare_policies(c,actual_close_day,actual_open_day,cal_close_day,cal_open_day,q20_close,q20_open,forecasts)
         b,a=results["calendar"][0],results["ml"][0]
+        em=results['economic_ml'][0]
         rows.append(dict(parameter=name,label=label,variation="база" if name=="base" else f"{(fac-1)*100:+.0f}%",
             param_value=getattr(c,name) if name!="base" else np.nan,before_mln_rub=b["total_cost_rub"]/1e6,
             after_mln_rub=a["total_cost_rub"]/1e6,saving_mln_rub=(b["total_cost_rub"]-a["total_cost_rub"])/1e6,
             saving_pct=100*(b["total_cost_rub"]-a["total_cost_rub"])/b["total_cost_rub"],
             yak_storage_delta_mln_rub=(a["cost_holding_yak_rub"]-b["cost_holding_yak_rub"])/1e6,
-            effect_positive=a["total_cost_rub"]<b["total_cost_rub"]))
+            effect_positive=a["total_cost_rub"]<b["total_cost_rub"],
+            economic_ml_mln_rub=em['total_cost_rub']/1e6,
+            economic_saving_vs_calendar_pct=100*(b['total_cost_rub']-em['total_cost_rub'])/b['total_cost_rub'],
+            economic_saving_vs_ml_pct=100*(a['total_cost_rub']-em['total_cost_rub'])/a['total_cost_rub'],
+            economic_terminal_backlog_tons=em['terminal_backlog_tons'],
+            economic_shortage_ton_days=em['shortage_ton_days'],
+            economic_effect_positive=em['total_cost_rub']<b['total_cost_rub']))
     return pd.DataFrame(rows)

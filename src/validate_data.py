@@ -80,9 +80,11 @@ def run_validation():
     res=compare_policies(CorridorConfig(),46,84,45,86)
     good=all(abs(s['mass_balance_error_tons'])<1e-6 and (d.inv_yak_t<=650+1e-6).all()
              and abs(d.hub_dispatched_t.iloc[:-6].sum()-d.rail_arrived_nb_t.sum())<1e-6
+             and abs(s['cash_cost_rub']-d[[col for col in d if col.startswith('cost_')]].to_numpy().sum())<1e-5
+             and abs(s['total_cost_rub']-s['cash_cost_rub']-s['terminal_commitment_rub'])<1e-5
              for s,d in res.values())
     record('V8_FLOW_LEDGER','PASS' if good else 'FAIL',
-           'Проверены баланс груза, задержка ж/д и жёсткая ёмкость склада. Остатки и заказы в ожидании показываются отдельно.')
+           'Пять подходов: баланс груза, задержка ж/д, жёсткая ёмкость склада и сумма затрат с оценкой довоза. Остатки и заказы в ожидании показываются отдельно.')
     return pd.DataFrame(checks),dict(shifts=shift,shift_stats=stats)
 
 
