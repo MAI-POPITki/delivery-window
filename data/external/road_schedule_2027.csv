@@ -1,0 +1,16 @@
+road,region,hydro_year,kind,announced_date,announced_published,actual_date,actual_published,source_announced,source_actual,comment
+Верхоянье: Иван-Сирэ — Батагай-Алыта,yakutia,2027,open10,2026-12-01,2026-10-29,,,https://yakutia.aif.ru/society/grafik-otkrytiya-avtozimnikov-utverdili-v-yakutii,,ближайший гидропост: gauge_3414 Яна — Верхоянск; живая проверка зимы 2026/27
+Верхоянье: Иван-Сирэ — Батагай-Алыта,yakutia,2027,limit20,2026-12-10,2026-10-29,,,https://yakutia.aif.ru/society/grafik-otkrytiya-avtozimnikov-utverdili-v-yakutii,,20 т — цель М1 (лёд держит 20 т); gauge_3414
+Верхоянье: Иван-Сирэ — Батагай-Алыта,yakutia,2027,limit30,2027-01-12,2026-10-29,,,https://yakutia.aif.ru/society/grafik-otkrytiya-avtozimnikov-utverdili-v-yakutii,,gauge_3414
+Верхоянье: объездные дороги Верхоянска,yakutia,2027,open10,2026-12-01,2026-10-29,,,https://yakutia.aif.ru/society/grafik-otkrytiya-avtozimnikov-utverdili-v-yakutii,,gauge_3414
+Усть-Куйга — Депутатский — Белая Гора: Депутатский — Уянди,yakutia,2027,open10,2026-12-01,2026-10-29,,,https://yakutia.aif.ru/society/grafik-otkrytiya-avtozimnikov-utverdili-v-yakutii,,
+Кресты: Усть-Куйга — Казачье,yakutia,2027,open10,2026-12-04,2026-10-29,,,https://yakutia.aif.ru/society/grafik-otkrytiya-avtozimnikov-utverdili-v-yakutii,,
+Кресты,yakutia,2027,limit30,2027-01-12,2026-10-29,,,https://yakutia.aif.ru/society/grafik-otkrytiya-avtozimnikov-utverdili-v-yakutii,,
+Мома,yakutia,2027,limit20,2026-12-10,2026-10-29,,,https://yakutia.aif.ru/society/grafik-otkrytiya-avtozimnikov-utverdili-v-yakutii,,
+Мома,yakutia,2027,limit30,2027-01-12,2026-10-29,,,https://yakutia.aif.ru/society/grafik-otkrytiya-avtozimnikov-utverdili-v-yakutii,,
+Арктика (отдельные участки),yakutia,2027,limit20,2026-12-25,2026-10-29,,,https://yakutia.aif.ru/society/grafik-otkrytiya-avtozimnikov-utverdili-v-yakutii,,
+Арктика (отдельные участки),yakutia,2027,limit30,2027-01-29,2026-10-29,,,https://yakutia.aif.ru/society/grafik-otkrytiya-avtozimnikov-utverdili-v-yakutii,,
+Яна,yakutia,2027,limit20,2026-12-30,2026-10-29,,,https://yakutia.aif.ru/society/grafik-otkrytiya-avtozimnikov-utverdili-v-yakutii,,
+Яна,yakutia,2027,limit30,2027-01-25,2026-10-29,,,https://yakutia.aif.ru/society/grafik-otkrytiya-avtozimnikov-utverdili-v-yakutii,,
+Индигир,yakutia,2027,limit20,2026-12-30,2026-10-29,,,https://yakutia.aif.ru/society/grafik-otkrytiya-avtozimnikov-utverdili-v-yakutii,,ближайший гидропост: gauge_3489 Индигирка — Индигирский (проверить расстояние)
+Индигир (отдельные участки),yakutia,2027,limit30,2027-01-29,2026-10-29,,,https://yakutia.aif.ru/society/grafik-otkrytiya-avtozimnikov-utverdili-v-yakutii,,

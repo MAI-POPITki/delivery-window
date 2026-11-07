@@ -1,0 +1,15 @@
+дата,река,точка,"бюллетень, см",диапазон,"расчёт по погоде, см","расчёт по климату, см",в диапазоне (погода),в диапазоне (климат),источник
+2021-01-26,Лена,yakutsk_crossing,98.0,—,94.1,90.7,,,https://yakutia.info/news/vnimanie-povysilas-gruzopodemnost-ledovoy-perepravy-yakutsk-nizhniy-bestyah-198037
+2023-03-20,Лена,yakutsk_crossing,102.5,55–150,114.3,110.8,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-20-marta-2023-goda/
+2023-03-20,Алдан,gauge_3219,90.0,50–130,97.4,97.4,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-20-marta-2023-goda/
+2023-12-01,Лена,yakutsk_crossing,37.5,20–55,44.0,49.9,True,True,https://ysia.ru/na-rekah-yakutii-tolshhina-lda-sostavlyaet-do-35-sm-menshe-srednih-mnogoletnih-znachenij/
+2024-02-29,Лена,yakutsk_crossing,110.0,60–160,103.6,106.0,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-na-29-fevralya-2024-goda/
+2024-02-29,Алдан,gauge_3219,92.5,50–135,91.6,92.8,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-na-29-fevralya-2024-goda/
+2025-04-10,Лена,yakutsk_crossing,99.0,55–143,110.2,113.1,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-i-zapas-vody-v-snege-na-territorii-rs-ya-11-aprelya-2025g/
+2025-04-10,Алдан,gauge_3219,89.5,70–109,97.2,98.6,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-i-zapas-vody-v-snege-na-territorii-rs-ya-11-aprelya-2025g/
+2025-04-10,Яна / Индигирка,gauge_3414,129.5,76–183,122.9,121.1,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-i-zapas-vody-v-snege-na-territorii-rs-ya-11-aprelya-2025g/
+2025-11-30,Лена,yakutsk_crossing,40.0,20–60,51.1,48.2,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-yakutii-po-sostoyaniju-na-30-noyabrya/
+2025-11-30,Алдан,gauge_3219,26.0,14–38,45.3,42.0,False,False,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-yakutii-po-sostoyaniju-na-30-noyabrya/
+2026-02-10,Лена,yakutsk_crossing,81.0,65–97,101.3,98.0,False,False,https://ykuthydromet.ru/docs/gidrologicheskaya-obstanovka-na-rekah-rs-ya/
+2026-02-10,Алдан,gauge_3219,80.5,55–106,93.3,85.8,True,True,https://ykuthydromet.ru/docs/gidrologicheskaya-obstanovka-na-rekah-rs-ya/
+2026-03-31,Лена,yakutsk_crossing,110.0,70–150,113.6,112.0,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-i-zapas-vody-v-snege-na-rekah-respubliki-saha-yakutiya-na-31-marta-2026-g/
