@@ -66,6 +66,7 @@ SENSITIVITY_PARAMS=(
     ("initial_yak_tons","Начальный запас"))
 POLICY_LABELS={"reactive":"Без предзавоза","calendar":"Предзавоз: календарная медиана",
                "calendar_q20":"Предзавоз: календарный q20","ml":"Предзавоз: ML q20",
+               "economic_calendar":"Экономический: календарная медиана",
                "economic_ml":"Экономический: ML q20"}
 
 
@@ -214,7 +215,7 @@ def compare_policies(cfg,ac,ao,cc,co,q20_close=None,q20_open=None,forecasts=None
                                   economic=name.startswith('economic_'))
             for name,pc,po,pre in (("reactive",cc,co,False),("calendar",cc,co,True),
                                    ("calendar_q20",qc,qo,True),("ml",qc,qo,True),
-                                   ("economic_ml",qc,qo,False))}
+                                   ("economic_calendar",cc,co,False),("economic_ml",qc,qo,False))}
 
 
 def weekly_dispatch_comparison(results,start_date):
@@ -260,14 +261,17 @@ def run_sensitivity_check(base_cfg=None,actual_close_day=30,actual_open_day=57,c
     for name,label,fac,c in variants:
         results=compare_policies(c,actual_close_day,actual_open_day,cal_close_day,cal_open_day,q20_close,q20_open,forecasts)
         b,a=results["calendar"][0],results["ml"][0]
-        em=results['economic_ml'][0]
+        ec,em=results['economic_calendar'][0],results['economic_ml'][0]
         rows.append(dict(parameter=name,label=label,variation="база" if name=="base" else f"{(fac-1)*100:+.0f}%",
             param_value=getattr(c,name) if name!="base" else np.nan,before_mln_rub=b["total_cost_rub"]/1e6,
             after_mln_rub=a["total_cost_rub"]/1e6,saving_mln_rub=(b["total_cost_rub"]-a["total_cost_rub"])/1e6,
             saving_pct=100*(b["total_cost_rub"]-a["total_cost_rub"])/b["total_cost_rub"],
             yak_storage_delta_mln_rub=(a["cost_holding_yak_rub"]-b["cost_holding_yak_rub"])/1e6,
             effect_positive=a["total_cost_rub"]<b["total_cost_rub"],
+            economic_calendar_mln_rub=ec['total_cost_rub']/1e6,
             economic_ml_mln_rub=em['total_cost_rub']/1e6,
+            # вклад именно прогноза при одном и том же оптимизаторе: > 0 — ML дешевле календаря
+            economic_forecast_effect_pct=100*(ec['total_cost_rub']-em['total_cost_rub'])/ec['total_cost_rub'],
             economic_saving_vs_calendar_pct=100*(b['total_cost_rub']-em['total_cost_rub'])/b['total_cost_rub'],
             economic_saving_vs_ml_pct=100*(a['total_cost_rub']-em['total_cost_rub'])/a['total_cost_rub'],
             economic_terminal_backlog_tons=em['terminal_backlog_tons'],

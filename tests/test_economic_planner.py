@@ -174,7 +174,7 @@ class EconomicPlannerTests(unittest.TestCase):
         self.assertTrue(weekly.week_start_date.eq('').all())
         self.assertTrue(weekly.week_end_date.eq('').all())
         self.assertEqual(weekly.day_start.tolist(), [0, 0, 7, 7])
-        self.assertEqual(set(results), {'reactive', 'calendar', 'calendar_q20', 'ml', 'economic_ml'})
+        self.assertEqual(set(results), {'reactive', 'calendar', 'calendar_q20', 'ml', 'economic_calendar', 'economic_ml'})
 
 
 if __name__ == '__main__':

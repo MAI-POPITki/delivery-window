@@ -39,12 +39,12 @@
   "objective": "minimum terminal shortfall first; then transport, holding, daily backlog and unpaid regular terminal transport",
   "terminal_valuation": "hub * rail_rate + (hub + transit + NB) * normal_crossing_rate; future holding excluded",
   "sha256": {
-    "okno/corridor.py": "1370be70233ce239b3da85376687355fdd9f37e48bb8853fffc934d73ce21a02",
-    "okno/economic_planner.py": "4e9c9a7f4ee10df8ce142798f45755fe6504d14bf257c56c4cd08d88cbbb62b0",
-    "okno/corridor_data.py": "56a597fcf09038ec12e22109c2dd67a41d263c5c0290413dd313c950f5f41fb8",
-    "src/corridor_simulator.py": "afeccdc90c07dc9324a83f22cd6c9894337a6d4e8bb25a4864d2998fae1d457d",
-    "src/model_window.py": "2e4f39144e968b8156c3f6135520ab365bf0789ba3aeaf1629a2121e6ebf7c9e",
-    "reports/window_forecasts_a3.csv": "0d5a8fde92d1a1eedca6525a3a7569e4e4da181bb0d169c17e7baddddee9a8ec",
-    "data/rosstat_prices/yakutsk_mchs_crossing_dates.csv": "a195bab215af6a71717bbbad111c3a8bb8fafb9924fac50093086a7cc485fc32"
+    "okno/corridor.py": "648c8de20306a56c1f928aceff07239382c244f03e3b57c1537d2d64a3affd19",
+    "okno/economic_planner.py": "0d579559824b3ed7a9095ef9c7caa7330ccbb47a4a2ac5fb0f12fb9c5cbfa18a",
+    "okno/corridor_data.py": "d3f893bdd9f3616b3da3d8739e09b42629869a64564a3bd08af5d1f561dbc570",
+    "src/corridor_simulator.py": "cd090abd57cbb84fb7deb57493a4564dcac45170a1438a0004d1a9906a0e8c7a",
+    "src/model_window.py": "838deb8d730aaa53c16598b4ebb7a1734e2578f79cb0139ede5d0d33c40ab6cb",
+    "reports/window_forecasts_a3.csv": "47da4c7424abef0a7803edcbfda9f901f9506afe2108506f06f1f4f9fbf57379",
+    "data/rosstat_prices/yakutsk_mchs_crossing_dates.csv": "378bdc84c602e3dfdb28abb44db0eb45c71e357b72adac8bfe93e87415927c51"
   }
 }
