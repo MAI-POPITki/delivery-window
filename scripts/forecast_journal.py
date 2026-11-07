@@ -63,7 +63,9 @@ def log_today(today: dt.date):
                              "q10_date": str(q["q10_date"]), "q50_date": str(q["q50_date"]),
                              "q90_date": str(q["q90_date"]), "calendar_date": str(q["calendar_date"]),
                              "physics_date": str(q["physics_date"]),
-                             "forecast_days_used": q.get("forecast_days_used", 0), "model": model_tag(kind)})
+                             "forecast_days_used": q.get("forecast_days_used", 0), "model": model_tag(kind),
+                             # точные дни сезона (дробные): по ним дашборд рисует карту без пересчёта
+                             **{f"{k}_day": round(float(q[k]), 3) for k in ("q10", "q50", "q90", "calendar", "physics")}})
     new = pd.DataFrame(rows)
     LOG.mkdir(parents=True, exist_ok=True)
     if FORECASTS.exists():

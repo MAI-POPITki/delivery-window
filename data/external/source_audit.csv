@@ -1,0 +1,92 @@
+file,obs_date,point_id,hydro_year,source,verdict,checked,comment
+ice_thickness_bulletins.csv,2023-01-31,yakutsk_crossing,2023,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-31-yanvarya-2023-goda/,по реке,2026-11-07,Лена 60–125 см
+ice_thickness_bulletins.csv,2023-01-31,gauge_3219,2023,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-31-yanvarya-2023-goda/,по группе рек или области,2026-11-07,"Алдан, Амга и Вилюй вместе: 45–100 см"
+ice_thickness_bulletins.csv,2023-01-31,gauge_3414,2023,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-31-yanvarya-2023-goda/,по группе рек или области,2026-11-07,реки северо-востока: 80–140 см
+ice_thickness_bulletins.csv,2023-02-20,yakutsk_crossing,2023,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-20-fevralya-2023-goda/,по реке,2026-11-07,Лена 60–140 см
+ice_thickness_bulletins.csv,2023-02-20,gauge_3219,2023,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-20-fevralya-2023-goda/,по группе рек или области,2026-11-07,"Алдан, Амга и Вилюй вместе: 50–110 см"
+ice_thickness_bulletins.csv,2023-02-20,gauge_3414,2023,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-20-fevralya-2023-goda/,по группе рек или области,2026-11-07,реки северо-востока: 90–155 см
+ice_thickness_bulletins.csv,2023-03-10,yakutsk_crossing,2023,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-na-10-03-2023/,по реке,2026-11-07,среднее течение Лены 58–126 см
+ice_thickness_bulletins.csv,2023-03-10,gauge_3219,2023,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-na-10-03-2023/,по реке,2026-11-07,верхний и средний Алдан 60–80 см
+ice_thickness_bulletins.csv,2023-03-10,gauge_3414,2023,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-na-10-03-2023/,по группе рек или области,2026-11-07,реки северо-востока 90–160 см; Яна названа только «выше нормы»
+ice_thickness_bulletins.csv,2023-03-31,yakutsk_crossing,2023,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-na-31-03-2023g/,по реке,2026-11-07,Лена 55–155 см
+ice_thickness_bulletins.csv,2023-03-31,gauge_3219,2023,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-na-31-03-2023g/,по группе рек или области,2026-11-07,"Алдан, Амга и Вилюй вместе: 50–130 см"
+ice_thickness_bulletins.csv,2023-03-31,gauge_3414,2023,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-na-31-03-2023g/,по группе рек или области,2026-11-07,реки северо-востока 90–170 см
+ice_thickness_bulletins.csv,2024-03-10,yakutsk_crossing,2024,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-na-10-marta-2024-goda/,по реке,2026-11-07,Лена 60–170 см
+ice_thickness_bulletins.csv,2024-03-10,gauge_3219,2024,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-na-10-marta-2024-goda/,по группе рек или области,2026-11-07,"Алдан, Амга и Вилюй вместе: 50–140 см"
+ice_thickness_bulletins.csv,2024-03-10,gauge_3414,2024,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-na-10-marta-2024-goda/,по группе рек или области,2026-11-07,реки северо-востока 80–140 см
+ice_thickness_bulletins.csv,2025-11-20,yakutsk_crossing,2026,https://ysia.ru/tolshhina-lda-na-osnovnyh-rekah-yakutii-sostavila-menshe-normy/,противоречит,2026-11-07,"на странице: у Покровска и Кангаласс толщина в норме; 28 см — наибольший недобор по рекам, не значение для Лены"
+ice_thickness_bulletins.csv,2025-12-20,yakutsk_crossing,2026,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-po-sostoyaniju-na-20-dekabrya/,не подтверждено,2026-11-07,"на странице нет значения в см для Покровска, только «больше нормы на 8–14 см»; год на странице не указан"
+ice_thickness_bulletins.csv,2022-03-01,gauge_3003,2022,https://www.ogirk.ru/2022/03/01/tolshhina-lda-na-rekah-irkutskoj-oblasti-menshe-normy/,не подтверждено,2026-11-07,на странице только общий диапазон области 54–118 см
+ice_thickness_bulletins.csv,2022-03-01,gauge_3087,2022,https://www.ogirk.ru/2022/03/01/tolshhina-lda-na-rekah-irkutskoj-oblasti-menshe-normy/,не подтверждено,2026-11-07,на странице только общий диапазон области 54–118 см
+ice_thickness_bulletins.csv,2022-03-01,gauge_3198,2022,https://www.ogirk.ru/2022/03/01/tolshhina-lda-na-rekah-irkutskoj-oblasti-menshe-normy/,не подтверждено,2026-11-07,на странице только общий диапазон области 54–118 см
+ice_thickness_bulletins.csv,2025-03-31,gauge_3003,2025,https://38rus.com/more/105128,по группе рек или области,2026-11-07,общий диапазон по рекам области 45–109 см
+ice_thickness_bulletins.csv,2025-03-31,gauge_3198,2025,https://38rus.com/more/105128,не подтверждено,2026-11-07,"на странице только «ниже нормы на 33 см», значения 65 см нет"
+ice_thickness_bulletins.csv,2021-02-10,gauge_70334,2021,https://www.sevmeteo.ru/weather/rivers/9632/,по группе рек или области,2026-11-07,общий диапазон по рекам области 40–55 см
+ice_thickness_bulletins.csv,2021-03-03,gauge_70275,2021,https://www.sevmeteo.ru/press/news/9717/,по группе рек или области,2026-11-07,общий диапазон по рекам области 40–55 см
+ice_thickness_bulletins.csv,2022-12-31,gauge_70334,2023,https://www.sevmeteo.ru/weather/rivers/12897/,по группе рек или области,2026-11-07,"общий диапазон 12–44 см, на 20 декабря"
+ice_thickness_bulletins.csv,2023-01-25,gauge_70334,2023,https://www.sevmeteo.ru/weather/rivers/13651/,по группе рек или области,2026-11-07,общий диапазон 25–53 см
+ice_thickness_bulletins.csv,2023-03-31,gauge_70334,2023,https://www.sevmeteo.ru/weather/rivers/13652/,по группе рек или области,2026-11-07,общий диапазон 36–73 см
+ice_thickness_bulletins.csv,2024-03-20,gauge_70275,2024,https://www.sevmeteo.ru/weather/rivers/15057/,по реке,2026-11-07,Северная Двина 39–60 см
+ice_thickness_bulletins.csv,2024-03-28,gauge_70334,2024,https://www.sevmeteo.ru/weather/rivers/15065/,противоречит,2026-11-07,45–76 см на странице — Северная Двина; для Пинеги — 65 см
+ice_thickness_bulletins.csv,2019-02-28,gauge_9372,2019,https://24.mchs.gov.ru/deyatelnost/press-centr/operativnaya-informaciya/prognozy/2011749,не подтверждено,2026-11-07,значения для Большого Пита на странице нет
+ice_thickness_bulletins.csv,2022-11-26,gauge_9425,2022,https://24.mchs.gov.ru/deyatelnost/press-centr/novosti/4889567,не подтверждено,2026-11-07,"на странице только пороги безопасности, замеров нет"
+ice_thickness_bulletins.csv,2026-01-12,gauge_9425,2026,https://24.mchs.gov.ru/deyatelnost/press-centr/novosti/5669822,не подтверждено,2026-11-07,"на странице только пороги безопасности, замеров нет"
+ice_thickness_bulletins.csv,2015-11-06,gauge_11558,2016,https://89.mchs.gov.ru/deyatelnost/press-centr/novosti/3914496,по группе рек или области,2026-11-07,"Обь между Салехардом и Лабытнанги, не Полуй: 10 см у берега"
+ice_thickness_bulletins.csv,2026-03-25,gauge_11574,2026,https://pro-gubkinskiy.ru/news/society/v_yanao_otsenili_risk_vozniknoveniya_pavodkov_lyed_tonshe_proshlogodnego/,не подтверждено,2026-11-07,"статья от 02.03.2022, Пякупур и значение не названы"
+hydro_post2012_phenology.csv,,yakutsk_crossing,2013,https://doi.org/10.5281/zenodo.17054619,повтор обучающих данных,2026-11-07,"те же даты, что в data/processed/yakutsk_sat_seasons.csv (Qiu et al. 2026) — на них обучена М1"
+hydro_post2012_phenology.csv,,yakutsk_crossing,2014,https://doi.org/10.5281/zenodo.17054619,повтор обучающих данных,2026-11-07,"те же даты, что в data/processed/yakutsk_sat_seasons.csv (Qiu et al. 2026) — на них обучена М1"
+hydro_post2012_phenology.csv,,yakutsk_crossing,2015,https://doi.org/10.5281/zenodo.17054619,повтор обучающих данных,2026-11-07,"те же даты, что в data/processed/yakutsk_sat_seasons.csv (Qiu et al. 2026) — на них обучена М1"
+hydro_post2012_phenology.csv,,yakutsk_crossing,2016,https://doi.org/10.5281/zenodo.17054619,повтор обучающих данных,2026-11-07,"те же даты, что в data/processed/yakutsk_sat_seasons.csv (Qiu et al. 2026) — на них обучена М1"
+hydro_post2012_phenology.csv,,yakutsk_crossing,2017,https://doi.org/10.5281/zenodo.17054619,повтор обучающих данных,2026-11-07,"те же даты, что в data/processed/yakutsk_sat_seasons.csv (Qiu et al. 2026) — на них обучена М1"
+hydro_post2012_phenology.csv,,yakutsk_crossing,2018,https://doi.org/10.5281/zenodo.17054619,повтор обучающих данных,2026-11-07,"те же даты, что в data/processed/yakutsk_sat_seasons.csv (Qiu et al. 2026) — на них обучена М1"
+hydro_post2012_phenology.csv,,yakutsk_crossing,2019,https://doi.org/10.5281/zenodo.17054619,повтор обучающих данных,2026-11-07,"те же даты, что в data/processed/yakutsk_sat_seasons.csv (Qiu et al. 2026) — на них обучена М1"
+hydro_post2012_phenology.csv,,yakutsk_crossing,2020,https://doi.org/10.5281/zenodo.17054619,повтор обучающих данных,2026-11-07,"те же даты, что в data/processed/yakutsk_sat_seasons.csv (Qiu et al. 2026) — на них обучена М1"
+hydro_post2012_phenology.csv,,yakutsk_crossing,2021,https://doi.org/10.5281/zenodo.17054619,повтор обучающих данных,2026-11-07,"те же даты, что в data/processed/yakutsk_sat_seasons.csv (Qiu et al. 2026) — на них обучена М1"
+hydro_post2012_phenology.csv,,yakutsk_crossing,2022,https://doi.org/10.5281/zenodo.17054619,повтор обучающих данных,2026-11-07,"те же даты, что в data/processed/yakutsk_sat_seasons.csv (Qiu et al. 2026) — на них обучена М1"
+hydro_post2012_phenology.csv,,yakutsk_crossing,2023,https://doi.org/10.5281/zenodo.17054619,повтор обучающих данных,2026-11-07,"те же даты, что в data/processed/yakutsk_sat_seasons.csv (Qiu et al. 2026) — на них обучена М1"
+hydro_post2012_phenology.csv,,yakutsk_crossing,2024,https://doi.org/10.5281/zenodo.17054619,повтор обучающих данных,2026-11-07,"те же даты, что в data/processed/yakutsk_sat_seasons.csv (Qiu et al. 2026) — на них обучена М1"
+hydro_post2012_phenology.csv,,yakutsk_crossing,2025,https://ysia.ru/ledohod-na-lene-v-rajone-yakutska-ozhidayut-ranshe-normy/,не подтверждено,2026-11-07,"статья от 17.04.2025 — прогноз ледохода 13–15 мая, не факт; даты ледостава нет"
+hydro_post2012_phenology.csv,,yakutsk_crossing,2026,https://ykuthydromet.ru/docs/gidrologicheskaya-obstanovka-na-rekah-rs-ya/,не подтверждено,2026-11-07,"страница — сводка на 10.02.2026 о толщине льда, дат вскрытия нет"
+hydro_post2012_phenology.csv,,gauge_3219,2017,https://ykuthydromet.ru/,не подтверждено,2026-11-07,"ссылка на главную страницу сайта, конкретной сводки нет"
+hydro_post2012_phenology.csv,,gauge_3219,2018,https://ykuthydromet.ru/,не подтверждено,2026-11-07,"ссылка на главную страницу сайта, конкретной сводки нет"
+hydro_post2012_phenology.csv,,gauge_3219,2019,https://ykuthydromet.ru/,не подтверждено,2026-11-07,"ссылка на главную страницу сайта, конкретной сводки нет"
+hydro_post2012_phenology.csv,,gauge_3219,2020,https://ykuthydromet.ru/,не подтверждено,2026-11-07,"ссылка на главную страницу сайта, конкретной сводки нет"
+hydro_post2012_phenology.csv,,gauge_3219,2021,https://ykuthydromet.ru/,не подтверждено,2026-11-07,"ссылка на главную страницу сайта, конкретной сводки нет"
+hydro_post2012_phenology.csv,,gauge_3219,2022,https://ykuthydromet.ru/,не подтверждено,2026-11-07,"ссылка на главную страницу сайта, конкретной сводки нет"
+hydro_post2012_phenology.csv,,gauge_3219,2023,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-na-31-03-2023g/,не подтверждено,2026-11-07,"страница о толщине льда, опубликована до даты вскрытия"
+hydro_post2012_phenology.csv,,gauge_3219,2024,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-na-29-fevralya-2024-goda/,не подтверждено,2026-11-07,"страница о толщине льда, опубликована до даты вскрытия"
+hydro_post2012_phenology.csv,,gauge_3219,2025,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-i-zapas-vody-v-snege-na-territorii-rs-ya-11-aprelya-2025g/,не подтверждено,2026-11-07,"страница о толщине льда, опубликована до даты вскрытия"
+hydro_post2012_phenology.csv,,gauge_3219,2026,https://ykuthydromet.ru/docs/gidrologicheskaya-obstanovka-na-rekah-rs-ya/,не подтверждено,2026-11-07,"страница — сводка на 10.02.2026 о толщине льда, дат вскрытия нет"
+hydro_post2012_phenology.csv,,gauge_3414,2017,https://ykuthydromet.ru/,не подтверждено,2026-11-07,"ссылка на главную страницу сайта, конкретной сводки нет"
+hydro_post2012_phenology.csv,,gauge_3414,2018,https://ykuthydromet.ru/,не подтверждено,2026-11-07,"ссылка на главную страницу сайта, конкретной сводки нет"
+hydro_post2012_phenology.csv,,gauge_3414,2019,https://ykuthydromet.ru/,не подтверждено,2026-11-07,"ссылка на главную страницу сайта, конкретной сводки нет"
+hydro_post2012_phenology.csv,,gauge_3414,2020,https://ykuthydromet.ru/,не подтверждено,2026-11-07,"ссылка на главную страницу сайта, конкретной сводки нет"
+hydro_post2012_phenology.csv,,gauge_3414,2021,https://ykuthydromet.ru/,не подтверждено,2026-11-07,"ссылка на главную страницу сайта, конкретной сводки нет"
+hydro_post2012_phenology.csv,,gauge_3414,2022,https://ykuthydromet.ru/,не подтверждено,2026-11-07,"ссылка на главную страницу сайта, конкретной сводки нет"
+hydro_post2012_phenology.csv,,gauge_3414,2023,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-na-31-03-2023g/,не подтверждено,2026-11-07,"страница о толщине льда, опубликована до даты вскрытия"
+hydro_post2012_phenology.csv,,gauge_3414,2024,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-na-29-fevralya-2024-goda/,не подтверждено,2026-11-07,"страница о толщине льда, опубликована до даты вскрытия"
+hydro_post2012_phenology.csv,,gauge_3414,2025,https://ysia.ru/severnye-reki-yakutii-nachali-pokryvatsya-ldom/,не проверено,2026-11-07,ссылка не открывалась при проверке
+hydro_post2012_phenology.csv,,gauge_3414,2026,https://ykuthydromet.ru/docs/gidrologicheskaya-obstanovka-na-rekah-rs-ya/,не подтверждено,2026-11-07,"страница — сводка на 10.02.2026 о толщине льда, дат вскрытия нет"
+hydro_post2012_phenology.csv,,gauge_70334,2021,https://www.sevmeteo.ru/weather/rivers/9632/,не проверено,2026-11-07,ссылка не открывалась при проверке
+hydro_post2012_phenology.csv,,gauge_70334,2022,https://www.sevmeteo.ru/weather/rivers/12771/,не проверено,2026-11-07,ссылка не открывалась при проверке
+hydro_post2012_phenology.csv,,gauge_70334,2023,https://www.sevmeteo.ru/weather/rivers/13656/,по группе рек или области,2026-11-07,"вскрытие Пинеги 26 апреля — 4 мая, без Кулогор; ледостава нет"
+hydro_post2012_phenology.csv,,gauge_70334,2024,https://www.sevmeteo.ru/weather/rivers/15065/,не проверено,2026-11-07,ссылка не открывалась при проверке
+hydro_post2012_phenology.csv,,gauge_11558,2021,https://89.mchs.gov.ru/deyatelnost/press-centr/novosti/3914496,не подтверждено,2026-11-07,новость МЧС от 06.11.2015 о толщине льда; приведена для 2021–2026
+hydro_post2012_phenology.csv,,gauge_11558,2022,https://89.mchs.gov.ru/deyatelnost/press-centr/novosti/3914496,не подтверждено,2026-11-07,новость МЧС от 06.11.2015 о толщине льда; приведена для 2021–2026
+hydro_post2012_phenology.csv,,gauge_11558,2023,https://89.mchs.gov.ru/deyatelnost/press-centr/novosti/3914496,не подтверждено,2026-11-07,новость МЧС от 06.11.2015 о толщине льда; приведена для 2021–2026
+hydro_post2012_phenology.csv,,gauge_11558,2024,https://89.mchs.gov.ru/deyatelnost/press-centr/novosti/3914496,не подтверждено,2026-11-07,новость МЧС от 06.11.2015 о толщине льда; приведена для 2021–2026
+hydro_post2012_phenology.csv,,gauge_11558,2025,https://89.mchs.gov.ru/deyatelnost/press-centr/novosti/3914496,не подтверждено,2026-11-07,новость МЧС от 06.11.2015 о толщине льда; приведена для 2021–2026
+hydro_post2012_phenology.csv,,gauge_11558,2026,https://89.mchs.gov.ru/deyatelnost/press-centr/vse_novosti/5854143,не проверено,2026-11-07,ссылка не открывалась при проверке
+hydro_post2012_phenology.csv,,gauge_3003,2021,https://www.irk.ru/news/20220407/water/,не проверено,2026-11-07,ссылка не открывалась при проверке
+hydro_post2012_phenology.csv,,gauge_3003,2022,https://www.irk.ru/news/20220407/water/,не проверено,2026-11-07,ссылка не открывалась при проверке
+hydro_post2012_phenology.csv,,gauge_3003,2023,https://www.ogirk.ru/2022/03/01/tolshhina-lda-na-rekah-irkutskoj-oblasti-menshe-normy/,не подтверждено,2026-11-07,"страница о толщине льда, опубликована до даты вскрытия"
+hydro_post2012_phenology.csv,,gauge_3003,2024,https://www.ogirk.ru/2022/03/01/tolshhina-lda-na-rekah-irkutskoj-oblasti-menshe-normy/,не подтверждено,2026-11-07,"страница о толщине льда, опубликована до даты вскрытия"
+hydro_post2012_phenology.csv,,gauge_3003,2025,https://38rus.com/more/105128,не подтверждено,2026-11-07,"страница о толщине льда, опубликована до даты вскрытия"
+hydro_post2012_phenology.csv,,gauge_3003,2026,https://38rus.com/more/105128,не подтверждено,2026-11-07,"страница о толщине льда, опубликована до даты вскрытия"
+prices.csv,,,2025,https://rspp.ru/download/5404e531dd803687be689186081424191cdfe0106b943ab5/,подтверждено,2026-11-07,"хранение нефтепродуктов на нефтебазах (тариф 2025): годовой отчёт: хранение 44,44 руб./т без НДС для прочих поклажедателей; для коммунального комплекса — 23,66; тариф после повышения на 18,5% к 2025 г."
+prices.csv,,,2025,https://rspp.ru/download/5404e531dd803687be689186081424191cdfe0106b943ab5/,подтверждено,2026-11-07,"приём-отпуск нефтепродуктов на ж/д нефтебазах (тариф 2025): годовой отчёт: ПСО на ж/д нефтебазах 2 096,41 руб./т без НДС"
+prices.csv,,,2026,https://oooyata.ru/uslugi/otvetstvennoe-hranenie/,подтверждено,2026-11-07,ответственное хранение сухих грузов в тёплом складе: Якутск: 60 руб./м³·сут (стандартное место); пересчёт в т — допущение плотности
+prices.csv,,,2026,https://www.bicotender.ru/toplivo-i-energetika/priem-xranenie-i-otpusk-nefteproduktov-dlia-nuzd-ao-saxaneftegazsbyt-v-godu-iakutsk-tender333492188.html,не проверено,2026-11-07,закупка услуг ПСО и хранения нефтепродуктов в Якутске (тендер 333492188): страница тендера отвечает 404
+prices.csv,,,2025,https://oct1.ru/files/images/NijniyBestyah.pdf,не проверено,2026-11-07,хранение гружёного 20-фут контейнера на терминале ст. Нижний Бестях: PDF не открылся (ошибка сертификата сайта)
+prices.csv,,,2026,"https://autotransport-tk.ru/napravleniya/gruzoperevozki-yakutsk,tarko-sale",не проверено,2026-11-07,простой 20-тонного грузовика в ожидании выгрузки: страница отвечает 404
+prices.csv,,,2025,https://starway-ykt.ru/wp-content/uploads/2020/12/Prikaz-ob-ustanovlenii-tarifov-1.pdf,не проверено,2026-11-07,хранение грузов на площадках Якутского речного порта: сайт отвечает 503

@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
-from okno.corridor import CorridorConfig,POLICY_LABELS,compare_policies,run_sensitivity_check,weekly_dispatch_comparison
+from okno.corridor import CorridorConfig,POLICY_LABELS,compare_policies,run_sensitivity_check,weekly_dispatch_comparison,service_frontier,service_plan
 from okno.corridor_data import case_inputs,verified_years
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -18,6 +18,63 @@ def calculate(config,case,version,sensitivity=False):
     sens=run_sensitivity_check(cfg,c['ac'],c['ao'],c['cc'],c['co'],forecasts=c['forecasts'],
                                q20_close=c['qc'],q20_open=c['qo']) if sensitivity else None
     return c,results,sens
+
+
+@st.cache_data(show_spinner=False)
+def _service_frontier(config,case,version,rasputitsa):
+    cfg=CorridorConfig(**config)
+    c=case_inputs(case,rasputitsa) if case=='synthetic' else case_inputs(case)
+    return service_frontier(cfg,c)
+
+
+@st.cache_data(show_spinner='Оптимизатор ищет план под заданное ожидание…')
+def _service(config,case,version,rasputitsa,wait_share):
+    frontier,base=_service_frontier(config,case,version,rasputitsa)  # граница считается один раз на все доли
+    cfg=CorridorConfig(**config)
+    c=case_inputs(case,rasputitsa) if case=='synthetic' else case_inputs(case)
+    plan,lever=service_plan(cfg,c,base['shortage_ton_days']*wait_share,frontier=frontier)
+    return frontier,base,plan,lever
+
+
+def render_service(cfg,case,version,rasputitsa):
+    """Режим «сервис»: минимум расходов оператора при заданном ожидании получателя.
+
+    Условная цена дня ожидания в расходы не входит — она только рычаг оптимизатора. Даты окна — календарные,
+    прогноз не участвует: проверяется именно планирование."""
+    st.subheader('Режим «сервис»: сколько стоит каждый день ожидания получателя')
+    st.caption('Задайте, насколько ожидание получателя должно быть короче, чем при привычном предзавозе по календарю. '
+               'Оптимизатор найдёт минимум расходов на перевозку и хранение при этом ограничении. Цена дня ожидания '
+               'в расходы не входит — ничего не нужно предполагать. Даты окна у обоих способов одинаковые (календарь).')
+    share=st.select_slider('Ожидание получателя относительно привычной схемы',
+                           options=[1.5,1.25,1.0,0.75,0.5,0.25,0.1],value=1.0,key='corr_service_share',
+                           format_func=lambda x:'как сейчас' if x==1.0 else f'{x:.0%} от текущего')
+    frontier,base,plan,lever=_service(asdict(cfg),case,version,rasputitsa,share)
+    if plan is None:
+        st.warning('Такого короткого ожидания нельзя добиться при заданных мощностях — даже при любой цене ожидания.')
+        return
+    d=100*(plan['operating_cost_rub']/base['operating_cost_rub']-1)
+    m1,m2,m3=st.columns(3)
+    m1.metric('Расходы оператора',f"{plan['operating_cost_rub']/1e6:.2f} млн ₽",
+              delta=f"{d:+.1f}% к привычной схеме",delta_color='inverse')
+    m2.metric('Ожидание получателя',f"{plan['shortage_ton_days']:,.0f} т·сут".replace(',',' '),
+              delta=f"{plan['shortage_ton_days']-base['shortage_ton_days']:+,.0f} т·сут".replace(',',' '),delta_color='inverse')
+    m3.metric('Дни с невыполненными заказами',f"{plan['days_with_deficit']:.0f}",
+              delta=f"{plan['days_with_deficit']-base['days_with_deficit']:+.0f}",delta_color='inverse')
+    fig=go.Figure()
+    # точки с ожиданием в разы длиннее привычного не показываем — они сжимают интересную часть графика
+    fr=frontier[frontier.shortage_ton_days<=4*max(base['shortage_ton_days'],1)].sort_values('shortage_ton_days')
+    fig.add_scatter(x=fr.shortage_ton_days,y=fr.operating_cost_rub/1e6,mode='lines+markers',name='Оптимизатор: что достижимо',
+                    hovertemplate='ожидание %{x:,.0f} т·сут<br>расходы %{y:.2f} млн ₽<extra></extra>')
+    fig.add_scatter(x=[base['shortage_ton_days']],y=[base['operating_cost_rub']/1e6],mode='markers',
+                    marker=dict(size=14,symbol='diamond'),name='Привычный предзавоз по календарю')
+    fig.add_scatter(x=[plan['shortage_ton_days']],y=[plan['operating_cost_rub']/1e6],mode='markers',
+                    marker=dict(size=14,symbol='star'),name='Выбранный план')
+    fig.update_layout(title='Расходы против ожидания получателя',xaxis_title='ожидание получателя, т·сут',
+                      yaxis_title='расходы на перевозку и хранение, млн ₽',height=380)
+    st.plotly_chart(fig,width='stretch',key='corr_service_chart')
+    st.caption('Точка привычной схемы выше кривой — оптимизатор может то же дешевле; на кривой — схема уже близка '
+               'к лучшему, и выбор только в том, что важнее: деньги или ожидание. Расходы включают одинаковую для всех '
+               'оценку довоза остатка. Проверка на трёх подтверждённых сезонах: reports/real_prices_check.md.')
 
 
 def render_weekly_dispatches(results,case,names):
@@ -68,17 +125,19 @@ def render_corridor():
     case=st.selectbox("Сценарий / подтверждённый сезон",options,key='corr_scenario',
                       format_func=lambda y:'Искусственный сценарий (не CatBoost)' if y=='synthetic' else f'{y}: реальные даты переправы')
     with st.expander("Параметры и тарифы 4 звеньев маршрута",expanded=False):
-        st.caption("Все тарифы, спрос, выделенные мощности и склады — допущения; подтверждённых цен оператора нет.")
+        st.caption("По умолчанию — реальные цены: ж/д ≈ 11 000 ₽/т (до Беркакита), паром ≈ 375 ₽/т (тариф 2025), судно на "
+                   "воздушной подушке 25 000 ₽/т (2026), хранение на нефтебазах Якутии ≈ 22 ₽/т·сут (2024); источники — "
+                   "data/external/tariffs.csv и prices.csv. Спрос, мощности, склады и цена дня ожидания — допущения.")
         k1,k2,k3=st.columns(3)
         vals=dict(daily_demand_tons=k1.slider('Суточная потребность d, т/сут',10.,50.,25.,1.,key='corr_d'),
             crossing_cap_normal_tons=k1.slider('Штатная пропускная способность, т/сут',35.,120.,60.,5.,key='corr_qmax'),
             crossing_cap_alt_tons=k1.slider('Лимит резерва в распутицу, т/сут',0.,20.,8.,1.,key='corr_qalt'),
             yak_warehouse_cap_tons=k1.slider('Ёмкость основного склада, т',300.,1200.,650.,50.,key='corr_vmax'),
-            rail_cost_per_ton=k2.slider('1. Тариф ж/д, ₽/т',4000.,15000.,8500.,500.,key='corr_crail'),
-            nb_holding_cost_per_ton_day=k2.slider('2. Хранение в Н. Бестяхе, ₽/т·сут',150.,1000.,450.,25.,key='corr_hnb'),
-            crossing_cost_normal=k2.slider('3а. Штатная переправа, ₽/т',800.,4000.,1800.,100.,key='corr_cnorm'),
-            crossing_cost_alt=k2.slider('3б. Резервная переправа, ₽/т',15000.,60000.,35000.,1000.,key='corr_calt'),
-            yak_holding_cost_per_ton_day=k3.slider('4а. Хранение в Якутске, ₽/т·сут',100.,500.,220.,10.,key='corr_hyak'),
+            rail_cost_per_ton=k2.slider('1. Тариф ж/д, ₽/т',4000.,15000.,11000.,500.,key='corr_crail'),
+            nb_holding_cost_per_ton_day=k2.slider('2. Хранение в Н. Бестяхе, ₽/т·сут',5.,1000.,22.5,2.5,key='corr_hnb'),
+            crossing_cost_normal=k2.slider('3а. Штатная переправа, ₽/т',100.,4000.,375.,25.,key='corr_cnorm'),
+            crossing_cost_alt=k2.slider('3б. Резервная переправа, ₽/т',15000.,60000.,25000.,1000.,key='corr_calt'),
+            yak_holding_cost_per_ton_day=k3.slider('4а. Хранение в Якутске, ₽/т·сут',5.,500.,22.5,2.5,key='corr_hyak'),
             yak_overflow_cost_per_ton_day=k3.slider('4б. Хранение на доп. складе, ₽/т·сут',300.,1200.,600.,25.,key='corr_hover'),
             shortage_penalty_per_ton_day=k3.slider('Штраф ожидания, ₽/т·сут',0.,25000.,12000.,500.,key='corr_pdef'))
         ras=k3.slider('Распутица только для искусственного сценария, сут',15,60,38,key='corr_rasp_len',disabled=case!='synthetic')
@@ -145,6 +204,7 @@ def render_corridor():
                'оценён будущий довоз оставшегося заказанного груза: ж/д для остатка в хабе и штатная переправа '
                'для груза в хабе, в пути и в Нижнем Бестяхе. Это расчётная оценка без будущего хранения, '
                'а не выполненные рейсы. Расходы за период показаны отдельно.')
+    render_service(cfg,case,version,ras)
     render_weekly_dispatches(results,c,names)
     chart=go.Figure()
     for col,title in [('cost_rail_rub','Ж/д'),('cost_holding_nb_rub','Хранение Н.Бестях'),

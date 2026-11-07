@@ -1,6 +1,6 @@
 # Сводка внешних данных (раздел 3 `docs/VALIDATION_PLAN.md`)
 
-Сформировано скриптом `scripts/validate_external_data.py`, 07.11.2026. Автопроверок пройдено: **30 из 30**.
+Сформировано скриптом `scripts/validate_external_data.py`, 07.11.2026. Автопроверок пройдено: **34 из 34**.
 
 Каждая строка во всех таблицах `data/external/*.csv` содержит прямую `https://`-ссылку на публичный источник (приказы и сводки Минтранса РС(Я), ГКУ «Управтодор РС(Я)», ГУ МЧС России, КрУДор, «Ямалавтодор», Дорожная служба Иркутской области, «Архангельскавтодор», ЕИС Закупки / региональные тарифные комитеты).
 
@@ -37,7 +37,11 @@
 | northern_supply_volumes.csv | схема колонок п. 3.4 (объёмы) | прошла | колонки: year, region, scope, plan_thousand_t, fact_thousand_t, unit_note, source, published_date |
 | northern_supply_volumes.csv | объёмы завоза со ссылками https:// | прошла | строк: 13, невалидных ссылок: 0 |
 | ice_thickness_bulletins.csv | схема колонок п. 3.4 (толщина льда) | прошла | колонки: obs_date, hydro_year, river, location, point_id, ice_cm, norm_cm, tonnage_limit_t, source, published_date, comment |
-| ice_thickness_bulletins.csv | замеры толщины льда после 2015 г. со ссылками https:// | прошла | замеров: 14, все после 2015: True, в пределах (0; 300] см: True |
+| ice_thickness_bulletins.csv | замеры толщины льда после 2015 г. со ссылками https:// | прошла | замеров: 48, все после 2015: True, в пределах (0; 300] см: True |
+| prices.csv | схема колонок цен хранения и ожидания | прошла | колонки: item, value, unit, region, year, source, comment |
+| prices.csv | цены со ссылками https://, числовые значения, без дублей | прошла | строк: 31, в ₽/т·сут: 23, плохих ссылок: 0, плохих чисел: 0, дублей: 0 |
+| hydro_post2012_phenology.csv | схема колонок фенологии рек после 2012 г. | прошла | колонки: point_id, river, location, region, hydro_year, freezeup_date, breakup_date, source, comment |
+| hydro_post2012_phenology.csv | даты явлений после 2012 со ссылками https://, валидные точки, без дублей | прошла | строк: 50, сезоны 2013..2026, точек: 6, регионов: 4 |
 
 ## 2. Официальные даты зимников и переправ (`3.1 road_events.csv`)
 
@@ -100,4 +104,4 @@
 
 - **Графики снижения допустимой массы (40 → 30 → 20 т):** в `road_events.csv` зафиксировано **25** официальных этапов снижения тоннажа (`limit30`, `limit20`).
 - **Объёмы северного завоза (план / факт):** `data/external/northern_supply_volumes.csv` — **13** записей.
-- **Сводки толщины льда УГМС / МЧС после 2015 г.:** `data/external/ice_thickness_bulletins.csv` — **14** замеров.
+- **Сводки толщины льда УГМС / МЧС после 2015 г.:** `data/external/ice_thickness_bulletins.csv` — **48** замеров.
