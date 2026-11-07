@@ -1,0 +1,31 @@
+таблица,проверка,результат,детали
+road_events.csv,схема колонок 3.1,прошла,"колонок 11: road, region, hydro_year, kind, announced_date, announced_published, actual_date, actual_published, source_announced, source_actual, comment"
+road_events.csv,объём выборки ≥ 100 событий (цель VALIDATION_PLAN),прошла,"всего 184 событий (Якутия: 95, другие 4 региона: 89)"
+road_events.csv,Якутия ≥ 60 событий (роль Б),прошла,Якутия: 95 событий
+road_events.csv,другие 4 региона ≥ 40 событий (роль В),прошла,"вне Якутии: 89 событий по регионам {'irkutsk': np.int64(31), 'yanao': np.int64(23), 'krasnoyarsk': np.int64(21), 'arkhangelsk': np.int64(14)}"
+road_events.csv,все регионы входят в okno/regions.py,прошла,"регионы: ['arkhangelsk', 'irkutsk', 'krasnoyarsk', 'yakutia', 'yanao']"
+road_events.csv,покрыты все 5 регионов сервиса,прошла,"покрыто 5 из 5: ['arkhangelsk', 'irkutsk', 'krasnoyarsk', 'yakutia', 'yanao']"
+road_events.csv,допустимые значения kind (open|close|limit30|limit20),прошла,"распределение kind: {'open': np.int64(81), 'close': np.int64(78), 'limit20': np.int64(14), 'limit30': np.int64(11)}"
+road_events.csv,формат ISO-дат и заполненность фактов,прошла,все фактические даты и даты публикаций заполнены
+road_events.csv,все ссылки https:// валидны,прошла,проверено 184 ссылок source_actual
+road_events.csv,соответствие hydro_year сезону Сен..Авг,прошла,все строки согласованы с гидрологическим годом
+road_events.csv,нет утечки будущего в объявленных датах (правило 1.2),прошла,пар «объявлено + факт»: 53
+road_events.csv,привязка point_id к точкам okno/regions.py,прошла,уникальных точек модели: 23
+road_events.csv,отсутствие дублей событий,прошла,дублей: 0
+road_events.csv,порог H2: ≥ 30 официальных событий open/close («дорога × сезон»),прошла,"уникальных пар «дорога × сезон» (open/close): 125, всего записей open/close: 159, дорог: 56"
+road_events.csv,порог H2a: наличие пар «объявленный план + факт»,прошла,подтверждённых пар «объявлено → факт»: 53
+tariffs.csv,схема колонок 3.2,прошла,"колонки: contract_id, year, route, mode, price_rub_per_t, deadline, penalty, url"
+tariffs.csv,объём выборки ≥ 15 контрактов/тарифов (роль В),прошла,строк: 30
+tariffs.csv,допустимые виды транспорта (зимник|авиа|река|ж/д|СВП),прошла,"распределение mode: {'река': np.int64(7), 'зимник': np.int64(7), 'авиа': np.int64(7), 'ж/д': np.int64(5), 'СВП': np.int64(4)}"
+tariffs.csv,цены price_rub_per_t > 0,прошла,"диапазон 64 … 211,000 ₽/т"
+tariffs.csv,все ссылки url начинаются с https://,прошла,валидных ссылок: 30 из 30
+tariffs.csv,уникальность contract_id,прошла,дублей contract_id: 0
+incidents.csv,схема колонок 3.3,прошла,"колонки: year, road, what, tonnage, extra_cost, source"
+incidents.csv,случаи срывов собраны (≥ 10 кейсов для R4/H5),прошла,кейсов: 21
+incidents.csv,допустимые типы срывов what,прошла,"распределение what: {'переход на авиа': np.int64(11), 'недовоз': np.int64(5), 'ранняя распутица': np.int64(3), 'позднее открытие': np.int64(2)}"
+incidents.csv,все ссылки source начинаются с https://,прошла,валидных ссылок: 21 из 21
+incidents.csv,указана дорога/направление в каждом кейсе,прошла,уникальных направлений: 20
+northern_supply_volumes.csv,схема колонок п. 3.4 (объёмы),прошла,"колонки: year, region, scope, plan_thousand_t, fact_thousand_t, unit_note, source, published_date"
+northern_supply_volumes.csv,объёмы завоза со ссылками https://,прошла,"строк: 13, невалидных ссылок: 0"
+ice_thickness_bulletins.csv,схема колонок п. 3.4 (толщина льда),прошла,"колонки: obs_date, hydro_year, river, location, point_id, ice_cm, norm_cm, tonnage_limit_t, source, published_date, comment"
+ice_thickness_bulletins.csv,замеры толщины льда после 2015 г. со ссылками https://,прошла,"замеров: 14, все после 2015: True, в пределах (0; 300] см: True"

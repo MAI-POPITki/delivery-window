@@ -1,1 +1,31 @@
 contract_id,year,route,mode,price_rub_per_t,deadline,penalty,url
+ГКЦ-РСЯ-2016-09-27,2019,Якутск — Нижний Бестях (паром при закрытии судоходной обстановки),река,980,октябрь (закрытие навигации),,https://sakhaday.ru/news/obnarodovany-tarify-na-perevozku-cherez-reku-lena
+ГКЦ-РСЯ-406078221,2023,Якутск — Нижний Бестях (паром — груз на палубе),река,340,период навигации,,https://docs.cntd.ru/document/406078221/titles/14M50GL
+ГКЦ-РСЯ-2025-8,2025,Якутск — Нижний Бестях (паром — грузовик до 30 т: 11200 руб.),река,373.33,2025-10-21,,https://ysia.ru/na-paromnoj-pereprave-yakutsk-nizhnij-bestyah-ustanovleny-novye-tarify/
+Паромы-Якутии-2025-10,2025,Якутск — Нижний Бестях (паром с буксиром в межсезонье — фура 25 т: 65000 руб.),река,2600,октябрь 2025,,https://yakutia.info/news/tarify-na-gruzoperevozku-cherez-lenu-vozrastut-v-sem-raz-216208
+Паромы-Якутии-2026-10,2026,Якутск — Нижний Бестях (паром с буксиром в межсезонье — фура 25 т: 100000 руб.),река,4000,2026-10-31,,https://yakutia.info/news/tarify-na-gruzoperevozku-cherez-lenu-vozrastut-v-sem-raz-216208
+ЛОРП-Ледокол-2026-11,2026,Жатай — Техтюр (паром-баржа ПАО ЛОРП с ледоколом — фура 25 т: 428000 руб.),река,17120,ноябрь 2026,,https://yakutia.info/news/tarify-na-gruzoperevozku-cherez-lenu-vozrastut-v-sem-raz-216208
+ДТПЭЖКХ-ЯНАО-2026-01,2026,Салехард — Лабытнанги (паром через р. Обь — грузовик до 28 т: 1790 руб.),река,63.93,навигация 2026,,https://ks-yanao.ru/news/obschestvo/na-jamale-podorozhajut-poezdki-na-paromah-cherez-ob
+ДТиДХ-ЯНАО-СВП-2024,2024,Салехард — Лабытнанги (СВП Нептун-23 — груз/багаж 17 руб. за 10 кг),СВП,1700,межсезонье 2024,,https://dtidh.yanao.ru/presscenter/news/254400/
+ДТПЭЖКХ-ЯНАО-СВП-2026,2026,Салехард — Лабытнанги (СВП Нептун-23 — груз/багаж 26 руб. за 10 кг),СВП,2600,межсезонье 2026,,https://salekhard.media/narrative/pereprava-salehard-labytnangi-zhizn-posle-prekrascheniya-paromnogo-soobscheniya
+Минтранс-РСЯ-Хивус-2026,2026,Якутск — Нижний Бестях (СВП Хивус-10 в ледостав — 8 мест / 0.8 т по 2500 руб.),СВП,25000,2026-10-28,,https://ysia.ru/na-marshrute-yakutsk-nizhnij-bestyah-sohranili-proshlogodnie-tarify-na-sudah-na-vozdushnoj-podushke/
+Минтранс-РСЯ-Хивус-ТяжЛёд-2026,2026,Якутск — Нижний Бестях (СВП Хивус-10 в тяжёлый ледоход — 8 мест / 0.8 т по 5000 руб.),СВП,50000,2026-10-29,,https://sakhaday.ru/news/proezd-na-hivusah-mezhdu-yakutskom-i-nizhnim-bestyahom-budet-stoit-5000-rubley
+ТЭК-Трансойл-ЖД-Лена,2025,ст. Биклянь — ст. Лена / Усть-Кут ВСЖД (дизельное топливо ДТ/ДТФГ),ж/д,7978,круглогодично,,https://www.gsmoptom.ru/rus/zhd-tarifi/
+ТЭК-Трансойл-ЖД-Лабытнанги,2025,ст. Биклянь — ст. Лабытнанги СЖД (дизельное топливо ДТ/ДТФГ),ж/д,5042,круглогодично,,https://www.gsmoptom.ru/rus/zhd-tarifi/
+ТЭК-Трансойл-ЖД-Беркакит,2025,ст. Биклянь — ст. Беркакит ДВЖД / АК ЖДЯ (дизельное топливо ДТ/ДТФГ),ж/д,11003,круглогодично,,https://www.gsmoptom.ru/rus/zhd-tarifi/
+ТрансРусь-ЖД-НижнийБестях,2025,Москва — ст. Нижний Бестях АК ЖДЯ (крытый вагон 68 т ТНП: 745000 руб.),ж/д,10955.88,25 суток,,https://www.transru.ru/prices/
+ТрансРусь-ЖД-Лабытнанги,2025,Москва — ст. Лабытнанги СЖД (крытый вагон 68 т ТНП: 420000 руб.),ж/д,6176.47,9 суток,,https://www.transru.ru/prices/
+ATI-2233025-Батагай,2025,Якутск — Батагай (Верхоянский улус — автозимник Яна: 95 руб./кг),зимник,95000,период действия автозимника,,https://aircargo-msk.ru/services/avtoperevozki/avtoperevozki-po-respublike-sakha/
+ATI-2233025-БелаяГора,2025,Якутск — Белая Гора (Абыйский улус — автозимник Индигир: 100 руб./кг),зимник,100000,период действия автозимника,,https://aircargo-msk.ru/services/avtoperevozki/avtoperevozki-po-respublike-sakha/
+ATI-2233025-Хонуу,2025,Якутск — Хонуу (Момский улус — автозимник Индигир: 100 руб./кг),зимник,100000,период действия автозимника,,https://aircargo-msk.ru/services/avtoperevozki/avtoperevozki-po-respublike-sakha/
+ATI-2233025-Среднеколымск,2025,Якутск — Среднеколымск (автозимник Колыма / Арктика: 95 руб./кг),зимник,95000,период действия автозимника,,https://aircargo-msk.ru/services/avtoperevozki/avtoperevozki-po-respublike-sakha/
+ATI-2233025-Оленек,2025,Якутск — Оленёк (Оленёкский улус — автозимник Анабар: 90 руб./кг),зимник,90000,период действия автозимника,,https://aircargo-msk.ru/services/avtoperevozki/avtoperevozki-po-respublike-sakha/
+ATI-2233025-Чокурдах,2025,Якутск — Чокурдах (Аллаиховский улус — автозимник Индигир: 120 руб./кг),зимник,120000,период действия автозимника,,https://aircargo-msk.ru/services/avtoperevozki/avtoperevozki-po-respublike-sakha/
+ATI-2233025-Черский,2025,Якутск — Черский (Нижнеколымский улус — автозимник Арктика: 140 руб./кг),зимник,140000,период действия автозимника,,https://aircargo-msk.ru/services/avtoperevozki/avtoperevozki-po-respublike-sakha/
+ПАЛ-Тариф-2023-Батагай,2023,Якутск — Батагай (АО Полярные авиалинии — продукты питания 157 руб./кг),авиа,157000,круглогодично,,https://polar-aero.ru/upload/iblock/aa4/1usqxkqbfj78dmsz7v88h6qunfb1za21.pdf
+ПАЛ-Тариф-2023-БелаяГора,2023,Якутск — Белая Гора (АО Полярные авиалинии — продукты питания 198 руб./кг),авиа,198000,круглогодично,,https://polar-aero.ru/upload/iblock/aa4/1usqxkqbfj78dmsz7v88h6qunfb1za21.pdf
+ПАЛ-Тариф-2023-Мома,2023,Якутск — Хонуу / Мома (АО Полярные авиалинии — продукты питания 177 руб./кг),авиа,177000,круглогодично,,https://polar-aero.ru/upload/iblock/aa4/1usqxkqbfj78dmsz7v88h6qunfb1za21.pdf
+ПАЛ-Тариф-2023-Среднеколымск,2023,Якутск — Среднеколымск (АО Полярные авиалинии — продукты питания 211 руб./кг),авиа,211000,круглогодично,,https://polar-aero.ru/upload/iblock/aa4/1usqxkqbfj78dmsz7v88h6qunfb1za21.pdf
+ПАЛ-Тариф-2023-Оленек,2023,Якутск — Оленёк (АО Полярные авиалинии — продукты питания 177 руб./кг),авиа,177000,круглогодично,,https://polar-aero.ru/upload/iblock/aa4/1usqxkqbfj78dmsz7v88h6qunfb1za21.pdf
+ПАЛ-Тариф-2023-Тикси,2023,Якутск — Тикси (АО Полярные авиалинии — продукты питания 181 руб./кг),авиа,181000,круглогодично,,https://polar-aero.ru/upload/iblock/aa4/1usqxkqbfj78dmsz7v88h6qunfb1za21.pdf
+ДТПЭЖКХ-ЯНАО-Авиа-2026,2026,Салехард — Лабытнанги (вертолёт Ми-8 АК Ямал в межсезонье — груз 20.4 руб./кг),авиа,20400,межсезонье 2026,,https://salekhard.media/narrative/pereprava-salehard-labytnangi-zhizn-posle-prekrascheniya-paromnogo-soobscheniya

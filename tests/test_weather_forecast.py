@@ -168,9 +168,13 @@ class WeatherPredictionTests(unittest.TestCase):
 
 class WeatherDashboardTests(unittest.TestCase):
     def test_toggle_is_optional_and_changes_only_the_supported_closing_model(self):
+        import datetime as dt
+
         app = AppTest.from_file(str(ROOT / "app" / "dashboard.py"), default_timeout=90).run()
         app.button(key="open_dashboard").click().run()
         self.assertEqual([error.message for error in app.exception], [])
+        app.sidebar.selectbox(key="filter_season").select(2027).run()
+        app.sidebar.date_input(key="filter_date").set_value(dt.date(2026, 11, 5)).run()
         # эксперимент выключен по умолчанию (выигрыш 1,3%, на 7 и 14 днях — без улучшения); включаем вручную
         self.assertFalse(app.sidebar.checkbox(key="weather_close_enabled_v3").value)
         app.sidebar.checkbox(key="weather_close_enabled_v3").check().run()
