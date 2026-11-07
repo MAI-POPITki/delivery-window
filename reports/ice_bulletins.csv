@@ -1,15 +1,48 @@
-дата,река,точка,"бюллетень, см",диапазон,"расчёт по погоде, см","расчёт по климату, см",в диапазоне (погода),в диапазоне (климат),источник
-2021-01-26,Лена,yakutsk_crossing,98.0,—,94.1,90.7,,,https://yakutia.info/news/vnimanie-povysilas-gruzopodemnost-ledovoy-perepravy-yakutsk-nizhniy-bestyah-198037
-2023-03-20,Лена,yakutsk_crossing,102.5,55–150,114.3,110.8,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-20-marta-2023-goda/
-2023-03-20,Алдан,gauge_3219,90.0,50–130,97.4,97.4,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-20-marta-2023-goda/
-2023-12-01,Лена,yakutsk_crossing,37.5,20–55,44.0,49.9,True,True,https://ysia.ru/na-rekah-yakutii-tolshhina-lda-sostavlyaet-do-35-sm-menshe-srednih-mnogoletnih-znachenij/
-2024-02-29,Лена,yakutsk_crossing,110.0,60–160,103.6,106.0,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-na-29-fevralya-2024-goda/
-2024-02-29,Алдан,gauge_3219,92.5,50–135,91.6,92.8,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-na-29-fevralya-2024-goda/
-2025-04-10,Лена,yakutsk_crossing,99.0,55–143,110.2,113.1,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-i-zapas-vody-v-snege-na-territorii-rs-ya-11-aprelya-2025g/
-2025-04-10,Алдан,gauge_3219,89.5,70–109,97.2,98.6,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-i-zapas-vody-v-snege-na-territorii-rs-ya-11-aprelya-2025g/
-2025-04-10,Яна / Индигирка,gauge_3414,129.5,76–183,122.9,121.1,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-i-zapas-vody-v-snege-na-territorii-rs-ya-11-aprelya-2025g/
-2025-11-30,Лена,yakutsk_crossing,40.0,20–60,51.1,48.2,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-yakutii-po-sostoyaniju-na-30-noyabrya/
-2025-11-30,Алдан,gauge_3219,26.0,14–38,45.3,42.0,False,False,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-yakutii-po-sostoyaniju-na-30-noyabrya/
-2026-02-10,Лена,yakutsk_crossing,81.0,65–97,101.3,98.0,False,False,https://ykuthydromet.ru/docs/gidrologicheskaya-obstanovka-na-rekah-rs-ya/
-2026-02-10,Алдан,gauge_3219,80.5,55–106,93.3,85.8,True,True,https://ykuthydromet.ru/docs/gidrologicheskaya-obstanovka-na-rekah-rs-ya/
-2026-03-31,Лена,yakutsk_crossing,110.0,70–150,113.6,112.0,True,True,https://ykuthydromet.ru/docs/tolshhina-lda-i-zapas-vody-v-snege-na-rekah-respubliki-saha-yakutiya-na-31-marta-2026-g/
+дата,река,точка,"бюллетень, см",диапазон,"расчёт по погоде, см","расчёт по климату, см",в диапазоне (погода),в диапазоне (климат),источник подтверждён,источник
+2021-01-26,Лена,yakutsk_crossing,98.0,—,94.1,90.7,,,исходные (Якутское УГМС),https://yakutia.info/news/vnimanie-povysilas-gruzopodemnost-ledovoy-perepravy-yakutsk-nizhniy-bestyah-198037
+2023-03-20,Лена,yakutsk_crossing,102.5,55–150,114.3,110.8,True,True,исходные (Якутское УГМС),https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-20-marta-2023-goda/
+2023-03-20,Алдан,gauge_3219,90.0,50–130,97.4,97.4,True,True,исходные (Якутское УГМС),https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-20-marta-2023-goda/
+2023-12-01,Лена,yakutsk_crossing,37.5,20–55,44.0,49.9,True,True,исходные (Якутское УГМС),https://ysia.ru/na-rekah-yakutii-tolshhina-lda-sostavlyaet-do-35-sm-menshe-srednih-mnogoletnih-znachenij/
+2024-02-29,Лена,yakutsk_crossing,110.0,60–160,103.6,106.0,True,True,исходные (Якутское УГМС),https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-na-29-fevralya-2024-goda/
+2024-02-29,Алдан,gauge_3219,92.5,50–135,91.6,92.8,True,True,исходные (Якутское УГМС),https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-na-29-fevralya-2024-goda/
+2025-04-10,Лена,yakutsk_crossing,99.0,55–143,110.2,113.1,True,True,исходные (Якутское УГМС),https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-i-zapas-vody-v-snege-na-territorii-rs-ya-11-aprelya-2025g/
+2025-04-10,Алдан,gauge_3219,89.5,70–109,97.2,98.6,True,True,исходные (Якутское УГМС),https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-i-zapas-vody-v-snege-na-territorii-rs-ya-11-aprelya-2025g/
+2025-04-10,Яна / Индигирка,gauge_3414,129.5,76–183,122.9,121.1,True,True,исходные (Якутское УГМС),https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-i-zapas-vody-v-snege-na-territorii-rs-ya-11-aprelya-2025g/
+2025-11-30,Лена,yakutsk_crossing,40.0,20–60,51.1,48.2,True,True,исходные (Якутское УГМС),https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-yakutii-po-sostoyaniju-na-30-noyabrya/
+2025-11-30,Алдан,gauge_3219,26.0,14–38,45.3,42.0,False,False,исходные (Якутское УГМС),https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-yakutii-po-sostoyaniju-na-30-noyabrya/
+2026-02-10,Лена,yakutsk_crossing,81.0,65–97,101.3,98.0,False,False,исходные (Якутское УГМС),https://ykuthydromet.ru/docs/gidrologicheskaya-obstanovka-na-rekah-rs-ya/
+2026-02-10,Алдан,gauge_3219,80.5,55–106,93.3,85.8,True,True,исходные (Якутское УГМС),https://ykuthydromet.ru/docs/gidrologicheskaya-obstanovka-na-rekah-rs-ya/
+2026-03-31,Лена,yakutsk_crossing,110.0,70–150,113.6,112.0,True,True,исходные (Якутское УГМС),https://ykuthydromet.ru/docs/tolshhina-lda-i-zapas-vody-v-snege-na-rekah-respubliki-saha-yakutiya-na-31-marta-2026-g/
+2023-01-31,Лена,yakutsk_crossing,92.5,60–125,97.2,93.5,True,True,по реке,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-31-yanvarya-2023-goda/
+2023-01-31,Алдан,gauge_3219,72.5,45–100,84.8,82.2,True,True,по группе рек или области,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-31-yanvarya-2023-goda/
+2023-01-31,Яна,gauge_3414,110.0,80–140,97.4,97.9,True,True,по группе рек или области,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-31-yanvarya-2023-goda/
+2023-02-20,Лена,yakutsk_crossing,100.0,60–140,107.2,102.8,True,True,по реке,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-20-fevralya-2023-goda/
+2023-02-20,Алдан,gauge_3219,80.0,50–110,92.8,90.6,True,True,по группе рек или области,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-20-fevralya-2023-goda/
+2023-02-20,Яна,gauge_3414,122.5,90–155,109.2,107.9,True,True,по группе рек или области,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-20-fevralya-2023-goda/
+2023-03-10,Лена,yakutsk_crossing,92.0,58–126,112.6,108.6,True,True,по реке,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-na-10-03-2023/
+2023-03-10,Алдан,gauge_3219,70.0,60–80,96.0,95.6,False,False,по реке,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-na-10-03-2023/
+2023-03-10,Яна,gauge_3414,125.0,90–160,116.1,114.7,True,True,по группе рек или области,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-na-10-03-2023/
+2023-03-31,Лена,yakutsk_crossing,105.0,55–155,115.9,112.3,True,True,по реке,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-na-31-03-2023g/
+2023-03-31,Алдан,gauge_3219,90.0,50–130,98.7,98.7,True,True,по группе рек или области,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-na-31-03-2023g/
+2023-03-31,Яна,gauge_3414,130.0,90–170,120.3,119.3,True,True,по группе рек или области,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-na-31-03-2023g/
+2024-03-10,Лена,yakutsk_crossing,115.0,60–170,106.6,108.8,True,True,по реке,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-na-10-marta-2024-goda/
+2024-03-10,Алдан,gauge_3219,95.0,50–140,94.2,95.2,True,True,по группе рек или области,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-na-10-marta-2024-goda/
+2024-03-10,Яна,gauge_3414,110.0,80–140,117.3,114.9,True,True,по группе рек или области,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-respubliki-saha-yakutiya-na-10-marta-2024-goda/
+2025-11-20,Лена,yakutsk_crossing,28.0,15–41,41.6,38.5,False,True,противоречит,https://ysia.ru/tolshhina-lda-na-osnovnyh-rekah-yakutii-sostavila-menshe-normy/
+2025-12-20,Лена,yakutsk_crossing,48.0,35–61,69.5,65.1,False,False,не подтверждено,https://ykuthydromet.ru/docs/tolshhina-lda-na-rekah-rs-ya-po-sostoyaniju-na-20-dekabrya/
+2022-03-01,Лена,gauge_3003,53.5,45–62,77.7,79.1,False,False,не подтверждено,https://www.ogirk.ru/2022/03/01/tolshhina-lda-na-rekah-irkutskoj-oblasti-menshe-normy/
+2022-03-01,Киренга,gauge_3087,75.0,74–76,76.7,81.2,False,False,не подтверждено,https://www.ogirk.ru/2022/03/01/tolshhina-lda-na-rekah-irkutskoj-oblasti-menshe-normy/
+2022-03-01,Жуя / Бодайбо,gauge_3198,70.0,54–118,86.7,89.8,True,True,не подтверждено,https://www.ogirk.ru/2022/03/01/tolshhina-lda-na-rekah-irkutskoj-oblasti-menshe-normy/
+2025-03-31,Лена,gauge_3003,77.0,45–109,82.2,84.1,True,True,по группе рек или области,https://38rus.com/more/105128
+2025-03-31,Жуя / Бодайбо,gauge_3198,65.0,—,90.5,93.6,,,не подтверждено,https://38rus.com/more/105128
+2021-02-10,Пинега,gauge_70334,47.5,40–55,50.9,47.8,True,True,по группе рек или области,https://www.sevmeteo.ru/weather/rivers/9632/
+2021-03-03,Вага / Двина,gauge_70275,47.5,40–55,57.2,47.6,False,True,по группе рек или области,https://www.sevmeteo.ru/press/news/9717/
+2022-12-31,Пинега,gauge_70334,28.0,12–44,32.9,30.2,True,True,по группе рек или области,https://www.sevmeteo.ru/weather/rivers/12897/
+2023-01-25,Пинега,gauge_70334,39.0,25–53,42.2,42.2,True,True,по группе рек или области,https://www.sevmeteo.ru/weather/rivers/13651/
+2023-03-31,Пинега,gauge_70334,54.5,36–73,55.1,55.9,True,True,по группе рек или области,https://www.sevmeteo.ru/weather/rivers/13652/
+2024-03-20,Северная Двина / Вага,gauge_70275,49.5,39–60,58.6,48.3,True,True,по реке,https://www.sevmeteo.ru/weather/rivers/15057/
+2024-03-28,Пинега,gauge_70334,60.5,45–76,59.6,54.6,True,True,противоречит,https://www.sevmeteo.ru/weather/rivers/15065/
+2019-02-28,Большой Пит / Енисей,gauge_9372,24.0,12–36,80.4,79.9,False,False,не подтверждено,https://24.mchs.gov.ru/deyatelnost/press-centr/operativnaya-informaciya/prognozy/2011749
+2026-01-12,Енисей / Турухан,gauge_9425,45.0,30–60,70.4,64.8,False,False,не подтверждено,https://24.mchs.gov.ru/deyatelnost/press-centr/novosti/5669822
+2015-11-06,Обь / Полуй,gauge_11558,10.0,2–3,24.8,19.0,False,False,по группе рек или области,https://89.mchs.gov.ru/deyatelnost/press-centr/novosti/3914496
+2026-03-25,Пякупур / Пур,gauge_11574,70.0,—,96.9,84.4,,,не подтверждено,https://pro-gubkinskiy.ru/news/society/v_yanao_otsenili_risk_vozniknoveniya_pavodkov_lyed_tonshe_proshlogodnego/

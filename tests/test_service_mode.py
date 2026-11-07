@@ -26,6 +26,14 @@ class ServiceModeTests(unittest.TestCase):
             self.assertLessEqual(plan['shortage_ton_days'], self.base['shortage_ton_days'] * share + 1e-6)
             self.assertEqual(plan['terminal_backlog_tons'], 0)
 
+    def test_frontier_start_gives_same_plan(self):
+        for share in (1.0, 0.5, 0.1):
+            lim = self.base['shortage_ton_days'] * share
+            a, _ = service_plan(self.cfg, self.c, lim)
+            b, _ = service_plan(self.cfg, self.c, lim, frontier=self.frontier)
+            self.assertLessEqual(b['shortage_ton_days'], lim + 1e-6)
+            self.assertAlmostEqual(a['operating_cost_rub'], b['operating_cost_rub'], delta=1e-3 * a['operating_cost_rub'])
+
     def test_waiting_price_is_not_counted_as_cost(self):
         lo = service_frontier(self.cfg, self.c, penalties=(0.,))[0].operating_cost_rub.iloc[0]
         hi = service_frontier(replace(self.cfg, shortage_penalty_per_ton_day=0.), self.c, penalties=(0.,))[0].operating_cost_rub.iloc[0]

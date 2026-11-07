@@ -310,24 +310,40 @@ def service_frontier(cfg, c, penalties=SERVICE_PENALTIES):
     return pd.DataFrame(rows), _service_row(base)
 
 
-def service_plan(cfg, c, max_wait_ton_days, iters=14):
+def service_plan(cfg, c, max_wait_ton_days, frontier=None, tol=100000. / 2 ** 14):
     """Минимум расходов оператора при ожидании получателя не больше max_wait_ton_days (т·сут).
 
     Ожидание убывает с ростом внутренней цены дня ожидания, поэтому ищем наименьшую цену, при которой
-    ограничение выполняется (бисекция). Возвращает (сводка оптимизатора, найденная цена) или (None, None),
-    если даже при очень высокой цене ожидание не укладывается в предел.
+    ограничение выполняется (бисекция до точности tol ₽/т·сут). Если передана уже посчитанная граница
+    (service_frontier), бисекция начинается с её интервала — так нужно втрое меньше решений.
+    Возвращает (сводка оптимизатора, найденная цена) или (None, None), если даже при очень высокой цене
+    ожидание не укладывается в предел.
     """
-    lo, hi = 0., 100000.
-    best = _economic_calendar(replace(cfg, shortage_penalty_per_ton_day=hi), c)
-    if best['shortage_ton_days'] > max_wait_ton_days + 1e-6:
-        return None, None
-    s0 = _economic_calendar(replace(cfg, shortage_penalty_per_ton_day=lo), c)
-    if s0['shortage_ton_days'] <= max_wait_ton_days + 1e-6:
-        return _service_row(s0), lo
-    for _ in range(iters):
+    lim = max_wait_ton_days + 1e-6
+    solve = lambda p: _economic_calendar(replace(cfg, shortage_penalty_per_ton_day=float(p)), c)
+    lo, hi, best = 0., 100000., None
+    if frontier is not None and len(frontier):
+        f = frontier.sort_values('penalty')
+        ok, bad = f[f.shortage_ton_days <= lim], f[f.shortage_ton_days > lim]
+        if len(bad):
+            lo = float(bad.penalty.max())
+        if len(ok) and float(ok.penalty.min()) > lo:
+            hi = float(ok.penalty.min())
+            if hi == 0.:
+                return _service_row(solve(0.)), 0.
+            best = solve(hi)
+    if best is None:
+        best = solve(hi)
+        if best['shortage_ton_days'] > lim:
+            return None, None
+        if lo == 0.:
+            s0 = solve(0.)
+            if s0['shortage_ton_days'] <= lim:
+                return _service_row(s0), 0.
+    while hi - lo > tol:
         mid = (lo + hi) / 2
-        s = _economic_calendar(replace(cfg, shortage_penalty_per_ton_day=mid), c)
-        if s['shortage_ton_days'] <= max_wait_ton_days + 1e-6:
+        s = solve(mid)
+        if s['shortage_ton_days'] <= lim:
             hi, best = mid, s
         else:
             lo = mid

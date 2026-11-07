@@ -21,11 +21,18 @@ def calculate(config,case,version,sensitivity=False):
 
 
 @st.cache_data(show_spinner=False)
-def _service(config,case,version,rasputitsa,wait_share):
+def _service_frontier(config,case,version,rasputitsa):
     cfg=CorridorConfig(**config)
     c=case_inputs(case,rasputitsa) if case=='synthetic' else case_inputs(case)
-    frontier,base=service_frontier(cfg,c)
-    plan,lever=service_plan(cfg,c,base['shortage_ton_days']*wait_share)
+    return service_frontier(cfg,c)
+
+
+@st.cache_data(show_spinner='Оптимизатор ищет план под заданное ожидание…')
+def _service(config,case,version,rasputitsa,wait_share):
+    frontier,base=_service_frontier(config,case,version,rasputitsa)  # граница считается один раз на все доли
+    cfg=CorridorConfig(**config)
+    c=case_inputs(case,rasputitsa) if case=='synthetic' else case_inputs(case)
+    plan,lever=service_plan(cfg,c,base['shortage_ton_days']*wait_share,frontier=frontier)
     return frontier,base,plan,lever
 
 

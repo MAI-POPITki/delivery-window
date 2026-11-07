@@ -169,6 +169,41 @@ def fc_path(pid, hy, kind, days):
 
 
 @st.cache_data(show_spinner=False)
+def _journal(ver):
+    """Готовые прогнозы из ежедневного журнала (scripts/forecast_journal.py, GitHub Actions):
+    ключ (point_id, hydro_year, kind, issue_date) → строка; только строки с текущими моделями М1."""
+    import hashlib
+    from okno.paths import DATA, MODELS
+    p = DATA / "forecast_log" / "forecasts.csv"
+    if not p.exists():
+        return {}
+    j = pd.read_csv(p, dtype=str)
+    tags = {k: hashlib.sha1((MODELS / f"m1_{k}.cbm").read_bytes()).hexdigest()[:8]
+            for k in ("open", "close") if (MODELS / f"m1_{k}.cbm").exists()}
+    j = j[j.model == j.kind.map(tags)].sort_values("run_date")
+    return {(r.point_id, int(r.hydro_year), r.kind, r.issue_date): r._asdict()
+            for r in j.itertuples(index=False)}
+
+
+def fc_map(pid, hy, day, kind):
+    """Прогноз для карты: если на эту дату он уже есть в журнале (те же модели и данные) — берём готовый,
+    иначе считаем. Совпадение даты выпуска гарантирует, что прогноз построен по тем же наблюдениям."""
+    if not (kind == "close" and use_weather_close):
+        last = FC.last_weather_day(pid, hy)  # прогноз выпускается не позже последнего дня наблюдений точки
+        eff = from_season_day(min(day, last) if last is not None else day, hy).date()
+        r = _journal(DATA_VER).get((pid, hy, kind, eff.isoformat()))
+        if r is not None:
+            q = {"point_id": pid, "hydro_year": hy, "kind": kind, "from_journal": True,
+                 "issue_day": int(to_season_day(eff, hy))}
+            for k in ("q10", "q50", "q90", "calendar", "physics"):
+                v = r.get(f"{k}_day")  # точное значение; в старых строках журнала — только дата
+                q[k] = float(v) if isinstance(v, str) and v not in ("", "nan") else float(to_season_day(pd.Timestamp(r[f"{k}_date"]), hy))
+                q[f"{k}_date"] = from_season_day(q[k], hy).date()
+            return q
+    return fc_cached(pid, hy, day, kind)
+
+
+@st.cache_data(show_spinner=False)
 def weather_until(ver):
     """(конец архива ERA5, конец оперативных наблюдений, конец прогноза погоды)."""
     from okno.paths import RECENT, WEATHER
@@ -272,7 +307,11 @@ tabs = st.tabs([
     "Рейтинг риска",
     "До / после",
     "О данных",
-])
+], key="main_tab", on_change="rerun")
+# Streamlit выполняет код всех вкладок сразу; тяжёлые (коридор, рейтинг риска) считаем только когда
+# вкладка открыта — первое открытие дашборда не ждёт расчётов, которые пользователь может и не смотреть.
+def _tab_open(i):
+    return tabs[i].open is not False
 
 # ------------------------------------------------------------------ 1. карта
 with tabs[0]:
@@ -283,13 +322,13 @@ with tabs[0]:
     for p in WEATHER_POINTS:
         meta = FC.point_meta(p)
         if FC.is_basin(p):  # притоки Лены: только прогноз вскрытия — отдельный слой
-            qc = fc_cached(p, hy, issue_day, "close")
+            qc = fc_map(p, hy, issue_day, "close")
             if qc and "error" not in qc:
                 basin_rows.append({"lat": meta["lat"], "lon": meta["lon"],
                                    "txt": f"<b>{label(p)}</b><br>Вскрытие (М1 для притоков, 50%): {qc['q50_date']:%d.%m}, "
                                           f"диапазон {qc['q10_date']:%d.%m}–{qc['q90_date']:%d.%m}"})
             continue
-        qo, qc = fc_cached(p, hy, issue_day, "open"), fc_cached(p, hy, issue_day, "close")
+        qo, qc = fc_map(p, hy, issue_day, "open"), fc_map(p, hy, issue_day, "close")
         p_open = p_by(qo, t)
         p_open = 1.0 if np.isnan(p_open) and issue_day > 120 else p_open
         p_closed = p_by(qc, t + margin)
@@ -486,8 +525,9 @@ with tabs[1]:
 
 # ------------------------------------------------------------------ 3. сквозной коридор (А3)
 with tabs[2]:
-    from app.corridor_view import render_corridor
-    render_corridor()
+    if _tab_open(2):
+        from app.corridor_view import render_corridor
+        render_corridor()
 
 # ------------------------------------------------------------------ 4. планировщик
 with tabs[3]:
@@ -510,28 +550,29 @@ with tabs[3]:
 
 # ------------------------------------------------------------------ 5. рейтинг риска
 with tabs[4]:
-    st.subheader(f"Рейтинг риска на {issue_date:%d.%m.%Y}")
-    st.caption("Ожидаемый недовоз = P(путь закроется до выполнения плана) × остаток плана. "
-               "Сортировка — с каких путей начинать пересчёт графика.")
-    P0 = Params(close_margin_days=margin)
-    rows = []
-    for p in WEATHER_POINTS:
-        q = fc_cached(p, hy, max(issue_day, 150), "close")
-        if not q or "error" in q:
-            continue
-        need_weeks = P0.Q_t / P0.K_t_week
-        done_day = max(issue_day, P0.start_day) + 7 * need_weeks
-        p_early = p_by(q, done_day + margin)
-        rows.append({"путь": label(p), "закрытие (50%)": from_season_day(q["q50"] - margin, hy).date(),
-                     "диапазон 10–90%": f"{from_season_day(q['q10'] - margin, hy):%d.%m} – "
-                                        f"{from_season_day(q['q90'] - margin, hy):%d.%m}",
-                     "сдвиг к календарю, сут": round(q["q50"] - q["calendar"]),
-                     "P(закроется до конца плана)": round(p_early, 2),
-                     "ожидаемый недовоз, т": round(p_early * P0.Q_t * 0.5)})
-    if rows:
-        st.dataframe(pd.DataFrame(rows).sort_values("ожидаемый недовоз, т", ascending=False), width="stretch")
+    if _tab_open(4):
+        st.subheader(f"Рейтинг риска на {issue_date:%d.%m.%Y}")
+        st.caption("Ожидаемый недовоз = P(путь закроется до выполнения плана) × остаток плана. "
+                   "Сортировка — с каких путей начинать пересчёт графика.")
+        P0 = Params(close_margin_days=margin)
+        rows = []
+        for p in WEATHER_POINTS:
+            q = fc_cached(p, hy, max(issue_day, 150), "close")
+            if not q or "error" in q:
+                continue
+            need_weeks = P0.Q_t / P0.K_t_week
+            done_day = max(issue_day, P0.start_day) + 7 * need_weeks
+            p_early = p_by(q, done_day + margin)
+            rows.append({"путь": label(p), "закрытие (50%)": from_season_day(q["q50"] - margin, hy).date(),
+                         "диапазон 10–90%": f"{from_season_day(q['q10'] - margin, hy):%d.%m} – "
+                                            f"{from_season_day(q['q90'] - margin, hy):%d.%m}",
+                         "сдвиг к календарю, сут": round(q["q50"] - q["calendar"]),
+                         "P(закроется до конца плана)": round(p_early, 2),
+                         "ожидаемый недовоз, т": round(p_early * P0.Q_t * 0.5)})
+        if rows:
+            st.dataframe(pd.DataFrame(rows).sort_values("ожидаемый недовоз, т", ascending=False), width="stretch")
 
-# ------------------------------------------------------------------ 6. до/после
+    # ------------------------------------------------------------------ 6. до/после
 with tabs[5]:
     st.subheader("Бэктест на прошлых сезонах")
     for name, f in (("Сквозной коридор 4 звеньев: «До и После» (Кейс А3)", REPORTS / "corridor_before_after.md"),

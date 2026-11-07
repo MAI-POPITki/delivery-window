@@ -139,6 +139,7 @@ class CorridorEvidenceTests(unittest.TestCase):
 class CorridorDashboardTests(unittest.TestCase):
     def test_historical_and_synthetic_render_with_honest_controls(self):
         app=AppTest.from_file(str(ROOT/'app/dashboard.py'),default_timeout=120).run()
+        app.session_state['main_tab']='Сквозной коридор (А3)'  # вкладка коридора считается только открытой
         app.button(key='open_dashboard').click().run()
         self.assertFalse(app.exception,[e.message for e in app.exception])
         self.assertEqual(app.selectbox(key='corr_scenario').value,2024)
