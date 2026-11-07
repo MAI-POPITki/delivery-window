@@ -63,10 +63,11 @@ def basin_points() -> dict:
     if not f.exists():
         return {}
     out = {}
-    for r in csv.DictReader(open(f, encoding="utf-8")):
-        la, lo = float(r["lat"]), float(r["lon"])
-        out[r["point_id"]] = {"lat": la, "lon": lo,
-                              "region": "irkutsk" if (lo < 119.5 and la < 59.5) else "yakutia"}
+    with open(f, encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            la, lo = float(r["lat"]), float(r["lon"])
+            out[r["point_id"]] = {"lat": la, "lon": lo,
+                                  "region": "irkutsk" if (lo < 119.5 and la < 59.5) else "yakutia"}
     return out
 
 
