@@ -272,6 +272,7 @@ tabs = st.tabs([
     "Рейтинг риска",
     "До / после",
     "О данных",
+    "Расширение применения",
 ])
 
 # ------------------------------------------------------------------ 1. карта
@@ -556,3 +557,8 @@ with tabs[6]:
         st.divider()
     f = REPORTS / "data_checks.md"
     st.markdown(f.read_text(encoding="utf-8") if f.exists() else "Запустите scripts/validate_data.py")
+
+
+with tabs[7]:
+    from app.supply_view import render_supply
+    render_supply()
