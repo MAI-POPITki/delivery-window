@@ -107,7 +107,7 @@ import plotly.graph_objects as go
 # модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
 _MODULE_NAMES = (
     "okno.paths", "okno.regions", "okno.report", "okno.ice", "okno.calib", "okno.features",
-    "okno.planner", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "app.corridor_view", "okno.supply_scenarios", "app.supply_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
+    "okno.planner", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "app.corridor_view", "okno.supply_scenarios", "okno.navigation", "app.navigation_view", "app.supply_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
     "okno.yakutsk_replay", "app.yakutsk_experiment",
 )
 _cached_modules = [sys.modules.get(name) for name in _MODULE_NAMES]
@@ -314,8 +314,8 @@ with tabs[0]:
     st.markdown(LEGEND_HTML, unsafe_allow_html=True)
     _l1, _l2, _l3 = st.columns(3)
     show_roads = _l1.checkbox("🛣️ Зимники", value=True, key="layer_roads")
-    show_s1 = _l2.checkbox("🛰️ Лена со спутника", value=region == "yakutia", key="layer_s1")
-    show_basin = _l3.checkbox("🌊 Притоки Лены", value=True, key="layer_basin")
+    show_s1 = _l2.checkbox("🛰️ Лена со спутника", value=False, key="layer_s1")
+    show_basin = _l3.checkbox("🌊 Притоки Лены", value=False, key="layer_basin")
     fmap = go.Figure()
     # 1) зимники OSM — фоном, приглушённо, чтобы не спорить с точками
     _roads_file = Path(PROCESSED).parent / "osm" / "winter_roads.json"

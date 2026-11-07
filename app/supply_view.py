@@ -11,6 +11,9 @@ from okno.supply_scenarios import Closure, SeasonalWindow, ServiceDays, compare_
 
 def render_supply():
     st.subheader('Расширение применения — сценарная лаборатория')
+    with st.expander('Речной завоз на Лене: подключён существующий прогноз М1 и наблюдения М2'):
+        from app.navigation_view import render_navigation
+        render_navigation()
     st.caption('Ветка ZXC · новые календари, региональные источники и воспроизводимые проверки')
     cases_path = Path(__file__).resolve().parents[1] / 'data/external/expansion_cases.json'
     cases = json.loads(cases_path.read_text(encoding='utf-8'))
