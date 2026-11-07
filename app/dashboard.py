@@ -429,6 +429,21 @@ with tabs[1]:
                              f"Прогноз погоды учтён на {q['forecast_days_used']} дней.")
             if q["actual_date"]:
                 st.success(f"Факт: {q['actual_date']:%d.%m.%Y}")
+            if kind == "close" and pid == "yakutsk_crossing":
+                _sp = Path(PROCESSED).parent / "s1" / "predictions.csv"
+                if _sp.exists():
+                    from okno.m2 import check_against_m1
+                    _sn = pd.read_csv(_sp, parse_dates=["date"]).dropna(subset=["p_ice"])
+                    _sn = _sn[(_sn.point == pid) & (_sn.date <= pd.Timestamp(issue_date))
+                              & (_sn.date >= pd.Timestamp(issue_date) - pd.Timedelta(days=14))]
+                    if len(_sn):
+                        _o = _sn.sort_values("date").iloc[-1]
+                        _st, _txt = check_against_m1(q["q10"], q["q50"], q["q90"],
+                                                     to_season_day(_o.date, hy), float(_o.p_ice))
+                        _msg = f"М1 и снимок {_o.date:%d.%m}: {_txt}"
+                        {"conflict": st.error, "warn": st.warning}.get(_st, st.caption)(_msg)
+                    else:
+                        st.caption("М1 и снимок: свежего снимка (≤ 14 сут) нет — сверка невозможна")
     # как менялся прогноз закрытия в течение сезона
     days = list(range(150, 271, 7))
     path = fc_path(pid, hy, "close", tuple(days))
