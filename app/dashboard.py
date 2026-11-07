@@ -388,13 +388,14 @@ with tabs[0]:
         _s["hover"] = [f"<b>{LENA_NAMES.get(a, a)}</b><br>Sentinel-1, снимок {d:%d.%m.%Y} ({ag} дн. назад): <b>{st_}</b>"
                        f"<br>P(лёд) = {pi:.2f}" for a, d, ag, st_, pi in zip(_s.point, _s.date, _s.age, _s.state, _s.p_ice)]
         _s["lbl"] = [f"\u00a0\u00a0\u00a0{st_} · {d:%d.%m}" for st_, d in zip(_s.state, _s.date)]
+        # Подписи всегда тёмные и непрозрачные: давность передаётся цветом точки, а не бледным текстом.
         for fresh, g in _s.groupby(_s.age <= 14):
             op = 1.0 if fresh else 0.35
             fmap.add_trace(go.Scattermap(lat=g.lat, lon=g.lon, mode="markers", hoverinfo="skip", showlegend=False,
                                          marker=dict(size=17, color="#ffffff", opacity=op)))
             fmap.add_trace(go.Scattermap(
                 lat=g.lat, lon=g.lon, mode="markers+text", text=g.lbl, hovertext=g.hover, hoverinfo="text",
-                textposition="middle right", textfont=dict(size=11, color="#0b3d91" if fresh else "#7a8aa0"),
+                textposition="middle right", textfont=dict(size=13, color="#17212b", weight="bold"),
                 marker=dict(size=12, color=list(g.col), opacity=op),
                 name="🛰️ Лена со спутника" + ("" if fresh else " (снимок старше 14 дней)")))
     # 4) пути — крупные точки с подписями, поверх всего
@@ -409,8 +410,8 @@ with tabs[0]:
         fmap.add_trace(go.Scattermap(
             lat=ok.lat, lon=ok.lon, mode="markers", hovertext=ok.txt, hoverinfo="text", name="🚚 пути: прогноз",
             marker=dict(size=19, color=ok.p_ok, cmin=0, cmax=1, colorscale="RdYlGn",
-                        colorbar=dict(title=dict(text="P(путь открыт<br>через N дн.)", font=dict(size=11)),
-                                      tickformat=".0%", thickness=12, len=0.55, x=0.99, xanchor="right", y=0.5,
+                        colorbar=dict(title=dict(text="P(путь открыт<br>через N дн.)", font=dict(size=11, color="#17212b")),
+                                      tickfont=dict(color="#17212b"), tickformat=".0%", thickness=12, len=0.55, x=0.99, xanchor="right", y=0.5,
                                       bgcolor="rgba(255,255,255,0.8)"))))
     # подписи путей — отдельными текстовыми слоями «над» и «под» точкой (слой не принимает разные позиции)
     if len(pts):
