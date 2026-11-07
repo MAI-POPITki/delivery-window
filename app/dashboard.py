@@ -107,7 +107,7 @@ import plotly.graph_objects as go
 # модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
 _MODULE_NAMES = (
     "okno.paths", "okno.regions", "okno.report", "okno.ice", "okno.calib", "okno.features",
-    "okno.planner", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
+    "okno.planner", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
     "okno.yakutsk_replay", "app.yakutsk_experiment",
 )
 _cached_modules = [sys.modules.get(name) for name in _MODULE_NAMES]
@@ -125,7 +125,7 @@ from okno import forecast as FC
 from okno.corridor import CorridorConfig, compute_prestock_schedule, run_sensitivity_check, simulate_corridor
 from okno.ice import from_season_day, to_season_day
 from okno.paths import DOCS, PROCESSED, REPORTS
-from okno.planner import Params, calendar_plan, plan_week_volumes, sample_quantiles, simulate_season
+from okno.planner import Params, sample_quantiles, simulate_season
 
 # ------------------------------------------------------------------ данные
 from okno.regions import REGIONS, label  # noqa: E402
@@ -476,54 +476,15 @@ with tabs[2]:
 
 # ------------------------------------------------------------------ 4. планировщик
 with tabs[3]:
-    st.subheader("Планировщик отправок (М3)")
-    st.caption("Экономические параметры — синтетика и допущения; вывод проверен на ±30% (вкладка «До / после»).")
-    c1, c2, c3 = st.columns(3)
-    P = Params(Q_t=c1.number_input("Осталось вывезти на дату решения, т", 0.1, 100000.0, 12000.0, 1.0,
-                                  format="%.1f"),
-               K_t_week=c1.number_input("Своя техника, т/нед", 0.1, 20000.0, 1000.0, 1.0, format="%.1f"),
-               K_extra_t_week=c1.number_input("Доп. техника максимум, т/нед", 0.0, 20000.0, 600.0, 1.0,
-                                             format="%.1f"),
-               c_road=c2.number_input("Зимник, ₽/т", 1000.0, 200000.0, 20000.0, 1000.0, format="%.2f"),
-               c_extra=c2.number_input("Надбавка за доп. технику, ₽/т", 0.0, 200000.0, 10000.0, 1000.0,
-                                       format="%.2f"),
-               c_exp=c3.number_input("Дорогой канал (авиа/СВП), ₽/т", 10000.0, 1000000.0, 120000.0, 5000.0,
-                                     format="%.2f"),
-               c_hold_week=c3.number_input("Хранение, ₽/т·нед", 0.0, 10000.0, 400.0, 50.0, format="%.2f"),
-               close_margin_days=margin)
-    q = fc_cached(pid, hy, max(issue_day, 150), "close")
-    if not q or "error" in q:
-        st.info("Нет прогноза закрытия для этой точки.")
-    else:
-        weeks = np.arange(max(issue_day, P.start_day), 300, 7, dtype=float)
-        sc = sample_quantiles(q["q10"], q["q50"], q["q90"], P.n_scenarios, np.random.default_rng(P.seed)) - margin
-        sc = np.maximum(sc, weeks[0])
-        p_closed = np.array([(sc < w + 7).mean() for w in weeks])
-        R = q["calendar"] - margin + 14
-        xb, xe = plan_week_volumes(weeks, p_closed, P.Q_t, P, R)
-        x = xb + xe
-        cal_close = q["calendar"] - margin
-        cb, ce = calendar_plan(weeks, cal_close, P)
-        x_cal = cb + ce
-        st.write(f"Рекомендация: своей техникой **{xb.sum():,.0f} т**, привлечь дополнительную на "
-                 f"**{xe.sum():,.0f} т**; календарный план привлекает {ce.sum():,.0f} т.".replace(",", " "))
-        dates = [from_season_day(w, hy).date() for w in weeks]
-        keep = (x > 0) | (x_cal > 0) | (p_closed < 0.99)
-        f = go.Figure()
-        f.add_trace(go.Bar(x=np.array(dates)[keep], y=x_cal[keep], name="Календарный план"))
-        f.add_trace(go.Bar(x=np.array(dates)[keep], y=x[keep], name="Рекомендация по прогнозу"))
-        f.add_trace(go.Scatter(x=np.array(dates)[keep], y=(p_closed[keep] * P.K_t_week), name="P(путь закрыт) × K",
-                               yaxis="y", line=dict(color="red", dash="dot")))
-        f.update_layout(barmode="group", title="Отправки по неделям, т", height=420)
-        st.plotly_chart(f, width="stretch")
-        risk_cal = float(np.sum(x_cal * p_closed))
-        risk_fc = float(np.sum(x * p_closed)) + (P.Q_t - x.sum())
-        a, b = st.columns(2)
-        a.metric("Ожидаемый недовоз — календарь", f"{risk_cal:,.0f} т".replace(",", " "))
-        b.metric("Ожидаемый недовоз — по прогнозу", f"{risk_fc:,.0f} т".replace(",", " "),
-                 delta=f"{risk_fc - risk_cal:,.0f} т".replace(",", " "), delta_color="inverse")
-        if not np.isnan(q["actual"]):
-            st.markdown("**Проверка на факте этого сезона** (оба правила, фактическая дата закрытия):")
+    from app.planner_view import render_planner
+    q = fc_cached(pid, hy, issue_day, "close")
+    P = render_planner(q, hy, issue_day, margin, label(pid))
+    if q and 'error' not in q and np.isfinite(q.get('actual', np.nan)):
+        with st.expander('Прежний ретроспективный тест М3: календарь и пересчёт по прогнозу'):
+            st.caption('Отдельная проверка на фактическом закрытии. Здесь введённый объём считается заказом '
+                       'на начало сезона, отправки начинаются с января. Это не проверка двух текущих графиков '
+                       'для остатка на выбранную дату решения.')
+            cal_close = q['calendar'] - margin
             path = fc_path(pid, hy, "close", tuple(range(150, 271, 7)))
             res = [simulate_season(q["actual"] - margin, path[["issue_day", "q10", "q50", "q90"]] if rule == "forecast"
                                    else None, cal_close, P, rule) for rule in ("calendar", "forecast")]

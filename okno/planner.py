@@ -95,6 +95,80 @@ def calendar_plan(weeks, cal_close, p: Params):
     return base, extra
 
 
+def ml_window_plan(weeks, predicted_close, p: Params):
+    """Uniform loading within the ML median window, without tariff optimisation.
+
+    The trip must arrive by the predicted closing date. Capacity that does not
+    fit this window is left for the backup channel, not moved to closed weeks.
+    """
+    eligible = np.asarray(weeks) + p.transit_days <= predicted_close
+    base, extra = np.zeros(len(weeks)), np.zeros(len(weeks))
+    if eligible.any():
+        per_week = min(p.Q_t / eligible.sum(), p.K_t_week + p.K_extra_t_week)
+        base[eligible] = min(p.K_t_week, per_week)
+        extra[eligible] = max(0., per_week - p.K_t_week)
+    return base, extra
+
+
+def expected_plan_cost(weeks, base, extra, p_closed, p: Params, reference_day):
+    """Same expected-cost ledger for every prospective loading plan.
+
+    As in the original M3, road/extra/holding charges apply to successfully
+    delivered tonnes. All other tonnes incur the backup rate. Failed-trip
+    expenses and a backup delivery schedule are not represented by this model.
+    """
+    survival = 1 - np.asarray(p_closed)
+    delivered = float(((base + extra) * survival).sum())
+    backup = max(0., p.Q_t - delivered)
+    road_cost = delivered * p.c_road
+    extra_cost = float((extra * survival).sum()) * p.c_extra
+    holding_cost = float(((base + extra) * survival * np.maximum(reference_day - weeks, 0) / WEEK).sum()) * p.c_hold_week
+    backup_cost = backup * p.c_exp
+    return dict(planned_road_t=float((base + extra).sum()), planned_base_t=float(base.sum()),
+        planned_extra_t=float(extra.sum()), unallocated_t=max(0., p.Q_t-float((base+extra).sum())),
+        expected_delivered_t=delivered, expected_backup_t=backup,
+        road_cost_rub=road_cost, extra_cost_rub=extra_cost, holding_cost_rub=holding_cost,
+        backup_cost_rub=backup_cost, expected_cost_rub=road_cost+extra_cost+holding_cost+backup_cost)
+
+
+def compare_ml_weekly_plans(forecast, issue_day, p: Params, *, end_day=300):
+    """Plan the remaining order using only the forecast issued by decision day.
+
+    Ordinary ML spreads the order over its median closing window. Economic ML
+    retains the existing M3 cost-sorting optimiser. Both use the same sampled
+    closure scenarios, capacity, transit time and common cost ledger. This is
+    a current plan; later weekly decisions will need a fresh forecast.
+    """
+    positive = (p.Q_t, p.n_scenarios)
+    nonnegative = (p.K_t_week, p.K_extra_t_week, p.c_road, p.c_extra,
+                   p.c_exp, p.c_hold_week, p.transit_days, p.close_margin_days)
+    if not all(np.isfinite(x) and x > 0 for x in positive) or not all(np.isfinite(x) and x >= 0 for x in nonnegative):
+        raise ValueError('Invalid order, capacity or tariff')
+    if int(p.n_scenarios) != p.n_scenarios:
+        raise ValueError('n_scenarios must be an integer')
+    if forecast.get('issue_day', issue_day) > issue_day:
+        raise ValueError('Forecast was issued after the decision date')
+    q10, q50, q90, calendar = [float(forecast[c]) for c in ('q10', 'q50', 'q90', 'calendar')]
+    if not np.isfinite([q10, q50, q90, calendar]).all() or not q10 <= q50 <= q90:
+        raise ValueError('Invalid forecast quantiles')
+    weeks = np.arange(max(issue_day, p.start_day), end_day, WEEK, dtype=float)
+    scenarios = sample_quantiles(q10, q50, q90, int(p.n_scenarios),
+                                 np.random.default_rng(p.seed)) - p.close_margin_days
+    # A future planned start is not an observation that the road will be open.
+    p_closed = np.array([(scenarios < w+p.transit_days).mean() for w in weeks])
+    reference_day = calendar - p.close_margin_days + 14
+    normal = ml_window_plan(weeks, q50-p.close_margin_days, p)
+    economic = plan_week_volumes(weeks, p_closed, p.Q_t, p, reference_day)
+    rows, summaries = [], []
+    for rule, (base, extra) in (('ml', normal), ('economic_ml', economic)):
+        rows.append(pd.DataFrame(dict(rule=rule, week=np.arange(1, len(weeks)+1),
+            dispatch_day=weeks, arrival_day=weeks+p.transit_days, base_t=base, extra_t=extra,
+            shipped_t=base+extra, p_closed=p_closed,
+            expected_delivered_t=(base+extra)*(1-p_closed), at_risk_t=(base+extra)*p_closed)))
+        summaries.append(dict(rule=rule, **expected_plan_cost(weeks, base, extra, p_closed, p, reference_day)))
+    return pd.concat(rows, ignore_index=True), pd.DataFrame(summaries).set_index('rule')
+
+
 def simulate_season(actual_close, forecasts, cal_close, p: Params, rule: str) -> dict:
     """
     actual_close — фактическая дата закрытия пути (день сезона).

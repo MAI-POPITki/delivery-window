@@ -4,6 +4,7 @@
 """
 
 import hashlib
+import json
 import os
 from pathlib import Path
 import sys
@@ -119,6 +120,23 @@ class WelcomeTests(unittest.TestCase):
             self.assertLessEqual(widget.min, widget.value)
             self.assertGreaterEqual(widget.max, widget.value)
         self.assertTrue(any("Рекомендация: своей техникой" in item.value for item in app.markdown))
+        charts = planner.get('plotly_chart')
+        self.assertEqual([json.loads(chart.proto.spec)['layout']['title']['text'] for chart in charts],
+                         ['Обычный ML: отправки по неделям', 'Экономический ML: отправки по неделям'])
+        before = next(d.value for d in planner.dataframe if 'Обычный ML: своя, т' in d.value.columns)
+        self.assertAlmostEqual((before['Обычный ML: своя, т']+before['Обычный ML: доп., т']).sum(), 45.)
+        self.assertAlmostEqual((before['Экономический ML: своя, т']+before['Экономический ML: доп., т']).sum(), 45.)
+        # Same order and forecast; a backup rate below the road rate must affect
+        # the economic chart, while the ordinary window schedule stays intact.
+        app.number_input(key='planner_backup_rate').set_value(10000.).run()
+        self.assertFalse(app.exception, [e.message for e in app.exception])
+        planner = next(tab for tab in app.tabs if tab.label == 'Планировщик')
+        after = next(d.value for d in planner.dataframe if 'Обычный ML: своя, т' in d.value.columns)
+        self.assertEqual(after['Обычный ML: своя, т'].tolist(), before['Обычный ML: своя, т'].tolist())
+        self.assertEqual((after['Экономический ML: своя, т']+after['Экономический ML: доп., т']).sum(), 0.)
+        summary = next(d.value for d in planner.dataframe if 'Ожидается дорогим каналом, т' in d.value.columns)
+        self.assertEqual(summary.loc['Экономический ML','Ожидается дорогим каналом, т'], 45.)
+        self.assertEqual(summary.loc['Экономический ML','Ожидаемые расходы, ₽'], 450000.)
 
     def test_document_path_is_independent_of_working_directory(self):
         previous_directory = Path.cwd()
