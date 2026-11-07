@@ -11,6 +11,7 @@ def render_planner(forecast, hydro_year, issue_day, margin, point_name):
     st.subheader('Планировщик отправок (М3)')
     st.caption('Оба графика используют путь, сезон и дату решения из левой панели и параметры ниже. '
                'Цены и мощности — сценарные значения; результат показывает ожидаемые расходы.')
+    decision_panel = st.container()
     c1, c2, c3 = st.columns(3)
     p = Params(Q_t=c1.number_input('Осталось вывезти на дату решения, т', 0.1, 100000.0, 12000.0, 1.0,
                                    format='%.1f', key='planner_quantity'),
@@ -30,6 +31,9 @@ def render_planner(forecast, hydro_year, issue_day, margin, point_name):
     if not forecast or 'error' in forecast:
         st.info('Нет прогноза закрытия для этой точки.')
         return p
+    from app.decision_view import render_decisions
+    with decision_panel:
+        render_decisions(forecast, issue_day, p, hydro_year)
     weekly, summary = compare_ml_weekly_plans(forecast, issue_day, p)
     names = {'ml':'Обычный ML', 'economic_ml':'Экономический ML'}
     st.write(f'**{point_name} · дата решения {from_season_day(issue_day, hydro_year):%d.%m.%Y}**')
