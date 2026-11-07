@@ -336,143 +336,12 @@ def extract_ice_points():
 
 
 def save_rosstat_and_tariffs():
-    """Сохраняет справочник тарифов сквозного коридора, сезонной динамики цен в распутицу
-    и референсных дат закрытия/открытия переправы Якутск — Нижний Бестях (МЧС / Минтранс РС(Я)).
-    Каждая строка явно помечена типом источника (публичный ориентир / сводка / допущение)."""
-    out_dir = DATA / "rosstat_prices"
-    out_dir.mkdir(parents=True, exist_ok=True)
-
-    tariffs = [
-        {
-            "segment": "1_rail_hub_to_nb",
-            "parameter": "rail_cost_per_ton",
-            "regime": "круглогодично",
-            "value": 8500.0,
-            "unit": "руб/т",
-            "source_type": "публичный тарифный ориентир / допущение",
-            "source": "Оптовый контейнерный ж/д тариф Новосибирск/Иркутск — ст. Нижний Бестях (ЖДЯ), пересчёт на 1 т нетто",
-        },
-        {
-            "segment": "1_rail_hub_to_nb",
-            "parameter": "rail_lead_time_days",
-            "regime": "круглогодично",
-            "value": 6.0,
-            "unit": "сут",
-            "source_type": "расписание / норматив",
-            "source": "Нормативное время хода ускоренного контейнерного поезда Восточная Сибирь — ст. Нижний Бестях",
-        },
-        {
-            "segment": "2_right_bank_nb",
-            "parameter": "nb_holding_cost_per_ton_day",
-            "regime": "ожидание переправы",
-            "value": 450.0,
-            "unit": "руб/(т·сут)",
-            "source_type": "допущение (проверяется ±30%)",
-            "source": "Сверхнормативный простой контейнеров / временное хранение на терминале Нижний Бестях",
-        },
-        {
-            "segment": "3_lena_crossing",
-            "parameter": "crossing_cost_normal",
-            "regime": "паром / ледовая переправа",
-            "value": 1800.0,
-            "unit": "руб/т",
-            "source_type": "публичный тарифный ориентир / допущение",
-            "source": "Госкомцен РС(Я): грузовой паром Якутск — Нижний Бестях + автодоставка через русло (15–20 км)",
-        },
-        {
-            "segment": "3_lena_crossing",
-            "parameter": "crossing_cost_svp_rasputitsa",
-            "regime": "межсезонье (СВП / аэроботы)",
-            "value": 25000.0,
-            "unit": "руб/т",
-            "source_type": "публичный тарифный ориентир",
-            "source": "Коммерческие грузоперевозки судами на воздушной подушке (25–30 руб/кг в период шуги)",
-        },
-        {
-            "segment": "3_lena_crossing",
-            "parameter": "crossing_cost_heli_rasputitsa",
-            "regime": "пик ледохода (вертолёт Ми-8)",
-            "value": 55000.0,
-            "unit": "руб/т",
-            "source_type": "публичный тарифный ориентир",
-            "source": "АК «Полярные авиалинии»: стыковочные грузовые рейсы Маган — Нижний Бестях (до 55 руб/кг)",
-        },
-        {
-            "segment": "3_lena_crossing",
-            "parameter": "crossing_cost_alt",
-            "regime": "межсезонье (средневзвешенный СВП + авиа)",
-            "value": 35000.0,
-            "unit": "руб/т",
-            "source_type": "допущение симулятора (проверяется ±30%)",
-            "source": "Средневзвешенный аварийный тариф переброски срочных партий в распутицу (СВП + Ми-8)",
-        },
-        {
-            "segment": "4_yakutsk_tlc",
-            "parameter": "yak_holding_cost_per_ton_day",
-            "regime": "плановый склад ТЛЦ",
-            "value": 220.0,
-            "unit": "руб/(т·сут)",
-            "source_type": "допущение (проверяется ±30%)",
-            "source": "Операционная себестоимость паллето-места (вкл. температурный контур) на складе Якутска",
-        },
-        {
-            "segment": "4_yakutsk_tlc",
-            "parameter": "yak_overflow_cost_per_ton_day",
-            "regime": "сверх ёмкости склада (аренда)",
-            "value": 600.0,
-            "unit": "руб/(т·сут)",
-            "source_type": "допущение (проверяется ±30%)",
-            "source": "Краткосрочная коммерческая аренда тёплых/холодильных складов в Якутске при переполнении",
-        },
-        {
-            "segment": "4_yakutsk_tlc",
-            "parameter": "shortage_penalty_per_ton_day",
-            "regime": "дефицит / срыв сроков",
-            "value": 12000.0,
-            "unit": "руб/(т·сут)",
-            "source_type": "допущение (проверяется ±30%)",
-            "source": "Упущенная маржа, списание скоропорта и штрафы SLA при отсутствии товара на левом берегу",
-        },
-        {
-            "segment": "4_yakutsk_retail_effect",
-            "parameter": "fresh_produce_rasputitsa_markup_pct",
-            "regime": "май / ноябрь (межсезонье)",
-            "value": 18.5,
-            "unit": "%",
-            "source_type": "статистический ориентир",
-            "source": "Саха(Якутия)стат / мониторинг цен: сезонный скачок розничных цен на плодоовощную группу в Якутске в распутицу (+12…+25%)",
-        },
-    ]
-    tariffs_path = out_dir / "yakutsk_tariffs_and_prices.csv"
-    pd.DataFrame(tariffs).to_csv(tariffs_path, index=False)
-
-    # Опубликованные сводки Минтранса РС(Я) и ГУ МЧС России по РС(Я) по переправе Якутск — Нижний Бестях:
-    # показывают физический разрыв между спутниковым началом поверхностного таяния (конец апреля — начало мая),
-    # официальным закрытием ледовой переправы (середина апреля), активным ледоходом у Якутска (середина мая)
-    # и открытием штатной грузовой паромной навигации (третья декада мая).
-    mchs_events = [
-        {"hydro_year": 2019, "ice_road_close_date": "2019-04-15", "lena_breakup_yakutsk_date": "2019-05-16",
-         "ferry_open_date": "2019-05-24", "source_type": "сводка МЧС / Минтранс РС(Я)",
-         "source": "Приказы Минтранса РС(Я) о закрытии ледовой переправы и открытии паромной навигации 2019"},
-        {"hydro_year": 2020, "ice_road_close_date": "2020-04-15", "lena_breakup_yakutsk_date": "2020-05-11",
-         "ferry_open_date": "2020-05-20", "source_type": "сводка МЧС / Минтранс РС(Я)",
-         "source": "Оперативные сводки ГУ МЧС России по РС(Я) и Минтранса РС(Я), весна 2020"},
-        {"hydro_year": 2021, "ice_road_close_date": "2021-04-16", "lena_breakup_yakutsk_date": "2021-05-17",
-         "ferry_open_date": "2021-05-25", "source_type": "сводка МЧС / Минтранс РС(Я)",
-         "source": "Оперативные сводки ГУ МЧС России по РС(Я) и Минтранса РС(Я), весна 2021"},
-        {"hydro_year": 2022, "ice_road_close_date": "2022-04-18", "lena_breakup_yakutsk_date": "2022-05-18",
-         "ferry_open_date": "2022-05-26", "source_type": "сводка МЧС / Минтранс РС(Я)",
-         "source": "Оперативные сводки ГУ МЧС России по РС(Я) и Минтранса РС(Я), весна 2022"},
-        {"hydro_year": 2023, "ice_road_close_date": "2023-04-17", "lena_breakup_yakutsk_date": "2023-05-19",
-         "ferry_open_date": "2023-05-27", "source_type": "сводка МЧС / Минтранс РС(Я)",
-         "source": "Оперативные сводки ГУ МЧС России по РС(Я) и Минтранса РС(Я), весна 2023"},
-        {"hydro_year": 2024, "ice_road_close_date": "2024-04-16", "lena_breakup_yakutsk_date": "2024-05-15",
-         "ferry_open_date": "2024-05-24", "source_type": "сводка МЧС / Минтранс РС(Я)",
-         "source": "Оперативные сводки ГУ МЧС России по РС(Я) и Минтранса РС(Я), май 2024 (спутник: 2024-04-27)"},
-    ]
-    mchs_path = out_dir / "yakutsk_mchs_crossing_dates.csv"
-    pd.DataFrame(mchs_events).to_csv(mchs_path, index=False)
-    log(f"тарифы и даты переправы: сохранены {tariffs_path.name} ({len(tariffs)} строк) и {mchs_path.name} ({len(mchs_events)} сезонов)")
+    """Use the versioned curated registry; never manufacture public facts."""
+    registry = DATA / "rosstat_prices"
+    for name in ("yakutsk_mchs_crossing_dates.csv", "yakutsk_tariffs_and_prices.csv"):
+        if not (registry / name).exists():
+            raise FileNotFoundError(f"Restore the reviewed registry from Git: {registry / name}")
+    log("Реестр событий и допущений сохранён; автоматической загрузки подтверждённых тарифов нет.")
 
 
 if __name__ == "__main__":
@@ -515,4 +384,3 @@ if __name__ == "__main__":
     if FAILED:
         log(f"не скачано: {', '.join(FAILED)} — остальное обновлено")
     log("готово.")
-

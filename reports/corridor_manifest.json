@@ -1,0 +1,46 @@
+{
+  "config": {
+    "daily_demand_tons": 25.0,
+    "horizon_days": 120,
+    "rail_lead_time_days": 6,
+    "rail_cap_tons": 120.0,
+    "rail_cost_per_ton": 8500.0,
+    "nb_holding_cost_per_ton_day": 450.0,
+    "crossing_cap_normal_tons": 60.0,
+    "crossing_cap_alt_tons": 8.0,
+    "crossing_cost_normal": 1800.0,
+    "crossing_cost_alt": 35000.0,
+    "yak_warehouse_cap_tons": 650.0,
+    "yak_overflow_capacity_tons": 0.0,
+    "yak_holding_cost_per_ton_day": 220.0,
+    "yak_overflow_cost_per_ton_day": 600.0,
+    "shortage_penalty_per_ton_day": 12000.0,
+    "safety_days": 3.0,
+    "initial_yak_tons": 225.0
+  },
+  "case": {
+    "label": "2024: подтверждённые даты переправы",
+    "start_date": "2024-03-01",
+    "ac": 46,
+    "ao": 84,
+    "cc": 45.0,
+    "co": 86.0,
+    "qc": 45.0,
+    "qo": 86.0,
+    "model_available": true,
+    "note": "Остальные параметры — допущения. Календарь — только прошлые подтверждённые годы; при отсутствии истории 15 апреля / 25 мая — явно заданный исходный сценарий. Преобразование спутника в дорожные даты: прошлые годы [2019, 2023] / [2019, 2020, 2021, 2022, 2023].",
+    "sources": [
+      "https://gtrksakha.ru/news/2024/04/15/ledovaya-pereprava-yakutsk-nizhnij-bestyah-zakryta-dlya-avtomobilnogo-dvizheniya/",
+      "https://ysia.ru/otkrylas-paromnaya-pereprava-po-marshrutu-yakutsk-nizhnij-bestyah/"
+    ]
+  },
+  "model_scope": "physical satellite breakup; road conversion estimated on earlier verified years",
+  "economic_scope": "operator demand, tariffs, allocated capacities, warehouse and opening stock are assumptions",
+  "sha256": {
+    "okno/corridor.py": "10273cafde4e6e2628e680f1f6aad0348a27013f0c013c05f415571b67fc9a1b",
+    "okno/corridor_data.py": "56a597fcf09038ec12e22109c2dd67a41d263c5c0290413dd313c950f5f41fb8",
+    "src/model_window.py": "2e4f39144e968b8156c3f6135520ab365bf0789ba3aeaf1629a2121e6ebf7c9e",
+    "reports/window_forecasts_a3.csv": "0d5a8fde92d1a1eedca6525a3a7569e4e4da181bb0d169c17e7baddddee9a8ec",
+    "data/rosstat_prices/yakutsk_mchs_crossing_dates.csv": "a195bab215af6a71717bbbad111c3a8bb8fafb9924fac50093086a7cc485fc32"
+  }
+}

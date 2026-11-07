@@ -1,11 +1,13 @@
 {
-  "quantiles": [
-    0.1,
-    0.2,
-    0.5,
-    0.8,
-    0.9
-  ],
-  "c80_close_days": 3.352,
-  "c60_close_days": 1.82
+  "protocol": "expanding past-only; fixed March 10 evaluation",
+  "target": "satellite physical breakup",
+  "weather": "ERA5 reanalysis; nominal lag 5 days; not operational vintage archive",
+  "satellite_label_vintage": "Retrospective phenology product; historical publication of each label is not verified",
+  "train_max_year": 2024,
+  "physical_alpha_hypothesis": 1.8,
+  "calibration": "Only previous walk-forward March 10 residuals; no current/future targets",
+  "sources": {
+    "data/processed/yakutsk_sat_seasons.csv": "99f4716ee90c938b101f252ff2fca3b704f775a98f3336ddedcaac17edcbe098",
+    "data/weather/yakutsk_crossing.csv": "188144f07b55d0cbd33539afaec797017ba797c201193e488ec06bbe42bb56dd"
+  }
 }

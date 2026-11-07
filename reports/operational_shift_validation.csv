@@ -1,0 +1,8 @@
+hydro_year,phase,actual_date,converted_satellite_date,error_days,fit_years,status
+2020,open,2020-05-22,2020-05-22,0.0,2019,diagnostic conversion using observed satellite event; not a forecast
+2021,open,2021-05-26,2021-05-29,3.0,"2019,2020",diagnostic conversion using observed satellite event; not a forecast
+2022,open,2022-05-30,2022-05-29,1.0,"2019,2020,2021",diagnostic conversion using observed satellite event; not a forecast
+2023,close,2023-04-15,2023-04-21,6.0,2019,diagnostic conversion using observed satellite event; not a forecast
+2023,open,2023-05-26,2023-05-31,5.0,"2019,2020,2021,2022",diagnostic conversion using observed satellite event; not a forecast
+2024,close,2024-04-16,2024-04-05,11.0,"2019,2023",diagnostic conversion using observed satellite event; not a forecast
+2024,open,2024-05-24,2024-05-18,6.0,"2019,2020,2021,2022,2023",diagnostic conversion using observed satellite event; not a forecast

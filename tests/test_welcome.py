@@ -107,11 +107,14 @@ class WelcomeTests(unittest.TestCase):
             "Дорогой канал (авиа/СВП), ₽/т": 500000.0,
             "Хранение, ₽/т·нед": 149.80,
         }
-        for widget in app.number_input:
+        planner = next(tab for tab in app.tabs if tab.label == "Планировщик")
+        self.assertEqual({w.label for w in planner.number_input}, set(values))
+        for widget in planner.number_input:
             widget.set_value(values[widget.label])
         app.run()
         self.assertEqual([e.message for e in app.exception], [])
-        for widget in app.number_input:
+        planner = next(tab for tab in app.tabs if tab.label == "Планировщик")
+        for widget in planner.number_input:
             self.assertAlmostEqual(widget.value, values[widget.label])
             self.assertLessEqual(widget.min, widget.value)
             self.assertGreaterEqual(widget.max, widget.value)
