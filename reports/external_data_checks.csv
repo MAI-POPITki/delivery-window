@@ -29,3 +29,5 @@ northern_supply_volumes.csv,схема колонок п. 3.4 (объёмы),п�
 northern_supply_volumes.csv,объёмы завоза со ссылками https://,прошла,"строк: 13, невалидных ссылок: 0"
 ice_thickness_bulletins.csv,схема колонок п. 3.4 (толщина льда),прошла,"колонки: obs_date, hydro_year, river, location, point_id, ice_cm, norm_cm, tonnage_limit_t, source, published_date, comment"
 ice_thickness_bulletins.csv,замеры толщины льда после 2015 г. со ссылками https://,прошла,"замеров: 14, все после 2015: True, в пределах (0; 300] см: True"
+prices.csv,схема колонок цен хранения и ожидания,прошла,"колонки: item, value, unit, region, year, source, comment"
+prices.csv,"цены со ссылками https://, числовые значения, без дублей",прошла,"строк: 31, в ₽/т·сут: 23, плохих ссылок: 0, плохих чисел: 0, дублей: 0"

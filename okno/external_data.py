@@ -90,6 +90,8 @@ ICE_BULLETINS_COLS = (
     "comment",
 )
 
+PRICES_COLS = ("item", "value", "unit", "region", "year", "source", "comment")
+
 _POINT_ID_RE = re.compile(r"(?:^|[;\s,])point_id=([a-z0-9_]+)")
 
 
@@ -470,6 +472,22 @@ def validate_supporting_tables(external_dir: Path | None = None) -> tuple[list[d
                 len(idf) >= 8 and not bad_u and post_2015 and valid_cm,
                 f"замеров: {len(idf)}, все после 2015: {post_2015}, в пределах (0; 300] см: {valid_cm}")
             stats["ice_bulletins_rows"] = len(idf)
+
+    pr_path = base / "prices.csv"
+    if pr_path.exists():
+        p_hdr = _read_header(pr_path)
+        add("prices.csv", "схема колонок цен хранения и ожидания", p_hdr == PRICES_COLS, f"колонки: {', '.join(p_hdr)}")
+        if p_hdr == PRICES_COLS:
+            pdf = pd.read_csv(pr_path, dtype=str, keep_default_na=False)
+            bad_u = [s for s in pdf["source"] if not is_valid_https_url(s)]
+            num_re = re.compile(r"^\d+(\.\d+)?(-\d+(\.\d+)?)?$")
+            bad_v = [v for v in pdf["value"] if not num_re.match(v.strip())]
+            dups = int(pdf.duplicated(["item", "region", "year"]).sum())
+            storage = int(pdf["unit"].str.contains("т·сут").sum())
+            add("prices.csv", "цены со ссылками https://, числовые значения, без дублей",
+                not bad_u and not bad_v and dups == 0,
+                f"строк: {len(pdf)}, в ₽/т·сут: {storage}, плохих ссылок: {len(bad_u)}, плохих чисел: {len(bad_v)}, дублей: {dups}")
+            stats["prices_rows"] = len(pdf)
 
     return checks, stats
 
