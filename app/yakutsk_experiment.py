@@ -1,6 +1,8 @@
 """Reviewable scenario replay, separate from the ordinary weekly planner."""
 
-from dataclasses import asdict
+from dataclasses import asdict, replace
+import json
+import math
 from pathlib import Path
 
 import pandas as pd
@@ -26,11 +28,17 @@ def render_experiment():
     st.info("Сценарный эксперимент: ограничения движения и спутниковые наблюдения реальные; "
             "заказ, парк, оборот машин и расходы — согласованные допущения. "
             "Результат не является подтверждённой экономией перевозчика.")
+    volume = json.loads((INPUTS / f"{PREFIX}_volume.json").read_text(encoding="utf-8"))
+    season_total = st.number_input("Общий объём за сезон, т", .1, 10000000.,
+                                   float(volume["season_total_t"]), 1000., key="replay_season_total")
+    st.caption(f"{season_total:,.0f} т за сезон — допущение пользователя. Остаток на 16 марта неизвестен. ".replace(",", " ") +
+               "Остаток задаётся ниже отдельно; начальные 5 000 т относятся к прежней тестовой партии. "
+               "Распределение сезонного объёма между направлениями также неизвестно.")
     c1, c2, c3 = st.columns(3)
     values = {
-        "Q_t": c1.number_input("Остаток заказа, т", 0.1, 100000., 5000., 100., key="replay_Q"),
-        "base_trucks": c1.number_input("Основной парк, машин", 1, 100, 10, key="replay_base"),
-        "extra_trucks": c1.number_input("Дополнительный парк, машин", 0, 100, 5, key="replay_extra"),
+        "Q_t": c1.number_input("Остаток заказа, т", 0.1, 10000000., 5000., 100., key="replay_Q"),
+        "base_trucks": c1.number_input("Основной парк, машин", 1, 5000, 10, key="replay_base"),
+        "extra_trucks": c1.number_input("Дополнительный парк, машин", 0, 5000, 5, key="replay_extra"),
         "tare_t": c2.number_input("Масса пустой машины, т", 0., 39., 12., 1., key="replay_tare"),
         "max_payload_t": c2.number_input("Максимальная полезная загрузка, т", .1, 100., 28., 1., key="replay_payload"),
         "trips_per_workday": c2.number_input("Рейсов на машину за рабочий день", .1, 10., 1., .1, key="replay_trips"),
@@ -39,6 +47,9 @@ def render_experiment():
         "c_backup": c3.number_input("Резервная доставка и издержки, ₽/т", 1., 1000000., 20000., 100., key="replay_backup"),
         "c_hold_week": c3.number_input("Хранение, ₽/т·неделю", 0., 10000., 100., 10., key="replay_hold"),
     }
+    if values["Q_t"] > season_total:
+        st.error("Остаток заказа превышает общий сезонный объём. Уточните эти два значения.")
+        st.stop()
     st.caption("Работа: понедельник — пятница; рейс завершается в тот же рабочий день. "
                "Груз нужен к 16 апреля. Резерв приходит 26 мая (допущение). "
                "Хранение считается за календарные дни; ставка резерва включает его доставку и связанные издержки.")
@@ -56,6 +67,23 @@ def render_experiment():
                f"{min(s.max_payload_t, max(0, 30-s.tare_t)):g} / "
                f"{min(s.max_payload_t, max(0, 20-s.tare_t)):g} т. "
                f"Вместимость основного парка за весь период: {cap.base_capacity_t.sum():,.0f} т.")
+    maximum = cap.base_capacity_t.sum() + cap.extra_capacity_t.sum()
+    if s.Q_t > maximum + 1e-7:
+        st.warning(f"Даже полный парк за 16 марта — 15 апреля перевезёт максимум {maximum:,.0f} т; "
+                   f"не менее {s.Q_t-maximum:,.0f} т потребуют другого способа доставки. "
+                   "Продление срока после закрытия не добавляет рейсов по льду.")
+    with st.expander("Какой парк нужен для всего сезонного объёма?"):
+        st.write("Это условие: весь сезонный объём ещё нужно перевезти с 16 марта по 15 апреля. "
+                 "Фактический остаток неизвестен. Расчёт даёт минимум по объёму при полной загрузке; "
+                 "очереди на переправе, ремонт и ограничения смен здесь не учтены.")
+        rows = []
+        for name, days in (("Понедельник — пятница", (0,1,2,3,4)),
+                           ("Понедельник — суббота", (0,1,2,3,4,5))):
+            per_truck = capacity_table(replace(s, base_trucks=1, extra_trucks=0,
+                                               weekdays=days)).base_capacity_t.sum()
+            rows.append({"График": name, "Одна машина за период, т": per_truck,
+                         "Нужно машин без найма дополнительного парка": math.ceil(season_total/per_truck)})
+        st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch", key="replay_season_capacity")
     paths = [INPUTS / f"{PREFIX}_{name}.csv" for name in ("forecasts", "observations")]
     version = tuple(p.stat().st_mtime_ns for p in paths + [ROOT / "okno/yakutsk_replay.py"])
     with st.spinner("Пересчитываем отправки по дням…"):
@@ -123,6 +151,8 @@ def render_experiment():
         st.write("М1 предсказывает физическое вскрытие. Запас 21 сутки и переходы к ограничениям за 14/7 суток "
                  "до закрытия — гипотезы, проверенные отдельно в чувствительности отчёта.")
     schedules = pd.concat([r.schedule for r in results.values()], ignore_index=True)
+    schedules["season_total_t"] = season_total
+    schedules["remaining_on_start_t"] = s.Q_t
     st.download_button("Скачать графики текущего расчёта (CSV)", schedules.to_csv(index=False).encode("utf-8-sig"),
                        "yakutsk-spring-2026-schedules.csv", "text/csv", key="replay_download_schedule")
     report = ROOT / "reports/yakutsk_spring_2026.md"

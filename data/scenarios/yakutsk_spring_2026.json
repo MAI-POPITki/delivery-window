@@ -46,10 +46,21 @@
     "satellite": "https://planetarycomputer.microsoft.com/dataset/sentinel-1-rtc",
     "weather": "https://open-meteo.com/en/docs/historical-weather-api"
   },
+  "season_volume_assumption": {
+    "route": "Якутск — Нижний Бестях",
+    "hydro_year": 2026,
+    "season_total_t": 400000.0,
+    "value_status": "user_assumption",
+    "scope": "Общий объём за сезон 2025/26 на указанном направлении; не подтверждённая статистика и не остаток на 16 марта.",
+    "remaining_on_2026_03_16_t": null,
+    "direction_split": null,
+    "note": "Остаток на дату решения и распределение по направлениям неизвестны. Прежняя партия 5 000 т остаётся отдельным иллюстративным расчётом."
+  },
   "parameter_status": "Order, fleet, turnaround and economics are assumptions authorized by user; no operator savings claimed.",
   "input_and_code_sha256": {
     "data/scenarios/yakutsk_spring_2026_forecasts.csv": "cbb05436f36ea030be0a10e10b2f4c154cae8593f64a213cfeb8cd42f64b4a1e",
     "data/scenarios/yakutsk_spring_2026_observations.csv": "386d478e3922d9ee95a0990e0a6cd56dceb883119d608cd2119916cc67256705",
+    "data/scenarios/yakutsk_spring_2026_volume.json": "ef967d9bd18b39340d3407d254e1de4d05603d3f231024dfeb396c889ad18ba2",
     "okno/yakutsk_replay.py": "d0ad4e8080d5e9fe459aa29f54e8bbfcee2cd8f532e9c4fa88925a17daebd566",
     "scripts/prepare_yakutsk_replay.py": "a6183022dfbef10b6c8208f67a8586e750822ea4527ddec3be2117af8170381b"
   }

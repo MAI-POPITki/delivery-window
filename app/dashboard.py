@@ -202,7 +202,7 @@ def _leave_replay():
 
 
 st.sidebar.button("Эксперимент: весна 2026", key="activate_replay", on_click=_activate_replay,
-                  help="Условный заказ 5 000 т, реальные ограничения переправы, сравнение пяти способов завоза.")
+                  help="Общий объём за сезон и остаток на дату решения задаются отдельно; сравнение пяти способов завоза.")
 replay_active = st.session_state.get("replay_active", False)
 if replay_active:
     st.sidebar.caption("Открыт сценарный эксперимент весны 2026 года.")

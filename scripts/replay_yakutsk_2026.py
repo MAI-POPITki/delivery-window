@@ -7,6 +7,7 @@ No model is retrained or tuned on this scenario's outcome.
 from dataclasses import asdict, replace
 import hashlib
 import json
+import math
 from pathlib import Path
 import sys
 
@@ -88,6 +89,15 @@ def md_table(frame):
 
 def main():
     REPORTS.mkdir(exist_ok=True)
+    volume_assumption = json.loads((INPUTS/f'{PREFIX}_volume.json').read_text(encoding='utf-8'))
+    season_total = float(volume_assumption['season_total_t'])
+    fleet_rows = []
+    for name, weekdays in [('Пять рабочих дней', (0,1,2,3,4)),
+                           ('Шесть рабочих дней', (0,1,2,3,4,5))]:
+        per_truck = capacity_table(replace(Scenario(), base_trucks=1, extra_trucks=0,
+                                           weekdays=weekdays)).base_capacity_t.sum()
+        fleet_rows.append({'График': name, 'Одна машина за 16.03–15.04, т': per_truck,
+                           'Машин для всего сезонного объёма за этот период': math.ceil(season_total/per_truck)})
     results, summary = comparison()
     daily = pd.concat([r.schedule for r in results.values()],ignore_index=True)
     decisions = pd.concat([r.decisions for r in results.values()],ignore_index=True)
@@ -103,9 +113,11 @@ def main():
                         ('calendar_boundary', boundary)]:
         frame.to_csv(REPORTS/f'{PREFIX}_{name}.csv',index=False,float_format='%.8f')
     files = [INPUTS/f'{PREFIX}_forecasts.csv',INPUTS/f'{PREFIX}_observations.csv',
+             INPUTS/f'{PREFIX}_volume.json',
              ROOT/'okno/yakutsk_replay.py',ROOT/'scripts/prepare_yakutsk_replay.py']
     manifest={'scenario':asdict(Scenario()),'announced_schedule':asdict(ANNOUNCED),
               'actual_schedule_evaluation_only':asdict(ACTUAL),'sources':SOURCES,
+              'season_volume_assumption': volume_assumption,
               'parameter_status':'Order, fleet, turnaround and economics are assumptions authorized by user; no operator savings claimed.',
               'input_and_code_sha256':{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}}
     (INPUTS/f'{PREFIX}.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
@@ -137,11 +149,27 @@ def main():
     scene_table.columns=['Дата съёмки UTC','Первое доступное решение UTC','P(лёд)']
     lines=[
         '# Переправа Нижний Бестях → Якутск: сценарная проверка весны 2026', '',
+        f'Общий сезонный объём {fmt(season_total, 0)} т задан пользователем как допущение. '
+        'Экономическое сравнение ниже относится к прежней тестовой партии 5 000 т. '
+        'Реальный остаток на 16 марта неизвестен.', '',
         f'**При согласованных параметрах наш метод дороже адаптивного календаря на {extra_cost:,.2f} ₽ ({percent:.2f}%). '
         f'Оба доставляют все 5 000 т; наш план завершает завоз на {days} суток раньше.**'.replace(',',' '), '',
         'Это один сценарный ретроспективный эксперимент. Ограничения движения реальные; заказ, парк, оборот и расходы — '
         'допущения. Результат не является подтверждённой экономией или убытком реального оператора. Параметры не подбирались '
         'после расчёта для получения выигрыша.', '',
+        '## Сезонный объём и остаток', '',
+        f'**{fmt(season_total, 0)} т на направлении Якутск — Нижний Бестях за сезон 2025/26** '
+        '— пользовательское допущение, не подтверждённая статистика. Неизвестно, сколько перевезено '
+        'до 16 марта и как объём распределён между направлениями. Поэтому общий объём не подменяет '
+        'остаток заказа, а результаты партии 5 000 т не масштабируются автоматически на весь сезон.', '',
+        'Если условно весь сезонный объём ещё предстоит вывезти с 16 марта по 15 апреля, '
+        'при одном рейсе в рабочий день и полезной загрузке 28/18/8 т необходимый парк составит:', '',
+        md_table(pd.DataFrame(fleet_rows)), '',
+        'Это минимум по объёму при полной загрузке, без очередей, ремонта и ограничений смен; '
+        'он не подтверждает фактическую пропускную способность переправы. Десять машин за этот период '
+        'дают 4 440 т при пятидневке или 5 160 т при шестидневке. Продление срока после закрытия '
+        '15 апреля не добавляет перевозок по льду. Для плана на весь сезон нужны его начало, '
+        'изменения допустимой массы за зиму и фактическая производительность парка.', '',
         '## Входные данные', '',
         '- Начало: 16.03.2026; весь остаток 5 000 т доступен к перевозке с этого дня.',
         '- Основной парк: 10 машин; дополнительный: до 5. Тара: 12 т; технический максимум груза: 28 т.',
@@ -260,6 +288,7 @@ def main():
         '- [Полная чувствительность](yakutsk_spring_2026_sensitivity.csv)',
         '- [Проверка трактовки последнего планового дня](yakutsk_spring_2026_calendar_boundary.csv)',
         '- [Параметры, источники и контрольные суммы](../data/scenarios/yakutsk_spring_2026.json)',
+        '- [Допущение о сезонном объёме](../data/scenarios/yakutsk_spring_2026_volume.json)',
         '- [Происхождение погодных и спутниковых данных](../data/scenarios/yakutsk_spring_2026_provenance.json)', '',
         '## Источники фактических ограничений', '',
     ]

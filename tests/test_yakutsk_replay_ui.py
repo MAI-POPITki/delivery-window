@@ -24,6 +24,7 @@ class ReplayDashboardTests(unittest.TestCase):
         self.assertEqual(app.sidebar.selectbox(key='filter_season').value, 2026)
         self.assertEqual(app.sidebar.selectbox(key='filter_point').value, 'yakutsk_crossing')
         self.assertEqual(app.sidebar.date_input(key='filter_date').value, dt.date(2026,3,16))
+        self.assertEqual(app.number_input(key='replay_season_total').value, 400000.)
         self.assertEqual(app.number_input(key='replay_Q').value, 5000.)
         self.assertEqual(app.number_input(key='replay_base').value, 10)
         self.assertEqual(app.number_input(key='replay_extra').value, 5)
@@ -40,6 +41,27 @@ class ReplayDashboardTests(unittest.TestCase):
                            frame.loc['Календарь с пересчётом','По зимней дороге, т'])
         self.assertTrue(app.download_button(key='replay_download_schedule'))
         self.assertTrue(app.download_button(key='replay_download_report'))
+
+    def test_season_total_is_separate_and_large_remainders_and_fleets_are_supported(self):
+        app=self.open_replay()
+        self.assertEqual(app.number_input(key='replay_season_total').value, 400000.)
+        self.assertEqual(app.number_input(key='replay_Q').value, 5000.)
+        fleet=next(d.value for d in app.dataframe if 'Одна машина за период, т' in d.value.columns)
+        self.assertEqual(fleet['Одна машина за период, т'].tolist(), [444.,516.])
+        self.assertEqual(fleet['Нужно машин без найма дополнительного парка'].tolist(), [901,776])
+        app.number_input(key='replay_Q').set_value(400000.)
+        app.number_input(key='replay_extra').set_value(0)
+        app.run()
+        self.assertFalse(app.exception, [e.message for e in app.exception])
+        frame=self.summary(app)
+        for _, row in frame.iterrows():
+            self.assertAlmostEqual(row['По зимней дороге, т'], 4440.)
+            self.assertAlmostEqual(row['По зимней дороге, т']+row['Резерв, т'], 400000.)
+        self.assertTrue(app.warning)
+        app.number_input(key='replay_base').set_value(1000).run()
+        self.assertFalse(app.exception, [e.message for e in app.exception])
+        self.assertAlmostEqual(self.summary(app).loc['М1 + спутник + планировщик','По зимней дороге, т'],400000.)
+        self.assertEqual(app.number_input(key='replay_season_total').value,400000.)
 
     def test_can_leave_replay_and_change_region_and_season(self):
         app=self.open_replay()
