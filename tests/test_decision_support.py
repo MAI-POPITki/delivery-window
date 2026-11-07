@@ -14,6 +14,8 @@ class Decisions(unittest.TestCase):
         self.assertAlmostEqual(table.iloc[0].expected_cost_rub,direct.loc['economic_ml'].expected_cost_rub)
         self.assertTrue((table.expected_delivered_t+table.expected_backup_t-p.Q_t).abs().max()<1e-6)
         with self.assertRaises(ValueError): start_options(f,180,p,194,179)
+        for invalid in (float('nan'), float('inf')):
+            with self.assertRaises(ValueError): start_options(f,180,p,invalid,180)
         self.assertEqual(len(start_options(f,180,p,180,180)),1)
         sens=start_sensitivity(f,180,p,180,180,.3)
         self.assertTrue((sens.saving_rub==0).all())

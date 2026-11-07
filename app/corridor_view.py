@@ -162,7 +162,7 @@ def render_corridor():
         st.caption('Диагностика выбранного ниже сезона: одна мощность увеличивается на 10%, остальные условия и календарное правило отправок сохраняются. Это исторический модельный эксперимент, а не обещание доступности дополнительной техники.')
         from okno.bottlenecks import diagnose_corridor
         diagnostic = diagnose_corridor(cfg, c)
-        st.dataframe(diagnostic, hide_index=True, width='stretch')
+        st.dataframe(diagnostic.rename(columns={'Мощность':'Исходная мощность, т/сут', 'Проверяемая_мощность':'Проверяемая мощность, т/сут', 'Сокращение_ожидания_т_сут':'Сокращение ожидания, т·сут', 'Сокращение_остатка_т':'Сокращение остатка, т'}), hide_index=True, width='stretch')
         best = diagnostic.loc[diagnostic['Сокращение_ожидания_т_сут'].idxmax()]
         if best['Сокращение_ожидания_т_сут'] > 1e-7:
             st.write(f"Наибольшее сокращение ожидания в этом эксперименте: **{best['Участок']}**.")

@@ -1,10 +1,13 @@
 """Проверяемые варианты начала отправок при одном доступном прогнозе."""
 from dataclasses import replace
+import math
 import pandas as pd
 from okno.planner import compare_ml_weekly_plans
 
 
 def start_options(forecast, issue_day, params, planned_start, earliest_start):
+    if not all(math.isfinite(x) for x in (issue_day, params.start_day, planned_start, earliest_start)):
+        raise ValueError('Даты расчёта должны быть конечными числами')
     if earliest_start < max(issue_day, params.start_day) or planned_start < earliest_start:
         raise ValueError('Начало должно быть не раньше даты решения и начала сезона')
     rows = []
