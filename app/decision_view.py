@@ -5,7 +5,7 @@ from okno.decision_support import start_options, start_sensitivity
 from okno.ice import from_season_day
 
 
-def render_decisions(forecast, issue_day, p, hydro_year):
+def render_decisions(forecast, issue_day, p, hydro_year,availability=None):
     st.markdown('### Что изменить, чтобы успеть?')
     st.caption('Расчёт М3 для выбранного участка. Объём и мощности берутся из параметров ниже; это ввод пользователя, а не подтверждённые данные перевозчика. Разрешение на проезд проверяется отдельно.')
     floor = math.ceil(max(issue_day, p.start_day))
@@ -14,7 +14,7 @@ def render_decisions(forecast, issue_day, p, hydro_year):
     advance = b.number_input('На сколько дней реально можете приблизить начало?', 0, int(delay), min(7, int(delay)), key='decision_advance')
     planned, early = floor+delay, floor+delay-advance
     st.caption(f'Отсчёт от {from_season_day(floor, hydro_year):%d.%m.%Y}: не раньше даты решения и начала сезона. Более ранний проезд допустим только после подтверждения открытия пути.')
-    table = start_options(forecast, issue_day, p, planned, early)
+    table = start_options(forecast, issue_day, p, planned, early,availability=availability)
     view = table[['start_day', 'planned_road_t', 'expected_backup_t', 'expected_cost_rub']].copy()
     view['start_day'] = view.start_day.map(lambda d: from_season_day(d, hydro_year).date())
     view.columns = ['Начало отправок', 'План по зимнику, т', 'Ожидаемый остаток для резерва, т', 'Ожидаемые расходы, ₽']
@@ -22,7 +22,7 @@ def render_decisions(forecast, issue_day, p, hydro_year):
     st.caption('Одинаковый прогноз и тарифы во всех вариантах. Остаток для резерва не означает доставку к сроку: расписание резервного канала здесь не моделируется. Масса машины не меняется автоматически: для этого нужны число машин и время их оборота.')
     st.markdown('**Насколько устойчив результат?**')
     spread = st.slider('Изменение неизвестных тарифов, ±%', 0, 100, 30, key='decision_spread')
-    sensitivity = start_sensitivity(forecast, issue_day, p, planned, early, spread/100)
+    sensitivity = start_sensitivity(forecast, issue_day, p, planned, early, spread/100,availability=availability)
     low, high = -sensitivity.saving_rub.max(), -sensitivity.saving_rub.min()
     st.write(f'Изменение ожидаемых расходов при самом раннем старте: от {low:+,.0f} до {high:+,.0f} ₽ относительно исходного начала.')
     st.caption('Минус — расходы снижаются; плюс — растут. Диапазон относится только к проверенным вариантам тарифов.')
@@ -34,4 +34,4 @@ def render_decisions(forecast, issue_day, p, hydro_year):
     sensitivity['parameter'] = sensitivity.parameter.map({'c_hold_week':'Хранение','c_exp':'Резервный канал','c_extra':'Дополнительная техника'})
     sensitivity = sensitivity.rename(columns={'parameter':'Изменяемый тариф', 'factor':'Множитель тарифа', 'saving_rub':'Экономия раннего старта, ₽', 'backup_reduction_t':'Сокращение остатка для резерва, т'})
     st.download_button('Скачать проверку устойчивости', sensitivity.to_csv(index=False).encode('utf-8-sig'), 'decision-sensitivity.csv', key='decision_export')
-    st.info('Где ограничение всей доставки? Откройте раздел сквозного коридора А3: там проверяется цепочка ж/д → переправа → склад. Вывод по зимнику нельзя переносить на всю цепочку.')
+    st.info('Где ограничение всей доставки? В этой вкладке доступна историческая проверка сквозного коридора А3: ж/д → переправа → склад. Вывод по зимнику нельзя переносить на всю цепочку.')

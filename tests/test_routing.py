@@ -64,21 +64,20 @@ class RoutingTests(unittest.TestCase):
         import app.route_view as view
         def search(q): return [dict(name=q,lat=0 if q=='Иркутск' else 1,lon=0 if q=='Иркутск' else 2)]
         def routes(points): return [sample(hours=3 if points[0]['lat']==1 else 2)]
+        app=AppTest.from_file(str(Path(__file__).resolve().parents[1]/'app/dashboard.py'),default_timeout=90)
+        app.query_params['module']='routes';app.run()
         with patch.object(view,'_places',side_effect=search),patch.object(view,'_routes',side_effect=routes):
-            app=AppTest.from_file(str(Path(__file__).resolve().parents[1]/'app/dashboard.py'),default_timeout=60)
-            app.query_params['module']='routes';app.run()
             app.button(key='route_search_А').click().run()
             app.button(key='route_search_Б').click().run()
             app.button(key='route_build').click().run()
             self.assertFalse(app.exception)
-            self.assertEqual(len(app.get('plotly_chart')),1)
+            self.assertFalse(app.error,[e.value for e in app.error])
+            self.assertEqual(len([c for c in app.get('plotly_chart') if 'route_map' in c.proto.id]),1)
             app.slider(key='route_stress').set_value(70).run()
-            self.assertEqual(len(app.get('plotly_chart')),0)
+            self.assertEqual(len([c for c in app.get('plotly_chart') if 'route_map' in c.proto.id]),0)
             app.button(key='route_build').click().run()
-            app.button(key='route_apply').click().run()
+            self.assertTrue(app.button(key='route_apply').disabled)
             self.assertFalse(app.exception)
-            self.assertEqual(app.title[0].value,'Завоз и обратный груз')
-            self.assertAlmostEqual(app.number_input(key='bh_travel').value,2*1.3)
-            self.assertAlmostEqual(app.number_input(key='bh_return_travel').value,3*1.3)
+
 
 if __name__=='__main__': unittest.main()

@@ -46,6 +46,7 @@ class Route:
     turnaround_h: float = 1.
     return_distance_km: float | None = None
     return_travel_h: float | None = None
+    daily_mass_limits_t: tuple | None = None
 
     @property
     def back_km(self):
@@ -131,6 +132,10 @@ def validate_inputs(orders, vehicles, route):
         raise ValueError('Расстояние, время пути, предел массы и шаг должны быть положительными.')
     if not _numbers((route.back_km,route.back_h),positive=True):
         raise ValueError('Расстояние и время обратного пути должны быть положительными.')
+    if route.daily_mass_limits_t is not None:
+        if len(route.daily_mass_limits_t)<math.ceil(route.close_h/24) or any(
+            x is not None and not _numbers((x,),positive=True) for x in route.daily_mass_limits_t):
+            raise ValueError('Календарь допустимой массы должен покрывать весь горизонт; неизвестный день — None.')
     if not _numbers((route.open_h, route.close_h, route.turnaround_h)) or route.close_h <= route.open_h:
         raise ValueError('Закрытие должно быть позже открытия; времена не могут быть отрицательными.')
     if route.close_h > 24*60 or route.step_h < 1:
@@ -169,6 +174,8 @@ def make_trip(v, route, start, outward=None, backward=None):
             return None
         if v.tare_t + (order.tons if order else 0) > route.gross_limit_t + EPS:
             return None
+        if not calendar_allows(route,depart,arrive,v.tare_t+(order.tons if order else 0)):
+            return None
     if outward and done_out > outward.due_h+EPS:
         return None
     if backward and done_back > backward.due_h+EPS:
@@ -193,7 +200,7 @@ def candidates(orders, vehicles, route, paired):
         combinations += [(a, b) for a in outward for b in backward]
     result = []
     for v in vehicles:
-        for start in np.arange(0, route.close_h, route.step_h):
+        for start in np.arange(route.open_h, route.close_h, route.step_h):
             for a, b in combinations:
                 trip = make_trip(v, route, float(start), a, b)
                 if trip:
@@ -217,11 +224,14 @@ def audit_plan(trips, orders, vehicles, route):
         for o in (out, back):
             if o and (o.body != v.body or o.tons > v.capacity_t+EPS or o.tons+v.tare_t > route.gross_limit_t+EPS):
                 raise ValueError('Нарушены ограничения кузова или массы.')
-        if t.start_h < -EPS or abs(t.start_h/route.step_h-round(t.start_h/route.step_h)) > EPS:
+        slot=(t.start_h-route.open_h)/route.step_h
+        if t.start_h < route.open_h-EPS or abs(slot-round(slot)) > EPS:
             raise ValueError('Начало вне сетки отправок.')
         for dep, arr, duration in ((t.outward_depart_h,t.outward_arrive_h,route.travel_h),(t.backward_depart_h,t.backward_arrive_h,route.back_h)):
             if dep < route.open_h-EPS or arr > route.close_h+EPS or abs(arr-dep-duration)>EPS:
                 raise ValueError('Нарушено окно движения или время пути.')
+        if not calendar_allows(route,t.outward_depart_h,t.outward_arrive_h,v.tare_t+(out.tons if out else 0)) or not calendar_allows(route,t.backward_depart_h,t.backward_arrive_h,v.tare_t+(back.tons if back else 0)):
+            raise ValueError('Рейс нарушает датированный календарь ограничений.')
         if v.tare_t > route.gross_limit_t+EPS:
             raise ValueError('Пустая машина превышает ограничение.')
         out_done = t.outward_arrive_h+(out.unloading_h if out else 0)
@@ -303,6 +313,15 @@ def solve(orders, vehicles, route, *, paired=True, time_limit=20.):
 def compare(orders, vehicles, route):
     return {'separate':solve(orders,vehicles,route,paired=False),
             'combined':solve(orders,vehicles,route,paired=True)}
+
+
+def calendar_allows(route,depart,arrive,gross):
+    if route.daily_mass_limits_t is None: return True
+    for day in range(int(math.floor(depart/24)),max(int(math.floor(depart/24))+1,int(math.ceil((arrive-EPS)/24)))):
+        if day<0 or day>=len(route.daily_mass_limits_t): return False
+        limit=route.daily_mass_limits_t[day]
+        if limit is None or gross>limit+EPS: return False
+    return True
 
 
 def fixed_plan_sensitivity(plans, orders):

@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import streamlit as st
 
-from app.welcome import render_welcome, show_welcome, open_backhaul
+from app.welcome import render_welcome, show_welcome
 
 def _px(lat, lon, zoom):
     """Координаты в пикселях веб-меркатора при стартовом масштабе карты."""
@@ -89,21 +89,12 @@ LEGEND_HTML = '\n<style>.okno-legend{display:flex;flex-wrap:wrap;gap:8px;margin:
 
 st.set_page_config(page_title="Окно завоза", page_icon="🧊", layout="wide")
 
-if st.query_params.get("module") == "routes":
-    from app.route_view import render_routes
-    if st.button("← Вернуться к проекту", key="routes_return"):
-        del st.query_params["module"]
-        st.rerun()
-    render_routes()
-    st.stop()
-
-if st.query_params.get("module") == "backhaul":
-    from app.backhaul_view import render_backhaul
-    if st.button("← Вернуться к проекту", key="backhaul_return"):
-        del st.query_params["module"]
-        st.rerun()
-    render_backhaul()
-    st.stop()
+# Старые ссылки открывают общую рабочую вкладку, не отдельные страницы.
+_requested_plan = st.query_params.get("module") in ("routes", "backhaul", "journey")
+if _requested_plan and not st.session_state.get("journey_link_processed"):
+    st.session_state["dashboard_open"] = True
+    st.session_state["main_tab"] = "Маршрут и план завоза"
+    st.session_state["journey_link_processed"] = True
 
 # Главная страница не загружает данные и модели до перехода в дашборд.
 if not st.session_state.get("dashboard_open", False):
@@ -123,8 +114,8 @@ import plotly.graph_objects as go
 # модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
 _MODULE_NAMES = (
     "okno.paths", "okno.regions", "okno.report", "okno.ice", "okno.calib", "okno.features",
-    "okno.planner", "okno.decision_support", "app.decision_view", "okno.truck_load", "app.truck_load_view", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "okno.bottlenecks", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
-    "okno.yakutsk_replay", "app.yakutsk_experiment",
+    "okno.planner", "okno.decision_support", "app.decision_view", "okno.truck_load", "okno.backhaul", "okno.backhaul_io", "okno.routing", "okno.journey", "app.truck_load_view", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "okno.bottlenecks", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
+    "okno.yakutsk_replay", "app.yakutsk_experiment", "app.route_view", "app.backhaul_view", "app.journey_view",
 )
 _cached_modules = [sys.modules.get(name) for name in _MODULE_NAMES]
 _needs_reload = any(module is None or getattr(module, "_loaded_mtime_ns", None)
@@ -315,14 +306,13 @@ last = FC.last_weather_day(pid, hy)
 if last is not None and last < issue_day:
     st.sidebar.warning(f"Погода есть до {from_season_day(last, hy).date():%d.%m.%Y}: прогноз выпускается на эту дату.")
 
-st.button("Завоз и обратный груз — сравнить рейсы", key="dashboard_backhaul", on_click=open_backhaul)
+if st.session_state.get("main_tab") in ("Планировщик", "Рейтинг риска", "Сквозной коридор (А3)"):
+    st.session_state["main_tab"] = "Маршрут и план завоза"
 
 tabs = st.tabs([
     "Карта путей",
     "Карточка пути",
-    "Сквозной коридор (А3)",
-    "Планировщик",
-    "Рейтинг риска",
+    "Маршрут и план завоза",
     "До / после",
     "О данных",
 ], key="main_tab", on_change="rerun")
@@ -542,59 +532,14 @@ with tabs[1]:
             st.caption("Классификатор лёд/вода: точность 0,95 на годах вне обучения. Снимок примерно раз в 12 дней; "
                        "даты вскрытия по ряду снимков — с точностью ≈ 9 сут.")
 
-# ------------------------------------------------------------------ 3. сквозной коридор (А3)
+# ------------------------------------------------------------------ 4. единое рабочее место
 with tabs[2]:
     if _tab_open(2):
-        from app.corridor_view import render_corridor
-        render_corridor()
-
-# ------------------------------------------------------------------ 4. планировщик
-with tabs[3]:
-    from app.planner_view import render_planner
-    q = fc_cached(pid, hy, issue_day, "close")
-    P = render_planner(q, hy, issue_day, margin, label(pid))
-    from app.truck_load_view import render_truck_load
-    render_truck_load(pid, issue_date)
-    if q and 'error' not in q and np.isfinite(q.get('actual', np.nan)):
-        with st.expander('Прежний ретроспективный тест М3: календарь и пересчёт по прогнозу'):
-            st.caption('Отдельная проверка на фактическом закрытии. Здесь введённый объём считается заказом '
-                       'на начало сезона, отправки начинаются с января. Это не проверка двух текущих графиков '
-                       'для остатка на выбранную дату решения.')
-            cal_close = q['calendar'] - margin
-            path = fc_path(pid, hy, "close", tuple(range(150, 271, 7)))
-            res = [simulate_season(q["actual"] - margin, path[["issue_day", "q10", "q50", "q90"]] if rule == "forecast"
-                                   else None, cal_close, P, rule) for rule in ("calendar", "forecast")]
-            st.dataframe(pd.DataFrame(res).set_index("rule")[["share_delivered", "undelivered_t", "cost_rub_per_t"]]
-                         .rename(index={"calendar": "до (календарь)", "forecast": "после (прогноз)"},
-                                 columns={"share_delivered": "доля плана", "undelivered_t": "недовоз, т",
-                                          "cost_rub_per_t": "₽/т"}).round(2))
-
-# ------------------------------------------------------------------ 5. рейтинг риска
-with tabs[4]:
-    if _tab_open(4):
-        st.subheader(f"Рейтинг риска на {issue_date:%d.%m.%Y}")
-        st.caption("Ожидаемый недовоз = P(путь закроется до выполнения плана) × остаток плана. "
-                   "Сортировка — с каких путей начинать пересчёт графика.")
-        P0 = Params(close_margin_days=margin)
-        rows = []
-        for p in WEATHER_POINTS:
-            q = fc_cached(p, hy, max(issue_day, 150), "close")
-            if not q or "error" in q:
-                continue
-            need_weeks = P0.Q_t / P0.K_t_week
-            done_day = max(issue_day, P0.start_day) + 7 * need_weeks
-            p_early = p_by(q, done_day + margin)
-            rows.append({"путь": label(p), "закрытие (50%)": from_season_day(q["q50"] - margin, hy).date(),
-                         "диапазон 10–90%": f"{from_season_day(q['q10'] - margin, hy):%d.%m} – "
-                                            f"{from_season_day(q['q90'] - margin, hy):%d.%m}",
-                         "сдвиг к календарю, сут": round(q["q50"] - q["calendar"]),
-                         "P(закроется до конца плана)": round(p_early, 2),
-                         "ожидаемый недовоз, т": round(p_early * P0.Q_t * 0.5)})
-        if rows:
-            st.dataframe(pd.DataFrame(rows).sort_values("ожидаемый недовоз, т", ascending=False), width="stretch")
+        from app.journey_view import render_journey
+        render_journey(pid, hy, issue_date, issue_day, margin, WEATHER_POINTS, fc_cached)
 
     # ------------------------------------------------------------------ 6. до/после
-with tabs[5]:
+with tabs[3]:
     st.subheader("Бэктест на прошлых сезонах")
     for name, f in (("Сквозной коридор 4 звеньев: «До и После» (Кейс А3)", REPORTS / "corridor_before_after.md"),
                     ("Экономический планировщик: сравнение подходов", REPORTS / "economic_planner.md"),
@@ -611,7 +556,7 @@ with tabs[5]:
             st.info(f"Нет файла {f.name}: запустите python src/corridor_simulator.py и scripts/train_m1.py")
 
 # ------------------------------------------------------------------ 7. о данных
-with tabs[6]:
+with tabs[4]:
     _val_a3 = DOCS / "validation_report.md"
     if _val_a3.exists():
         st.markdown(_val_a3.read_text(encoding="utf-8"))

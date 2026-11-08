@@ -22,8 +22,7 @@ from app.welcome import PROJECT_PDF
 
 DASHBOARD = ROOT / "app" / "dashboard.py"
 UPLOADED_PDF_SHA256 = "49c9a37957633d593af31ff1b12c8faa31276c0528ba06b9cff3c30dd3ff6884"  # паспорт v4: проверка на реальных данных (одна версия с docs/project.pdf)
-DASHBOARD_TABS = ["Карта путей", "Карточка пути", "Сквозной коридор (А3)", "Планировщик",
-                  "Рейтинг риска", "До / после", "О данных"]
+DASHBOARD_TABS = ["Карта путей", "Карточка пути", "Маршрут и план завоза", "До / после", "О данных"]
 
 
 class WelcomeTests(unittest.TestCase):
@@ -41,7 +40,7 @@ class WelcomeTests(unittest.TestCase):
         with patch("okno.forecast.data_version", side_effect=AssertionError("Данные загружены до входа")) as data_version:
             app = self.new_app()
         self.assert_welcome(app)
-        self.assertEqual(len(app.button), 3)
+        self.assertEqual(len(app.button), 1)
         self.assertEqual(len(app.download_button), 1)
         data_version.assert_not_called()
 
@@ -99,6 +98,9 @@ class WelcomeTests(unittest.TestCase):
     def test_planner_accepts_small_order_and_fractional_parameters(self):
         app = self.new_app()
         app.button(key="open_dashboard").click().run()
+        app.session_state['main_tab']='Маршрут и план завоза'
+        app.run()
+        app.number_input(key='journey_m3_hours').set_value(168.).run()
         values = {
             "Осталось вывезти на дату решения, т": 45.0,
             "Своя техника, т/нед": 28.0,
@@ -108,13 +110,13 @@ class WelcomeTests(unittest.TestCase):
             "Дорогой канал (авиа/СВП), ₽/т": 500000.0,
             "Хранение, ₽/т·нед": 149.80,
         }
-        planner = next(tab for tab in app.tabs if tab.label == "Планировщик")
+        planner = next(tab for tab in app.tabs if tab.label == "Маршрут и план завоза")
         self.assertEqual({w.label for w in planner.number_input if str(w.key).startswith("planner_")}, set(values))
         for widget in (w for w in planner.number_input if str(w.key).startswith("planner_")):
             widget.set_value(values[widget.label])
         app.run()
         self.assertEqual([e.message for e in app.exception], [])
-        planner = next(tab for tab in app.tabs if tab.label == "Планировщик")
+        planner = next(tab for tab in app.tabs if tab.label == "Маршрут и план завоза")
         for widget in (w for w in planner.number_input if str(w.key).startswith("planner_")):
             self.assertAlmostEqual(widget.value, values[widget.label])
             self.assertLessEqual(widget.min, widget.value)
@@ -130,7 +132,7 @@ class WelcomeTests(unittest.TestCase):
         # the economic chart, while the ordinary window schedule stays intact.
         app.number_input(key='planner_backup_rate').set_value(10000.).run()
         self.assertFalse(app.exception, [e.message for e in app.exception])
-        planner = next(tab for tab in app.tabs if tab.label == 'Планировщик')
+        planner = next(tab for tab in app.tabs if tab.label == 'Маршрут и план завоза')
         after = next(d.value for d in planner.dataframe if 'Обычный ML: своя, т' in d.value.columns)
         self.assertEqual(after['Обычный ML: своя, т'].tolist(), before['Обычный ML: своя, т'].tolist())
         self.assertEqual((after['Экономический ML: своя, т']+after['Экономический ML: доп., т']).sum(), 0.)

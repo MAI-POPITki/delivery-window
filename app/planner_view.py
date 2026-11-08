@@ -7,34 +7,52 @@ from okno.ice import from_season_day
 from okno.planner import Params, compare_ml_weekly_plans
 
 
-def render_planner(forecast, hydro_year, issue_day, margin, point_name):
+def render_planner(forecast, hydro_year, issue_day, margin, point_name, *, transit_days=None,quantity_t=None,require_quantity=False,availability=None,start_day=None):
+    if require_quantity: st.session_state.pop('journey_m3_summary',None)
     st.subheader('Планировщик отправок (М3)')
     st.caption('Оба графика используют путь, сезон и дату решения из левой панели и параметры ниже. '
                'Цены и мощности — сценарные значения; результат показывает ожидаемые расходы.')
     decision_panel = st.container()
+    if quantity_t is not None and quantity_t>0:
+        st.session_state['planner_quantity']=float(quantity_t)
+        st.caption(f'Объём завоза взят из ваших заявок: {quantity_t:g} т. Для изменения объёма исправьте заявки выше.')
+    if transit_days is not None:
+        st.caption(f'Время рейса взято из выбранного маршрута: {transit_days*24:.1f} ч. Ограничения полной массы и возврат проверяются в рейсовом плане выше.')
     c1, c2, c3 = st.columns(3)
-    p = Params(Q_t=c1.number_input('Осталось вывезти на дату решения, т', 0.1, 100000.0, 12000.0, 1.0,
-                                   format='%.1f', key='planner_quantity'),
-        K_t_week=c1.number_input('Своя техника, т/нед', 0.1, 20000.0, 1000.0, 1.0,
+    p = Params(Q_t=c1.number_input('Осталось вывезти на дату решения, т', 0.1, 100000.0, quantity_t if quantity_t else None if require_quantity else 12000.0, 1.0,
+                                   format='%.1f', key='planner_quantity',disabled=quantity_t is not None and quantity_t>0),
+        K_t_week=c1.number_input('Своя техника, т/нед', 0.1, 20000.0, None if require_quantity else 1000.0, 1.0,
                                  format='%.1f', key='planner_capacity'),
-        K_extra_t_week=c1.number_input('Доп. техника максимум, т/нед', 0.0, 20000.0, 600.0, 1.0,
+        K_extra_t_week=c1.number_input('Доп. техника максимум, т/нед', 0.0, 20000.0, 0.0 if require_quantity else 600.0, 1.0,
                                        format='%.1f', key='planner_extra_capacity'),
-        c_road=c2.number_input('Зимник, ₽/т', 1000.0, 200000.0, 20000.0, 1000.0,
+        c_road=c2.number_input('Зимник, ₽/т', 1000.0, 200000.0, None if require_quantity else 20000.0, 1000.0,
                                format='%.2f', key='planner_road_rate'),
-        c_extra=c2.number_input('Надбавка за доп. технику, ₽/т', 0.0, 200000.0, 10000.0, 1000.0,
+        c_extra=c2.number_input('Надбавка за доп. технику, ₽/т', 0.0, 200000.0, 0.0 if require_quantity else 10000.0, 1000.0,
                                 format='%.2f', key='planner_extra_rate'),
-        c_exp=c3.number_input('Дорогой канал (авиа/СВП), ₽/т', 10000.0, 1000000.0, 120000.0, 5000.0,
+        c_exp=c3.number_input('Дорогой канал (авиа/СВП), ₽/т', 10000.0, 1000000.0, None if require_quantity else 120000.0, 5000.0,
                               format='%.2f', key='planner_backup_rate'),
-        c_hold_week=c3.number_input('Хранение, ₽/т·нед', 0.0, 10000.0, 400.0, 50.0,
+        c_hold_week=c3.number_input('Хранение, ₽/т·нед', 0.0, 10000.0, None if require_quantity else 400.0, 50.0,
                                     format='%.2f', key='planner_holding_rate'),
-        close_margin_days=margin)
+        close_margin_days=margin,transit_days=transit_days if transit_days is not None else 7,
+        start_day=start_day if start_day is not None else 150)
+    if p.Q_t is None:
+        st.info('Введите остаток заказа либо добавьте свои заявки в рейсовый план. Учебный объём не подставляется.')
+        return p
+    if any(x is None for x in (p.K_t_week,p.c_road,p.c_exp,p.c_hold_week)):
+        st.info('Введите мощности и свои тарифы. Действующие ставки для произвольного зимника не выводятся из тарифов парома.')
+        return p
     if not forecast or 'error' in forecast:
         st.info('Нет прогноза закрытия для этой точки.')
         return p
     from app.decision_view import render_decisions
     with decision_panel:
-        render_decisions(forecast, issue_day, p, hydro_year)
-    weekly, summary = compare_ml_weekly_plans(forecast, issue_day, p)
+        render_decisions(forecast, issue_day, p, hydro_year,availability=availability)
+    weekly, summary = compare_ml_weekly_plans(forecast, issue_day, p,availability=availability)
+    if require_quantity: st.session_state['journey_m3_summary']=summary.copy()
+    if availability is not None:
+        st.caption('Оба плана и рекомендации изменения старта исключают недели, для которых реестр не подтверждает массу или сообщает закрытие. '
+                   'Неизвестные дни не считаются открытыми. Это может оставить весь груз для резервного канала.')
+        st.caption('Остаток при недостатке сведений означает необходимость уточнить допуск или обеспечить резерв, а не доказанный фактический недовоз.')
     names = {'ml':'Обычный ML', 'economic_ml':'Экономический ML'}
     st.write(f'**{point_name} · дата решения {from_season_day(issue_day, hydro_year):%d.%m.%Y}**')
     st.caption(f"Прогноз выпущен {from_season_day(forecast.get('issue_day', issue_day), hydro_year):%d.%m.%Y}. "

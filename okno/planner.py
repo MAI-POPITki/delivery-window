@@ -131,7 +131,7 @@ def expected_plan_cost(weeks, base, extra, p_closed, p: Params, reference_day):
         backup_cost_rub=backup_cost, expected_cost_rub=road_cost+extra_cost+holding_cost+backup_cost)
 
 
-def compare_ml_weekly_plans(forecast, issue_day, p: Params, *, end_day=300):
+def compare_ml_weekly_plans(forecast, issue_day, p: Params, *, end_day=300,availability=None):
     """Plan the remaining order using only the forecast issued by decision day.
 
     Ordinary ML spreads the order over its median closing window. Economic ML
@@ -157,13 +157,22 @@ def compare_ml_weekly_plans(forecast, issue_day, p: Params, *, end_day=300):
     # A future planned start is not an observation that the road will be open.
     p_closed = np.array([(scenarios < w+p.transit_days).mean() for w in weeks])
     reference_day = calendar - p.close_margin_days + 14
-    normal = ml_window_plan(weeks, q50-p.close_margin_days, p)
-    economic = plan_week_volumes(weeks, p_closed, p.Q_t, p, reference_day)
+    allowed=np.ones(len(weeks),dtype=bool) if availability is None else np.asarray(
+        availability(weeks,weeks+p.transit_days) if callable(availability) else availability,dtype=bool)
+    if allowed.shape!=weeks.shape:
+        raise ValueError('Календарь должен соответствовать неделям плана')
+    def expand(pair):
+        result=[]
+        for values in pair:
+            full=np.zeros(len(weeks));full[allowed]=values;result.append(full)
+        return tuple(result)
+    normal = expand(ml_window_plan(weeks[allowed], q50-p.close_margin_days, p))
+    economic = expand(plan_week_volumes(weeks[allowed], p_closed[allowed], p.Q_t, p, reference_day))
     rows, summaries = [], []
     for rule, (base, extra) in (('ml', normal), ('economic_ml', economic)):
         rows.append(pd.DataFrame(dict(rule=rule, week=np.arange(1, len(weeks)+1),
             dispatch_day=weeks, arrival_day=weeks+p.transit_days, base_t=base, extra_t=extra,
-            shipped_t=base+extra, p_closed=p_closed,
+            shipped_t=base+extra, p_closed=p_closed,allowed_by_calendar=allowed,
             expected_delivered_t=(base+extra)*(1-p_closed), at_risk_t=(base+extra)*p_closed)))
         summaries.append(dict(rule=rule, **expected_plan_cost(weeks, base, extra, p_closed, p, reference_day)))
     return pd.concat(rows, ignore_index=True), pd.DataFrame(summaries).set_index('rule')

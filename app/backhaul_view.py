@@ -11,47 +11,63 @@ import streamlit as st
 
 from okno.backhaul import Route, compare, fixed_plan_sensitivity, validate_inputs
 from okno.backhaul_io import example_frames, parse_frames, schedule_frame, report_payload
+from okno.journey import route_calendar
 
 
 def _csv(frame):
     return frame.to_csv(index=False).encode('utf-8-sig')
 
 
-def render_backhaul():
-    st.title('Завоз и обратный груз')
+def render_backhaul(context=None):
+    context=context or {}
+    integrated=bool(context)
+    st.subheader('2. Грузы, машины и обратная загрузка')
     st.write('Проверьте, можно ли выполнить завоз и вывоз одними машинами, сократить пустой пробег и расходы.')
     st.caption('Один маршрут А — Б, все машины базируются в А. Сравниваем одни и те же заявки, сроки и парк. '
                'Каждый рейс включает возвращение в А. Расчёт не требует нейросети.')
-    st.warning('Начальные значения — учебный пример. Реальных заявок на обратный груз в проекте пока нет. '
+    if not integrated: st.warning('Начальные значения — учебный пример. Реальных заявок на обратный груз в проекте пока нет. '
                'Для своего расчёта замените таблицы и параметры; программа не проверяет достоверность введённых источников.')
     calculate_slot=st.container()
     result_slot=st.container()
-    if st.button('Построить маршрут по дорогам',key='bh_open_route'):
+    if not integrated and st.button('Построить маршрут по дорогам',key='bh_open_route'):
         st.query_params['module']='routes'; st.rerun()
     if st.session_state.get('bh_route_import_note'):
         st.info(st.session_state['bh_route_import_note'])
+    if integrated and not context.get('selected_route'):
+        st.info('Сначала постройте и выберите маршрут в разделе выше. Рейсы будут использовать его расстояние и время.'); return
     c1,c2,c3=st.columns(3)
-    a=c1.text_input('Точка А — база', 'Терминал А',key='bh_a')
-    b=c2.text_input('Точка Б — получатель завоза', 'Терминал Б',key='bh_b')
-    base=c3.date_input('Дата решения, время 00:00',dt.date(2026,3,1),key='bh_date')
+    a=c1.text_input('Точка А — база', 'Терминал А',key='bh_a',disabled=integrated)
+    b=c2.text_input('Точка Б — получатель завоза', 'Терминал Б',key='bh_b',disabled=integrated)
+    base=context['issue_date'] if integrated else c3.date_input('Дата решения, время 00:00',dt.date(2026,3,1),key='bh_date')
+    if integrated: c3.caption(f'Общая дата решения: {base:%d.%m.%Y}')
     st.caption('Все даты и часы — в одном выбранном местном времени. Дата и путь из боковой панели М1 здесь не используются.')
     with st.expander('Маршрут, транспортное окно и источник параметров',expanded=True):
         left,right=st.columns(2)
-        distance=left.number_input('Расстояние А → Б, км',0.01,None,300.,key='bh_distance')
-        travel=left.number_input('Время движения А → Б, ч',0.01,None,8.,0.5,key='bh_travel')
-        back_distance=left.number_input('Расстояние Б → А, км',0.01,None,300.,key='bh_return_distance')
-        back_travel=left.number_input('Время движения Б → А, ч',0.01,None,8.,0.5,key='bh_return_travel')
+        distance=left.number_input('Расстояние А → Б, км',0.01,None,300.,key='bh_distance',disabled=integrated)
+        travel=left.number_input('Время движения А → Б, ч',0.01,None,8.,0.5,key='bh_travel',disabled=integrated)
+        back_distance=left.number_input('Расстояние Б → А, км',0.01,None,300.,key='bh_return_distance',disabled=integrated)
+        back_travel=left.number_input('Время движения Б → А, ч',0.01,None,8.,0.5,key='bh_return_travel',disabled=integrated)
         turnaround=left.number_input('Подготовка машины к следующему рейсу, ч',0.,72.,1.,0.5,key='bh_turn')
         step=left.selectbox('Шаг начала рейсов, ч',[24,12,6],key='bh_step')
-        opened=right.date_input('Движение разрешено с 00:00',base,min_value=base,key='bh_open')
-        closed=right.date_input('Движение закрывается в 00:00',base+dt.timedelta(days=4),min_value=base,key='bh_close')
-        limit=right.number_input('Допустимая полная масса, т',0.1,200.,20.,0.1,key='bh_limit')
+        opened=base if integrated else right.date_input('Движение разрешено с 00:00',base,min_value=base,key='bh_open')
+        closed=base+dt.timedelta(days=60) if integrated else right.date_input('Движение закрывается в 00:00',base+dt.timedelta(days=4),min_value=base,key='bh_close')
+        calendar=None
+        if integrated:
+            calendar,sources=route_calendar(context['events'],context['road'],context['issue_date'],base,60,context['gross_t'])
+            limit=max((x for x in calendar if x is not None),default=context['gross_t'])
+            right.write('Календарь и полная масса — по записям реестра для выбранной дороги. Неизвестные дни исключаются из рейсов.')
+            right.caption('Реестр имеет дневную точность: при неизвестном часе день закрытия исключается целиком.')
+            for link in sources: right.markdown(f'[Источник календаря]({link})')
+        else: limit=right.number_input('Допустимая полная масса, т',0.1,200.,20.,0.1,key='bh_limit')
         source=st.text_input('Откуда взяты расстояние, время, окно и ограничение массы?',
-                             'Учебные значения; разрешение на движение не подтверждено',key='bh_source')
+                             'Календарь road_events.csv и выбранный маршрут OSM; источники приведены выше' if integrated else 'Учебные значения; разрешение на движение не подтверждено',key='bh_source')
         st.caption('Окно должно быть известно на дату решения. По нему проверяется весь путь туда и обратно. '
                    'Прогноз льда не заменяет разрешение проезда. Время движения задавайте с учётом отдыха и остановок. '
                    'Расстояния можно ввести вручную или передать из построителя маршрутов.')
     demo_orders,demo_vehicles=example_frames(base)
+    if integrated:
+        demo_orders=st.session_state.get('journey_order_frame',demo_orders.iloc[:0]).copy()
+        demo_vehicles=st.session_state.get('journey_vehicle_frame',demo_vehicles.iloc[:0]).copy()
     st.subheader('Заявки и доступные машины')
     st.caption('Заявка — одна неделимая партия. Тип кузова в заявке и у машины должен совпадать. '
                'Готовность — начало возможной погрузки, срок — окончание разгрузки. До 12 заявок и 4 машин.')
@@ -73,19 +89,39 @@ def render_backhaul():
     st.caption('Ставка движения — собственные расходы на километр, а не цена продажи перевозки. '
                'Стоимость часа покрывает занятость, включая ожидание и обработку. Не учитывайте одну затрату дважды.')
     vehicle_frame=st.data_editor(vehicle_input,num_rows='dynamic',hide_index=True,width='stretch',key='bh_vehicles_'+vehicle_key)
+    if integrated:
+        st.session_state['journey_order_frame']=order_frame.copy()
+        st.session_state['journey_vehicle_frame']=vehicle_frame.copy()
     st.caption('При смене груза оператор должен подтвердить совместимость и нужную обработку кузова. '
                'Модель проверяет массу и указанный тип кузова; габариты, осевые нагрузки и специальные требования отдельно не рассчитывает.')
     metadata={'point_a':a,'point_b':b,'route_source':source,
               'order_sources':order_frame.get('Источник',pd.Series(dtype=str)).astype(str).tolist(),
               'vehicle_sources':vehicle_frame.get('Источник',pd.Series(dtype=str)).astype(str).tolist(),
-              'evidence':'Пользовательский сценарий; фактическая экономия не подтверждена'}
+              'evidence':'Пользовательские заявки, календарь реестра проекта' if integrated else 'Пользовательский сценарий; фактическая экономия не подтверждена'}
+    if integrated:
+        metadata.update(point_id=context['pid'],road=context['road'],decision_date=str(context['issue_date']),
+                        registry_version=context.get('version'),calendar_sources=sources,
+                        forecast_is_not_permission=True)
+    if integrated and (order_frame.empty or vehicle_frame.empty):
+        st.session_state.pop('journey_orders_summary',None)
+        st.info('Добавьте свои заявки и машины в таблицы или загрузите CSV. Учебные заказы не подставляются.'); return
     try:
         if not source.strip() or not a.strip() or not b.strip() or a.strip()==b.strip():
             raise ValueError('Укажите разные точки А и Б и источник параметров.')
         orders,vehicles=parse_frames(order_frame,vehicle_frame,base)
-        route=Route(distance,travel,(opened-base).days*24,(closed-base).days*24,limit,float(step),turnaround,back_distance,back_travel)
+        earliest=max(0.,(pd.Timestamp(context['selected_route']['departure'])-pd.Timestamp(base)).total_seconds()/3600) if integrated else (opened-base).days*24
+        route=Route(distance,travel,earliest,(closed-base).days*24,limit,float(step),turnaround,back_distance,back_travel,
+                    tuple(calendar) if calendar is not None else None)
         validate_inputs(orders,vehicles,route)
+        if integrated:
+            max_gross=max((v.tare_t+o.tons for v in vehicles for o in orders if v.body==o.body and o.tons<=v.capacity_t),default=context['gross_t'])
+            st.session_state['journey_orders_summary']=dict(out_t=sum(o.tons for o in orders if o.direction=='out'),
+                back_t=sum(o.tons for o in orders if o.direction=='back'),orders=len(orders),vehicles=len(vehicles),max_gross_t=max_gross,
+                max_out_handling_h=max((o.loading_h+o.unloading_h for o in orders if o.direction=='out'),default=0))
+            if max_gross>context['gross_t']+.01:
+                st.warning(f'По заявкам возможна полная масса до {max_gross:g} т. Сравнение маршрутов выше выполнено для {context["gross_t"]:g} т — обновите общую массу и пересчитайте маршрут. В рейсовом плане каждая фактическая масса проверяется отдельно.')
     except (ValueError,TypeError) as error:
+        if integrated: st.session_state.pop('journey_orders_summary',None)
         st.error(str(error))
         return
     signature=json.dumps(dict(route=asdict(route),orders=[asdict(o) for o in orders],
