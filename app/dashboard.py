@@ -346,7 +346,7 @@ with tabs[0]:
         txt = f"<b>{label(p)}</b><br>P(открыт через {horizon} дн.) = " + ("н/д" if np.isnan(p_ok) else f"{p_ok:.0%}")
         if qc and "error" not in qc:
             txt += f"<br>Таяние (М1, 50%): {qc['q50_date']:%d.%m}, диапазон {qc['q10_date']:%d.%m}–{qc['q90_date']:%d.%m}"
-        rows.append({"lat": meta["lat"], "lon": meta["lon"], "color": color, "txt": txt, "p_ok": p_ok})
+        rows.append({"lat": meta["lat"], "lon": meta["lon"], "color": color, "txt": txt, "p_ok": p_ok, "pid": p})
     pts = pd.DataFrame(rows)
     if len(pts):
         def _short(p):
@@ -411,12 +411,12 @@ with tabs[0]:
     na = pts[pts.p_ok.isna()] if len(pts) else pts
     if len(na):
         fmap.add_trace(go.Scattermap(lat=na.lat, lon=na.lon, mode="markers", hovertext=na.txt, hoverinfo="text",
-                                     marker=dict(size=15, color="#9e9e9e"), name="🚚 путь: нет данных"))
+                                     customdata=na[["pid"]], marker=dict(size=15, color="#9e9e9e"), name="🚚 путь: нет данных"))
     if len(ok):
         fmap.add_trace(go.Scattermap(lat=ok.lat, lon=ok.lon, mode="markers", hoverinfo="skip", showlegend=False,
                                      marker=dict(size=24, color="#ffffff")))
         fmap.add_trace(go.Scattermap(
-            lat=ok.lat, lon=ok.lon, mode="markers", hovertext=ok.txt, hoverinfo="text", name="🚚 пути: прогноз",
+            lat=ok.lat, lon=ok.lon, customdata=ok[["pid"]], mode="markers", hovertext=ok.txt, hoverinfo="text", name="🚚 пути: прогноз",
             marker=dict(size=19, color=ok.p_ok, cmin=0, cmax=1, colorscale="RdYlGn",
                         colorbar=dict(title=dict(text="P(путь открыт<br>через N дн.)", font=dict(size=11, color="#17212b")),
                                       tickfont=dict(color="#17212b"), tickformat=".0%", thickness=12, len=0.55, x=0.99, xanchor="right", y=0.5,
@@ -435,7 +435,7 @@ with tabs[0]:
                 _obst += [(x - 8, y - 8, x + 8, y + 8), (x + 8, y - 8, x + 8 + 7 * len(t), y + 8)]
         _lab = place_labels(pts, _z, _obst)
         for where, g in _lab.groupby("textpos"):
-            fmap.add_trace(go.Scattermap(lat=g.lat, lon=g.lon, mode="markers+text", text=g.label_txt, textposition=where,
+            fmap.add_trace(go.Scattermap(lat=g.lat, lon=g.lon, mode="markers+text", customdata=g[["pid"]], text=g.label_txt, textposition=where,
                                          marker=dict(size=26, color="rgba(0,0,0,0)"),  # прозрачная точка задаёт отступ
                                          textfont=dict(size=13, color="#14243a", weight="bold"),
                                          hoverinfo="skip", showlegend=False))
@@ -444,7 +444,33 @@ with tabs[0]:
                        margin=dict(l=0, r=0, t=0, b=0), height=600, showlegend=True,
                        legend=dict(x=0.01, y=0.99, bgcolor="rgba(255,255,255,0.9)", font=dict(size=12, color="#222"),
                                    bordercolor="rgba(0,0,0,0.15)", borderwidth=1))
-    st.plotly_chart(fmap, width="stretch", config={"scrollZoom": True, "displaylogo": False})
+    from okno.journey import seasonal_segment
+    _segment = seasonal_segment(pid)
+    if _segment:
+        _coords = _segment['coordinates']
+        fmap.add_trace(go.Scattermap(lon=[x[0] for x in _coords],lat=[x[1] for x in _coords],
+            mode='lines+markers',line=dict(width=5,color='#28768e'),marker=dict(size=4),
+            customdata=[[pid] for _ in _coords],name='Выбранный сезонный участок',
+            hovertext=_segment['road'],hoverinfo='text'))
+    def _select_map_path():
+        event=st.session_state.get('paths_map',{})
+        for point in event.get('selection',{}).get('points',[]):
+            data=point.get('customdata')
+            if data and data[0] in WEATHER_POINTS:
+                st.session_state['filter_point']=data[0]
+                break
+    st.plotly_chart(fmap, width="stretch", key='paths_map', on_select=_select_map_path,
+                    selection_mode='points', config={"scrollZoom": True, "displaylogo": False})
+    st.caption('Выберите отмеченную точку на карте — её карточка и планирование откроются ниже. '
+               'Толстая линия показывает явно привязанный сезонный участок; фоновые зимники не являются подтверждёнными маршрутами.')
+    _map_choice_key='map_path_choice_'+pid
+    def _select_map_list():
+        st.session_state['filter_point']=st.session_state[_map_choice_key]
+    st.selectbox('Путь для планирования на карте',WEATHER_POINTS,index=WEATHER_POINTS.index(pid),
+                 format_func=label,key=_map_choice_key,on_change=_select_map_list)
+    if _tab_open(0):
+        from app.journey_view import render_journey
+        render_journey(pid, hy, issue_date, issue_day, margin, WEATHER_POINTS, fc_cached)
     st.caption(f"Прогноз выпущен на {issue_date:%d.%m.%Y}; вероятность — на "
                f"{(issue_date + dt.timedelta(days=horizon)):%d.%m.%Y}. Состояние Лены — на дату последнего снимка "
                "в каждой точке (подписано рядом с точкой).")

@@ -60,24 +60,16 @@ class RoutingTests(unittest.TestCase):
         self.assertEqual(plans['separate'].summary(orders)['total_km'],1400)
         for p in plans.values(): audit_plan(p.trips,orders,cars,route)
 
-    def test_browser_flow_and_stale_results(self):
+    def test_unlinked_route_is_not_requested(self):
         import app.route_view as view
-        def search(q): return [dict(name=q,lat=0 if q=='Иркутск' else 1,lon=0 if q=='Иркутск' else 2)]
-        def routes(points): return [sample(hours=3 if points[0]['lat']==1 else 2)]
         app=AppTest.from_file(str(Path(__file__).resolve().parents[1]/'app/dashboard.py'),default_timeout=90)
         app.query_params['module']='routes';app.run()
-        with patch.object(view,'_places',side_effect=search),patch.object(view,'_routes',side_effect=routes):
-            app.button(key='route_search_А').click().run()
-            app.button(key='route_search_Б').click().run()
-            app.button(key='route_build').click().run()
+        with patch.object(view,'_routes') as fetch:
+            app.run()
             self.assertFalse(app.exception)
-            self.assertFalse(app.error,[e.value for e in app.error])
-            self.assertEqual(len([c for c in app.get('plotly_chart') if 'route_map' in c.proto.id]),1)
-            app.slider(key='route_stress').set_value(70).run()
-            self.assertEqual(len([c for c in app.get('plotly_chart') if 'route_map' in c.proto.id]),0)
-            app.button(key='route_build').click().run()
-            self.assertTrue(app.button(key='route_apply').disabled)
-            self.assertFalse(app.exception)
+            self.assertNotIn('route_build',[b.key for b in app.button])
+            fetch.assert_not_called()
+            self.assertTrue(any('Построение маршрута отключено' in x.value for x in app.info))
 
 
 if __name__=='__main__': unittest.main()

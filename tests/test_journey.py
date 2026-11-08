@@ -112,6 +112,18 @@ class JourneyUITests(unittest.TestCase):
         self.assertEqual(len(app.tabs),0)
         self.assertEqual([b.key for b in app.button],['open_dashboard'])
 
+    def test_planning_is_available_on_paths_map(self):
+        app=AppTest.from_file(str(ROOT/'app/dashboard.py'),default_timeout=90)
+        app.query_params['module']='journey';app.run()
+        app.button(key='journey_archive').click().run()
+        app.session_state['main_tab']='Карта путей'
+        app.run()
+        self.assertFalse(app.exception)
+        self.assertIn('route_build',[x.key for x in app.button])
+        self.assertEqual(app.selectbox(key='map_path_choice_yakutsk_crossing').value,'yakutsk_crossing')
+        charts=[x for x in app.get('plotly_chart') if 'paths_map' in x.proto.id]
+        self.assertEqual(len(charts),1)
+
     def test_selected_seasonal_route_connects_to_empty_orders_and_m3(self):
         app=self.app()
         import app.route_view as view

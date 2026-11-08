@@ -22,13 +22,18 @@ def render_routes(context=None):
     context=context or {}
     integrated=bool(context)
     st.subheader('1. Маршрут и условия проезда')
-    st.write('Постройте варианты по дорогам, сравните запас времени и исключите известные препятствия.')
+    st.write('Постройте путь через сезонный участок выбранной точки карты. Допуск и прогноз берутся из его карточки.')
     if not integrated:
         st.info('Откройте рабочую вкладку «Маршрут и план завоза», чтобы использовать карточки путей.')
     segment=context.get('segment')
-    seasonal=False;speed=None
+    if not segment:
+        st.session_state.pop('journey_selected',None)
+        st.session_state.pop('route_result',None)
+        st.info('Для выбранной точки пока не сопоставлены геометрия сезонного пути и реестр дороги. Построение маршрута отключено. Выберите на карте переправу Якутск — Нижний Бестях с явной привязкой. Обычные дорожные варианты без данных проекта не запрашиваются.')
+        return
+    seasonal=True;speed=None
     if segment:
-        seasonal=st.checkbox('Добавить сезонный вариант через '+segment['road'],value=True,key='route_seasonal')
+        st.write('Сезонный участок: **'+segment['road']+'**')
         speed=st.number_input('Скорость на сезонном участке по данным перевозчика, км/ч',1.,60.,value=None,key='route_seasonal_speed')
         st.caption('Трасса — из карты зимников проекта. Время на ней рассчитывается по вашей скорости; допуск и закрытие — из реестра, прогноз — из карточки пути.')
     results_slot=st.container()
@@ -102,10 +107,7 @@ def render_routes(context=None):
         with st.spinner('Ищу дорожные варианты туда и обратно…'):
             try:
                 routes=[];errors=[];reverse=None
-                try:
-                    routes=_routes(points)
-                    reverse=_routes(list(reversed(points)))[0]
-                except ValueError as e: errors.append(str(e))
+                # OSRM нужен только для подъездов к явно привязанному сезонному участку.
                 if seasonal:
                     if speed is None: raise ValueError('Укажите рабочую скорость на сезонном участке. Учебное значение не подставляется.')
                     try:
@@ -155,7 +157,7 @@ def render_routes(context=None):
             if eligible[0]['assessment']['late_scenarios']:
                 st.warning('Даже предпочтительный вариант не укладывается в срок в части заданных сценариев. Увеличьте запас времени или измените путь.')
         if len(ranked)==1:
-            st.caption('Сервис нашёл только один вариант. Чтобы исследовать другой путь, задайте промежуточные точки.')
+            st.caption('Показан путь через выбранный сезонный участок. Другие сезонные альтернативы не добавляются без явной привязки к данным проекта.')
         selected=st.selectbox('Вариант для просмотра',range(len(ranked)),format_func=lambda i:f"Вариант {ranked[i]['route']['id']}",key='route_selected')
         item=ranked[selected]; route=item['route']; assessment=item['assessment']
         reverse=route.get('reverse') or reverse
