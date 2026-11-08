@@ -60,16 +60,6 @@ class RoutingTests(unittest.TestCase):
         self.assertEqual(plans['separate'].summary(orders)['total_km'],1400)
         for p in plans.values(): audit_plan(p.trips,orders,cars,route)
 
-    def test_unlinked_route_is_not_requested(self):
-        import app.route_view as view
-        app=AppTest.from_file(str(Path(__file__).resolve().parents[1]/'app/dashboard.py'),default_timeout=90)
-        app.query_params['module']='routes';app.run()
-        with patch.object(view,'_routes') as fetch:
-            app.run()
-            self.assertFalse(app.exception)
-            self.assertNotIn('route_build',[b.key for b in app.button])
-            fetch.assert_not_called()
-            self.assertTrue(any('Построение маршрута отключено' in x.value for x in app.info))
 
 
 if __name__=='__main__': unittest.main()

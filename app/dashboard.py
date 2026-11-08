@@ -93,7 +93,7 @@ st.set_page_config(page_title="Окно завоза", page_icon="🧊", layout=
 _requested_plan = st.query_params.get("module") in ("routes", "backhaul", "journey")
 if _requested_plan and not st.session_state.get("journey_link_processed"):
     st.session_state["dashboard_open"] = True
-    st.session_state["main_tab"] = "Маршрут и план завоза"
+    st.session_state["main_tab"] = "Риски и рекомендации"
     st.session_state["journey_link_processed"] = True
 
 # Главная страница не загружает данные и модели до перехода в дашборд.
@@ -114,8 +114,8 @@ import plotly.graph_objects as go
 # модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
 _MODULE_NAMES = (
     "okno.paths", "okno.regions", "okno.report", "okno.ice", "okno.calib", "okno.features",
-    "okno.planner", "okno.decision_support", "app.decision_view", "okno.truck_load", "okno.backhaul", "okno.backhaul_io", "okno.routing", "okno.journey", "app.truck_load_view", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "okno.bottlenecks", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
-    "okno.yakutsk_replay", "app.yakutsk_experiment", "app.route_view", "app.backhaul_view", "app.journey_view",
+    "okno.planner", "okno.decision_support", "app.decision_view", "okno.truck_load", "okno.backhaul", "okno.backhaul_io", "okno.routing", "okno.journey", "okno.risk_advice", "app.truck_load_view", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "okno.bottlenecks", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
+    "okno.yakutsk_replay", "app.yakutsk_experiment", "app.backhaul_view", "app.journey_view",
 )
 _cached_modules = [sys.modules.get(name) for name in _MODULE_NAMES]
 _needs_reload = any(module is None or getattr(module, "_loaded_mtime_ns", None)
@@ -306,13 +306,13 @@ last = FC.last_weather_day(pid, hy)
 if last is not None and last < issue_day:
     st.sidebar.warning(f"Погода есть до {from_season_day(last, hy).date():%d.%m.%Y}: прогноз выпускается на эту дату.")
 
-if st.session_state.get("main_tab") in ("Планировщик", "Рейтинг риска", "Сквозной коридор (А3)"):
-    st.session_state["main_tab"] = "Маршрут и план завоза"
+if st.session_state.get("main_tab") in ("Планировщик", "Рейтинг риска", "Сквозной коридор (А3)", "Маршрут и план завоза"):
+    st.session_state["main_tab"] = "Риски и рекомендации"
 
 tabs = st.tabs([
     "Карта путей",
     "Карточка пути",
-    "Маршрут и план завоза",
+    "Риски и рекомендации",
     "До / после",
     "О данных",
 ], key="main_tab", on_change="rerun")
@@ -444,33 +444,7 @@ with tabs[0]:
                        margin=dict(l=0, r=0, t=0, b=0), height=600, showlegend=True,
                        legend=dict(x=0.01, y=0.99, bgcolor="rgba(255,255,255,0.9)", font=dict(size=12, color="#222"),
                                    bordercolor="rgba(0,0,0,0.15)", borderwidth=1))
-    from okno.journey import seasonal_segment
-    _segment = seasonal_segment(pid)
-    if _segment:
-        _coords = _segment['coordinates']
-        fmap.add_trace(go.Scattermap(lon=[x[0] for x in _coords],lat=[x[1] for x in _coords],
-            mode='lines+markers',line=dict(width=5,color='#28768e'),marker=dict(size=4),
-            customdata=[[pid] for _ in _coords],name='Выбранный сезонный участок',
-            hovertext=_segment['road'],hoverinfo='text'))
-    def _select_map_path():
-        event=st.session_state.get('paths_map',{})
-        for point in event.get('selection',{}).get('points',[]):
-            data=point.get('customdata')
-            if data and data[0] in WEATHER_POINTS:
-                st.session_state['filter_point']=data[0]
-                break
-    st.plotly_chart(fmap, width="stretch", key='paths_map', on_select=_select_map_path,
-                    selection_mode='points', config={"scrollZoom": True, "displaylogo": False})
-    st.caption('Выберите отмеченную точку на карте — её карточка и планирование откроются ниже. '
-               'Толстая линия показывает явно привязанный сезонный участок; фоновые зимники не являются подтверждёнными маршрутами.')
-    _map_choice_key='map_path_choice_'+pid
-    def _select_map_list():
-        st.session_state['filter_point']=st.session_state[_map_choice_key]
-    st.selectbox('Путь для планирования на карте',WEATHER_POINTS,index=WEATHER_POINTS.index(pid),
-                 format_func=label,key=_map_choice_key,on_change=_select_map_list)
-    if _tab_open(0):
-        from app.journey_view import render_journey
-        render_journey(pid, hy, issue_date, issue_day, margin, WEATHER_POINTS, fc_cached)
+    st.plotly_chart(fmap, width="stretch", config={"scrollZoom": True, "displaylogo": False})
     st.caption(f"Прогноз выпущен на {issue_date:%d.%m.%Y}; вероятность — на "
                f"{(issue_date + dt.timedelta(days=horizon)):%d.%m.%Y}. Состояние Лены — на дату последнего снимка "
                "в каждой точке (подписано рядом с точкой).")

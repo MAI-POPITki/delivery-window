@@ -97,66 +97,28 @@ class JourneyUITests(unittest.TestCase):
         app.query_params['module']='journey'
         return app.run()
 
-    def test_navigation_and_live_project_data_without_demo_orders(self):
-        app=self.app()
-        self.assertFalse(app.exception)
-        self.assertIn('Маршрут и план завоза',[t.label for t in app.tabs])
-        self.assertNotIn('Рейтинг риска',[t.label for t in app.tabs])
-        self.assertNotIn('Планировщик',[t.label for t in app.tabs])
-        self.assertFalse(any(b.key in ('open_backhaul','open_routes') for b in app.button))
-        self.assertTrue(any('Есть запись ограничения массы' in x.value for x in app.markdown))
-        # Источник — общий реестр, никакой загрузки пользовательского CSV не требуется.
-        self.assertTrue(any('ysia.ru' in x.value for x in app.markdown))
-        app.sidebar.button(key='show_welcome').click().run()
-        self.assertFalse(app.exception)
-        self.assertEqual(len(app.tabs),0)
-        self.assertEqual([b.key for b in app.button],['open_dashboard'])
+    def test_risks_use_registry_and_do_not_request_routes(self):
+        with patch('okno.routing.fetch_routes') as fetch:
+            app=self.app()
+            app.selectbox(key='risk_road_yakutsk_crossing2026').select('Якутск — Нижний Бестях').run()
+            self.assertFalse(app.exception)
+            self.assertIn('Риски и рекомендации',[t.label for t in app.tabs])
+            self.assertNotIn('route_build',[b.key for b in app.button])
+            self.assertNotIn('bh_calculate',[b.key for b in app.button])
+            self.assertTrue(any('ysia.ru' in x.value for x in app.markdown))
+            app.date_input(key='risk_passage_2026-04-08').set_value(dt.date(2026,4,8)).run()
+            app.number_input(key='risk_cargo').set_value(13.).run()
+            self.assertFalse(app.exception)
+            self.assertTrue(any('Уменьшить груз минимум на 5 т' in x.value for x in app.markdown),[x.value for x in app.markdown])
+            self.assertFalse(any(x.label=='М1: риск закрытия участка к дате проезда' for x in app.metric))
+            fetch.assert_not_called()
 
-    def test_planning_is_available_on_paths_map(self):
-        app=AppTest.from_file(str(ROOT/'app/dashboard.py'),default_timeout=90)
-        app.query_params['module']='journey';app.run()
-        app.button(key='journey_archive').click().run()
-        app.session_state['main_tab']='Карта путей'
-        app.run()
-        self.assertFalse(app.exception)
-        self.assertIn('route_build',[x.key for x in app.button])
-        self.assertEqual(app.selectbox(key='map_path_choice_yakutsk_crossing').value,'yakutsk_crossing')
-        charts=[x for x in app.get('plotly_chart') if 'paths_map' in x.proto.id]
-        self.assertEqual(len(charts),1)
-
-    def test_selected_seasonal_route_connects_to_empty_orders_and_m3(self):
+    def test_map_remains_only_a_map(self):
         app=self.app()
-        import app.route_view as view
-        with patch.object(view,'_routes',side_effect=ValueError('В обычном графе путь не найден')):
-            app.number_input(key='route_seasonal_speed').set_value(10.).run()
-            app.button(key='route_build').click().run()
-            self.assertFalse(app.exception)
-            self.assertFalse(app.button(key='route_apply').disabled)
-            app.button(key='route_apply').click().run()
-            self.assertFalse(app.exception)
-            self.assertAlmostEqual(app.number_input(key='bh_travel').value,app.number_input(key='bh_return_travel').value)
-            self.assertTrue(any('Учебные заказы не подставляются' in x.value for x in app.info))
-            self.assertIsNone(app.number_input(key='planner_quantity').value)
-            self.assertNotIn('bh_date',[x.key for x in app.date_input])
-            self.assertNotIn('bh_open',[x.key for x in app.date_input])
-            self.assertTrue(app.number_input(key='bh_travel').disabled)
-            # Введённые пользователем заявки становятся источником объёма М3.
-            orders,cars=example_frames('2026-04-08')
-            orders['Источник']='Проверочные заявки интеграционного теста'
-            cars['Источник']='Проверочный парк интеграционного теста'
-            app.session_state['journey_order_frame']=orders
-            app.session_state['journey_vehicle_frame']=cars
-            app.run()
-            self.assertFalse(app.exception)
-            self.assertEqual(app.number_input(key='planner_quantity').value,8.)
-            self.assertTrue(app.number_input(key='planner_quantity').disabled)
-            app.button(key='bh_calculate').click().run()
-            self.assertFalse(app.exception)
-            self.assertTrue(any('Выполнены все заявки (2)' in x.value for x in app.success))
-            # Изменённая общая масса делает прежний выбор неактуальным.
-            app.number_input(key='journey_gross').set_value(25.).run()
-            self.assertFalse(app.exception)
-            self.assertNotIn('bh_travel',[x.key for x in app.number_input])
+        app.session_state['main_tab']='Карта путей';app.run()
+        self.assertFalse(app.exception)
+        self.assertNotIn('risk_cargo',[x.key for x in app.number_input])
+        self.assertNotIn('route_build',[x.key for x in app.button])
 
 
 if __name__=='__main__': unittest.main()
