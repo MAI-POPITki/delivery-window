@@ -82,6 +82,11 @@ def show_welcome():
     st.session_state["dashboard_open"] = False
 
 
+def open_backhaul():
+    """Самостоятельный модуль доступен без загрузки моделей прогноза."""
+    st.query_params["module"] = "backhaul"
+
+
 def render_welcome():
     st.markdown(_STYLES, unsafe_allow_html=True)
 
@@ -129,6 +134,8 @@ def render_welcome():
                         width="stretch",
                     )
 
+        st.button("Завоз и обратный груз — сравнить рейсы", key="open_backhaul",
+                  on_click=open_backhaul, width="stretch")
         st.caption("В дашборде — карта путей, прогнозы, планировщик отправок и рейтинг риска. "
                    "В PDF — подробное описание проекта, методика и результаты.")
         st.divider()

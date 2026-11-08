@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import streamlit as st
 
-from app.welcome import render_welcome, show_welcome
+from app.welcome import render_welcome, show_welcome, open_backhaul
 
 def _px(lat, lon, zoom):
     """Координаты в пикселях веб-меркатора при стартовом масштабе карты."""
@@ -88,6 +88,14 @@ def place_labels(df, zoom, obstacles=()):
 LEGEND_HTML = '\n<style>.okno-legend{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 10px}\n.okno-legend div{flex:1 1 220px;border:1px solid rgba(128,128,128,.25);border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.35}\n.okno-legend b{font-size:14px}.okno-sw{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle;margin:0 3px 0 0;border:2px solid #fff;box-shadow:0 0 0 1px #999}\n.okno-bar{display:inline-block;width:70px;height:10px;border-radius:5px;vertical-align:middle;background:linear-gradient(90deg,#a50026,#fdae61,#ffffbf,#a6d96a,#006837)}</style>\n<div class="okno-legend">\n<div>🚚 <b>Пути с прогнозом</b><br>крупные точки с подписью; цвет — вероятность, что путь открыт через N дней<br>\n<span class="okno-bar"></span> 0% → 100% &nbsp; <span class="okno-sw" style="background:#9e9e9e"></span>нет данных</div>\n<div>🛰️ <b>Лена со спутника (М2)</b><br>что на реке по последнему радарному снимку<br>\n<span class="okno-sw" style="background:#bfe9ff"></span>лёд &nbsp; <span class="okno-sw" style="background:#0b3d91"></span>вода &nbsp;\n<span class="okno-sw" style="background:#0b3d91;opacity:.35"></span>снимок старше 14 дней</div>\n<div>🌊 <b>Притоки Лены</b><br>мелкие бирюзовые точки — прогноз даты вскрытия (отдельная модель)<br>\n<span class="okno-sw" style="background:#0f9d8a"></span>точка на реке</div>\n<div>🛣️ <b>Зимники и переправы</b><br>линии из OpenStreetMap: где проходят сезонные пути региона</div>\n</div>'
 
 st.set_page_config(page_title="Окно завоза", page_icon="🧊", layout="wide")
+
+if st.query_params.get("module") == "backhaul":
+    from app.backhaul_view import render_backhaul
+    if st.button("← Вернуться к проекту", key="backhaul_return"):
+        del st.query_params["module"]
+        st.rerun()
+    render_backhaul()
+    st.stop()
 
 # Главная страница не загружает данные и модели до перехода в дашборд.
 if not st.session_state.get("dashboard_open", False):
@@ -298,6 +306,8 @@ if use_weather_close:
 last = FC.last_weather_day(pid, hy)
 if last is not None and last < issue_day:
     st.sidebar.warning(f"Погода есть до {from_season_day(last, hy).date():%d.%m.%Y}: прогноз выпускается на эту дату.")
+
+st.button("Завоз и обратный груз — сравнить рейсы", key="dashboard_backhaul", on_click=open_backhaul)
 
 tabs = st.tabs([
     "Карта путей",
