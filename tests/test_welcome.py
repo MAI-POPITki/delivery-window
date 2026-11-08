@@ -41,7 +41,7 @@ class WelcomeTests(unittest.TestCase):
         with patch("okno.forecast.data_version", side_effect=AssertionError("Данные загружены до входа")) as data_version:
             app = self.new_app()
         self.assert_welcome(app)
-        self.assertEqual(len(app.button), 2)
+        self.assertEqual(len(app.button), 3)
         self.assertEqual(len(app.download_button), 1)
         data_version.assert_not_called()
 

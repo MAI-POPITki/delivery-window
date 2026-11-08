@@ -26,6 +26,10 @@ def render_backhaul():
                'Для своего расчёта замените таблицы и параметры; программа не проверяет достоверность введённых источников.')
     calculate_slot=st.container()
     result_slot=st.container()
+    if st.button('Построить маршрут по дорогам',key='bh_open_route'):
+        st.query_params['module']='routes'; st.rerun()
+    if st.session_state.get('bh_route_import_note'):
+        st.info(st.session_state['bh_route_import_note'])
     c1,c2,c3=st.columns(3)
     a=c1.text_input('Точка А — база', 'Терминал А',key='bh_a')
     b=c2.text_input('Точка Б — получатель завоза', 'Терминал Б',key='bh_b')
@@ -33,8 +37,10 @@ def render_backhaul():
     st.caption('Все даты и часы — в одном выбранном местном времени. Дата и путь из боковой панели М1 здесь не используются.')
     with st.expander('Маршрут, транспортное окно и источник параметров',expanded=True):
         left,right=st.columns(2)
-        distance=left.number_input('Расстояние в одну сторону, км',1.,10000.,300.,key='bh_distance')
-        travel=left.number_input('Время движения в одну сторону, ч',0.5,240.,8.,0.5,key='bh_travel')
+        distance=left.number_input('Расстояние А → Б, км',0.01,None,300.,key='bh_distance')
+        travel=left.number_input('Время движения А → Б, ч',0.01,None,8.,0.5,key='bh_travel')
+        back_distance=left.number_input('Расстояние Б → А, км',0.01,None,300.,key='bh_return_distance')
+        back_travel=left.number_input('Время движения Б → А, ч',0.01,None,8.,0.5,key='bh_return_travel')
         turnaround=left.number_input('Подготовка машины к следующему рейсу, ч',0.,72.,1.,0.5,key='bh_turn')
         step=left.selectbox('Шаг начала рейсов, ч',[24,12,6],key='bh_step')
         opened=right.date_input('Движение разрешено с 00:00',base,min_value=base,key='bh_open')
@@ -44,7 +50,7 @@ def render_backhaul():
                              'Учебные значения; разрешение на движение не подтверждено',key='bh_source')
         st.caption('Окно должно быть известно на дату решения. По нему проверяется весь путь туда и обратно. '
                    'Прогноз льда не заменяет разрешение проезда. Время движения задавайте с учётом отдыха и остановок. '
-                   'Расстояние не определяется автоматически по названиям точек.')
+                   'Расстояния можно ввести вручную или передать из построителя маршрутов.')
     demo_orders,demo_vehicles=example_frames(base)
     st.subheader('Заявки и доступные машины')
     st.caption('Заявка — одна неделимая партия. Тип кузова в заявке и у машины должен совпадать. '
@@ -77,7 +83,7 @@ def render_backhaul():
         if not source.strip() or not a.strip() or not b.strip() or a.strip()==b.strip():
             raise ValueError('Укажите разные точки А и Б и источник параметров.')
         orders,vehicles=parse_frames(order_frame,vehicle_frame,base)
-        route=Route(distance,travel,(opened-base).days*24,(closed-base).days*24,limit,float(step),turnaround)
+        route=Route(distance,travel,(opened-base).days*24,(closed-base).days*24,limit,float(step),turnaround,back_distance,back_travel)
         validate_inputs(orders,vehicles,route)
     except (ValueError,TypeError) as error:
         st.error(str(error))

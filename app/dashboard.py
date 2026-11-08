@@ -89,6 +89,14 @@ LEGEND_HTML = '\n<style>.okno-legend{display:flex;flex-wrap:wrap;gap:8px;margin:
 
 st.set_page_config(page_title="Окно завоза", page_icon="🧊", layout="wide")
 
+if st.query_params.get("module") == "routes":
+    from app.route_view import render_routes
+    if st.button("← Вернуться к проекту", key="routes_return"):
+        del st.query_params["module"]
+        st.rerun()
+    render_routes()
+    st.stop()
+
 if st.query_params.get("module") == "backhaul":
     from app.backhaul_view import render_backhaul
     if st.button("← Вернуться к проекту", key="backhaul_return"):

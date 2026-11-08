@@ -87,6 +87,10 @@ def open_backhaul():
     st.query_params["module"] = "backhaul"
 
 
+def open_routes():
+    st.query_params["module"] = "routes"
+
+
 def render_welcome():
     st.markdown(_STYLES, unsafe_allow_html=True)
 
@@ -136,6 +140,8 @@ def render_welcome():
 
         st.button("Завоз и обратный груз — сравнить рейсы", key="open_backhaul",
                   on_click=open_backhaul, width="stretch")
+        st.button("Построить маршрут и проверить условия доставки",key="open_routes",
+                  on_click=open_routes,width="stretch")
         st.caption("В дашборде — карта путей, прогнозы, планировщик отправок и рейтинг риска. "
                    "В PDF — подробное описание проекта, методика и результаты.")
         st.divider()

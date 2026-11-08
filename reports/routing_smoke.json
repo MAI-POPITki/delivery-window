@@ -1,0 +1,35 @@
+{
+  "points": [
+    {
+      "name": "Иркутск (52.296, 104.291)",
+      "lat": 52.29566,
+      "lon": 104.29076
+    },
+    {
+      "name": "Братск (56.133, 101.614)",
+      "lat": 56.1325,
+      "lon": 101.61417
+    }
+  ],
+  "results": [
+    {
+      "direction": "А → Б",
+      "distance_km": 617.2208,
+      "travel_h": 8.920333333333334,
+      "ferries": 0,
+      "source": "https://routing.openstreetmap.de/routed-car/route/v1/driving/104.290760,52.295660;101.614170,56.132500",
+      "fetched_at": "2026-11-08T17:19:17.602945+00:00",
+      "data_version": "не указана сервисом"
+    },
+    {
+      "direction": "Б → А",
+      "distance_km": 618.1256,
+      "travel_h": 8.941138888888888,
+      "ferries": 0,
+      "source": "https://routing.openstreetmap.de/routed-car/route/v1/driving/101.614170,56.132500;104.290760,52.295660",
+      "fetched_at": "2026-11-08T17:19:19.210056+00:00",
+      "data_version": "не указана сервисом"
+    }
+  ],
+  "note": "Реальная дорожная сеть; автомобильное время без подтверждения проезда грузовика."
+}

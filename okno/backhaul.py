@@ -44,6 +44,16 @@ class Route:
     gross_limit_t: float
     step_h: float = 24.
     turnaround_h: float = 1.
+    return_distance_km: float | None = None
+    return_travel_h: float | None = None
+
+    @property
+    def back_km(self):
+        return self.distance_km if self.return_distance_km is None else self.return_distance_km
+
+    @property
+    def back_h(self):
+        return self.travel_h if self.return_travel_h is None else self.return_travel_h
 
 
 @dataclass(frozen=True)
@@ -119,6 +129,8 @@ def validate_inputs(orders, vehicles, route):
             raise ValueError('Укажите тип кузова.')
     if not _numbers((route.distance_km, route.travel_h, route.gross_limit_t, route.step_h), positive=True):
         raise ValueError('Расстояние, время пути, предел массы и шаг должны быть положительными.')
+    if not _numbers((route.back_km,route.back_h),positive=True):
+        raise ValueError('Расстояние и время обратного пути должны быть положительными.')
     if not _numbers((route.open_h, route.close_h, route.turnaround_h)) or route.close_h <= route.open_h:
         raise ValueError('Закрытие должно быть позже открытия; времена не могут быть отрицательными.')
     if route.close_h > 24*60 or route.step_h < 1:
@@ -149,7 +161,7 @@ def make_trip(v, route, start, outward=None, backward=None):
     done_out = arr_out + (outward.unloading_h if outward else 0)
     load_back = max(done_out, backward.ready_h) if backward else done_out
     dep_back = load_back + (backward.loading_h if backward else 0)
-    arr_back = dep_back + route.travel_h
+    arr_back = dep_back + route.back_h
     done_back = arr_back + (backward.unloading_h if backward else 0)
     # Для обеих сторон проверяется полная масса и весь интервал движения.
     for depart, arrive, order in ((dep_out, arr_out, outward), (dep_back, arr_back, backward)):
@@ -162,8 +174,8 @@ def make_trip(v, route, start, outward=None, backward=None):
     if backward and done_back > backward.due_h+EPS:
         return None
     finish = done_back + route.turnaround_h
-    loaded = route.distance_km * (int(outward is not None)+int(backward is not None))
-    empty = 2*route.distance_km-loaded
+    loaded = route.distance_km * int(outward is not None)+route.back_km*int(backward is not None)
+    empty = route.distance_km+route.back_km-loaded
     return Trip(v.id, outward.id if outward else None, backward.id if backward else None,
                 start, dep_out, arr_out, load_back, dep_back, arr_back, finish,
                 done_out if outward else None, done_back if backward else None,
@@ -207,8 +219,8 @@ def audit_plan(trips, orders, vehicles, route):
                 raise ValueError('Нарушены ограничения кузова или массы.')
         if t.start_h < -EPS or abs(t.start_h/route.step_h-round(t.start_h/route.step_h)) > EPS:
             raise ValueError('Начало вне сетки отправок.')
-        for dep, arr in ((t.outward_depart_h,t.outward_arrive_h),(t.backward_depart_h,t.backward_arrive_h)):
-            if dep < route.open_h-EPS or arr > route.close_h+EPS or abs(arr-dep-route.travel_h)>EPS:
+        for dep, arr, duration in ((t.outward_depart_h,t.outward_arrive_h,route.travel_h),(t.backward_depart_h,t.backward_arrive_h,route.back_h)):
+            if dep < route.open_h-EPS or arr > route.close_h+EPS or abs(arr-dep-duration)>EPS:
                 raise ValueError('Нарушено окно движения или время пути.')
         if v.tare_t > route.gross_limit_t+EPS:
             raise ValueError('Пустая машина превышает ограничение.')
@@ -226,8 +238,8 @@ def audit_plan(trips, orders, vehicles, route):
             raise ValueError('Нарушен срок обратной заявки.')
         if abs(t.finish_h-back_done-route.turnaround_h)>EPS or abs(t.wait_h-(t.backward_load_h-out_done))>EPS:
             raise ValueError('Неверное время занятости или ожидания.')
-        loaded=route.distance_km*len(t.orders)
-        empty=2*route.distance_km-loaded
+        loaded=route.distance_km*int(out is not None)+route.back_km*int(back is not None)
+        empty=route.distance_km+route.back_km-loaded
         if any(abs(a-b)>1e-5 for a,b in ((t.loaded_km,loaded),(t.empty_km,empty),
             (t.movement_rub,loaded*v.loaded_rub_km+empty*v.empty_rub_km),
             (t.time_rub,(t.finish_h-t.start_h)*v.occupied_rub_h),(t.fixed_rub,v.fixed_rub))):
