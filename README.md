@@ -10,6 +10,7 @@
 | 📊 **Живой дашборд** | https://okno-zavoza-dmitrii.streamlit.app/ — карта, прогнозы, планировщик (если «спит» — первое открытие ~30–60 с) |
 | 📄 **Документ проекта** | [docs/project.pdf](docs/project.pdf) |
 | 🧪 **Фичи на пробу для команды** | [docs/FEATURES.md](docs/FEATURES.md) — идеи, как проверять, таблица результатов |
+| 📘 **Как пользоваться сервисом** | [docs/TUTORIAL.pdf](docs/TUTORIAL.pdf) — туториал: каждая вкладка и кнопка, словарь терминов, режим «сервис», источники данных для жюри |
 | 🛰️ **М2: снимки Sentinel-1** | [docs/M2_sentinel1.md](docs/M2_sentinel1.md) — лёд/вода с точностью 0,95, отчёт [reports/m2_metrics.md](reports/m2_metrics.md) |
 | 🌍 **Переносимость на другие регионы** | [reports/transferability.md](reports/transferability.md) — проверка на 5 регионах вне Якутии |
 
