@@ -116,7 +116,8 @@ import plotly.graph_objects as go
 _service = st.sidebar.radio("Направление", ["Зимники и переправы", "Паводки"], key="service_mode")
 if _service == "Паводки":
     # Обновляем зависимости и представление в живом процессе Streamlit после git pull.
-    for _name in ("okno.flood", "app.flood_view"):
+    for _name in ("okno.map_style", "okno.flood", "okno.flood_routes", "okno.flood_planning",
+                  "app.flood_workspace", "app.flood_view"):
         _mod = sys.modules.get(_name)
         if _mod is None:
             _mod = importlib.import_module(_name)
@@ -155,6 +156,7 @@ from okno.planner import Params, sample_quantiles, simulate_season
 
 # ------------------------------------------------------------------ данные
 from okno.regions import REGIONS, label  # noqa: E402
+from okno.map_style import AVAILABILITY_SCALE
 
 
 def region_points(key):
@@ -454,7 +456,7 @@ with tabs[0]:
                                      marker=dict(size=24, color="#ffffff")))
         fmap.add_trace(go.Scattermap(
             lat=ok.lat, lon=ok.lon, customdata=ok[["pid"]], mode="markers", hovertext=ok.txt, hoverinfo="text", name="🚚 пути: прогноз",
-            marker=dict(size=19, color=ok.p_ok, cmin=0, cmax=1, colorscale="RdYlGn",
+            marker=dict(size=19, color=ok.p_ok, cmin=0, cmax=1, colorscale=AVAILABILITY_SCALE,
                         colorbar=dict(title=dict(text="P(путь открыт<br>через N дн.)", font=dict(size=11, color="#17212b")),
                                       tickfont=dict(color="#17212b"), tickformat=".0%", thickness=12, len=0.55, x=0.99, xanchor="right", y=0.5,
                                       bgcolor="rgba(255,255,255,0.8)"))))

@@ -17,7 +17,7 @@
 | Проверка поездки | Отдельные планировщик и рейтинг риска | Выбор дороги из опубликованного реестра, дата проезда, масса машины и груза; ограничения и прогноз рассматриваются вместе |
 | Рекомендации | Общие результаты планировщика | Проверка более раннего проезда, превышения полной массы и необходимости более лёгкой машины; все варианты используют один выпуск прогноза и опубликованные на дату решения сведения |
 | Исторический коридор А3 | Самостоятельная вкладка | Раскрываемый раздел в «Рисках и рекомендациях»; существующие расчёты, источники, графики и режим «сервис» сохранены |
-| Паводки | Отдельного режима нет | Карта четырёх регионов и пяти речных точек, семидневный ансамбль, диапазон расхода и CSV |
+| Паводки | Отдельного режима нет | Дата планирования, карта реальных дорог, прогноз воды, риски и рекомендации, оптимизатор доставки и данные с источниками |
 | Стартовый экран | Описание прогноза и планирования | Описание доступных сейчас режимов и проверки поездки; исправлены упоминания скрытых вкладок |
 
 ## Новый прогноз высокой воды
@@ -46,6 +46,36 @@
 превысил фиксированный порог у Ишима, Кургана и Оренбурга, но не у Орска,
 несмотря на известное наводнение. Нет расчёта опасных уровней, ледовых заторов
 и границ затопления. Ограничение явно указано в интерфейсе.
+
+### Рабочая область паводков после замечания пользователя
+
+Вместо отдельного просмотра прогноза добавлены пять разделов: «Карта путей»,
+«Прогноз», «Риски», «План», «Данные». Компактные названия помещаются в узком окне;
+внутри разделов показаны полные названия и пояснения.
+
+В боковой панели доступны дата планирования, регион, речная точка, конкретный
+дорожный участок и длительность проезда. Для прошлой даты выбирается только
+выпуск, фактически полученный не позже конца этих UTC-суток. Исторический
+реанализ не подменяет отсутствующий оперативный прогноз.
+
+Из официального API OSM сохранён 421 дорожный и мостовой участок: Якутск — 95,
+Ишим — 14, Курган — 211, Оренбург — 90, Орск — 11. Сохранены XML.gz, запросы,
+время получения и SHA-256. Путь выделяется синим; речные точки используют общую
+с зимниками шкалу `RdYlGn`: красный → жёлтый → зелёный. Показатель точки — доля
+сценариев без высокой воды, а не подтверждённая проходимость дороги.
+
+Раздел рисков сравнивает даты с учётом всей длительности рейса. Планировщик
+оптимизирует распределение объёма между подтверждёнными днями по стоимости
+перевозки, хранения и оценке довоза остатка. Мощности, тарифы и подтверждения
+вводит оператор; учебных чисел нет. Источник и дата подтверждения обязательны,
+поздние сведения исключаются. Соперник — равномерный план с теми же ограничениями.
+Гидрологический фильтр — настраиваемая политика предосторожности, а не модель
+закрытия дороги. Ввод сохраняется между вкладками; результаты выгружаются в CSV.
+
+В разделе данных видны источник и возраст выпуска, число сценариев, история,
+метод порога, источники геометрий и ограничения. Текущие геометрии не выдаются
+за архив состояния дороги. Проверки расширения: **27 тестов**, включая
+независимый перебор 27 маленьких задач оптимизации и расчёт через интерфейс.
 
 ## Проверка сезонного пути
 
@@ -117,7 +147,8 @@ OpenStreetMap и описание источника, погодный файл 
 Проверки: [протокол паводков](FLOOD_VALIDATION_PLAN.md),
 [исходные числа](../reports/flood_validation.md),
 [проверки программы](../reports/flood_implementation_checks.md).
-Финальный полный прогон: **160/160 тестов пройдены**; валидация данных паводков — **5/5 точек**.
+Полный прогон после добавления рабочей области паводков: **172/172 теста пройдены**;
+валидация гидрологии и дорожных геометрий — **5/5 точек**.
 
 ## Полный перечень отличающихся файлов
 
@@ -125,7 +156,7 @@ OpenStreetMap и описание источника, погодный файл 
 
 <!-- FILE_INVENTORY -->
 
-Всего файлов: **83**.
+Всего файлов: **99**.
 
 | Статус | Файл |
 | --- | --- |
@@ -136,6 +167,7 @@ OpenStreetMap и описание источника, погодный файл 
 | M | [app/dashboard.py](../app/dashboard.py) |
 | A | [app/decision_view.py](../app/decision_view.py) |
 | A | [app/flood_view.py](../app/flood_view.py) |
+| A | [app/flood_workspace.py](../app/flood_workspace.py) |
 | A | [app/journey_view.py](../app/journey_view.py) |
 | M | [app/planner_view.py](../app/planner_view.py) |
 | A | [app/truck_load_view.py](../app/truck_load_view.py) |
@@ -156,6 +188,16 @@ OpenStreetMap и описание источника, погодный файл 
 | A | [data/flood/latest/tobol_kurgan.json](../data/flood/latest/tobol_kurgan.json) |
 | A | [data/flood/latest/ural_orenburg.json](../data/flood/latest/ural_orenburg.json) |
 | A | [data/flood/latest/ural_orsk.json](../data/flood/latest/ural_orsk.json) |
+| A | [data/flood/routes/ishim_ishim.json](../data/flood/routes/ishim_ishim.json) |
+| A | [data/flood/routes/ishim_ishim.osm.gz](../data/flood/routes/ishim_ishim.osm.gz) |
+| A | [data/flood/routes/lena_yakutsk.json](../data/flood/routes/lena_yakutsk.json) |
+| A | [data/flood/routes/lena_yakutsk.osm.gz](../data/flood/routes/lena_yakutsk.osm.gz) |
+| A | [data/flood/routes/tobol_kurgan.json](../data/flood/routes/tobol_kurgan.json) |
+| A | [data/flood/routes/tobol_kurgan.osm.gz](../data/flood/routes/tobol_kurgan.osm.gz) |
+| A | [data/flood/routes/ural_orenburg.json](../data/flood/routes/ural_orenburg.json) |
+| A | [data/flood/routes/ural_orenburg.osm.gz](../data/flood/routes/ural_orenburg.osm.gz) |
+| A | [data/flood/routes/ural_orsk.json](../data/flood/routes/ural_orsk.json) |
+| A | [data/flood/routes/ural_orsk.osm.gz](../data/flood/routes/ural_orsk.osm.gz) |
 | A | [data/flood/runs/2026-11-09/ishim_ishim.json](../data/flood/runs/2026-11-09/ishim_ishim.json) |
 | A | [data/flood/runs/2026-11-09/lena_yakutsk.json](../data/flood/runs/2026-11-09/lena_yakutsk.json) |
 | A | [data/flood/runs/2026-11-09/tobol_kurgan.json](../data/flood/runs/2026-11-09/tobol_kurgan.json) |
@@ -181,7 +223,10 @@ OpenStreetMap и описание источника, погодный файл 
 | A | [okno/decision_support.py](../okno/decision_support.py) |
 | M | [okno/economic_planner.py](../okno/economic_planner.py) |
 | A | [okno/flood.py](../okno/flood.py) |
+| A | [okno/flood_planning.py](../okno/flood_planning.py) |
+| A | [okno/flood_routes.py](../okno/flood_routes.py) |
 | A | [okno/journey.py](../okno/journey.py) |
+| A | [okno/map_style.py](../okno/map_style.py) |
 | M | [okno/planner.py](../okno/planner.py) |
 | A | [okno/risk_advice.py](../okno/risk_advice.py) |
 | A | [okno/routing.py](../okno/routing.py) |
@@ -197,6 +242,7 @@ OpenStreetMap и описание источника, погодный файл 
 | A | [reports/routing_smoke.json](../reports/routing_smoke.json) |
 | A | [scripts/check_komi_coverage.py](../scripts/check_komi_coverage.py) |
 | A | [scripts/download_flood.py](../scripts/download_flood.py) |
+| A | [scripts/download_flood_routes.py](../scripts/download_flood_routes.py) |
 | A | [scripts/validate_flood.py](../scripts/validate_flood.py) |
 | A | [scripts/verify_backhaul.py](../scripts/verify_backhaul.py) |
 | A | [tests/test_backhaul.py](../tests/test_backhaul.py) |
@@ -204,6 +250,7 @@ OpenStreetMap и описание источника, погодный файл 
 | M | [tests/test_corridor_a3.py](../tests/test_corridor_a3.py) |
 | A | [tests/test_decision_support.py](../tests/test_decision_support.py) |
 | A | [tests/test_flood.py](../tests/test_flood.py) |
+| A | [tests/test_flood_workspace.py](../tests/test_flood_workspace.py) |
 | M | [tests/test_import_reload.py](../tests/test_import_reload.py) |
 | A | [tests/test_journey.py](../tests/test_journey.py) |
 | A | [tests/test_risk_advice.py](../tests/test_risk_advice.py) |

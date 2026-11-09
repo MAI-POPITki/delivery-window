@@ -111,7 +111,7 @@ class FloodTests(unittest.TestCase):
         self.assertTrue(rows.fraction.isna().all())
         fig = make_map(rows)
         self.assertEqual(sum(len(trace.lat) for trace in fig.data), 5)
-        self.assertEqual(fig.data[0].marker.color, "#8a929e")
+        self.assertEqual(fig.data[0].marker.color, "#9e9e9e")
         rows, _ = F.load_points(self.now + timedelta(days=5))
         self.assertTrue(rows.fraction.isna().all())
 
@@ -145,14 +145,16 @@ class FloodTests(unittest.TestCase):
                 F._history_reference(path, self.pid, changed.st_mtime_ns, changed.st_size, 2026)
 
     def test_streamlit_renders_map_and_region_filter(self):
-        with patch("app.flood_view.load_points", side_effect=lambda: F.load_points(self.now)):
+        with patch("app.flood_view.load_points", side_effect=lambda **kw: F.load_points(self.now, **kw)):
             at = AppTest.from_string("from app.flood_view import render_flood\nrender_flood()")
+            at.session_state['flood_decision'] = self.now.date()
             at.run(timeout=30)
             self.assertFalse(at.exception)
-            self.assertEqual(len(at.get("plotly_chart")), 2)
-            at.sidebar.selectbox[0].select("Оренбургская область").run()
+            self.assertEqual(len(at.get("plotly_chart")), 1)
+            self.assertEqual([t.label for t in at.tabs], ['Карта путей','Прогноз','Риски','План','Данные'])
+            at.sidebar.selectbox(key='flood_region').select("Оренбургская область").run()
             self.assertFalse(at.exception)
-            self.assertEqual(len(at.selectbox[0].options), 2)
+            self.assertEqual(len(at.sidebar.selectbox(key='flood_point').options), 2)
 
     def test_dashboard_switches_between_flood_and_winter_modes(self):
         at = AppTest.from_file(str(F.ROOT / "app" / "dashboard.py"), default_timeout=90)

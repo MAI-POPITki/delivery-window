@@ -5,6 +5,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from okno.flood import DATA, POINTS, ROOT, daily_frame, read_response, summarize
+from okno.flood_routes import load_routes
 
 
 def main():
@@ -16,6 +17,7 @@ def main():
              "| --- | ---: | ---: | ---: | ---: | ---: |"]
     errors = []
     cases = []
+    roads = []
     for pid, point in POINTS.items():
         try:
             hist = read_response(DATA / "history" / f"{pid}.json")
@@ -24,6 +26,10 @@ def main():
             if str(frame.index.min().date()) != "1991-01-01" or str(frame.index.max().date()) != "2020-12-31":
                 raise ValueError("Не соответствует период архива")
             result = summarize(hist, live, point, now)
+            routes, metadata = load_routes(pid)
+            if not routes or not metadata.get('source_url','').startswith('https://www.openstreetmap.org/api/0.6/map?'):
+                raise ValueError('Не подтверждены исходные геометрии OpenStreetMap')
+            roads.append(f"| {point['name']} | {len(routes)} | {metadata['fetched_at']} |")
             lines.append(f"| {point['river']} — {point['name']} | {result['years']} | "
                          f"{frame.river_discharge.mean():.2f} | {result['threshold']:.2f} | "
                          f"{result['members']} | {result['fraction']:.1%} |")
@@ -68,6 +74,12 @@ def main():
                   "Порог по 1997–2020 не подбирался под 2024 год. Официальные сообщения о последствиях: "
                   "[Оренбург, Курган, Тюмень](https://mchs.gov.ru/deyatelnost/press-centr/novosti/5280317), "
                   "[Якутия](https://mchs.gov.ru/uploads/document/2025-05-21/c2d8f5ede16d0aa263d22ef7dbc22833.pdf)."]
+    if roads:
+        lines += ['', '### Реальные дорожные геометрии OpenStreetMap', '',
+                  '| Населённый пункт | Участков | Получено, UTC |', '| --- | ---: | --- |', *roads, '',
+                  'Исходные XML сохранены с gzip-сжатием; проверены SHA-256 и разбор геометрий. '
+                  'Источники и рамки запросов: `data/flood/routes/*.json`. '
+                  'Это текущая геометрия, не исторический реестр ограничений движения.']
     lines += ["", *errors] if errors else []
     (ROOT / "reports" / "flood_validation.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"Flood validation: {len(POINTS) - len(errors)}/{len(POINTS)} points OK")

@@ -11,6 +11,9 @@
   Дата каталога — дата получения, а не неизвестное время инициализации модели.
 - `cases/2024/`: исторический модельный ряд для диагностики; это не архив
   оперативных выпусков и не фактические измерения наводнения.
+- `routes/`: реальные XML-ответы официального API OpenStreetMap (`*.osm.gz`)
+  и метаданные запросов (`*.json`): URL рамки, время UTC, SHA-256 распакованного XML.
+  Лицензия — ODbL 1.0, © OpenStreetMap contributors. Это геометрия, не сведения о допуске.
 
 В JSON-конверте: `payload` — ответ поставщика, `url` — полный запрос,
 `fetched_at` — UTC-время получения, `model`, `source`, `sha256`.
@@ -26,4 +29,5 @@
 Обновить: `python scripts/download_flood.py`.
 Повторно получить архив и пример: `python scripts/download_flood.py --history --case-year 2024`.
 Проверить: `python scripts/validate_flood.py`.
+Обновить дорожные геометрии: `python scripts/download_flood_routes.py`.
 Полный протокол: `docs/FLOOD_VALIDATION_PLAN.md` и `reports/flood_implementation_checks.md`.

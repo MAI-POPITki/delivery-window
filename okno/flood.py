@@ -84,13 +84,14 @@ def threshold(history, before_year=None):
     return value, len(maxima)
 
 
-def summarize(history_envelope, forecast_envelope, point, now=None, horizon=7, *, reference=None):
+def summarize(history_envelope, forecast_envelope, point, now=None, horizon=7, *, reference=None, planning_date=None):
     now = now or datetime.now(timezone.utc)
     fetched = datetime.fromisoformat(forecast_envelope["fetched_at"])
     if fetched.tzinfo is None or not timedelta(0) <= now - fetched <= timedelta(hours=48):
         raise ValueError("Прогноз устарел (>48 ч) или время загрузки некорректно")
     forecast = daily_frame(forecast_envelope["payload"], point)
-    start = now.astimezone(timezone.utc).date() + timedelta(days=1)
+    decision_date = planning_date or now.astimezone(timezone.utc).date()
+    start = decision_date + timedelta(days=1)
     dates = pd.date_range(start, periods=horizon)
     if reference is None:
         hist = daily_frame(history_envelope["payload"], point)
@@ -109,7 +110,7 @@ def summarize(history_envelope, forecast_envelope, point, now=None, horizon=7, *
                 peak_date=str(median.idxmax().date()), peak=float(median.max()),
                 fetched_at=forecast_envelope["fetched_at"],
                 curve=pd.DataFrame({"q10": future.quantile(.1, axis=1), "q50": median,
-                                    "q90": future.quantile(.9, axis=1)}))
+                                    "q90": future.quantile(.9, axis=1)}), scenarios=future)
 
 
 @lru_cache(maxsize=32)
@@ -119,20 +120,42 @@ def _history_reference(path, pid, mtime_ns, size, before_year):
     return threshold(frame, before_year=before_year)
 
 
-def load_points(now=None, data_dir=DATA):
+def forecast_as_of(pid, decision_time, data_dir=DATA):
+    """Только действительно сохранённые ответы, полученные не позже решения."""
+    paths = [data_dir / "latest" / f"{pid}.json", *(data_dir / "runs").glob(f"*/{pid}.json")]
+    candidates = []
+    for path in paths:
+        if path.exists():
+            envelope = read_response(path)
+            fetched = datetime.fromisoformat(envelope["fetched_at"])
+            if fetched.tzinfo is None:
+                raise ValueError("В выпуске не указан часовой пояс")
+            if fetched <= decision_time:
+                candidates.append((fetched, envelope))
+    if not candidates:
+        raise ValueError("На выбранную дату нет сохранённого выпуска прогноза")
+    return max(candidates, key=lambda item: item[0])[1]
+
+
+def load_points(now=None, data_dir=DATA, planning_date=None):
     now = now or datetime.now(timezone.utc)
+    planning_date = planning_date or now.date()
+    if planning_date > now.date():
+        raise ValueError("Дата решения не может быть в будущем")
+    decision_time = now if planning_date == now.date() else datetime.combine(
+        planning_date + timedelta(days=1), datetime.min.time(), tzinfo=timezone.utc) - timedelta(microseconds=1)
     rows, details = [], {}
     for pid, point in POINTS.items():
         row = dict(pid=pid, **point, fraction=None, status="нет данных")
         try:
             path = data_dir / "history" / f"{pid}.json"
             stat = path.stat()
-            cutoff = (now.astimezone(timezone.utc).date() + timedelta(days=1)).year
+            cutoff = (planning_date + timedelta(days=1)).year
             reference = _history_reference(path, pid, stat.st_mtime_ns, stat.st_size, cutoff)
-            result = summarize(None, read_response(data_dir / "latest" / f"{pid}.json"),
-                               point, now, reference=reference)
+            result = summarize(None, forecast_as_of(pid, decision_time, data_dir),
+                               point, decision_time, reference=reference, planning_date=planning_date)
             details[pid] = result
-            row.update({k: v for k, v in result.items() if k != "curve"})
+            row.update({k: v for k, v in result.items() if k not in ("curve", "scenarios")})
             row["status"] = "расчёт доступен"
         except (OSError, ValueError, KeyError, TypeError) as exc:
             row["status"] = "Данные ещё не загружены" if isinstance(exc, FileNotFoundError) else str(exc)
