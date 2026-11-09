@@ -22,6 +22,7 @@ import numpy as np
 import pandas as pd
 
 from okno import hydro
+from okno import northeast
 from okno.ice import required_thickness_cm, to_season_day
 from okno.paths import DATA, PROCESSED
 
@@ -78,7 +79,7 @@ def flag_spikes(thick: pd.DataFrame) -> pd.DataFrame:
     сохраняем в ice_cm_raw, в ice_cm ставим пусто. Стабильно толстый лёд (наледи на горных
     реках, ~300 см много замеров подряд) выбросом не считается."""
     thick = thick.sort_values(["gauge_code", "hydro_year", "date"]).reset_index(drop=True)
-    thick["ice_cm_raw"] = thick["ice_cm"]
+    thick["ice_cm_raw"] = thick.get('ice_cm_raw', thick['ice_cm']).fillna(thick['ice_cm'])
     g = thick.groupby(["gauge_code", "hydro_year"])["ice_cm"]
     prev_, next_ = g.shift(1), g.shift(-1)
     neigh = pd.concat([prev_, next_], axis=1).median(axis=1)
@@ -90,10 +91,14 @@ def flag_spikes(thick: pd.DataFrame) -> pd.DataFrame:
 
 def build_hydro():
     st, thick, events = hydro.read_all()
-    thick = flag_spikes(thick)
     st["yakutia"] = st["region"].str.contains("Sakha")
     st["source_type"] = "замер"
     st["source"] = hydro.SOURCE
+    if (northeast.DIRECTORY/'ice_snow.tsv').exists():
+        extra_st,extra_th=northeast.load_observations()
+        st=pd.concat([st,extra_st],ignore_index=True)
+        thick=pd.concat([thick,extra_th],ignore_index=True)
+    thick = flag_spikes(thick)
 
     # сезонная таблица
     ev = events.copy()
@@ -104,6 +109,9 @@ def build_hydro():
     seasons = pd.concat([
         wide_date.add_suffix("_date"), wide_day.add_suffix("_day"), wide_raw.add_suffix("_raw"),
     ], axis=1).reset_index()
+    # PANGAEA contains thickness/snow, not dates of freeze-up or breakup.
+    # Add measured seasons without manufacturing those missing phases.
+    seasons=seasons.merge(thick[['gauge_code','hydro_year']].drop_duplicates(),how='outer')
 
     # даты достижения нормативной толщины — по реальным замерам
     max_h = thick.groupby(["gauge_code", "hydro_year"])["ice_cm"].max().rename("max_ice_cm")
@@ -122,8 +130,8 @@ def build_hydro():
     seasons["valid"] = seasons["flags"] == ""
     seasons = seasons.drop(columns=[c for c in seasons.columns if c.endswith("_raw")])
     seasons = seasons.sort_values(["gauge_code", "hydro_year"]).reset_index(drop=True)
-    seasons["source_type"] = "замер"
-    seasons["source"] = hydro.SOURCE
+    seasons["source_type"] = np.where(seasons.gauge_code.isin(northeast.STATIONS),'оценка по толщине','замер')
+    seasons["source"] = seasons.gauge_code.map(st.set_index('gauge_code').source)
     return st, thick, seasons
 
 
@@ -155,6 +163,9 @@ def main():
     st.to_csv(PROCESSED / "gauges.csv", index=False)
     thick.to_csv(PROCESSED / "hydro_ice_thickness.csv", index=False)
     seasons.to_csv(PROCESSED / "hydro_ice_seasons.csv", index=False)
+    snow=thick[thick.get('snow_on_ice_cm',pd.Series(np.nan,index=thick.index)).notna()].copy()
+    if not snow.empty:
+        snow[['gauge_code','hydro_year','date','snow_on_ice_cm','source']].to_csv(PROCESSED/'hydro_snow_on_ice.csv',index=False)
     sat = build_sat()
     sat.to_csv(PROCESSED / "yakutsk_sat_seasons.csv", index=False)
     print(f"gauges: {len(st)} (Якутия: {st['yakutia'].sum()})")

@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-STEPS = ["build_dataset.py", "validate_data.py", "train_m1.py", "before_after.py", "stress_test.py", "significance.py", "transfer_test.py",
+STEPS = ["build_dataset.py", "download_snow_data.py", "validate_data.py", "train_m1.py", "train_snow_model.py", "before_after.py", "stress_test.py", "significance.py", "transfer_test.py",
          "forecast_journal.py", "build_site.py"]
 
 for s in STEPS:

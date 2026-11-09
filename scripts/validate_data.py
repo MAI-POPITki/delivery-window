@@ -60,12 +60,13 @@ def hydro_checks():
     g = pd.read_csv(PROCESSED / "gauges.csv")
     yak = g.loc[g.yakutia, "gauge_code"]
     sy = s[s.gauge_code.isin(yak)]
-    bad = s[~s.valid]
+    phase_known=s[['first_ice_day','freezeup_day','melt_start_day','drift_start_day','ice_end_day']].notna().any(axis=1)
+    bad = s[phase_known & ~s.valid]
     check("гидропосты: даты ледовых явлений в правильном порядке и в правдоподобных месяцах",
-          len(bad) / len(s) < 0.05,
-          f"сезонов {len(s)}, с флагами {len(bad)} ({len(bad) / len(s):.1%}) — исключаются из обучения; "
+          len(bad) / phase_known.sum() < 0.05,
+          f"сезонов с известными фазами {phase_known.sum()}, с флагами {len(bad)} ({len(bad) / phase_known.sum():.1%}) — исключаются из обучения; "
           f"по Якутии {(~sy.valid).sum()} из {len(sy)}")
-    dur = (sy.drift_start_day - sy.freezeup_day)[sy.valid]
+    dur = (sy.drift_start_day - sy.freezeup_day)[sy.valid].dropna()
     check("длительность ледостава в Якутии в пределах литературы (180–250 сут)",
           dur.between(170, 260).mean() > 0.9,
           f"медиана {dur.median():.0f} сут, 5–95%: {dur.quantile(.05):.0f}–{dur.quantile(.95):.0f}")
@@ -78,7 +79,46 @@ def hydro_checks():
           f"(сырые значения: {', '.join(str(int(v)) for v in spikes.ice_cm_raw)} см); "
           f"после очистки максимум {thy.ice_cm.max():.0f} см (наледи на горных реках, напр. Алгий); "
           f"«промерзание до дна»: {int(thy.frozen_to_bottom.sum())}")
+    from okno.northeast import STATIONS
+    new=th[th.gauge_code.isin(STATIONS)]
+    after=new[new.date>='2013-01-01']
+    check('Новые посты: данные после 2012 и неповторяющиеся даты',
+          len(after)>0 and not new.duplicated(['gauge_code','date']).any(),
+          f'{new.gauge_code.nunique()} постов, {len(after)} строк после 2012, последняя дата {after.date.max()}; '
+          'противоречивые повторные даты в сыром файле исключены')
+    new_phases=s[s.gauge_code.isin(STATIONS)]
+    check('Недостающие фазы PANGAEA не подменены датами замеров',
+          new_phases[['first_ice_day','freezeup_day','melt_start_day','drift_start_day','ice_end_day']].isna().all().all(),
+          'Доступны оценки достижения пороговой толщины; начала таяния и ледохода в источнике нет')
     return s, g
+
+
+def snow_checks():
+    from okno.regions import all_gauges
+    expected={f'gauge_{c}' for c in all_gauges()}|{'yakutsk_crossing'}
+    missing=[];bad=[];total=0
+    for pid in sorted(expected):
+        path=DATA/'snow_depth'/f'{pid}.csv'
+        if not path.exists():
+            missing.append(pid)
+            continue
+        frame=pd.read_csv(path,parse_dates=['date'])
+        total+=len(frame)
+        dates=frame.date
+        gaps=len(pd.date_range(dates.min(),dates.max()))-dates.nunique()
+        if (dates.duplicated().any() or not dates.is_monotonic_increasing or gaps or
+            frame.snow_depth_cm.isna().mean()>.05 or (frame.snow_depth_cm.dropna()<0).any() or
+            dates.gt(pd.Timestamp(dt.date.today())).any()):
+            bad.append(pid)
+    check('Снег на суше: полные суточные ряды без отрицательной толщины',not missing and not bad,
+          f'точек {len(expected)-len(missing)}/{len(expected)}, строк {total}; '
+          f'отсутствуют: {", ".join(missing) or "нет"}; ошибки: {", ".join(bad) or "нет"}. '
+          'ERA5-Land, сантиметры, UTC; в прогнозе номинальный лаг пять суток')
+    measured=pd.read_csv(PROCESSED/'hydro_snow_on_ice.csv')
+    check('Снег на льду: измерения отделены от модельного снега на суше',
+          not measured.duplicated(['gauge_code','date']).any() and measured.snow_on_ice_cm.ge(0).all(),
+          f'{len(measured)} замеров на {measured.gauge_code.nunique()} постах, '
+          f'последняя дата {measured.date.max()}; в прогнозе только свой сезон и возраст не более 30 суток')
 
 
 def stefan_check():
@@ -173,11 +213,12 @@ def main():
     REPORTS.mkdir(exist_ok=True)
     weather_checks()
     seasons, gauges = hydro_checks()
+    snow_checks()
     pooled, per = stefan_check()
     comp = satellite_checks(seasons, gauges)
     write_report(comp, pooled, per)
     from src.validate_data import main as run_a3_validation
-    if run_a3_validation():
+    if run_a3_validation() or any(row['результат']=='НЕ прошла' for row in CHECKS):
         raise SystemExit(1)
 
 

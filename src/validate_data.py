@@ -55,8 +55,10 @@ def run_validation():
     record('V1_WEATHER','PASS' if gaps==dups==nans==0 and len(paths)>0 else 'FAIL',
            f'{len(paths)} рядов; пропуски {gaps}, дубли {dups}, пустые температуры {nans}. Это реанализ, не архив оперативных выпусков.')
     seasons=pd.read_csv(ROOT/'data/processed/hydro_ice_seasons.csv')
-    record('V2_HYDRO','PASS' if (~seasons.valid).mean()<.05 else 'FAIL',
-           f'{len(seasons)} сезонов; доля брака {(~seasons.valid).mean():.1%}')
+    with_phases=seasons[seasons[['first_ice_day','freezeup_day','melt_start_day','drift_start_day','ice_end_day']].notna().any(axis=1)]
+    record('V2_HYDRO','PASS' if len(with_phases) and (~with_phases.valid).mean()<.05 else 'FAIL',
+           f'{len(with_phases)} сезонов с известными фазами; доля брака {(~with_phases.valid).mean():.1%}. '
+           'Новые сезоны только с толщиной не увеличивают знаменатель проверки ледовых фаз.')
     pooled,per,_=calibrate_all()
     record('V3_STEFAN','PASS' if pooled and pooled['r2']>.5 else 'FAIL',
            f"Подбор по {pooled['n']} замерам: alpha={pooled['alpha']:.2f}, R²={pooled['r2']:.2f}; это ошибка подбора, не независимый тест.")
@@ -106,7 +108,7 @@ def write_validation_report(summary,meta):
           'Для 2024 года: вечером 15 апреля / первый закрытый день 16 апреля; паромы — 24 мая, разрыв 38 суток.','',
           'Параметры спроса, выделенной мощности, ж/д плеча, начального запаса и складов остаются сценарными. '
           'Достоверная экономика перевозчика требует его отправок, договоров, реальных мощностей и издержек.']
-    out.write_text('\n'.join(text)+'\n')
+    out.write_text('\n'.join(text)+'\n',encoding='utf-8')
     summary.to_csv(ROOT/'reports/validation_summary_a3.csv',index=False)
     return out
 

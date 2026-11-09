@@ -47,6 +47,10 @@ jobs:
           python scripts/download_flood.py
           python scripts/validate_flood.py
 
+      - name: Высота снежного покрова ERA5-Land (докачка хвоста)
+        continue-on-error: true   # без свежего снега прогноз использует М1 без снежной поправки
+        run: python scripts/download_snow_data.py --recent
+
       - name: Архив прогнозов GFS для погодной модели закрытия
         continue-on-error: true   # при недоступности архива дашборд использует обычную М1
         run: python scripts/download_weather_forecasts.py --live
@@ -61,7 +65,7 @@ jobs:
       - name: Есть ли новые данные
         id: diff
         run: |
-          if git diff --quiet -- data/weather && [ -z "$(git ls-files --others --exclude-standard data/weather)" ]; then
+          if git diff --quiet -- data/weather data/snow_depth && [ -z "$(git ls-files --others --exclude-standard data/weather data/snow_depth)" ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "Новых данных о погоде нет"
           else
