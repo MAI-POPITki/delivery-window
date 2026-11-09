@@ -41,6 +41,12 @@ jobs:
       - name: Свежая погода ERA5 (докачка хвоста)
         run: python scripts/download_data.py --weather --gauges --lena --recent
 
+      - name: Прогноз высокой воды GloFAS (четыре региона)
+        continue-on-error: true   # старый прогноз станет серым через 48 ч; данные не подменяются
+        run: |
+          python scripts/download_flood.py
+          python scripts/validate_flood.py
+
       - name: Архив прогнозов GFS для погодной модели закрытия
         continue-on-error: true   # при недоступности архива дашборд использует обычную М1
         run: python scripts/download_weather_forecasts.py --live

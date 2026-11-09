@@ -109,6 +109,12 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 
+_service = st.sidebar.radio("Направление", ["Зимники и переправы", "Паводки"], key="service_mode")
+if _service == "Паводки":
+    from app.flood_view import render_flood
+    render_flood()
+    st.stop()
+
 # Streamlit перезапускает этот скрипт при каждом изменении, но уже импортированные модули okno
 # остаются в памяти процесса. Сначала обновляем зависимости, затем импортируем зависимые
 # модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
