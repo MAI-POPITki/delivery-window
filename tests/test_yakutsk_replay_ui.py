@@ -71,7 +71,9 @@ class ReplayDashboardTests(unittest.TestCase):
         self.assertFalse(app.exception, [e.message for e in app.exception])
         self.assertFalse(app.session_state['replay_active'])
         self.assertEqual(app.sidebar.selectbox(key='filter_region').value, 'irkutsk')
-        self.assertTrue(any(w.label=='Осталось вывезти на дату решения, т' for w in app.number_input))
+        self.assertEqual(app.sidebar.selectbox(key='filter_season').value, 2027)
+        self.assertIn('Риски и рекомендации', [tab.label for tab in app.tabs])
+        self.assertNotIn('replay_Q', [widget.key for widget in app.number_input])
 
 
 if __name__=='__main__':

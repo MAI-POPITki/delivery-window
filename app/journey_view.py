@@ -7,16 +7,16 @@ from okno.risk_advice import scenarios
 from okno.regions import label
 from okno.ice import from_season_day
 
-NAMES={'unknown':'Нет опубликованных сведений','closed':'Закрыто по записи',
-       'overweight':'Масса превышена','limited':'Есть запись предела массы',
-       'mass_unknown':'Масса в записи не определена'}
+NAMES={'unknown':'Нет опубликованных сведений','closed':'Путь закрыт',
+       'overweight':'Масса превышена','limited':'Предел массы опубликован',
+       'mass_unknown':'Предел массы не указан'}
 
 
 def render_journey(pid,hy,issue_date,issue_day,margin,points,forecast):
     st.subheader('Риски и рекомендации')
     st.write(f'**{label(pid)}** · сведения, известные на {issue_date:%d.%m.%Y} · сезон {hy-1}/{hy}')
-    st.caption('Анализ выбранного сезонного пути. Географический маршрут не строится. '
-               'Реестр определяет известные ограничения, М1 оценивает физическое закрытие; неизвестное не считается безопасным.')
+    st.caption('Выберите дату поездки и укажите массу машины с грузом. '
+               'Опубликованные ограничения и прогноз закрытия помогут оценить возможность проезда.')
     events=road_rows(pid,hy)
     roads=sorted(events.road.unique())
     road=st.selectbox('Дорога из реестра',roads,index=0 if len(roads)==1 else None,
@@ -33,7 +33,7 @@ def render_journey(pid,hy,issue_date,issue_day,margin,points,forecast):
     rows=scenarios(events,road,q,issue_date,passage,hy,margin,gross)
     current=rows[0]
     st.subheader('Что известно о рисках')
-    st.write('**Реестр: '+NAMES[current['status']]+'**')
+    st.write('**Опубликованные ограничения: '+NAMES[current['status']]+'**')
     record=current['record']
     if record:
         st.markdown(f"{record['basis']} · действует с {record['date']:%d.%m.%Y} · опубликовано {record['publication']:%d.%m.%Y} · [Источник]({record['source']})")

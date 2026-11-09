@@ -63,14 +63,20 @@ class FloodTests(unittest.TestCase):
         self.assertEqual(result["fraction"], 1.)
 
     def test_wrong_cell_units_dates_and_negative_values_rejected(self):
-        for field in ("cell", "units", "duplicate", "negative", "infinite"):
+        for field in ("cell", "nan_cell", "units", "duplicate", "negative", "infinite", "missing_date", "time_in_date"):
             bad = deepcopy(self.live["payload"])
             if field == "cell":
                 bad["latitude"] += 1
+            elif field == "nan_cell":
+                bad["latitude"] = float("nan")
             elif field == "units":
                 bad["daily_units"]["river_discharge"] = "cm"
             elif field == "duplicate":
                 bad["daily"]["time"][1] = bad["daily"]["time"][0]
+            elif field == "missing_date":
+                bad["daily"]["time"][0] = None
+            elif field == "time_in_date":
+                bad["daily"]["time"] = [v + "T12:00:00" for v in bad["daily"]["time"]]
             else:
                 bad["daily"]["river_discharge"][0] = -1 if field == "negative" else float("inf")
             with self.subTest(field=field), self.assertRaises(ValueError):
@@ -105,7 +111,7 @@ class FloodTests(unittest.TestCase):
         self.assertTrue(rows.fraction.isna().all())
         fig = make_map(rows)
         self.assertEqual(sum(len(trace.lat) for trace in fig.data), 5)
-        self.assertEqual(fig.data[0].marker.color, "#999999")
+        self.assertEqual(fig.data[0].marker.color, "#8a929e")
         rows, _ = F.load_points(self.now + timedelta(days=5))
         self.assertTrue(rows.fraction.isna().all())
 
@@ -115,6 +121,28 @@ class FloodTests(unittest.TestCase):
         self.assertEqual(sum(len(trace.lat) for trace in fig.data), 5)
         ids = {item[0] for trace in fig.data for item in trace.customdata}
         self.assertEqual(ids, set(F.POINTS))
+
+    def test_map_fits_region_and_keeps_labels_readable(self):
+        rows, _ = F.load_points(self.now)
+        all_map = make_map(rows)
+        regional_map = make_map(rows[rows.region == "Оренбургская область"], "ural_orsk")
+        self.assertGreater(regional_map.layout.map.zoom, all_map.layout.map.zoom)
+        self.assertEqual(regional_map.data[0].textfont.color, "#172033")
+        self.assertIn(23, regional_map.data[0].marker.size)
+
+    def test_archive_cache_invalidates_when_file_changes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "history.json"
+            path.write_text(json.dumps(self.history), encoding="utf-8")
+            stat = path.stat()
+            F._history_reference.cache_clear()
+            F._history_reference(path, self.pid, stat.st_mtime_ns, stat.st_size, 2026)
+            F._history_reference(path, self.pid, stat.st_mtime_ns, stat.st_size, 2026)
+            self.assertEqual(F._history_reference.cache_info().hits, 1)
+            path.write_text('{"payload": {}}', encoding="utf-8")
+            changed = path.stat()
+            with self.assertRaises(KeyError):
+                F._history_reference(path, self.pid, changed.st_mtime_ns, changed.st_size, 2026)
 
     def test_streamlit_renders_map_and_region_filter(self):
         with patch("app.flood_view.load_points", side_effect=lambda: F.load_points(self.now)):
@@ -137,6 +165,17 @@ class FloodTests(unittest.TestCase):
         at.sidebar.radio(key="service_mode").set_value("Зимники и переправы").run()
         self.assertFalse(at.exception)
         self.assertEqual(at.tabs[0].label, "Карта путей")
+
+    def test_direct_link_opens_flood_and_can_return_to_welcome(self):
+        at = AppTest.from_file(str(F.ROOT / "app" / "dashboard.py"), default_timeout=90)
+        at.query_params["module"] = "flood"
+        at.run()
+        self.assertFalse(at.exception)
+        self.assertEqual(at.title[0].value, "Паводки")
+        at.sidebar.button(key="flood_welcome").click().run()
+        self.assertFalse(at.exception)
+        self.assertEqual(at.title[0].value, "Окно завоза")
+        self.assertNotIn("module", at.query_params)
 
 
 if __name__ == "__main__":

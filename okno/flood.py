@@ -3,6 +3,7 @@ from datetime import date, datetime, timedelta, timezone
 import hashlib
 import json
 from pathlib import Path
+from functools import lru_cache
 
 import numpy as np
 import pandas as pd
@@ -47,7 +48,10 @@ def read_response(path):
 def daily_frame(payload, point):
     if payload.get("timezone") != "GMT" or payload.get("utc_offset_seconds") != 0:
         raise ValueError("Ожидались исходные UTC-даты GloFAS")
-    if abs(payload["latitude"] - point["lat"]) > .03 or abs(payload["longitude"] - point["lon"]) > .03:
+    coords = (payload["latitude"], payload["longitude"])
+    if not all(np.isfinite(value) for value in coords):
+        raise ValueError("Некорректные координаты речной ячейки")
+    if abs(coords[0] - point["lat"]) > .03 or abs(coords[1] - point["lon"]) > .03:
         raise ValueError("Поставщик изменил речную ячейку")
     fields = {k: v for k, v in payload["daily"].items() if k.startswith("river_discharge")}
     if not fields or any(payload["daily_units"].get(k) != "m³/s" for k in fields):
@@ -55,6 +59,8 @@ def daily_frame(payload, point):
     df = pd.DataFrame(fields, index=pd.to_datetime(payload["daily"]["time"], errors="raise"))
     if df.index.has_duplicates or not df.index.is_monotonic_increasing:
         raise ValueError("Повторяющиеся или неупорядоченные даты")
+    if df.index.hasnans or df.index.tz is not None or not (df.index == df.index.normalize()).all():
+        raise ValueError("Ожидались календарные даты без времени")
     if ((df < 0) | np.isinf(df)).any().any():
         raise ValueError("Некорректный расход")
     return df
@@ -78,16 +84,19 @@ def threshold(history, before_year=None):
     return value, len(maxima)
 
 
-def summarize(history_envelope, forecast_envelope, point, now=None, horizon=7):
+def summarize(history_envelope, forecast_envelope, point, now=None, horizon=7, *, reference=None):
     now = now or datetime.now(timezone.utc)
     fetched = datetime.fromisoformat(forecast_envelope["fetched_at"])
     if fetched.tzinfo is None or not timedelta(0) <= now - fetched <= timedelta(hours=48):
         raise ValueError("Прогноз устарел (>48 ч) или время загрузки некорректно")
-    hist = daily_frame(history_envelope["payload"], point)
     forecast = daily_frame(forecast_envelope["payload"], point)
     start = now.astimezone(timezone.utc).date() + timedelta(days=1)
     dates = pd.date_range(start, periods=horizon)
-    q, years = threshold(hist, before_year=start.year)
+    if reference is None:
+        hist = daily_frame(history_envelope["payload"], point)
+        q, years = threshold(hist, before_year=start.year)
+    else:
+        q, years = reference
     members = [c for c in forecast if c.startswith("river_discharge_member")]
     future = forecast.reindex(dates)[members].dropna(axis=1)
     if future.shape[1] < 30:
@@ -103,17 +112,29 @@ def summarize(history_envelope, forecast_envelope, point, now=None, horizon=7):
                                     "q90": future.quantile(.9, axis=1)}))
 
 
+@lru_cache(maxsize=32)
+def _history_reference(path, pid, mtime_ns, size, before_year):
+    """Статичный архив проверяется и обрабатывается один раз на версию файла."""
+    frame = daily_frame(read_response(path)["payload"], POINTS[pid])
+    return threshold(frame, before_year=before_year)
+
+
 def load_points(now=None, data_dir=DATA):
+    now = now or datetime.now(timezone.utc)
     rows, details = [], {}
     for pid, point in POINTS.items():
         row = dict(pid=pid, **point, fraction=None, status="нет данных")
         try:
-            result = summarize(read_response(data_dir / "history" / f"{pid}.json"),
-                               read_response(data_dir / "latest" / f"{pid}.json"), point, now)
+            path = data_dir / "history" / f"{pid}.json"
+            stat = path.stat()
+            cutoff = (now.astimezone(timezone.utc).date() + timedelta(days=1)).year
+            reference = _history_reference(path, pid, stat.st_mtime_ns, stat.st_size, cutoff)
+            result = summarize(None, read_response(data_dir / "latest" / f"{pid}.json"),
+                               point, now, reference=reference)
             details[pid] = result
             row.update({k: v for k, v in result.items() if k != "curve"})
             row["status"] = "расчёт доступен"
         except (OSError, ValueError, KeyError, TypeError) as exc:
-            row["status"] = str(exc)
+            row["status"] = "Данные ещё не загружены" if isinstance(exc, FileNotFoundError) else str(exc)
         rows.append(row)
     return pd.DataFrame(rows), details

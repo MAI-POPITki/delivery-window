@@ -138,9 +138,10 @@ class CorridorEvidenceTests(unittest.TestCase):
 
 class CorridorDashboardTests(unittest.TestCase):
     def test_historical_and_synthetic_render_with_honest_controls(self):
-        app=AppTest.from_file(str(ROOT/'app/dashboard.py'),default_timeout=120).run()
-        app.session_state['main_tab']='Сквозной коридор (А3)'  # вкладка коридора считается только открытой
-        app.button(key='open_dashboard').click().run()
+        # Исторический расчёт теперь открывается из «Рисков и рекомендаций».
+        # Проверяем сам компонент, не удалённую вкладку старой навигации.
+        app=AppTest.from_string('from app.corridor_view import render_corridor\nrender_corridor()',
+                                default_timeout=120).run()
         self.assertFalse(app.exception,[e.message for e in app.exception])
         self.assertEqual(app.selectbox(key='corr_scenario').value,2024)
         frame=next(d.value for d in app.dataframe if 'Получено потребителем, т' in d.value.columns)

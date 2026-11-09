@@ -186,7 +186,7 @@ def render_corridor():
     summary=pd.DataFrame([dict(policy=p,**r[0]) for p,r in results.items()]).set_index('policy')
     if st.session_state.get('corr_focus') not in results:
         st.session_state['corr_focus']='economic_ml'
-    focus=st.selectbox('Подход для подробного сравнения',list(results),index=list(results).index('economic_ml'),
+    focus=st.selectbox('Подход для подробного сравнения',list(results),index=None,
                        format_func=names.get,key='corr_focus')
     before,after=summary.loc['calendar'],summary.loc[focus]
     st.write(f'**Выбран: {names[focus]}**')

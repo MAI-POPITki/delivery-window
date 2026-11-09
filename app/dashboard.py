@@ -90,9 +90,13 @@ LEGEND_HTML = '\n<style>.okno-legend{display:flex;flex-wrap:wrap;gap:8px;margin:
 st.set_page_config(page_title="Окно завоза", page_icon="🧊", layout="wide")
 
 # Старые ссылки открывают общую рабочую вкладку, не отдельные страницы.
-_requested_plan = st.query_params.get("module") in ("routes", "backhaul", "journey")
+_requested_module = st.query_params.get("module")
+if _requested_module == "flood" and not st.session_state.get("flood_link_processed"):
+    st.session_state.update(dashboard_open=True, service_mode="Паводки", flood_link_processed=True)
+_requested_plan = _requested_module in ("routes", "backhaul", "journey")
 if _requested_plan and not st.session_state.get("journey_link_processed"):
     st.session_state["dashboard_open"] = True
+    st.session_state["service_mode"] = "Зимники и переправы"
     st.session_state["main_tab"] = "Риски и рекомендации"
     st.session_state["journey_link_processed"] = True
 
@@ -111,6 +115,15 @@ import plotly.graph_objects as go
 
 _service = st.sidebar.radio("Направление", ["Зимники и переправы", "Паводки"], key="service_mode")
 if _service == "Паводки":
+    # Обновляем зависимости и представление в живом процессе Streamlit после git pull.
+    for _name in ("okno.flood", "app.flood_view"):
+        _mod = sys.modules.get(_name)
+        if _mod is None:
+            _mod = importlib.import_module(_name)
+        elif getattr(_mod, "_loaded_mtime_ns", None) != os.stat(_mod.__file__).st_mtime_ns:
+            _mod = importlib.reload(_mod)
+        _mod._loaded_mtime_ns = os.stat(_mod.__file__).st_mtime_ns
+    st.sidebar.button("О проекте", key="flood_welcome", on_click=show_welcome, width="stretch")
     from app.flood_view import render_flood
     render_flood()
     st.stop()
