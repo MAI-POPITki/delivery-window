@@ -1,0 +1,89 @@
+{
+  "source": "https://level-satellite.ru/api/series",
+  "request": {
+    "post_code": "3045",
+    "date_from": "2000-01-01",
+    "date_to": "2026-11-09"
+  },
+  "fetched_at": "2026-11-09T14:00:06.503646+00:00",
+  "sha256": "b57f4aa5d500a1a82af9c665ba3eac7a7bce899088b9056f31e12c59b3f49b63",
+  "station": {
+    "geometry": {
+      "coordinates": [
+        129.819245,
+        62.06161
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "basin_code": "03",
+      "basin_name": null,
+      "bo_code": "18",
+      "bo_name": null,
+      "catchment_area_km2": 904000.0,
+      "has_discharge": false,
+      "name": "р.Лена - г.Якутск",
+      "opened": "1899-04-13",
+      "post_code": "3045",
+      "subbasin_code": "05",
+      "subbasin_name": null,
+      "vhu_code": "18.03.05.002",
+      "vhu_name": null
+    },
+    "type": "Feature"
+  },
+  "summary": {
+    "b": {
+      "code": "03",
+      "name": null
+    },
+    "bo": {
+      "code": "18",
+      "name": null
+    },
+    "catchment_area_km2": 904000.0,
+    "discharge": {
+      "avg": null,
+      "max": null,
+      "min": null,
+      "n": 0,
+      "param": null
+    },
+    "lat": 62.06161,
+    "level": {
+      "avg": -18.359311599272424,
+      "dmax": "2024-05-13",
+      "dmin": "2001-01-11",
+      "max": 858.0,
+      "min": -346.0,
+      "n": 7147
+    },
+    "lon": 129.819245,
+    "name": "р.Лена - г.Якутск",
+    "opened": "1899-04-13",
+    "pb": {
+      "code": "05",
+      "name": null
+    },
+    "period_all": {
+      "max": "2024-05-13",
+      "min": "2001-01-11"
+    },
+    "post_code": "3045",
+    "vhu": {
+      "code": "18.03.05.002",
+      "name": null
+    },
+    "zero_marks": [
+      {
+        "height_system": "БС | БС 77",
+        "is_current": true,
+        "year_from": 2008,
+        "year_to": 2023,
+        "zero_mark_m": 85.2
+      }
+    ]
+  },
+  "attribution": "Головлев П.П., Иннокентьев А.И., Уровень-Спутник (2026); источник записей gmvo — АИС ГМВО",
+  "units": "cm above gauge zero; negative values valid"
+}

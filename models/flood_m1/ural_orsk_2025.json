@@ -1,0 +1,89 @@
+{
+  "year": 2025,
+  "train_until": "2023-12-31",
+  "calibration_year": 2024,
+  "methods": {
+    "1": "persistence",
+    "2": "persistence",
+    "3": "persistence",
+    "4": "persistence",
+    "5": "persistence",
+    "6": "persistence",
+    "7": "catboost"
+  },
+  "widths_cm": {
+    "1": 8.0,
+    "2": 16.0,
+    "3": 27.0,
+    "4": 34.0,
+    "5": 42.0,
+    "6": 53.0,
+    "7": 62.6734440914002
+  },
+  "calibration_mae": {
+    "1": {
+      "catboost": 10.337496366047507,
+      "persistence": 6.950684931506849,
+      "calendar": 108.82054794520548,
+      "last_year": 110.35068493150685
+    },
+    "2": {
+      "catboost": 14.867813526170133,
+      "persistence": 13.626373626373626,
+      "calendar": 109.10302197802197,
+      "last_year": 110.61538461538461
+    },
+    "3": {
+      "catboost": 21.33937926765904,
+      "persistence": 19.977961432506888,
+      "calendar": 109.3870523415978,
+      "last_year": 110.88154269972452
+    },
+    "4": {
+      "catboost": 27.891255298875524,
+      "persistence": 26.174033149171272,
+      "calendar": 109.68370165745857,
+      "last_year": 111.16298342541437
+    },
+    "5": {
+      "catboost": 34.107046788352726,
+      "persistence": 32.18559556786703,
+      "calendar": 109.98614958448753,
+      "last_year": 111.45429362880887
+    },
+    "6": {
+      "catboost": 38.64657332337542,
+      "persistence": 37.86388888888889,
+      "calendar": 110.29027777777777,
+      "last_year": 111.74722222222222
+    },
+    "7": {
+      "catboost": 43.02714932047816,
+      "persistence": 43.17270194986072,
+      "calendar": 110.59610027855153,
+      "last_year": 112.041782729805
+    }
+  },
+  "features": [
+    "h0",
+    "h1",
+    "h3",
+    "h7",
+    "h14",
+    "h30",
+    "d1",
+    "d3",
+    "d7",
+    "d14",
+    "mean7",
+    "mean30",
+    "sin",
+    "cos",
+    "lead"
+  ],
+  "interval": "80% residual quantile on previous year; coverage not guaranteed",
+  "point_id": "ural_orsk",
+  "gauge_code": "19054",
+  "observation_source": "vodinfo",
+  "data_sha256": "c6c122fcbb65b192ef3bba80bfda4a51ce5eac2092f9d3a2fada96e17109e0b8"
+}

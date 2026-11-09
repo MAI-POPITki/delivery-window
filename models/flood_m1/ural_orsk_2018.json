@@ -1,0 +1,89 @@
+{
+  "year": 2018,
+  "train_until": "2016-12-31",
+  "calibration_year": 2017,
+  "methods": {
+    "1": "persistence",
+    "2": "persistence",
+    "3": "catboost",
+    "4": "catboost",
+    "5": "catboost",
+    "6": "catboost",
+    "7": "catboost"
+  },
+  "widths_cm": {
+    "1": 2.0,
+    "2": 5.0,
+    "3": 8.228553541201592,
+    "4": 10.681161645565567,
+    "5": 12.762405741905326,
+    "6": 13.944761694923244,
+    "7": 15.206121776834038
+  },
+  "calibration_mae": {
+    "1": {
+      "catboost": 5.447678415829875,
+      "persistence": 3.14010989010989,
+      "calendar": 41.93131868131868,
+      "last_year": 32.667582417582416
+    },
+    "2": {
+      "catboost": 6.544669264111632,
+      "persistence": 6.099173553719008,
+      "calendar": 42.0,
+      "last_year": 32.64462809917355
+    },
+    "3": {
+      "catboost": 8.544810065432571,
+      "persistence": 8.817679558011049,
+      "calendar": 42.074585635359114,
+      "last_year": 32.62154696132597
+    },
+    "4": {
+      "catboost": 11.131670153946475,
+      "persistence": 11.426592797783934,
+      "calendar": 42.149584487534625,
+      "last_year": 32.59279778393352
+    },
+    "5": {
+      "catboost": 13.513281588554637,
+      "persistence": 13.75,
+      "calendar": 42.230555555555554,
+      "last_year": 32.577777777777776
+    },
+    "6": {
+      "catboost": 15.13476135466349,
+      "persistence": 16.011142061281337,
+      "calendar": 42.31197771587744,
+      "last_year": 32.57660167130919
+    },
+    "7": {
+      "catboost": 16.273361952445313,
+      "persistence": 18.206703910614525,
+      "calendar": 42.39385474860335,
+      "last_year": 32.58659217877095
+    }
+  },
+  "features": [
+    "h0",
+    "h1",
+    "h3",
+    "h7",
+    "h14",
+    "h30",
+    "d1",
+    "d3",
+    "d7",
+    "d14",
+    "mean7",
+    "mean30",
+    "sin",
+    "cos",
+    "lead"
+  ],
+  "interval": "80% residual quantile on previous year; coverage not guaranteed",
+  "point_id": "ural_orsk",
+  "gauge_code": "19054",
+  "observation_source": "vodinfo",
+  "data_sha256": "c6c122fcbb65b192ef3bba80bfda4a51ce5eac2092f9d3a2fada96e17109e0b8"
+}

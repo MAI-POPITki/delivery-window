@@ -1,0 +1,332 @@
+{
+  "ishim_ishim:1": {
+    "success": false,
+    "point_skill_success": true,
+    "interval_valid": false,
+    "spring_coverage": 0.5180327868852459,
+    "gain_ci90_cm": {
+      "persistence": [
+        1.5303611755649398,
+        2.9000009283352965
+      ],
+      "calendar": [
+        52.678861300267,
+        95.14257740730024
+      ],
+      "last_year": [
+        42.90852806234064,
+        84.8682528068467
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ]
+  },
+  "ishim_ishim:3": {
+    "success": false,
+    "point_skill_success": true,
+    "interval_valid": false,
+    "spring_coverage": 0.5147540983606558,
+    "gain_ci90_cm": {
+      "persistence": [
+        6.509318006185358,
+        11.125221771152601
+      ],
+      "calendar": [
+        50.03499508952534,
+        95.3079523560581
+      ],
+      "last_year": [
+        41.59031768384499,
+        82.98969486407125
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ]
+  },
+  "ishim_ishim:7": {
+    "success": false,
+    "point_skill_success": true,
+    "interval_valid": false,
+    "spring_coverage": 0.48196721311475405,
+    "gain_ci90_cm": {
+      "persistence": [
+        12.775865584106558,
+        23.579691576958275
+      ],
+      "calendar": [
+        42.430495391845604,
+        87.92937976266228
+      ],
+      "last_year": [
+        34.83964960457876,
+        76.1535143835603
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ]
+  },
+  "lena_yakutsk:1": {
+    "success": false,
+    "point_skill_success": true,
+    "interval_valid": false,
+    "spring_coverage": 0.6,
+    "gain_ci90_cm": {
+      "persistence": [
+        0.06171443521647504,
+        1.8109118467427852
+      ],
+      "calendar": [
+        55.351426378367,
+        78.84416769909211
+      ],
+      "last_year": [
+        89.52081299538165,
+        99.53535858777707
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ]
+  },
+  "lena_yakutsk:3": {
+    "success": false,
+    "point_skill_success": true,
+    "interval_valid": false,
+    "spring_coverage": 0.6721311475409836,
+    "gain_ci90_cm": {
+      "persistence": [
+        10.440641738002387,
+        15.133474019564638
+      ],
+      "calendar": [
+        47.23124450447827,
+        70.9004731372316
+      ],
+      "last_year": [
+        81.69689922198272,
+        91.8379683640605
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ]
+  },
+  "lena_yakutsk:7": {
+    "success": false,
+    "point_skill_success": true,
+    "interval_valid": false,
+    "spring_coverage": 0.6754098360655737,
+    "gain_ci90_cm": {
+      "persistence": [
+        18.201285217341002,
+        24.392961973213687
+      ],
+      "calendar": [
+        25.601285899627563,
+        50.47158364228393
+      ],
+      "last_year": [
+        60.13588448064395,
+        72.36937945545247
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ]
+  },
+  "ural_orenburg:1": {
+    "success": false,
+    "point_skill_success": false,
+    "interval_valid": false,
+    "spring_coverage": 0.5762295081967214,
+    "gain_ci90_cm": {
+      "persistence": [
+        0.0,
+        0.0
+      ],
+      "calendar": [
+        22.363269794721408,
+        67.8126409033667
+      ],
+      "last_year": [
+        19.90027042849624,
+        62.90435215273925
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ]
+  },
+  "ural_orenburg:3": {
+    "success": false,
+    "point_skill_success": true,
+    "interval_valid": false,
+    "spring_coverage": 0.5685488767455981,
+    "gain_ci90_cm": {
+      "persistence": [
+        0.1668412689618798,
+        2.3105730982041304
+      ],
+      "calendar": [
+        19.768583175556405,
+        61.6018456881441
+      ],
+      "last_year": [
+        17.043169509792943,
+        57.880052011109086
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ]
+  },
+  "ural_orenburg:7": {
+    "success": false,
+    "point_skill_success": false,
+    "interval_valid": false,
+    "spring_coverage": 0.564541590771099,
+    "gain_ci90_cm": {
+      "persistence": [
+        -0.6346622185859415,
+        5.454688833958014
+      ],
+      "calendar": [
+        13.373846261091217,
+        50.870663172302194
+      ],
+      "last_year": [
+        10.254478375463728,
+        47.51324218286666
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ]
+  },
+  "ural_orsk:1": {
+    "success": false,
+    "point_skill_success": false,
+    "interval_valid": true,
+    "spring_coverage": 0.76775956284153,
+    "gain_ci90_cm": {
+      "persistence": [
+        0.0,
+        0.0
+      ],
+      "calendar": [
+        23.170100732600734,
+        63.12905994405139
+      ],
+      "last_year": [
+        14.411308896582868,
+        58.85444076471475
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ]
+  },
+  "ural_orsk:3": {
+    "success": false,
+    "point_skill_success": false,
+    "interval_valid": false,
+    "spring_coverage": 0.6202185792349727,
+    "gain_ci90_cm": {
+      "persistence": [
+        -1.2294043349455865,
+        -0.16997651977801928
+      ],
+      "calendar": [
+        19.466327623943844,
+        54.67879626554663
+      ],
+      "last_year": [
+        11.079931336539547,
+        50.470638820371526
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ]
+  },
+  "ural_orsk:7": {
+    "success": false,
+    "point_skill_success": false,
+    "interval_valid": false,
+    "spring_coverage": 0.6092896174863388,
+    "gain_ci90_cm": {
+      "persistence": [
+        -0.898063372063263,
+        0.4260397311443593
+      ],
+      "calendar": [
+        15.358439852749555,
+        42.814033271781234
+      ],
+      "last_year": [
+        6.553601926512848,
+        38.27714194872012
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ]
+  }
+}

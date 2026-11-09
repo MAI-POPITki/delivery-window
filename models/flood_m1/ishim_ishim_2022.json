@@ -1,0 +1,89 @@
+{
+  "year": 2022,
+  "train_until": "2020-12-31",
+  "calibration_year": 2021,
+  "methods": {
+    "1": "catboost",
+    "2": "catboost",
+    "3": "catboost",
+    "4": "catboost",
+    "5": "catboost",
+    "6": "catboost",
+    "7": "catboost"
+  },
+  "widths_cm": {
+    "1": 3.356853721851053,
+    "2": 3.1577888986136884,
+    "3": 5.141296959496003,
+    "4": 7.865034230242713,
+    "5": 11.307876638391889,
+    "6": 13.492529751552667,
+    "7": 14.965521406962921
+  },
+  "calibration_mae": {
+    "1": {
+      "catboost": 2.1678237093742614,
+      "persistence": 4.403846153846154,
+      "calendar": 40.82692307692308,
+      "last_year": 84.87912087912088
+    },
+    "2": {
+      "catboost": 2.410753888374093,
+      "persistence": 8.801652892561984,
+      "calendar": 40.93112947658402,
+      "last_year": 85.09917355371901
+    },
+    "3": {
+      "catboost": 4.112970981374468,
+      "persistence": 13.1353591160221,
+      "calendar": 41.030386740331494,
+      "last_year": 85.31767955801105
+    },
+    "4": {
+      "catboost": 6.049692098673089,
+      "persistence": 17.412742382271468,
+      "calendar": 41.12742382271468,
+      "last_year": 85.53462603878117
+    },
+    "5": {
+      "catboost": 8.177597140438106,
+      "persistence": 21.658333333333335,
+      "calendar": 41.21666666666667,
+      "last_year": 85.74722222222222
+    },
+    "6": {
+      "catboost": 10.020823769182842,
+      "persistence": 25.88857938718663,
+      "calendar": 41.306406685236766,
+      "last_year": 85.96100278551532
+    },
+    "7": {
+      "catboost": 12.3495822859516,
+      "persistence": 30.089385474860336,
+      "calendar": 41.39664804469274,
+      "last_year": 86.17597765363128
+    }
+  },
+  "features": [
+    "h0",
+    "h1",
+    "h3",
+    "h7",
+    "h14",
+    "h30",
+    "d1",
+    "d3",
+    "d7",
+    "d14",
+    "mean7",
+    "mean30",
+    "sin",
+    "cos",
+    "lead"
+  ],
+  "interval": "80% residual quantile on previous year; coverage not guaranteed",
+  "point_id": "ishim_ishim",
+  "gauge_code": "11412",
+  "observation_source": "gmvo",
+  "data_sha256": "4b369dae8a23a490c9784889920f1bfc6752a66e41b782c8096a3156c403efeb"
+}

@@ -1,0 +1,89 @@
+{
+  "year": 2021,
+  "train_until": "2019-12-31",
+  "calibration_year": 2020,
+  "methods": {
+    "1": "persistence",
+    "2": "persistence",
+    "3": "persistence",
+    "4": "persistence",
+    "5": "persistence",
+    "6": "persistence",
+    "7": "persistence"
+  },
+  "widths_cm": {
+    "1": 2.0,
+    "2": 3.0,
+    "3": 5.0,
+    "4": 6.0,
+    "5": 7.0,
+    "6": 8.0,
+    "7": 9.0
+  },
+  "calibration_mae": {
+    "1": {
+      "catboost": 3.186574082375423,
+      "persistence": 1.63013698630137,
+      "calendar": 37.6,
+      "last_year": 14.98082191780822
+    },
+    "2": {
+      "catboost": 3.848791406521332,
+      "persistence": 2.728021978021978,
+      "calendar": 37.64835164835165,
+      "last_year": 14.964285714285714
+    },
+    "3": {
+      "catboost": 4.785337377672334,
+      "persistence": 3.6666666666666665,
+      "calendar": 37.69421487603306,
+      "last_year": 14.944903581267218
+    },
+    "4": {
+      "catboost": 6.3419867354241655,
+      "persistence": 4.505524861878453,
+      "calendar": 37.74585635359116,
+      "last_year": 14.933701657458563
+    },
+    "5": {
+      "catboost": 7.942597051371462,
+      "persistence": 5.299168975069252,
+      "calendar": 37.800554016620495,
+      "last_year": 14.930747922437673
+    },
+    "6": {
+      "catboost": 8.781361622920738,
+      "persistence": 6.002777777777778,
+      "calendar": 37.852777777777774,
+      "last_year": 14.930555555555555
+    },
+    "7": {
+      "catboost": 9.396060472983589,
+      "persistence": 6.674094707520891,
+      "calendar": 37.901114206128135,
+      "last_year": 14.930362116991644
+    }
+  },
+  "features": [
+    "h0",
+    "h1",
+    "h3",
+    "h7",
+    "h14",
+    "h30",
+    "d1",
+    "d3",
+    "d7",
+    "d14",
+    "mean7",
+    "mean30",
+    "sin",
+    "cos",
+    "lead"
+  ],
+  "interval": "80% residual quantile on previous year; coverage not guaranteed",
+  "point_id": "ural_orsk",
+  "gauge_code": "19054",
+  "observation_source": "vodinfo",
+  "data_sha256": "c6c122fcbb65b192ef3bba80bfda4a51ce5eac2092f9d3a2fada96e17109e0b8"
+}

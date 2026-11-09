@@ -116,8 +116,8 @@ import plotly.graph_objects as go
 _service = st.sidebar.radio("Направление", ["Зимники и переправы", "Паводки"], key="service_mode")
 if _service == "Паводки":
     # Обновляем зависимости и представление в живом процессе Streamlit после git pull.
-    for _name in ("okno.map_style", "okno.flood", "okno.flood_routes", "okno.flood_planning",
-                  "app.flood_workspace", "app.flood_view"):
+    for _name in ("okno.map_style", "okno.flood", "okno.flood_routes", "okno.flood_planning", "okno.flood_m1",
+                  "app.flood_workspace", "app.flood_view", "app.flood_m1_view"):
         _mod = sys.modules.get(_name)
         if _mod is None:
             _mod = importlib.import_module(_name)
@@ -125,8 +125,13 @@ if _service == "Паводки":
             _mod = importlib.reload(_mod)
         _mod._loaded_mtime_ns = os.stat(_mod.__file__).st_mtime_ns
     st.sidebar.button("О проекте", key="flood_welcome", on_click=show_welcome, width="stretch")
-    from app.flood_view import render_flood
-    render_flood()
+    _flood_source=st.sidebar.radio('Источник прогноза',['М1 · уровень по измерениям','GloFAS · внешний расход'],key='flood_model_source')
+    if _flood_source.startswith('М1'):
+        from app.flood_m1_view import render_m1
+        render_m1()
+    else:
+        from app.flood_view import render_flood
+        render_flood()
     st.stop()
 
 # Streamlit перезапускает этот скрипт при каждом изменении, но уже импортированные модули okno

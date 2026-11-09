@@ -1,0 +1,89 @@
+{
+  "source": "https://level-satellite.ru/api/series",
+  "request": {
+    "post_code": "19054",
+    "date_from": "2000-01-01",
+    "date_to": "2026-11-09"
+  },
+  "fetched_at": "2026-11-09T14:00:07.775132+00:00",
+  "sha256": "c6c122fcbb65b192ef3bba80bfda4a51ce5eac2092f9d3a2fada96e17109e0b8",
+  "station": {
+    "geometry": {
+      "coordinates": [
+        58.59978,
+        51.243693
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "basin_code": "01",
+      "basin_name": null,
+      "bo_code": "12",
+      "bo_name": null,
+      "catchment_area_km2": 46100.0,
+      "has_discharge": false,
+      "name": "р.Урал - г.Орск",
+      "opened": "1931-04-19",
+      "post_code": "19054",
+      "subbasin_code": "00",
+      "subbasin_name": null,
+      "vhu_code": "12.01.00.004",
+      "vhu_name": null
+    },
+    "type": "Feature"
+  },
+  "summary": {
+    "b": {
+      "code": "01",
+      "name": null
+    },
+    "bo": {
+      "code": "12",
+      "name": null
+    },
+    "catchment_area_km2": 46100.0,
+    "discharge": {
+      "avg": null,
+      "max": null,
+      "min": null,
+      "n": 0,
+      "param": null
+    },
+    "lat": 51.243693,
+    "level": {
+      "avg": 186.2467026035096,
+      "dmax": "2025-09-09",
+      "dmin": "2001-01-11",
+      "max": 972.0,
+      "min": 15.0,
+      "n": 8719
+    },
+    "lon": 58.59978,
+    "name": "р.Урал - г.Орск",
+    "opened": "1931-04-19",
+    "pb": {
+      "code": "00",
+      "name": null
+    },
+    "period_all": {
+      "max": "2025-09-09",
+      "min": "2001-01-11"
+    },
+    "post_code": "19054",
+    "vhu": {
+      "code": "12.01.00.004",
+      "name": null
+    },
+    "zero_marks": [
+      {
+        "height_system": "БС",
+        "is_current": true,
+        "year_from": 2008,
+        "year_to": 2023,
+        "zero_mark_m": 186.11
+      }
+    ]
+  },
+  "attribution": "Головлев П.П., Иннокентьев А.И., Уровень-Спутник (2026); источник записей gmvo — АИС ГМВО",
+  "units": "cm above gauge zero; negative values valid"
+}
