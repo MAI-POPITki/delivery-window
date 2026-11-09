@@ -108,7 +108,7 @@ def write_validation_report(summary,meta):
           'Для 2024 года: вечером 15 апреля / первый закрытый день 16 апреля; паромы — 24 мая, разрыв 38 суток.','',
           'Параметры спроса, выделенной мощности, ж/д плеча, начального запаса и складов остаются сценарными. '
           'Достоверная экономика перевозчика требует его отправок, договоров, реальных мощностей и издержек.']
-    out.write_text('\n'.join(text)+'\n')
+    out.write_text('\n'.join(text)+'\n',encoding='utf-8')
     summary.to_csv(ROOT/'reports/validation_summary_a3.csv',index=False)
     return out
 

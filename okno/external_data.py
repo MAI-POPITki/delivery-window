@@ -93,7 +93,18 @@ ICE_BULLETINS_COLS = (
 )
 
 PRICES_COLS = ("item", "value", "unit", "region", "year", "source", "comment")
-HYDRO_PHENOLOGY_COLS = ("point_id", "river", "location", "region", "hydro_year", "freezeup_date", "breakup_date", "source", "comment")
+HYDRO_PHENOLOGY_COLS = (
+    "point_id",
+    "river",
+    "location",
+    "region",
+    "hydro_year",
+    "freezeup_date",
+    "source_freezeup",
+    "breakup_date",
+    "source_breakup",
+    "comment",
+)
 
 _POINT_ID_RE = re.compile(r"(?:^|[;\s,])point_id=([a-z0-9_]+)")
 
@@ -508,14 +519,17 @@ def validate_supporting_tables(external_dir: Path | None = None) -> tuple[list[d
             h_hdr == HYDRO_PHENOLOGY_COLS, f"колонки: {', '.join(h_hdr)}")
         if h_hdr == HYDRO_PHENOLOGY_COLS:
             ph_df = load_hydro_post2012_phenology(ph_path)
-            bad_u = [s for s in ph_df["source"] if not is_valid_https_url(s)]
+            all_urls = list(ph_df["source_freezeup"]) + list(ph_df["source_breakup"])
+            bad_u = [s for s in all_urls if not is_valid_https_url(s)]
+            root_u = [s for s in all_urls if urlparse(s).path in ("", "/")]
+            ice_thick_u = [s for s in all_urls if "tolshhina-lda" in s]
             all_valid_points = {pt for reg in VALID_REGIONS for pt in points_of(reg)}
             bad_pts = [p for p in ph_df["point_id"] if p not in all_valid_points]
             bad_hy = [y for y in ph_df["hydro_year"] if y < 2013]
             dups = int(ph_df.duplicated(["point_id", "hydro_year"]).sum())
             add("hydro_post2012_phenology.csv", "даты явлений после 2012 со ссылками https://, валидные точки, без дублей",
-                not bad_u and not bad_pts and not bad_hy and dups == 0 and len(ph_df) >= 20,
-                f"строк: {len(ph_df)}, сезоны {ph_df['hydro_year'].min()}..{ph_df['hydro_year'].max()}, точек: {ph_df['point_id'].nunique()}, регионов: {ph_df['region'].nunique()}")
+                not bad_u and not root_u and not ice_thick_u and not bad_pts and not bad_hy and dups == 0 and len(ph_df) >= 20,
+                f"строк: {len(ph_df)}, сезоны {ph_df['hydro_year'].min()}..{ph_df['hydro_year'].max()}, точек: {ph_df['point_id'].nunique()}, регионов: {ph_df['region'].nunique()}, без главных страниц (корневых: {len(root_u)}), без толщины льда ({len(ice_thick_u)})")
             stats["hydro_post2012_rows"] = len(ph_df)
 
     return checks, stats
