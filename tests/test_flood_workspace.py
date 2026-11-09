@@ -59,6 +59,48 @@ class FloodWorkspaceTests(unittest.TestCase):
         self.assertTrue(risk.complete.iloc[:5].all())
         self.assertTrue(risk.fraction.iloc[-2:].isna().all())
 
+    def test_target_date_changes_real_discharge_even_when_exceedance_is_zero(self):
+        d = self.details['lena_yakutsk']
+        first = F.evaluate_window(d, d['curve'].index[0].date())
+        last = F.evaluate_window(d, d['curve'].index[-1].date())
+        self.assertNotEqual(first['median'], last['median'])
+        self.assertEqual(first['fraction'], 0.)
+        self.assertEqual(last['fraction'], 0.)
+        self.assertIsNone(F.evaluate_window(d,d['curve'].index[-1].date(),2))
+
+    def test_map_estimate_is_tied_to_target_date(self):
+        d = self.details['lena_yakutsk']
+        first = F.evaluate_points(self.rows,self.details,d['curve'].index[0].date())
+        last = F.evaluate_points(self.rows,self.details,d['curve'].index[-1].date())
+        self.assertNotEqual(first.iloc[0].median_m3s,last.iloc[0].median_m3s)
+        self.assertNotEqual(first.iloc[0].start,last.iloc[0].start)
+
+    def test_target_control_updates_displayed_forecast_in_ui(self):
+        with patch('app.flood_view.load_points',side_effect=lambda **kw:F.load_points(self.now,**kw)):
+            at=AppTest.from_string('from app.flood_view import render_flood\nrender_flood()',default_timeout=30)
+            at.session_state['flood_decision']=self.now.date()
+            at.session_state['flood_tab']='Прогноз'
+            at.run()
+            before=at.metric[0].value
+            last=self.details['lena_yakutsk']['curve'].index[-1].date()
+            next(w for w in at.sidebar.date_input if w.label=='Дата оценки / проезда').set_value(last).run()
+            self.assertFalse(at.exception,[e.message for e in at.exception])
+            self.assertNotEqual(before,at.metric[0].value)
+            self.assertTrue(any(row.value['Выбранная дата'].iloc[-1] for row in at.dataframe))
+
+    def test_march_date_explains_missing_archive_and_opens_available_forecast(self):
+        with patch('app.flood_view.load_points',side_effect=lambda **kw:F.load_points(self.now,**kw)):
+            at=AppTest.from_string('from app.flood_view import render_flood\nrender_flood()',default_timeout=30)
+            at.session_state['flood_decision']=date(2026,3,20)
+            at.run()
+            self.assertFalse(at.exception)
+            self.assertTrue(next(w for w in at.sidebar.date_input if w.label=='Дата оценки / проезда').disabled)
+            at.button(key='flood_open_available').click().run()
+            self.assertFalse(at.exception,[e.message for e in at.exception])
+            self.assertEqual(at.sidebar.date_input(key='flood_decision').value,self.now.date())
+            self.assertFalse(next(w for w in at.sidebar.date_input if w.label=='Дата оценки / проезда').disabled)
+            self.assertTrue(at.metric)
+
     def records(self,n=3):
         return pd.DataFrame(dict(date=pd.date_range('2026-11-10',periods=n).date,
              confirmed=True, capacity_t=1., source='test-only operator record', published=date(2026,11,9)))
@@ -149,6 +191,11 @@ class FloodWorkspaceTests(unittest.TestCase):
             self.assertFalse(at.exception,[e.message for e in at.exception])
             self.assertEqual(at.metric[0].value,'5.0 т')
             self.assertTrue(at.get('plotly_chart'))
+            next(w for w in at.sidebar.date_input if w.label=='Дата оценки / проезда').set_value(records.date.iloc[-1]).run()
+            at.button(key='flood_optimize').click().run()
+            self.assertFalse(at.exception,[e.message for e in at.exception])
+            self.assertEqual(at.metric[0].value,'2.0 т')
+            self.assertEqual(at.metric[1].value,'3.0 т')
             at.session_state['flood_tab']='Прогноз воды'
             at.run()
             at.session_state['flood_tab']='Планировщик'

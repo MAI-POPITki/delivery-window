@@ -16,7 +16,7 @@ def risk_table(d, travel):
                   'fraction':'Сценарии высокой воды','complete':'Полный прогноз на рейс'})
 
 
-def render_risks(d, route, decision, travel):
+def render_risks(d, route, decision, travel, target=None):
     st.subheader('Риски и рекомендации')
     st.write(f"**{route or 'Путь не выбран'}** · решение на {decision:%d.%m.%Y} · проезд {travel} сут.")
     st.warning('Текущий официальный допуск для этого участка в базе не подтверждён. '
@@ -25,8 +25,9 @@ def render_risks(d, route, decision, travel):
         st.info('На эту дату нет сохранённого гидрологического прогноза. Уточните обстановку и действующие ограничения у владельца дороги.')
         return
     risks = passage_risks(d, travel)
-    passage = st.date_input('Планируемая дата проезда', value=risks.date.iloc[0], min_value=risks.date.iloc[0],
+    passage = target or st.date_input('Планируемая дата проезда', value=risks.date.iloc[0], min_value=risks.date.iloc[0],
                             max_value=risks.date.iloc[-1], format='DD.MM.YYYY', key='flood_passage_'+str(decision))
+    st.write(f'Оценка проезда с {passage:%d.%m.%Y}. Дата меняется в боковой панели.')
     current = risks.loc[risks.date == passage].iloc[0]
     if pd.isna(current.fraction):
         st.info('Прогноз не покрывает весь рейс. Уменьшите горизонт проезда или дождитесь нового выпуска.')
@@ -49,7 +50,7 @@ def render_risks(d, route, decision, travel):
                         'flood-date-risks.csv', 'text/csv')
 
 
-def render_optimizer(d, route, pid, decision, travel):
+def render_optimizer(d, route, pid, decision, travel, start_date=None):
     st.subheader('Планировщик доставки')
     st.write('Распределяет объём по датам с минимальной суммой перевозки, хранения и оценки довоза остатка. '
              'Сравнение — с равномерной загрузкой тех же доступных мощностей.')
@@ -93,6 +94,8 @@ def render_optimizer(d, route, pid, decision, travel):
     try:
         calendar = confirmed_calendar(edited, passage_risks(d,travel) if d is not None else None,
                                       decision, travel, limit/100, allow_without)
+        if start_date is not None:
+            calendar.loc[calendar.date < start_date,'policy_allowed'] = False
         if not calendar.confirmed.any():
             st.info('Нет дней с подтверждённым допуском на весь рейс. Заполните основание и даты; неизвестный путь не считается открытым.')
             return
@@ -143,7 +146,8 @@ def render_data(pid, decision, d, routes, metadata):
     st.markdown('**Что ещё не доказано:** опасные уровни и границы затопления не рассчитываются. '
                 'В диагностике 2024 года порог не был превышен у Орска, несмотря на известное наводнение. '
                 'Официальные ограничения, осевые нагрузки и влияние заторов требуют отдельных данных.')
-    for label,path in [('План проверок',ROOT/'docs/FLOOD_VALIDATION_PLAN.md'),
+    for label,path in [('Как построен прогноз',ROOT/'docs/FLOOD_METHOD.md'),
+                       ('План проверок',ROOT/'docs/FLOOD_VALIDATION_PLAN.md'),
                        ('Результаты проверки данных',ROOT/'reports/flood_validation.md'),
                        ('Проверки программы',ROOT/'reports/flood_implementation_checks.md')]:
         if path.exists():

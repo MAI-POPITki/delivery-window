@@ -137,6 +137,47 @@ def forecast_as_of(pid, decision_time, data_dir=DATA):
     return max(candidates, key=lambda item: item[0])[1]
 
 
+def available_forecast_dates(pid, data_dir=DATA):
+    days = set()
+    for path in [data_dir/'latest'/f'{pid}.json', *(data_dir/'runs').glob(f'*/{pid}.json')]:
+        try:
+            fetched = datetime.fromisoformat(read_response(path)['fetched_at'])
+            if fetched.tzinfo is not None:
+                days.add(fetched.astimezone(timezone.utc).date())
+        except (OSError, ValueError, KeyError, TypeError):
+            continue
+    return sorted(days)
+
+
+def evaluate_window(result, target, travel_days=1):
+    """Оценка именно выбранных суток/рейса, без изменения исходного выпуска."""
+    if int(travel_days) != travel_days or not 1 <= travel_days <= 7:
+        raise ValueError('Длительность рейса должна быть от 1 до 7 целых суток')
+    dates = pd.date_range(target, periods=travel_days)
+    window = result['scenarios'].reindex(dates)
+    if window.empty or window.isna().any().any():
+        return None
+    daily = window.iloc[0]
+    fraction = float((window.max() > result['threshold']).mean())
+    return dict(start=str(dates[0].date()), end=str(dates[-1].date()), fraction=fraction,
+                median=float(daily.median()), lower=float(daily.quantile(.1)), upper=float(daily.quantile(.9)),
+                members=window.shape[1])
+
+
+def evaluate_points(rows, details, target, travel_days=1):
+    result = rows.copy()
+    result['median_m3s'] = np.nan
+    for index, row in result.iterrows():
+        estimate = evaluate_window(details[row.pid], target, travel_days) if row.pid in details else None
+        result.at[index, 'fraction'] = estimate['fraction'] if estimate else None
+        if estimate:
+            result.at[index, 'median_m3s'] = estimate['median']
+            result.at[index, 'start'], result.at[index, 'end'] = estimate['start'], estimate['end']
+        elif row.pid in details:
+            result.at[index, 'status'] = 'Выпуск не покрывает выбранную дату и весь рейс'
+    return result
+
+
 def load_points(now=None, data_dir=DATA, planning_date=None):
     now = now or datetime.now(timezone.utc)
     planning_date = planning_date or now.date()
