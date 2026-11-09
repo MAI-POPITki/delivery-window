@@ -1,0 +1,11 @@
+{
+  "data_url": "https://doi.org/10.1594/PANGAEA.925460",
+  "metadata_url": "https://doi.org/10.1594/PANGAEA.925456",
+  "license": "CC BY 4.0",
+  "retrieved_date": "2026-11-07",
+  "scope": "19 stations whose observations extend beyond 2012; full available historical records",
+  "files": {
+    "stations.tsv": "c928ed1bc217490cef52b7e3fad007f0df5e20800a6c7dfe0a98b38461391ce6",
+    "ice_snow.tsv": "f3856a49c59747ad26129f5c1c86a1dce0ea5e6b94b14c99ff12cb3100cae849"
+  }
+}

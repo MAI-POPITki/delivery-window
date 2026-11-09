@@ -36,8 +36,8 @@ FACT_COLS = ["point_id", "hydro_year", "kind", "date", "source", "comment"]
 BUCKETS = {"≈7 дней": (4, 10), "≈14 дней": (11, 17), "≈28 дней": (25, 31), "все": (0, 400)}
 
 
-def model_tag(kind):
-    p = MODELS / f"m1_{kind}.cbm"
+def model_tag(kind,filename=None):
+    p = MODELS / (Path(filename).name if filename else f"m1_{kind}.cbm")
     return hashlib.sha1(p.read_bytes()).hexdigest()[:8] if p.exists() else ""
 
 
@@ -52,7 +52,7 @@ def log_today(today: dt.date):
                 continue
             for kind in ("open", "close"):
                 try:
-                    q = FC.forecast(pid, hy, d, kind)
+                    q = FC.forecast(pid, hy, d, kind)  # без снежной поправки: она не дала выигрыша (reports/snow_model.md)
                 except Exception as e:  # noqa: BLE001
                     print(f"  {pid} {kind}: ошибка {e}")
                     continue
@@ -63,7 +63,9 @@ def log_today(today: dt.date):
                              "q10_date": str(q["q10_date"]), "q50_date": str(q["q50_date"]),
                              "q90_date": str(q["q90_date"]), "calendar_date": str(q["calendar_date"]),
                              "physics_date": str(q["physics_date"]),
-                             "forecast_days_used": q.get("forecast_days_used", 0), "model": model_tag(kind),
+                             "forecast_days_used": q.get("forecast_days_used", 0),
+                             'model_file':q.get('prediction_model',''),'snow_applied':q.get('snow_model_applied',False),
+                             "model": model_tag(kind,q.get('prediction_model')),
                              # точные дни сезона (дробные): по ним дашборд рисует карту без пересчёта
                              **{f"{k}_day": round(float(q[k]), 3) for k in ("q10", "q50", "q90", "calendar", "physics")}})
     new = pd.DataFrame(rows)

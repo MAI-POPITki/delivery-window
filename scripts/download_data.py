@@ -31,7 +31,8 @@ import pandas as pd
 import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from okno.regions import all_gauges  # noqa: E402 — посты всех подтверждённых регионов
+from okno.regions import all_gauges  # noqa: E402 — посты всех доступных регионов
+from okno.northeast import STATIONS  # noqa: E402
 
 DATA = Path(__file__).resolve().parent.parent / "data"
 RAW = DATA / "raw"
@@ -61,12 +62,22 @@ def log(msg):
 
 
 # ---------------------------------------------------------------- погода
+def gauge_coordinates():
+    """Unified metadata includes the PANGAEA stations, not only the old 31 posts."""
+    path=DATA/'processed/gauges.csv'
+    if path.exists():
+        return pd.read_csv(path).rename(columns={'gauge_code':'Code','lat':'Lat','lon':'Long'}).set_index('Code')
+    return pd.read_csv(RAW/'hydro_ice/River_ice_station_attributes.csv').set_index('Code')
+
+
 def _get_weather_chunk(p, start, end, tries=8):
     params = {
         "latitude": p["lat"], "longitude": p["lon"],
         "start_date": start, "end_date": end,
         "daily": DAILY_VARS, "timezone": "auto",
     }
+    if p.get('archive_model'):
+        params.update(models=p['archive_model'],timezone=p['archive_timezone'])
     for attempt in range(tries):
         try:
             r = requests.get(OPEN_METEO, params=params, timeout=120)
@@ -114,7 +125,7 @@ def update_point(p, out: Path, start: str, end: str):
         time.sleep(3)
     df = pd.concat(parts, ignore_index=True)
     df.insert(0, "point_id", p["id"])
-    df["source"] = "ERA5 via Open-Meteo archive API"
+    df["source"] = p.get('archive_source',"ERA5 via Open-Meteo archive API")
     df = df.dropna(subset=["temperature_2m_mean"])  # самые свежие дни архив иногда отдаёт пустыми
     if old is not None:
         df = pd.concat([old, df], ignore_index=True).drop_duplicates("date", keep="last")
@@ -187,12 +198,14 @@ def download_gauge_weather(start="1979-01-01", end=None, codes=None):
     """Погода в точках постов. Если файл уже есть — докачивает только недостающий хвост
     (ряд нужен до сегодняшнего дня для живого прогноза текущего сезона)."""
     end = end or (dt.date.today() - dt.timedelta(days=7)).isoformat()
-    st = pd.read_csv(RAW / "hydro_ice" / "River_ice_station_attributes.csv")
-    st = st.set_index("Code")
+    st = gauge_coordinates()
     out_dir = DATA / "weather" / "gauges"
     out_dir.mkdir(parents=True, exist_ok=True)
     for code in (codes or all_gauges()):
         p = {"id": f"gauge_{code}", "lat": float(st.loc[code, "Lat"]), "lon": float(st.loc[code, "Long"])}
+        if code in STATIONS:
+            p.update(archive_model='era5_seamless',archive_timezone='UTC',
+                     archive_source='Open-Meteo ERA5-Seamless (ERA5-Land temperature)')
         safe_update(p, out_dir / f"gauge_{code}.csv", start, end)
 
 
@@ -229,13 +242,15 @@ def download_recent(past_days=14, forecast_days=16):
     Перезаписывается при каждом запуске; в обучении не участвует — только в живом прогнозе."""
     out_dir = DATA / "weather_recent"
     out_dir.mkdir(parents=True, exist_ok=True)
-    st = pd.read_csv(RAW / "hydro_ice" / "River_ice_station_attributes.csv").set_index("Code")
+    st = gauge_coordinates()
     pts = [p for p in POINTS if p["kind"] != "city"] + [
         {"id": f"gauge_{c}", "lat": float(st.loc[c, "Lat"]), "lon": float(st.loc[c, "Long"])} for c in all_gauges()] +         lena_basin_points()
     today = dt.date.today().isoformat()
     for p in pts:
         params = {"latitude": p["lat"], "longitude": p["lon"], "daily": DAILY_VARS, "timezone": "auto",
                   "past_days": past_days, "forecast_days": forecast_days}
+        if p['id'].startswith('gauge_') and int(p['id'].split('_')[1]) in STATIONS:
+            params['timezone']='UTC'
         try:
             for attempt in range(5):
                 r = requests.get(OPEN_METEO_FORECAST, params=params, timeout=60)

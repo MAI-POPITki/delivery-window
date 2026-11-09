@@ -12,6 +12,7 @@ import pandas as pd
 
 from . import features as F
 from . import weather_forecast as WF
+from . import snow as SN
 from .ice import from_season_day, load_weather
 from .paths import MODELS, PROCESSED, RECENT, WEATHER, WEATHER_FORECASTS
 
@@ -85,7 +86,9 @@ def data_version() -> float:
     или переобучаются модели. Кэши ниже привязаны к ней, поэтому дашборд подхватывает
     новые данные без перезапуска."""
     files = (list(WEATHER.glob("*.csv")) + list((WEATHER / "gauges").glob("*.csv")) + list(MODELS.glob("*"))
-             + list(RECENT.glob("*.csv")) + list(WEATHER_FORECASTS.glob("*.csv")))
+             + list(RECENT.glob("*.csv")) + list(WEATHER_FORECASTS.glob("*.csv"))
+             + list((PROCESSED.parent/'snow_depth').glob('*.csv'))
+             + [PROCESSED/'hydro_snow_on_ice.csv',PROCESSED/'gauges.csv',PROCESSED/'hydro_ice_seasons.csv'])
     return max((_mtime(f) for f in files), default=0.0)
 
 
@@ -170,7 +173,7 @@ def calendar_day(point_id, hydro_year, kind):
     return cal
 
 
-def forecast(point_id: str, hydro_year: int, issue_day: int, kind: str, *, use_weather=False) -> dict | None:
+def forecast(point_id: str, hydro_year: int, issue_day: int, kind: str, *, use_weather=False,use_snow=False) -> dict | None:
     if is_basin(point_id) and kind == "open":
         return None  # в бассейне Лены нет замеров толщины — прогнозируем только вскрытие
     model_key = "close_lena" if is_basin(point_id) and kind == "close" else kind
@@ -212,6 +215,26 @@ def forecast(point_id: str, hydro_year: int, issue_day: int, kind: str, *, use_w
     corr = _conformal(model_key)
     q[0], q[2] = q[0] - corr, q[2] + corr
     q = np.maximum(q, issue_day)  # событие ещё не наступило — раньше даты прогноза его быть не может
+    prediction_model=f'm1_{model_key}.cbm'
+    # Updated models with/without snow share the same training data and fixed
+    # physical coefficient. The checkbox therefore isolates snow, not a change
+    # in the training set or calibration method.
+    sf=F.season_features(T_all,S_all,hydro_year,int(issue_day),clim,F.ALPHA_DEFAULT,fz_obs,theta)
+    sp=sf.pop('phys_open' if kind=='open' else 'phys_close')
+    sf.pop('phys_close' if kind=='open' else 'phys_open')
+    sp=sp if np.isfinite(sp) else cal
+    sr={'issue_day':issue_day,'lat':meta['lat'],'is_satellite':meta['is_satellite'],
+        'cal_target':cal,'phys_pred':sp,'phys_minus_cal':sp-cal,**sf}
+    # Обновлённая М1 (переобучена с постами PANGAEA, α = 1,8) заменяет прежнюю только на новых постах:
+    # там она проверена (2013–2018, вне обучения: за 14 сут −27% к календарю против −9% у прежней М1).
+    # На прежних постах и переправе Якутск остаётся прежняя М1: на закрытии постов обновлённая хуже
+    # календаря (5,6 против 5,1 сут) — scripts/new_gauges_test.py, reports/new_gauges.md.
+    from .northeast import STATIONS as _NEW
+    _is_new = point_id.startswith('gauge_') and int(point_id.split('_')[1]) in _NEW
+    paired=SN.predict(point_id,hydro_year,int(issue_day),kind,sr,use_snow=False) if _is_new else {}
+    if 'quantiles' in paired:
+        q=paired['quantiles'];phys=sp;f['h_stefan_now']=sf['h_stefan_now']
+        prediction_model=paired['model_file']
     weather_message, weather_applied, weather_delta = "", False, None
     days_used = int(((np.arange(365) > issue_day) & np.isfinite(ahead)).sum()) if ahead is not None else 0
     if kind == "close" and use_weather:
@@ -233,12 +256,27 @@ def forecast(point_id: str, hydro_year: int, issue_day: int, kind: str, *, use_w
             q = result["quantiles"]
             phys = wf_phys
             days_used, weather_applied = result["days"], True
+            prediction_model=WF.MODEL_PATH.name
+    snow_applied,snow_message,snow_delta,snow_inputs,snow_validation=False,'',None,{},{}
+    if use_snow:
+        if weather_applied:
+            snow_message='Применён погодный эксперимент GFS; отдельная снежная поправка с ним не складывается.'
+        else:
+            result=SN.predict(point_id,hydro_year,int(issue_day),kind,sr)
+            snow_message=result['message']
+            if 'quantiles' in result:
+                snow_delta=float(result['quantiles'][1]-q[1]);q=result['quantiles'];phys=sp
+                snow_applied=True;snow_inputs=result['features'];snow_validation=result['validation']
+                prediction_model=result['model_file']
     out = {"point_id": point_id, "hydro_year": hydro_year, "issue_day": int(issue_day), "kind": kind,
            "q10": q[0], "q50": q[1], "q90": q[2], "calendar": cal, "physics": phys,
            "actual": float(hist.loc[hydro_year, f"{kind}_day"]) if hydro_year in hist.index else np.nan,
            "h_stefan_now_cm": f["h_stefan_now"],
            "forecast_days_used": days_used, "weather_model_applied": weather_applied,
-           "weather_model_message": weather_message, "weather_delta_days": weather_delta}
+           "weather_model_message": weather_message, "weather_delta_days": weather_delta,
+           'snow_model_applied':snow_applied,'snow_model_message':snow_message,'snow_delta_days':snow_delta,
+           'snow_features':snow_inputs,'snow_validation':snow_validation,
+           'updated_model_applied':'quantiles' in paired,'prediction_model':prediction_model}
     for k in ("q10", "q50", "q90", "calendar", "physics", "actual"):
         out[f"{k}_date"] = from_season_day(out[k], hydro_year).date() if not np.isnan(out[k]) else None
     return out

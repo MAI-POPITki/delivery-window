@@ -106,7 +106,7 @@ import plotly.graph_objects as go
 # остаются в памяти процесса. Сначала обновляем зависимости, затем импортируем зависимые
 # модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
 _MODULE_NAMES = (
-    "okno.paths", "okno.regions", "okno.report", "okno.ice", "okno.calib", "okno.features",
+    "okno.paths", "okno.northeast", "okno.regions", "okno.report", "okno.ice", "okno.calib", "okno.features", "okno.snow",
     "okno.planner", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
     "okno.yakutsk_replay", "app.yakutsk_experiment",
 )
@@ -147,25 +147,25 @@ DATA_VER = FC.data_version()
 
 
 @st.cache_data(show_spinner=False, max_entries=5000, ttl=3600)
-def _fc_cached(pid, hy, day, kind, ver, use_weather):
+def _fc_cached(pid, hy, day, kind, ver, use_weather, use_snow):
     try:
-        return FC.forecast(pid, hy, day, kind, use_weather=use_weather)
+        return FC.forecast(pid, hy, day, kind, use_weather=use_weather,use_snow=use_snow)
     except Exception as e:  # noqa: BLE001 — в дашборде показываем, а не падаем
         return {"error": str(e)}
 
 
 def fc_cached(pid, hy, day, kind):
-    return _fc_cached(pid, hy, day, kind, DATA_VER, use_weather_close)
+    return _fc_cached(pid, hy, day, kind, DATA_VER, use_weather_close,use_snow_depth)
 
 
 @st.cache_data(show_spinner=False, max_entries=500, ttl=3600)
-def _fc_path(pid, hy, kind, days, ver, use_weather):
-    rows = [_fc_cached(pid, hy, d, kind, ver, use_weather) for d in days]
+def _fc_path(pid, hy, kind, days, ver, use_weather,use_snow):
+    rows = [_fc_cached(pid, hy, d, kind, ver, use_weather,use_snow) for d in days]
     return pd.DataFrame([r for r in rows if r and "error" not in r])
 
 
 def fc_path(pid, hy, kind, days):
-    return _fc_path(pid, hy, kind, days, DATA_VER, use_weather_close)
+    return _fc_path(pid, hy, kind, days, DATA_VER, use_weather_close,use_snow_depth)
 
 
 @st.cache_data(show_spinner=False)
@@ -178,9 +178,16 @@ def _journal(ver):
     if not p.exists():
         return {}
     j = pd.read_csv(p, dtype=str)
-    tags = {k: hashlib.sha1((MODELS / f"m1_{k}.cbm").read_bytes()).hexdigest()[:8]
-            for k in ("open", "close") if (MODELS / f"m1_{k}.cbm").exists()}
-    j = j[j.model == j.kind.map(tags)].sort_values("run_date")
+    if "model_file" not in j.columns:
+        j["model_file"] = ""
+    j["model_file"] = j["model_file"].fillna("")
+    files = j["model_file"].where(j["model_file"] != "", "m1_" + j["kind"] + ".cbm")
+    tags = {f: hashlib.sha1((MODELS / f).read_bytes()).hexdigest()[:8]
+            for f in files.unique() if (MODELS / f).exists()}
+    j = j[j.model == files.map(tags)]
+    if "snow_applied" in j.columns:  # карта по умолчанию без снежной поправки
+        j = j[j["snow_applied"].astype(str) != "True"]
+    j = j.sort_values("run_date")
     return {(r.point_id, int(r.hydro_year), r.kind, r.issue_date): r._asdict()
             for r in j.itertuples(index=False)}
 
@@ -188,7 +195,7 @@ def _journal(ver):
 def fc_map(pid, hy, day, kind):
     """Прогноз для карты: если на эту дату он уже есть в журнале (те же модели и данные) — берём готовый,
     иначе считаем. Совпадение даты выпуска гарантирует, что прогноз построен по тем же наблюдениям."""
-    if not (kind == "close" and use_weather_close):
+    if not (kind == "close" and use_weather_close) and not use_snow_depth:
         last = FC.last_weather_day(pid, hy)  # прогноз выпускается не позже последнего дня наблюдений точки
         eff = from_season_day(min(day, last) if last is not None else day, hy).date()
         r = _journal(DATA_VER).get((pid, hy, kind, eff.isoformat()))
@@ -213,6 +220,13 @@ def weather_until(ver):
         return era5, None, None
     r = pd.read_csv(rp, usecols=["date", "is_forecast"])
     return era5, r[~r.is_forecast]["date"].max(), r[r.is_forecast]["date"].max()
+
+
+@st.cache_data(show_spinner=False)
+def measured_ice_snow(code,ver):
+    path=PROCESSED/'hydro_ice_thickness.csv'
+    d=pd.read_csv(path,usecols=['gauge_code','hydro_year','date','ice_cm','snow_on_ice_cm','author_interpolated'])
+    return d[d.gauge_code.eq(code)].sort_values('date')
 
 
 def p_by(q, t):
@@ -292,6 +306,10 @@ use_weather_close = st.sidebar.checkbox(
     help="Модель обучена на архиве прогнозов GFS. Пилот — переправа Якутск — Нижний Бестях. "
          "При отсутствии данных используется обычная М1. Прогноз открытия не меняется.",
 )
+use_snow_depth=st.sidebar.checkbox('Учитывать толщину снега (эксперимент)',value=False,key='snow_depth_enabled',
+    help='Для прогноза М1 на карте, в карточке и планировщике М3. '
+         'Сквозной коридор А3 использует отдельный прогноз. Различает снег на льду и снег на суше из ERA5-Land. '
+         'Использует только данные до даты решения; с погодным экспериментом GFS поправки не складываются.')
 if use_weather_close:
     st.sidebar.caption("Эксперимент: прогноз GFS на 6 дней. Выигрыш за 7/14 дней не подтверждён, "
                        "диапазон пока ненадёжен. Результаты — во вкладке «До / после».")
@@ -443,12 +461,20 @@ with tabs[0]:
 # ------------------------------------------------------------------ 2. карточка пути
 with tabs[1]:
     st.subheader(label(pid))
+    from okno.northeast import STATIONS as _new_stations
+    is_new_gauge=pid.startswith('gauge_') and int(pid.split('_')[1]) in _new_stations
+    if is_new_gauge:
+        st.caption('Это гидропост — точка измерения льда и снега, а не трасса зимника. '
+                   'Достижение расчётной толщины льда не означает разрешение на проезд.')
     c1, c2 = st.columns(2)
     for kind, col, title in (("open", c1, "Открытие: лёд держит 20 т"), ("close", c2, "Закрытие: начало таяния")):
         q = fc_cached(pid, hy, issue_day, kind)
         with col:
             st.markdown(f"**{title}**")
             if not q or "error" in q:
+                if is_new_gauge and kind=='close':
+                    st.info('В новом источнике нет дат начала таяния. Для прогноза закрытия нужен дополнительный ряд ледовых фаз.')
+                    continue
                 st.info("Нет прогноза для этой точки и вида события"
                         + (" (здесь нет замеров толщины льда — только спутниковые даты вскрытия)."
                            if (pid == "yakutsk_crossing" or FC.is_basin(pid)) and kind == "open" else "."))
@@ -456,18 +482,28 @@ with tabs[1]:
             close_note = f" (закрытие пути ≈ на {margin} сут раньше)" if kind == "close" else ""
             st.metric("Медиана прогноза М1", f"{q['q50_date']:%d.%m.%Y}",
                       delta=f"{q['q50'] - q['calendar']:+.0f} сут к календарю", delta_color="inverse")
-            range_name = "Экспериментальный диапазон" if q.get("weather_model_applied") else "80%-диапазон"
+            range_name = "Экспериментальный диапазон" if q.get("weather_model_applied") or q.get('snow_model_applied') or q.get('updated_model_applied') else "80%-диапазон"
             st.write(f"{range_name}: **{q['q10_date']:%d.%m} – {q['q90_date']:%d.%m}**{close_note}")
             st.write(f"Календарь (средняя за прошлые сезоны): {q['calendar_date']:%d.%m}; "
                      f"физика: {q['physics_date']:%d.%m}")
             st.write(f"Расчётная толщина льда на дату решения: **{q['h_stefan_now_cm']:.0f} см**")
+            if use_snow_depth:
+                st.caption(q.get('snow_model_message',''))
+                if q.get('snow_model_applied'):
+                    sf=q['snow_features']
+                    st.write(f"Сдвиг при учёте снега: **{q['snow_delta_days']:+.1f} сут** к обычной М1.")
+                    if np.isfinite(sf.get('snow_ground_cm',np.nan)):
+                        st.caption(f"Снег на суше по ERA5-Land: {sf['snow_ground_cm']:.1f} см (не замер на реке).")
+                    if sf.get('snow_on_ice_observed'):
+                        st.caption(f"Последний замер снега на льду: {sf['snow_on_ice_cm']:.1f} см, {sf['snow_on_ice_age_days']:.0f} суток назад.")
             if kind == "close" and use_weather_close:
                 st.caption(q["weather_model_message"])
                 if q["weather_model_applied"]:
                     st.write(f"Сдвиг к обычной М1: **{q['weather_delta_days']:+.1f} сут**. "
                              f"Прогноз погоды учтён на {q['forecast_days_used']} дней.")
             if q["actual_date"]:
-                st.success(f"Факт: {q['actual_date']:%d.%m.%Y}")
+                fact_label='Оценка достижения толщины по замерам' if is_new_gauge else 'Факт'
+                st.success(f"{fact_label}: {q['actual_date']:%d.%m.%Y}")
             if kind == "close" and pid == "yakutsk_crossing":
                 _sp = Path(PROCESSED).parent / "s1" / "predictions.csv"
                 if _sp.exists():
@@ -483,14 +519,30 @@ with tabs[1]:
                         {"conflict": st.error, "warn": st.warning}.get(_st, st.caption)(_msg)
                     else:
                         st.caption("М1 и снимок: свежего снимка (≤ 14 сут) нет — сверка невозможна")
+    if is_new_gauge:
+        with st.expander('Архив измерений льда и снега на посту'):
+            observed=measured_ice_snow(int(pid.split('_')[1]),DATA_VER)
+            selected=observed[observed.hydro_year.eq(hy)]
+            if selected.empty:
+                archive_year=int(observed.hydro_year.max())
+                selected=observed[observed.hydro_year.eq(archive_year)]
+                st.caption(f'За выбранный сезон замеров нет. Показан последний архивный сезон {season_name(archive_year)}; '
+                           'эти старые значения не подставляются как текущий снег.')
+            st.caption('PANGAEA: лёд и снег на льду, сантиметры. Интерполированные авторами значения льда исключены из обучения.')
+            view=selected[['date','ice_cm','snow_on_ice_cm']].rename(columns={
+                'date':'Дата замера','ice_cm':'Лёд, см','snow_on_ice_cm':'Снег на льду, см'})
+            st.dataframe(view,hide_index=True,width='stretch',key='snow_measurements_archive')
+            st.markdown('[Источник измерений и лицензия](https://doi.org/10.1594/PANGAEA.925460)')
     # как менялся прогноз закрытия в течение сезона
     days = list(range(150, 271, 7))
     path = fc_path(pid, hy, "close", tuple(days))
     if not path.empty:
         x = [from_season_day(d, hy) for d in path.issue_day]
         f = go.Figure()
+        experimental=path[['weather_model_applied','snow_model_applied','updated_model_applied']].any().any()
+        band_name='Экспериментальный диапазон М1' if experimental else '80%-диапазон М1'
         f.add_trace(go.Scatter(x=x + x[::-1], y=[from_season_day(v, hy) for v in list(path.q90) + list(path.q10[::-1])],
-                               fill="toself", line=dict(width=0), name="80%-диапазон М1", opacity=0.3))
+                               fill="toself", line=dict(width=0), name=band_name, opacity=0.3))
         f.add_trace(go.Scatter(x=x, y=[from_season_day(v, hy) for v in path.q50], name="М1, медиана"))
         f.add_trace(go.Scatter(x=x, y=[from_season_day(v, hy) for v in path.calendar], name="Календарь",
                                line=dict(dash="dash")))
@@ -577,6 +629,7 @@ with tabs[5]:
     st.subheader("Бэктест на прошлых сезонах")
     for name, f in (("Сквозной коридор 4 звеньев: «До и После» (Кейс А3)", REPORTS / "corridor_before_after.md"),
                     ("Экономический планировщик: сравнение подходов", REPORTS / "economic_planner.md"),
+                    ("Толщина снега: проверка новой модели", REPORTS / "snow_model.md"),
                     ("Квантильная модель окна CatBoost (2001–2024)", REPORTS / "window_model_report.md"),
                     ("М1: точность прогноза", REPORTS / "m1_metrics.md"),
                     ("Погодная модель закрытия: эксперимент", REPORTS / "weather_close.md"),
