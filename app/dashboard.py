@@ -350,12 +350,14 @@ last = FC.last_weather_day(pid, hy)
 if last is not None and last < issue_day:
     st.sidebar.warning(f"Погода есть до {from_season_day(last, hy).date():%d.%m.%Y}: прогноз выпускается на эту дату.")
 
-if st.session_state.get("main_tab") in ("Планировщик", "Рейтинг риска", "Сквозной коридор (А3)", "Маршрут и план завоза"):
+if st.session_state.get("main_tab") in ("Рейтинг риска", "Маршрут и план завоза"):  # прежние названия
     st.session_state["main_tab"] = "Риски и рекомендации"
 
 tabs = st.tabs([
     "Карта путей",
     "Карточка пути",
+    "Сквозной коридор (А3)",
+    "Планировщик",
     "Риски и рекомендации",
     "До / после",
     "О данных",
@@ -610,14 +612,39 @@ with tabs[1]:
             st.caption("Классификатор лёд/вода: точность 0,95 на годах вне обучения. Снимок примерно раз в 12 дней; "
                        "даты вскрытия по ряду снимков — с точностью ≈ 9 сут.")
 
-# ------------------------------------------------------------------ 4. единое рабочее место
+# ------------------------------------------------------------------ 3. сквозной коридор (А3)
 with tabs[2]:
     if _tab_open(2):
+        from app.corridor_view import render_corridor
+        render_corridor()
+
+# ------------------------------------------------------------------ 4. планировщик
+with tabs[3]:
+    from app.planner_view import render_planner
+    q = fc_cached(pid, hy, issue_day, "close")
+    P = render_planner(q, hy, issue_day, margin, label(pid))
+    if q and 'error' not in q and np.isfinite(q.get('actual', np.nan)):
+        with st.expander('Прежний ретроспективный тест М3: календарь и пересчёт по прогнозу'):
+            st.caption('Отдельная проверка на фактическом закрытии. Здесь введённый объём считается заказом '
+                       'на начало сезона, отправки начинаются с января. Это не проверка двух текущих графиков '
+                       'для остатка на выбранную дату решения.')
+            cal_close = q['calendar'] - margin
+            path = fc_path(pid, hy, "close", tuple(range(150, 271, 7)))
+            res = [simulate_season(q["actual"] - margin, path[["issue_day", "q10", "q50", "q90"]] if rule == "forecast"
+                                   else None, cal_close, P, rule) for rule in ("calendar", "forecast")]
+            st.dataframe(pd.DataFrame(res).set_index("rule")[["share_delivered", "undelivered_t", "cost_rub_per_t"]]
+                         .rename(index={"calendar": "до (календарь)", "forecast": "после (прогноз)"},
+                                 columns={"share_delivered": "доля плана", "undelivered_t": "недовоз, т",
+                                          "cost_rub_per_t": "₽/т"}).round(2))
+
+# ------------------------------------------------------------------ 5. риски и рекомендации (ZXC)
+with tabs[4]:
+    if _tab_open(4):
         from app.journey_view import render_journey
         render_journey(pid, hy, issue_date, issue_day, margin, WEATHER_POINTS, fc_cached)
 
     # ------------------------------------------------------------------ 6. до/после
-with tabs[3]:
+with tabs[5]:
     st.subheader("Бэктест на прошлых сезонах")
     for name, f in (("Сквозной коридор 4 звеньев: «До и После» (Кейс А3)", REPORTS / "corridor_before_after.md"),
                     ("Экономический планировщик: сравнение подходов", REPORTS / "economic_planner.md"),
@@ -635,7 +662,7 @@ with tabs[3]:
             st.info(f"Нет файла {f.name}: запустите python src/corridor_simulator.py и scripts/train_m1.py")
 
 # ------------------------------------------------------------------ 7. о данных
-with tabs[4]:
+with tabs[6]:
     _val_a3 = DOCS / "validation_report.md"
     if _val_a3.exists():
         st.markdown(_val_a3.read_text(encoding="utf-8"))

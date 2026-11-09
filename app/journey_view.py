@@ -76,8 +76,4 @@ def render_journey(pid,hy,issue_date,issue_day,margin,points,forecast):
                          'Источник':x['record']['source'] if x['record'] else ''} for x in rows])
     st.dataframe(table,hide_index=True,width='stretch')
     st.download_button('Скачать сравнение дат',table.to_csv(index=False).encode('utf-8-sig'),'risk-scenarios.csv','text/csv')
-    with st.expander('Историческая проверка всей цепочки (А3)'):
-        st.caption('Отдельный исторический расчёт, не оценка текущей поездки.')
-        if st.checkbox('Показать расчёт по кейсу А3',key='risk_corridor'):
-            from app.corridor_view import render_corridor
-            render_corridor()
+    st.caption('Расчёт всей цепочки хаб → ж/д → Нижний Бестях → переправа → Якутск и режим «сервис» — на вкладке «Сквозной коридор (А3)».')
