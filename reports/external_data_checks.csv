@@ -1,19 +1,19 @@
 таблица,проверка,результат,детали
 road_events.csv,схема колонок 3.1,прошла,"колонок 11: road, region, hydro_year, kind, announced_date, announced_published, actual_date, actual_published, source_announced, source_actual, comment"
-road_events.csv,объём выборки ≥ 100 событий (цель VALIDATION_PLAN),прошла,"всего 184 событий (Якутия: 95, другие 4 региона: 89)"
-road_events.csv,Якутия ≥ 60 событий (роль Б),прошла,Якутия: 95 событий
-road_events.csv,другие 4 региона ≥ 40 событий (роль В),прошла,"вне Якутии: 89 событий по регионам {'irkutsk': np.int64(31), 'yanao': np.int64(23), 'krasnoyarsk': np.int64(21), 'arkhangelsk': np.int64(14)}"
+road_events.csv,объём выборки ≥ 100 событий (цель VALIDATION_PLAN),прошла,"всего 241 событий (Якутия: 125, другие 4 региона: 116)"
+road_events.csv,Якутия ≥ 60 событий (роль Б),прошла,Якутия: 125 событий
+road_events.csv,другие 4 региона ≥ 40 событий (роль В),прошла,"вне Якутии: 116 событий по регионам {'irkutsk': np.int64(37), 'yanao': np.int64(34), 'krasnoyarsk': np.int64(27), 'arkhangelsk': np.int64(18)}"
 road_events.csv,все регионы входят в okno/regions.py,прошла,"регионы: ['arkhangelsk', 'irkutsk', 'krasnoyarsk', 'yakutia', 'yanao']"
 road_events.csv,покрыты все 5 регионов сервиса,прошла,"покрыто 5 из 5: ['arkhangelsk', 'irkutsk', 'krasnoyarsk', 'yakutia', 'yanao']"
-road_events.csv,допустимые значения kind (open|close|limit30|limit20),прошла,"распределение kind: {'open': np.int64(81), 'close': np.int64(78), 'limit20': np.int64(14), 'limit30': np.int64(11)}"
+road_events.csv,допустимые значения kind (open|close|limit30|limit20),прошла,"распределение kind: {'open': np.int64(105), 'close': np.int64(78), 'limit20': np.int64(34), 'limit30': np.int64(24)}"
 road_events.csv,формат ISO-дат и заполненность фактов,прошла,все фактические даты и даты публикаций заполнены
-road_events.csv,все ссылки https:// валидны,прошла,проверено 184 ссылок source_actual
+road_events.csv,все ссылки https:// валидны,прошла,проверено 241 ссылок source_actual
 road_events.csv,соответствие hydro_year сезону Сен..Авг,прошла,все строки согласованы с гидрологическим годом
-road_events.csv,нет утечки будущего в объявленных датах (правило 1.2),прошла,пар «объявлено + факт»: 53
+road_events.csv,нет утечки будущего в объявленных датах (правило 1.2),прошла,пар «объявлено + факт»: 110
 road_events.csv,привязка point_id к точкам okno/regions.py,прошла,уникальных точек модели: 23
 road_events.csv,отсутствие дублей событий,прошла,дублей: 0
-road_events.csv,порог H2: ≥ 30 официальных событий open/close («дорога × сезон»),прошла,"уникальных пар «дорога × сезон» (open/close): 125, всего записей open/close: 159, дорог: 56"
-road_events.csv,порог H2a: наличие пар «объявленный план + факт»,прошла,подтверждённых пар «объявлено → факт»: 53
+road_events.csv,порог H2: ≥ 30 официальных событий open/close («дорога × сезон»),прошла,"уникальных пар «дорога × сезон» (open/close): 146, всего записей open/close: 180, дорог: 56"
+road_events.csv,порог H2a: наличие пар «объявленный план + факт»,прошла,подтверждённых пар «объявлено → факт»: 110
 tariffs.csv,схема колонок 3.2,прошла,"колонки: contract_id, year, route, mode, price_rub_per_t, deadline, penalty, url"
 tariffs.csv,объём выборки ≥ 15 контрактов/тарифов (роль В),прошла,строк: 30
 tariffs.csv,допустимые виды транспорта (зимник|авиа|река|ж/д|СВП),прошла,"распределение mode: {'река': np.int64(7), 'зимник': np.int64(7), 'авиа': np.int64(7), 'ж/д': np.int64(5), 'СВП': np.int64(4)}"

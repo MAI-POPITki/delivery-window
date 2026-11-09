@@ -531,6 +531,88 @@ with tabs[4]:
     if rows:
         st.dataframe(pd.DataFrame(rows).sort_values("ожидаемый недовоз, т", ascending=False), width="stretch")
 
+    st.divider()
+    st.subheader("Реестр официальных приказов и ограничений массы (30 т / 20 т)")
+    st.caption(
+        "Официальные приказы об открытии автозимников, утверждённые графики тоннажа "
+        "и этапы снижения допустимой массы (data/external/road_events.csv)."
+    )
+
+    from okno.external_data import load_road_events
+    ev_df = load_road_events(with_point_id=True)
+
+    if not ev_df.empty:
+        c1, c2, c3, c4 = st.columns(4)
+        c1.metric("Всего событий и приказов", len(ev_df))
+        c2.metric("Сезон 2026/27 (распоряжения)", int((ev_df["hydro_year"] == 2027).sum()))
+        c3.metric("Дорог с ограничением 30/20 т", int(ev_df[ev_df["kind"].isin(["limit30", "limit20"])]["road"].nunique()))
+        c4.metric("Охвачено регионов", int(ev_df["region"].nunique()))
+
+        f_col1, f_col2 = st.columns([2, 1])
+        with f_col1:
+            view_mode = st.radio(
+                "Категория реестра",
+                ["Приказы сезона 2026/27 (график и этапы массы)",
+                 "Этапы снижения массы 30 т / 20 т (все сезоны)",
+                 f"События текущего региона ({REGIONS[region]['name']})",
+                 "Полный реестр (все записи)"],
+                horizontal=True,
+                key="road_events_view_mode",
+            )
+        with f_col2:
+            kind_filter = st.selectbox(
+                "Фильтр по типу события",
+                ["Все типы", "open (открытие / график)", "limit30 (снижение до 30 т)", "limit20 (снижение до 20 т)", "close (закрытие)"],
+                key="road_events_kind_filter",
+            )
+
+        sub_ev = ev_df.copy()
+        if "Приказы сезона 2026/27" in view_mode:
+            sub_ev = sub_ev[sub_ev["hydro_year"] == 2027]
+        elif "Этапы снижения массы" in view_mode:
+            sub_ev = sub_ev[sub_ev["kind"].isin(["limit30", "limit20"])]
+        elif "События текущего региона" in view_mode:
+            sub_ev = sub_ev[sub_ev["region"] == region]
+
+        if kind_filter != "Все типы":
+            k_val = kind_filter.split()[0]
+            sub_ev = sub_ev[sub_ev["kind"] == k_val]
+
+        kind_labels = {
+            "open": "🟢 Открытие / график",
+            "limit30": "🟡 Ограничение 30 т",
+            "limit20": "🟠 Ограничение 20 т",
+            "close": "🔴 Закрытие переправы",
+        }
+
+        table_rows = []
+        for r in sub_ev.itertuples():
+            reg_name = REGIONS.get(r.region, {}).get("name", r.region)
+            table_rows.append({
+                "Дорога / зимник": r.road,
+                "Регион": reg_name,
+                "Сезон": f"{r.hydro_year - 1}/{str(r.hydro_year)[2:]}",
+                "Этап / Событие": kind_labels.get(r.kind, r.kind),
+                "План по приказу": r.announced_date if r.announced_date else "—",
+                "Дата ввода / факта": r.actual_date,
+                "Приказ / Ссылка": r.source_actual,
+                "Содержание распоряжения": r.comment,
+            })
+
+        if table_rows:
+            disp_df = pd.DataFrame(table_rows)
+            st.dataframe(
+                disp_df,
+                column_config={
+                    "Приказ / Ссылка": st.column_config.LinkColumn("Первоисточник", display_text="Открыть приказ"),
+                    "Содержание распоряжения": st.column_config.TextColumn(width="large"),
+                },
+                width="stretch",
+                hide_index=True,
+            )
+        else:
+            st.info("Нет записей, удовлетворяющих выбранному фильтру.")
+
 # ------------------------------------------------------------------ 6. до/после
 with tabs[5]:
     st.subheader("Бэктест на прошлых сезонах")
