@@ -121,3 +121,30 @@ def render_journey(pid,hy,issue_date,issue_day,margin,points,forecast):
     st.dataframe(table,hide_index=True,width='stretch')
     st.download_button('Скачать сравнение дат',table.to_csv(index=False).encode('utf-8-sig'),'risk-scenarios.csv','text/csv')
     st.caption('Расчёт всей цепочки хаб → ж/д → Нижний Бестях → переправа → Якутск и режим «сервис» — на вкладке «Сквозной коридор (А3)».')
+    _render_registry(pid,hy)
+
+
+def _render_registry(pid,hy):
+    """Просмотр реестра официальных приказов и графиков (идея — ветка dmitrii, 09.11.2026)."""
+    from okno.journey import _registry, _registry_version
+    reg=_registry(_registry_version())
+    with st.expander(f'Реестр официальных приказов и ограничений массы — {len(reg)} записей'):
+        st.caption('Факты и опубликованные графики открытия, ограничений 30/20 т и закрытия из data/external/road_events.csv '
+                   'и графика текущего сезона. Каждая запись — со ссылкой на первоисточник; записи без подтверждённого '
+                   'источника в реестр не вносятся (сверка — reports/source_audit.md).')
+        mode=st.radio('Показать',['эта точка, все сезоны','выбранный сезон, все точки','ограничения массы 30/20 т, все сезоны','весь реестр'],
+                      horizontal=True,key='registry_view')
+        view=reg
+        if mode.startswith('эта точка'): view=reg[reg.point_id==pid]
+        elif mode.startswith('выбранный сезон'): view=reg[reg.hydro_year==hy]
+        elif mode.startswith('ограничения'): view=reg[reg.kind.isin(['limit30','limit20','open10'])]
+        kinds={'open':'открытие','open10':'открытие до 10 т','limit30':'предел 30 т','limit20':'предел 20 т','close':'закрытие'}
+        rows=[{'Дорога':r.road,'Сезон':f'{int(r.hydro_year)-1}/{str(int(r.hydro_year))[2:]}','Событие':kinds.get(r.kind,r.kind),
+               'По графику':r.announced_date or '—','Факт':r.actual_date or '—',
+               'Источник':r.source_actual or r.source_announced,'Комментарий':r.comment}
+              for r in view.sort_values(['hydro_year','road']).itertuples()]
+        if rows:
+            st.dataframe(pd.DataFrame(rows),hide_index=True,width='stretch',key='registry_table',
+                         column_config={'Источник':st.column_config.LinkColumn('Источник',display_text='открыть')})
+        else:
+            st.info('По выбранному фильтру записей нет.')
