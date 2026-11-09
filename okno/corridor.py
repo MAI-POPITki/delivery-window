@@ -99,7 +99,7 @@ def _forecast_table(frame):
 
 
 def simulate_corridor(cfg,actual_close_day,actual_open_day,planned_close_day,planned_open_day,
-                      use_prestock=True,return_daily=False,*,forecasts=None,economic=False):
+                      use_prestock=True,return_daily=False,*,forecasts=None,economic=False,availability=None):
     """Execute only current hub dispatch. Arrival is dispatch + rail lead.
 
     Unsatisfied demand persists as backlog; penalty is its daily area in t·days.
@@ -107,6 +107,10 @@ def simulate_corridor(cfg,actual_close_day,actual_open_day,planned_close_day,pla
     """
     if not 0<=actual_close_day<=actual_open_day or planned_open_day<planned_close_day:
         raise ValueError("Invalid river window")
+    if availability is not None:
+        availability = np.asarray(availability, dtype=bool).copy()
+        if availability.shape != (cfg.horizon_days,):
+            raise ValueError("Календарь должен покрывать весь горизонт")
     f=_forecast_table(forecasts)
     d,H,lag=cfg.daily_demand_tons,cfg.horizon_days,cfg.rail_lead_time_days
     space=cfg.yak_warehouse_cap_tons+cfg.yak_overflow_capacity_tons
@@ -116,10 +120,10 @@ def simulate_corridor(cfg,actual_close_day,actual_open_day,planned_close_day,pla
     arrivals=np.zeros(H+lag+1)
     in_transit=0.
     seen_closed=False
-    planner=EconomicPlanner(cfg) if economic else None
+    planner=EconomicPlanner(cfg, availability=availability) if economic else None
     records=[]
     for t in range(H):
-        river_open=t<actual_close_day or t>=actual_open_day
+        river_open=bool(availability[t]) if availability is not None else t<actual_close_day or t>=actual_open_day
         reopened=seen_closed and river_open
         seen_closed |= not river_open
         avail=f[f.issue_day<=t]

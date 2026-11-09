@@ -121,6 +121,7 @@ def render_corridor():
                "Сезон коридора выбирается ниже. "
                "Старые правила предзавоза сохранены. Экономический план выбирает суточную загрузку "
                "ж/д и переправы по минимуму затрат при известных на день решения данных.")
+    decision_panel = st.container()
     options=sorted(verified_years(),reverse=True)+['synthetic']
     case=st.selectbox("Сценарий / подтверждённый сезон",options,key='corr_scenario',
                       format_func=lambda y:'Искусственный сценарий (не CatBoost)' if y=='synthetic' else f'{y}: реальные даты переправы')
@@ -156,6 +157,18 @@ def render_corridor():
         sens=run_sensitivity_check(cfg,c['ac'],c['ao'],c['cc'],c['co'],forecasts=c['forecasts'],q20_close=c['qc'],q20_open=c['qo']) if want_sens else None
     else:
         c,results,sens=calculate(asdict(cfg),case,version,want_sens)
+    with decision_panel:
+        st.markdown('### Где ограничение всей доставки?')
+        st.caption('Диагностика выбранного ниже сезона: одна мощность увеличивается на 10%, остальные условия и календарное правило отправок сохраняются. Это исторический модельный эксперимент, а не обещание доступности дополнительной техники.')
+        from okno.bottlenecks import diagnose_corridor
+        diagnostic = diagnose_corridor(cfg, c)
+        st.dataframe(diagnostic.rename(columns={'Мощность':'Исходная мощность, т/сут', 'Проверяемая_мощность':'Проверяемая мощность, т/сут', 'Сокращение_ожидания_т_сут':'Сокращение ожидания, т·сут', 'Сокращение_остатка_т':'Сокращение остатка, т'}), hide_index=True, width='stretch')
+        best = diagnostic.loc[diagnostic['Сокращение_ожидания_т_сут'].idxmax()]
+        if best['Сокращение_ожидания_т_сут'] > 1e-7:
+            st.write(f"Наибольшее сокращение ожидания в этом эксперименте: **{best['Участок']}**.")
+        else:
+            st.info('Ни одно из проверенных увеличений мощности не сокращает ожидание. Причина может быть в сроках, запасах или сочетании ограничений.')
+        st.caption('Нулевая мощность остаётся нулевой: новый канал не придумывается. Ёмкость склада не увеличивается. Показатель не доказывает единственную причину задержки; стоимость приобретения мощности не задана.')
     names=dict(POLICY_LABELS)
     if case=='synthetic':
         names['ml']='Предзавоз: ручное предупреждение'

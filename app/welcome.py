@@ -82,6 +82,15 @@ def show_welcome():
     st.session_state["dashboard_open"] = False
 
 
+def open_backhaul():
+    """Совместимость старых переходов: общая рабочая вкладка."""
+    st.query_params["module"] = "backhaul"
+
+
+def open_routes():
+    st.query_params["module"] = "routes"
+
+
 def render_welcome():
     st.markdown(_STYLES, unsafe_allow_html=True)
 

@@ -89,6 +89,13 @@ LEGEND_HTML = '\n<style>.okno-legend{display:flex;flex-wrap:wrap;gap:8px;margin:
 
 st.set_page_config(page_title="Окно завоза", page_icon="🧊", layout="wide")
 
+# Старые ссылки открывают общую рабочую вкладку, не отдельные страницы.
+_requested_plan = st.query_params.get("module") in ("routes", "backhaul", "journey")
+if _requested_plan and not st.session_state.get("journey_link_processed"):
+    st.session_state["dashboard_open"] = True
+    st.session_state["main_tab"] = "Риски и рекомендации"
+    st.session_state["journey_link_processed"] = True
+
 # Главная страница не загружает данные и модели до перехода в дашборд.
 if not st.session_state.get("dashboard_open", False):
     render_welcome()
@@ -107,8 +114,8 @@ import plotly.graph_objects as go
 # модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
 _MODULE_NAMES = (
     "okno.paths", "okno.northeast", "okno.regions", "okno.report", "okno.ice", "okno.calib", "okno.features", "okno.snow",
-    "okno.planner", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
-    "okno.yakutsk_replay", "app.yakutsk_experiment",
+    "okno.planner", "okno.decision_support", "app.decision_view", "okno.truck_load", "okno.backhaul", "okno.backhaul_io", "okno.routing", "okno.journey", "okno.risk_advice", "app.truck_load_view", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "okno.bottlenecks", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
+    "okno.yakutsk_replay", "app.yakutsk_experiment", "app.backhaul_view", "app.journey_view",
 )
 _cached_modules = [sys.modules.get(name) for name in _MODULE_NAMES]
 _needs_reload = any(module is None or getattr(module, "_loaded_mtime_ns", None)
@@ -317,12 +324,15 @@ last = FC.last_weather_day(pid, hy)
 if last is not None and last < issue_day:
     st.sidebar.warning(f"Погода есть до {from_season_day(last, hy).date():%d.%m.%Y}: прогноз выпускается на эту дату.")
 
+if st.session_state.get("main_tab") in ("Рейтинг риска", "Маршрут и план завоза"):  # прежние названия
+    st.session_state["main_tab"] = "Риски и рекомендации"
+
 tabs = st.tabs([
     "Карта путей",
     "Карточка пути",
     "Сквозной коридор (А3)",
     "Планировщик",
-    "Рейтинг риска",
+    "Риски и рекомендации",
     "До / после",
     "О данных",
 ], key="main_tab", on_change="rerun")
@@ -356,7 +366,7 @@ with tabs[0]:
         txt = f"<b>{label(p)}</b><br>P(открыт через {horizon} дн.) = " + ("н/д" if np.isnan(p_ok) else f"{p_ok:.0%}")
         if qc and "error" not in qc:
             txt += f"<br>Таяние (М1, 50%): {qc['q50_date']:%d.%m}, диапазон {qc['q10_date']:%d.%m}–{qc['q90_date']:%d.%m}"
-        rows.append({"lat": meta["lat"], "lon": meta["lon"], "color": color, "txt": txt, "p_ok": p_ok})
+        rows.append({"lat": meta["lat"], "lon": meta["lon"], "color": color, "txt": txt, "p_ok": p_ok, "pid": p})
     pts = pd.DataFrame(rows)
     if len(pts):
         def _short(p):
@@ -370,8 +380,8 @@ with tabs[0]:
     st.markdown(LEGEND_HTML, unsafe_allow_html=True)
     _l1, _l2, _l3 = st.columns(3)
     show_roads = _l1.checkbox("🛣️ Зимники", value=True, key="layer_roads")
-    show_s1 = _l2.checkbox("🛰️ Лена со спутника", value=region == "yakutia", key="layer_s1")
-    show_basin = _l3.checkbox("🌊 Притоки Лены", value=True, key="layer_basin")
+    show_s1 = _l2.checkbox("🛰️ Лена со спутника", value=False, key="layer_s1")
+    show_basin = _l3.checkbox("🌊 Притоки Лены", value=False, key="layer_basin")
     fmap = go.Figure()
     # 1) зимники OSM — фоном, приглушённо, чтобы не спорить с точками
     _roads_file = Path(PROCESSED).parent / "osm" / "winter_roads.json"
@@ -406,13 +416,14 @@ with tabs[0]:
         _s["hover"] = [f"<b>{LENA_NAMES.get(a, a)}</b><br>Sentinel-1, снимок {d:%d.%m.%Y} ({ag} дн. назад): <b>{st_}</b>"
                        f"<br>P(лёд) = {pi:.2f}" for a, d, ag, st_, pi in zip(_s.point, _s.date, _s.age, _s.state, _s.p_ice)]
         _s["lbl"] = [f"\u00a0\u00a0\u00a0{st_} · {d:%d.%m}" for st_, d in zip(_s.state, _s.date)]
+        # Подписи всегда тёмные и непрозрачные: давность передаётся цветом точки, а не бледным текстом.
         for fresh, g in _s.groupby(_s.age <= 14):
             op = 1.0 if fresh else 0.35
             fmap.add_trace(go.Scattermap(lat=g.lat, lon=g.lon, mode="markers", hoverinfo="skip", showlegend=False,
                                          marker=dict(size=17, color="#ffffff", opacity=op)))
             fmap.add_trace(go.Scattermap(
                 lat=g.lat, lon=g.lon, mode="markers+text", text=g.lbl, hovertext=g.hover, hoverinfo="text",
-                textposition="middle right", textfont=dict(size=11, color="#0b3d91" if fresh else "#7a8aa0"),
+                textposition="middle right", textfont=dict(size=13, color="#17212b", weight="bold"),
                 marker=dict(size=12, color=list(g.col), opacity=op),
                 name="🛰️ Лена со спутника" + ("" if fresh else " (снимок старше 14 дней)")))
     # 4) пути — крупные точки с подписями, поверх всего
@@ -420,15 +431,15 @@ with tabs[0]:
     na = pts[pts.p_ok.isna()] if len(pts) else pts
     if len(na):
         fmap.add_trace(go.Scattermap(lat=na.lat, lon=na.lon, mode="markers", hovertext=na.txt, hoverinfo="text",
-                                     marker=dict(size=15, color="#9e9e9e"), name="🚚 путь: нет данных"))
+                                     customdata=na[["pid"]], marker=dict(size=15, color="#9e9e9e"), name="🚚 путь: нет данных"))
     if len(ok):
         fmap.add_trace(go.Scattermap(lat=ok.lat, lon=ok.lon, mode="markers", hoverinfo="skip", showlegend=False,
                                      marker=dict(size=24, color="#ffffff")))
         fmap.add_trace(go.Scattermap(
-            lat=ok.lat, lon=ok.lon, mode="markers", hovertext=ok.txt, hoverinfo="text", name="🚚 пути: прогноз",
+            lat=ok.lat, lon=ok.lon, customdata=ok[["pid"]], mode="markers", hovertext=ok.txt, hoverinfo="text", name="🚚 пути: прогноз",
             marker=dict(size=19, color=ok.p_ok, cmin=0, cmax=1, colorscale="RdYlGn",
-                        colorbar=dict(title=dict(text="P(путь открыт<br>через N дн.)", font=dict(size=11)),
-                                      tickformat=".0%", thickness=12, len=0.55, x=0.99, xanchor="right", y=0.5,
+                        colorbar=dict(title=dict(text="P(путь открыт<br>через N дн.)", font=dict(size=11, color="#17212b")),
+                                      tickfont=dict(color="#17212b"), tickformat=".0%", thickness=12, len=0.55, x=0.99, xanchor="right", y=0.5,
                                       bgcolor="rgba(255,255,255,0.8)"))))
     # подписи путей — отдельными текстовыми слоями «над» и «под» точкой (слой не принимает разные позиции)
     if len(pts):
@@ -444,7 +455,7 @@ with tabs[0]:
                 _obst += [(x - 8, y - 8, x + 8, y + 8), (x + 8, y - 8, x + 8 + 7 * len(t), y + 8)]
         _lab = place_labels(pts, _z, _obst)
         for where, g in _lab.groupby("textpos"):
-            fmap.add_trace(go.Scattermap(lat=g.lat, lon=g.lon, mode="markers+text", text=g.label_txt, textposition=where,
+            fmap.add_trace(go.Scattermap(lat=g.lat, lon=g.lon, mode="markers+text", customdata=g[["pid"]], text=g.label_txt, textposition=where,
                                          marker=dict(size=26, color="rgba(0,0,0,0)"),  # прозрачная точка задаёт отступ
                                          textfont=dict(size=13, color="#14243a", weight="bold"),
                                          hoverinfo="skip", showlegend=False))
@@ -600,29 +611,11 @@ with tabs[3]:
                                  columns={"share_delivered": "доля плана", "undelivered_t": "недовоз, т",
                                           "cost_rub_per_t": "₽/т"}).round(2))
 
-# ------------------------------------------------------------------ 5. рейтинг риска
+# ------------------------------------------------------------------ 5. риски и рекомендации (ZXC)
 with tabs[4]:
     if _tab_open(4):
-        st.subheader(f"Рейтинг риска на {issue_date:%d.%m.%Y}")
-        st.caption("Ожидаемый недовоз = P(путь закроется до выполнения плана) × остаток плана. "
-                   "Сортировка — с каких путей начинать пересчёт графика.")
-        P0 = Params(close_margin_days=margin)
-        rows = []
-        for p in WEATHER_POINTS:
-            q = fc_cached(p, hy, max(issue_day, 150), "close")
-            if not q or "error" in q:
-                continue
-            need_weeks = P0.Q_t / P0.K_t_week
-            done_day = max(issue_day, P0.start_day) + 7 * need_weeks
-            p_early = p_by(q, done_day + margin)
-            rows.append({"путь": label(p), "закрытие (50%)": from_season_day(q["q50"] - margin, hy).date(),
-                         "диапазон 10–90%": f"{from_season_day(q['q10'] - margin, hy):%d.%m} – "
-                                            f"{from_season_day(q['q90'] - margin, hy):%d.%m}",
-                         "сдвиг к календарю, сут": round(q["q50"] - q["calendar"]),
-                         "P(закроется до конца плана)": round(p_early, 2),
-                         "ожидаемый недовоз, т": round(p_early * P0.Q_t * 0.5)})
-        if rows:
-            st.dataframe(pd.DataFrame(rows).sort_values("ожидаемый недовоз, т", ascending=False), width="stretch")
+        from app.journey_view import render_journey
+        render_journey(pid, hy, issue_date, issue_day, margin, WEATHER_POINTS, fc_cached)
 
     # ------------------------------------------------------------------ 6. до/после
 with tabs[5]:
