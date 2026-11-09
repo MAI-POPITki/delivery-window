@@ -1,6 +1,7 @@
 """Связь маршрута, реестра дорог и прогнозов карточки. Факты не заменяются моделью."""
 import datetime as dt
 import math
+import re
 from pathlib import Path
 import json
 from functools import lru_cache
@@ -14,9 +15,48 @@ from .planner import sample_quantiles
 ROOT=Path(__file__).resolve().parents[1]
 
 
+_BARE_POINT=re.compile(r"\b(gauge_\d+|yakutsk_crossing|lena_\d+)\b")
+
+
+def _point_of(comment):
+    """point_id=<id>; в графике 2026/27 точка записана без тега («ближайший гидропост: gauge_3414»)."""
+    tagged=extract_point_id(comment)
+    if tagged:
+        return tagged
+    m=_BARE_POINT.search(comment) if isinstance(comment,str) else None
+    return m.group(1) if m else None
+
+
+@lru_cache(maxsize=4)
+def _registry(version):
+    """Реестр фактов и опубликованных графиков: road_events.csv + график текущего сезона (road_schedule_*.csv)."""
+    parts=[pd.read_csv(ROOT/'data/external/road_events.csv').fillna('')]
+    for path in sorted((ROOT/'data/external').glob('road_schedule_*.csv')):
+        parts.append(pd.read_csv(path).fillna(''))
+    frame=pd.concat(parts,ignore_index=True)
+    frame['point_id']=frame.comment.map(_point_of)
+    return frame
+
+
+def _registry_version():
+    files=[ROOT/'data/external/road_events.csv',*sorted((ROOT/'data/external').glob('road_schedule_*.csv'))]
+    return tuple(f.stat().st_mtime_ns for f in files if f.exists())
+
+
 def road_rows(point_id,hydro_year):
-    frame=pd.read_csv(ROOT/'data/external/road_events.csv').fillna('')
-    return frame[(frame.comment.map(extract_point_id)==point_id)&(frame.hydro_year==hydro_year)].copy()
+    frame=_registry(_registry_version())
+    return frame[(frame.point_id==point_id)&(frame.hydro_year==hydro_year)].drop(columns='point_id').copy()
+
+
+def registry_coverage(point_id=None,hydro_year=None):
+    """Какие точки и сезоны вообще есть в реестре — для подсказки «где данные есть»."""
+    frame=_registry(_registry_version())
+    frame=frame[frame.point_id.notna()]
+    if point_id is not None:
+        frame=frame[frame.point_id==point_id]
+    if hydro_year is not None:
+        frame=frame[frame.hydro_year==hydro_year]
+    return frame
 
 
 def evidence(frame,road,decision,passage,gross_t):
@@ -24,11 +64,15 @@ def evidence(frame,road,decision,passage,gross_t):
     decision=pd.Timestamp(decision).normalize();passage=pd.Timestamp(passage).normalize()
     records=[]
     for _,row in frame[frame.road.eq(road)].iterrows():
+        # Если факт события уже опубликован к дате решения, прежний график этого же события не используется.
+        _fact=pd.to_datetime(row['actual_date'],errors='coerce');_fact_pub=pd.to_datetime(row['actual_published'],errors='coerce')
+        fact_known=not pd.isna(_fact) and not pd.isna(_fact_pub) and _fact_pub<=decision and _fact<=decision and bool(row['source_actual'])
         for prefix,effective,published,source in (
             ('Факт','actual_date','actual_published','source_actual'),
             ('Объявленный график','announced_date','announced_published','source_announced')):
             when=pd.to_datetime(row[effective],errors='coerce');known=pd.to_datetime(row[published],errors='coerce')
             if pd.isna(when) or pd.isna(known) or known>decision or not row[source]: continue
+            if fact_known and prefix=='Объявленный график': continue
             # Датированное сообщение о будущем событии — график, а не наблюдение будущего.
             kind=prefix if when<=decision else 'Объявленный график'
             records.append(dict(kind=row.kind,date=when,publication=known,source=row[source],
@@ -43,7 +87,7 @@ def evidence(frame,road,decision,passage,gross_t):
     if len({r['kind'] for r in latest})!=1:
         return dict(status='unknown',limit_t=None,record=None,records=records)
     row=max(latest,key=lambda r:r['publication'])
-    limit={'limit20':20.,'limit30':30.}.get(row['kind'])
+    limit={'limit20':20.,'limit30':30.,'open10':10.}.get(row['kind'])  # open10 — открытие до 10 т полной массы
     status='closed' if row['kind']=='close' else 'overweight' if limit and gross_t>limit else 'limited' if limit else 'mass_unknown'
     return dict(status=status,limit_t=limit,record=row,records=records)
 
