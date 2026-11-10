@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 import streamlit as st
 from okno import flood_m1_quantile as M
 from okno.flood_probability import exceedance
-from okno.flood import POINTS
+from okno.flood_sites import SITES as POINTS
 from okno import map_style as _flood_map_style
 from okno.map_style import AVAILABILITY_SCALE,UNKNOWN_COLOR
 
@@ -16,7 +16,9 @@ def overview_rows(issue,horizon):
     for pid,point in POINTS.items():
         source=json.loads((M.DATA/f'{pid}.manifest.json').read_text(encoding='utf-8'))
         lon,lat=source['station']['geometry']['coordinates']
-        row=dict(pid=pid,name=point['name'],river=point['river'],lat=lat,lon=lon,probability=None,status='Нет прогноза на эту дату')
+        row=dict(pid=pid,name=point['name'],river=point['river'],lat=lat,lon=lon,probability=None,
+                 satellite_only=pid not in M.STATIONS,
+                 status='Только спутниковое наблюдение; М1 не обучена' if pid not in M.STATIONS else 'Нет прогноза на эту дату')
         try:
             series=M.load_levels(pid)
             forecast,_=M.forecast(pid,issue);forecast=forecast.iloc[:horizon]
@@ -31,7 +33,7 @@ def overview_rows(issue,horizon):
 
 def select_point(pid):
     if pid in POINTS:
-        st.session_state['m1_flood_region']='Все четыре региона'
+        st.session_state['m1_flood_region']='Все регионы'
         st.session_state['m1_flood_point']=pid
 
 
@@ -55,14 +57,14 @@ def render_overview(issue,horizon,selected):
     st.write('Выберите город кнопкой под картой или в боковой панели. Затем проверьте прогноз и спутниковую обстановку, '
              'а для плана доставки укажите условия проезда и свои тарифы.')
     st.button('Пример: паводок в Орске 11 апреля 2024',key='flood_ready_example',on_click=open_example)
-    st.caption(f'Пять участков в четырёх регионах · расчёт на {pd.Timestamp(issue):%d.%m.%Y} · горизонт {horizon} сут. '
+    st.caption(f"{len(rows)} участков в {len({p['region'] for p in POINTS.values()})} регионах · расчёт на {pd.Timestamp(issue):%d.%m.%Y} · горизонт {horizon} сут. "
                'Карта показывает все участки проекта, а не только выбранный гидропост.')
     fig=go.Figure()
     for row in rows:
         known=row['probability'] is not None
         group=[row]
         marker=dict(size=[23 if r['pid']==selected else 16 for r in group],
-            color=[1-r['probability'] for r in group] if known else UNKNOWN_COLOR)
+            color=[1-r['probability'] for r in group] if known else '#0b3d91' if row['satellite_only'] else UNKNOWN_COLOR)
         if known:marker.update(colorscale=AVAILABILITY_SCALE,cmin=0,cmax=1)
         fig.add_trace(go.Scattermap(lon=[r['lon'] for r in group],lat=[r['lat'] for r in group],
             mode='markers+text',text=[r['name'] for r in group],
@@ -75,7 +77,8 @@ def render_overview(issue,horizon,selected):
     st.plotly_chart(fig,key='flood_overview_map',width='stretch',
         config={'displaylogo':False,'scrollZoom':True,'modeBarButtonsToRemove':['toImage','lasso2d','select2d']})
     st.caption('Зелёный → красный: оценка вероятности очень высокого уровня (q90 прошлых лет). '
-               'Серый: нет расчёта. Это не разрешение проезда. Наведите на точку для просмотра оценки. Выбор участка — кнопками ниже.')
+               'Синий: только спутниковый режим. Серый: нет расчёта на выбранную дату. '
+               'Это не разрешение проезда. Наведите на точку для просмотра оценки. Выбор участка — кнопками ниже.')
     columns=st.columns(len(rows))
     for col,row in zip(columns,rows):
         col.button(('● ' if row['pid']==selected else '')+row['name'],key='choose_flood_'+row['pid'],

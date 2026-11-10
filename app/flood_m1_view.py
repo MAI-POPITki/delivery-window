@@ -9,7 +9,7 @@ import streamlit as st
 
 from okno import flood_m1 as M
 from okno import flood_m1_quantile as Q
-from okno.flood import POINTS
+from okno.flood_sites import SITES as POINTS
 from okno.flood_routes import load_routes
 from okno.map_style import AVAILABILITY_SCALE
 
@@ -24,8 +24,10 @@ def render_m1():
     st.title('Паводки')
     st.caption('Оценка участка: спутниковая обстановка, прогноз уровня на 1–7 суток и план доставки')
     regions=list(dict.fromkeys(p['region'] for p in POINTS.values()))
-    region=st.sidebar.selectbox('Регион',['Все четыре региона',*regions],index=0,key='m1_flood_region')
-    points=[pid for pid,p in POINTS.items() if region=='Все четыре региона' or p['region']==region]
+    if st.session_state.get('m1_flood_region')=='Все четыре региона':
+        st.session_state['m1_flood_region']='Все регионы'
+    region=st.sidebar.selectbox('Регион',['Все регионы',*regions],index=0,key='m1_flood_region')
+    points=[pid for pid,p in POINTS.items() if region=='Все регионы' or p['region']==region]
     if st.session_state.get('m1_flood_point') not in points:
         st.session_state['m1_flood_point']=points[0]
     pid=st.sidebar.selectbox('Участок реки',points,key='m1_flood_point',
@@ -33,11 +35,13 @@ def render_m1():
     if pid not in M.STATIONS:
         from app.flood_overview import render_overview,open_satellite
         render_overview(st.session_state.get('flood_overview_date',date(2023,5,1)),7,pid)
-        st.warning('Курган: М1 пока не обучена. В доступном архиве всего один полный год ГМВО; другие записи имеют большие разрывы. '
-                   'Прогноз другой реки сюда не переносится.')
+        if pid=='tobol_kurgan':
+            st.warning('Курган: М1 пока не обучена. В доступном архиве всего один полный год ГМВО; другие записи имеют большие разрывы.')
+        else:
+            st.info(f"{POINTS[pid]['name']}: подключён спутниковый мониторинг. М1 уровня ещё не обучена; план М3 по чужому прогнозу не строится.")
         st.markdown('Источники и покрытие: [Уровень-Спутник](https://level-satellite.ru). '
-                    'Внешний расход GloFAS доступен отдельным пунктом в боковой панели.')
-        st.button('Посмотреть спутниковые снимки Кургана',on_click=open_satellite,args=(pid,),key='kurgan_satellite')
+                    'Для выбранного участка доступны только явно перечисленные возможности.')
+        st.button('Открыть спутниковую карту',on_click=open_satellite,args=(pid,),key='kurgan_satellite')
         return
     with st.sidebar.expander('Настройки модели'):
         version=st.radio('Версия М1',['v2 · квантили уровня','v1 · точечная модель'],key='m1_flood_version')
@@ -195,7 +199,7 @@ def render_m1():
                             ticktext=['Рост ≥100','Без изменения','Снижение ≥100'],orientation='h',thickness=10,y=-.06)),
                 hovertext=[f"{manifest['station']['properties']['name']}<br>Измерено: {current:.0f} см"
                            f"<br>М1 на {selected.date:%d.%m.%Y}: {selected.predicted_cm:.0f} см"],hoverinfo='text'))
-            fig.update_layout(map=dict(style=_flood_map_style.FLOOD_MAP_STYLE,center=dict(lat=gauge_lat,lon=gauge_lon),zoom=10),
+            fig.update_layout(map=dict(style=_flood_map_style.FLOOD_LOCAL_MAP_STYLE,center=dict(lat=gauge_lat,lon=gauge_lon),zoom=10),
                               height=500,margin=dict(l=0,r=0,t=0,b=65),showlegend=False)
             st.plotly_chart(fig,width='stretch',config={'scrollZoom':True,'displaylogo':False})
             st.caption('Красный — прогноз роста уровня, зелёный — снижения. Это не вероятность безопасности дороги. '

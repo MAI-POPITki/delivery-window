@@ -47,7 +47,7 @@ def render_assessment(pid,decision,forecast,threshold,probabilistic):
         fig.add_trace(go.Scattermap(lon=[lon],lat=[lat],mode='markers',marker=dict(size=13,color='#111827'),
             text=[f"М1 на {result['target']}: {result['predicted_cm']:.0f} см"],hoverinfo='text'))
         source='data:image/png;base64,'+base64.b64encode((sat['path'].parent/'overlay.png').read_bytes()).decode()
-        fig.update_layout(map=dict(style=_flood_map_style.FLOOD_MAP_STYLE,center=dict(lon=lon,lat=lat),zoom=11,
+        fig.update_layout(map=dict(style=_flood_map_style.FLOOD_LOCAL_MAP_STYLE,center=dict(lon=lon,lat=lat),zoom=11,
             layers=[dict(sourcetype='image',source=source,coordinates=sat['meta']['overlay_coordinates'],below='traces',opacity=.8)]),
             height=400,margin=dict(l=0,r=0,t=0,b=0),showlegend=False)
         st.plotly_chart(fig,width='stretch')

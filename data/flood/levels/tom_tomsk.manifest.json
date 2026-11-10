@@ -1,0 +1,34 @@
+{
+  "source": "https://level-satellite.ru/api/posts_geojson",
+  "request": {},
+  "fetched_at": "2026-11-10T04:27:30.996460+00:00",
+  "station": {
+    "geometry": {
+      "coordinates": [
+        84.960621,
+        56.447785
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "basin_code": "01",
+      "basin_name": null,
+      "bo_code": "13",
+      "bo_name": null,
+      "catchment_area_km2": 57000.0,
+      "has_discharge": true,
+      "name": "р.Томь - г.Томск",
+      "opened": "1963-08-15",
+      "post_code": "10251",
+      "subbasin_code": "03",
+      "subbasin_name": null,
+      "vhu_code": "13.01.03.004",
+      "vhu_name": null
+    },
+    "type": "Feature"
+  },
+  "sha256": "1354d430291d01a1e3bc46774b8d344adc61aca40c863fbc7d5f1c2317ba256c",
+  "raw_file": "data/flood/sites/posts_geojson.json.gz",
+  "summary": {},
+  "coverage": "satellite only; no measured level series downloaded"
+}

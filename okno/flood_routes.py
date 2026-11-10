@@ -5,7 +5,8 @@ import json
 from functools import lru_cache
 import xml.etree.ElementTree as ET
 
-from .flood import DATA, POINTS
+from .flood import DATA
+from .flood_sites import SITES as POINTS
 
 
 def parse_roads(raw, pid):

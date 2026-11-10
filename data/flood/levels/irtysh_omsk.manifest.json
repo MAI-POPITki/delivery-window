@@ -1,0 +1,34 @@
+{
+  "source": "https://level-satellite.ru/api/posts_geojson",
+  "request": {},
+  "fetched_at": "2026-11-10T04:27:30.991471+00:00",
+  "station": {
+    "geometry": {
+      "coordinates": [
+        73.32482,
+        55.00222
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "basin_code": "01",
+      "basin_name": null,
+      "bo_code": "14",
+      "bo_name": null,
+      "catchment_area_km2": 769000.0,
+      "has_discharge": true,
+      "name": "р.Иртыш - г.Омск",
+      "opened": "1891-01-01",
+      "post_code": "11048",
+      "subbasin_code": "01",
+      "subbasin_name": null,
+      "vhu_code": "14.01.01.003",
+      "vhu_name": null
+    },
+    "type": "Feature"
+  },
+  "sha256": "1354d430291d01a1e3bc46774b8d344adc61aca40c863fbc7d5f1c2317ba256c",
+  "raw_file": "data/flood/sites/posts_geojson.json.gz",
+  "summary": {},
+  "coverage": "satellite only; no measured level series downloaded"
+}

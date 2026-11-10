@@ -8,7 +8,7 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from okno import flood_m2 as M
-from okno.flood import POINTS
+from okno.flood_sites import SITES as POINTS
 
 
 def read_crop(destination, scene):

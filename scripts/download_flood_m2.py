@@ -14,12 +14,12 @@ import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from okno import flood_m2 as M
-from okno.flood import POINTS
+from okno.flood_sites import SITES as POINTS
 
 STAC = 'https://planetarycomputer.microsoft.com/api/stac/v1'
 COLLECTION = 'sentinel-2-l2a'
 BANDS = ['B02', 'B03', 'B04', 'B08', 'B11', 'SCL']
-WINDOWS = {'lena_yakutsk': ('2024-05-15', '2024-05-31'),
+WINDOWS = {'irtysh_omsk':('2024-05-05','2024-05-20'),'tom_tomsk':('2024-04-15','2024-04-25'),'lena_yakutsk': ('2024-05-15', '2024-05-31'),
     'ishim_ishim': ('2024-04-18', '2024-04-28'), 'tobol_kurgan': ('2024-04-15', '2024-04-25'),
     'ural_orenburg': ('2024-04-10', '2024-04-20'), 'ural_orsk': ('2024-04-08', '2024-04-15')}
 

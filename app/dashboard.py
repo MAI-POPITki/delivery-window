@@ -118,7 +118,7 @@ import plotly.graph_objects as go
 _service = st.sidebar.radio("Направление", ["Зимники и переправы", "Паводки"], key="service_mode")
 if _service == "Паводки":
     # Обновляем зависимости и представление в живом процессе Streamlit после git pull.
-    for _name in ("okno.map_style", "okno.flood", "okno.flood_routes", "okno.flood_planning", "okno.flood_m1", "okno.flood_m1_quantile", "okno.flood_m2",
+    for _name in ("okno.map_style", "okno.flood", "okno.flood_sites", "okno.flood_routes", "okno.flood_planning", "okno.flood_m1", "okno.flood_m1_quantile", "okno.flood_m2",
                   "okno.flood_probability", "okno.flood_m3", "okno.flood_assessment", "app.flood_assessment_view", "app.flood_overview", "app.flood_workspace", "app.flood_view", "app.flood_m1_view", "app.flood_m2_view", "app.flood_m3_view"):
         _mod = sys.modules.get(_name)
         if _mod is None:
@@ -132,6 +132,12 @@ if _service == "Паводки":
     if st.session_state.get('flood_model_source') in _old_sources:
         st.session_state['flood_model_source']=_old_sources[st.session_state['flood_model_source']]
     _flood_source=st.sidebar.radio('Режим',['Общая оценка участка','Спутниковые наблюдения · М2','Внешний расход · GloFAS'],key='flood_model_source')
+    with st.sidebar.expander('Материалы для демонстрации'):
+        for _label,_relative in [('Сценарий на 5–7 минут','docs/FLOOD_DEMO.md'),
+                                 ('Проверенная польза и ограничения','reports/flood_demo_value.md')]:
+            _path=Path(__file__).resolve().parents[1]/_relative
+            if _path.exists():
+                st.download_button(_label,_path.read_bytes(),_path.name,'text/markdown',key='demo_'+_path.stem)
     if _flood_source=='Общая оценка участка':
         from app.flood_m1_view import render_m1
         render_m1()

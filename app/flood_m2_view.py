@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from okno import flood_m2 as M
-from okno.flood import POINTS
+from okno.flood_sites import SITES as POINTS
 from okno.flood_routes import load_routes
 
 
@@ -39,11 +39,11 @@ def render_m2():
         st.session_state.setdefault(key,min(latest,date.today()))
         archive=[pd.Timestamp(m['product_generated_at']).date() for m in metadata if m['acquired_at'].startswith('2024-')]
         if archive:
-            st.sidebar.button('Пример паводка 2024',key='m2_example_'+pid,
+            st.sidebar.button('Архивный снимок 2024',key='m2_example_'+pid,
                 on_click=set_observation_date,args=(key,max(archive)))
         st.sidebar.button('Последний обработанный снимок',key='m2_latest_'+pid,
             on_click=set_observation_date,args=(key,min(latest,date.today())))
-        st.sidebar.caption('В каждом интервале обработки выбирается сцена с минимальной облачностью; '
+        st.sidebar.caption('Доступны обработанные снимки, выбранные по условиям обработки; '
                            'она не обязательно самая новая в каталоге.')
         as_of=st.sidebar.date_input('Дата просмотра М2',value=None,min_value=earliest,
             max_value=max(date.today(),latest),format='DD.MM.YYYY',key=key)
@@ -95,7 +95,7 @@ def render_m2():
             fig.add_trace(go.Scattermap(lon=[lon],lat=[lat],mode='markers',marker=dict(size=10,color='#111827'),
                 text=[meta['station']['properties']['name']],hoverinfo='text'))
             source='data:image/png;base64,'+base64.b64encode((folder/'overlay.png').read_bytes()).decode()
-            fig.update_layout(map=dict(style=_flood_map_style.FLOOD_MAP_STYLE,center=dict(lon=lon,lat=lat),zoom=10,
+            fig.update_layout(map=dict(style=_flood_map_style.FLOOD_LOCAL_MAP_STYLE,center=dict(lon=lon,lat=lat),zoom=10,
                 layers=[dict(sourcetype='image',source=source,coordinates=meta['overlay_coordinates'],below='traces',opacity=.85)]),
                 height=550,margin=dict(l=0,r=0,t=0,b=0),showlegend=False)
             st.plotly_chart(fig,width='stretch',config={'scrollZoom':True,'displaylogo':False})

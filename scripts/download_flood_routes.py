@@ -10,7 +10,8 @@ import requests
 import argparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from okno.flood import DATA, POINTS
+from okno.flood import DATA
+from okno.flood_sites import SITES as POINTS
 from okno.flood_routes import parse_roads
 
 

@@ -8,11 +8,11 @@ from okno.map_style import FLOOD_MAP_STYLE
 class OverviewTests(unittest.TestCase):
     def test_all_five_points_same_date_and_missing_model_is_unknown(self):
         rows=overview_rows('2023-05-01',7)
-        self.assertEqual(len(rows),5)
-        self.assertEqual(len({r['pid'] for r in rows}),5)
+        self.assertEqual(len(rows),7)
+        self.assertEqual(len({r['pid'] for r in rows}),7)
         kurgan=next(r for r in rows if r['pid']=='tobol_kurgan')
         self.assertIsNone(kurgan['probability'])
-        self.assertEqual({r['name'] for r in rows},{'Якутск','Ишим','Курган','Оренбург','Орск'})
+        self.assertEqual({r['name'] for r in rows},{'Якутск','Ишим','Курган','Оренбург','Орск','Омск','Томск'})
 
     def test_background_has_no_foreign_text_labels(self):
         self.assertTrue(all(l['type']=='raster' for l in FLOOD_MAP_STYLE['layers']))
