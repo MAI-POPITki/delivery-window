@@ -138,7 +138,7 @@ def render_m2():
                 rows.append({'Роль':label,'Съёмка UTC':scene['acquired_at'],'Генерация продукта UTC':scene['generated_at'],
                              'Каталог':scene['stac_url']})
             st.dataframe(pd.DataFrame(rows),hide_index=True,width='stretch')
-            st.caption('Время получения архива: '+meta['fetched_at']+'. Выбираются продукты не позже даты просмотра; '
+            st.caption('Время обработки архива: '+meta['processed_at']+'. Выбираются продукты не позже даты просмотра; '
                        'поздняя переработка снимка не считается доступной раньше её генерации.')
             st.download_button('Метаданные М2 и SHA-256',json.dumps(meta,ensure_ascii=False,indent=2).encode('utf-8'),
                                f'{pid}-m2-source.json','application/json')

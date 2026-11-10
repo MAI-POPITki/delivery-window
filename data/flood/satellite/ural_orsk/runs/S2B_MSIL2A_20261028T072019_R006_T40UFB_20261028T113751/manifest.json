@@ -12,7 +12,6 @@
   "pid": "ural_orsk",
   "acquired_at": "2026-10-28T07:20:19.024000Z",
   "product_generated_at": "2026-10-28T11:37:51.000000Z",
-  "fetched_at": "2026-11-10T02:49:54.362953+00:00",
   "source": "Copernicus Sentinel-2 L2A / Microsoft Planetary Computer",
   "station": {
     "geometry": {
@@ -184,5 +183,6 @@
     "rgb.png": "2e2b64a8df7bd29b47f9d5bcc05c0ae6f090c606397e57d4da188eb7dfbd36c5",
     "baseline.png": "feff3e27e69a17a43ccc0d533116eefe79d65d6d27c67448ad5fcf70e2dd59e5",
     "overlay.png": "635e509bc18dc0e10c29f3d36f868df8aaf175193d4e64a9b82721dd3c81497d"
-  }
+  },
+  "processed_at": "2026-11-10T02:49:54.362953+00:00"
 }

@@ -12,7 +12,6 @@
   "pid": "tobol_kurgan",
   "acquired_at": "2026-11-06T07:00:51.025000Z",
   "product_generated_at": "2026-11-06T09:56:05.000000Z",
-  "fetched_at": "2026-11-10T02:49:46.909386+00:00",
   "source": "Copernicus Sentinel-2 L2A / Microsoft Planetary Computer",
   "station": {
     "geometry": {
@@ -184,5 +183,6 @@
     "rgb.png": "74a5071b6905caaac7b4296b7c7428bcfe3dcb275eb03611e2c2c8c31756eb7f",
     "baseline.png": "55cce1eedf15c0e17a7dce2b9c638cea4ab43aa2165e243ae9e5003a2d5db4da",
     "overlay.png": "f6773917415c2971db2bf30f032c944e6cbcc5d32576329043cef22f81bee0ee"
-  }
+  },
+  "processed_at": "2026-11-10T02:49:46.909386+00:00"
 }

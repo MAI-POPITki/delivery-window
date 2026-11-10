@@ -101,12 +101,14 @@ def read_scene(item, location, destination):
             arrays = dict(pool.map(one, BANDS))
         np.savez_compressed(raw, **arrays)
         cachemeta.write_text(json.dumps(dict(grid=location, sha256=M.sha256(raw),
-            resampling='bilinear spectral DN / nearest SCL', nodata=0), indent=2), encoding='utf-8')
+            resampling='bilinear spectral DN / nearest SCL', nodata=0,
+            fetched_at=datetime.now(timezone.utc).isoformat()), indent=2), encoding='utf-8')
     stacpath.write_text(json.dumps(item, indent=2), encoding='utf-8')
     radi = radiometry(xmlpath.read_bytes(), item['properties']['s2:processing_baseline'])
     reflectance = {b: np.where(arrays[b] > 0, (arrays[b].astype('float64') + radi['offsets'][b]) / radi['quantification'], np.nan)
                    for b in BANDS if b != 'SCL'}
     return reflectance, arrays['SCL'], dict(item_id=item['id'], acquired_at=item['properties']['datetime'],
+        fetched_at=json.loads(cachemeta.read_text()).get('fetched_at'),
         generated_at=item['properties']['s2:generation_time'], cloud_scene_percent=item['properties']['eo:cloud_cover'],
         stac_url=f'{STAC}/collections/{COLLECTION}/items/{item["id"]}',
         files={p.relative_to(destination).as_posix(): M.sha256(p) for p in (raw, xmlpath, stacpath, cachemeta)}, radiometry=radi)
@@ -191,7 +193,7 @@ def process(pid, start, end, selected=None):
     stats['scl_water_agreement_iou'] = float((water & scl_water).sum() / union) if union else None
     manifest = dict(algorithm=M.ALGORITHM, parameters=M.PARAMS, pid=pid,
         acquired_at=meta['acquired_at'], product_generated_at=meta['generated_at'],
-        fetched_at=datetime.now(timezone.utc).isoformat(), source='Copernicus Sentinel-2 L2A / Microsoft Planetary Computer',
+        processed_at=datetime.now(timezone.utc).isoformat(), source='Copernicus Sentinel-2 L2A / Microsoft Planetary Computer',
         station=station['station'], grid=location, overlay_coordinates=coordinates, statistics=stats,
         observation=meta, references=provenance, selection_window=[start, end],
         selection='minimum scene cloud cover, no tuning of water thresholds',

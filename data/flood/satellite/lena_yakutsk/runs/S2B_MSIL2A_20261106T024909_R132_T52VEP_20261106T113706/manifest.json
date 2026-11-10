@@ -12,7 +12,6 @@
   "pid": "lena_yakutsk",
   "acquired_at": "2026-11-06T02:49:09.024000Z",
   "product_generated_at": "2026-11-06T11:37:06.000000Z",
-  "fetched_at": "2026-11-10T02:49:40.043903+00:00",
   "source": "Copernicus Sentinel-2 L2A / Microsoft Planetary Computer",
   "station": {
     "geometry": {
@@ -184,5 +183,6 @@
     "rgb.png": "06ad0b97f25b3a2f87ed07d7592e9dfaff3ce1d979c32d22b751f7e870a6a1a4",
     "baseline.png": "c89f20370f8f89d6686b87f6d7dc1ebf3467d3839fb2fd8c45ffa3258f468dbc",
     "overlay.png": "ac5cbd958b71d0b21d34e701d45a7c63fec59c26ff66cde44fc4253c02dd1c9c"
-  }
+  },
+  "processed_at": "2026-11-10T02:49:40.043903+00:00"
 }

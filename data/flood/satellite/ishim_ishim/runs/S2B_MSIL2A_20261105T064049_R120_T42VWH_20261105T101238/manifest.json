@@ -12,7 +12,6 @@
   "pid": "ishim_ishim",
   "acquired_at": "2026-11-05T06:40:49.024000Z",
   "product_generated_at": "2026-11-05T10:12:38.000000Z",
-  "fetched_at": "2026-11-10T02:49:43.660694+00:00",
   "source": "Copernicus Sentinel-2 L2A / Microsoft Planetary Computer",
   "station": {
     "geometry": {
@@ -184,5 +183,6 @@
     "rgb.png": "f563cd4b140020e6a78362138fa7cf55aa93b03b4c86e2c6cf6225ff8d10f63b",
     "baseline.png": "cd2fd9ca12d73ccfd5186de08e25ef9faefd4ceffcc5c58f3ec8511371d1228b",
     "overlay.png": "1e760dc677e3b686bfcb7497d9aafb8e272c81f93ba2dabef5c19976e4827bae"
-  }
+  },
+  "processed_at": "2026-11-10T02:49:43.660694+00:00"
 }
