@@ -1,2 +1,4 @@
 # PANGAEA TSVs are preserved verbatim; trailing tab fields encode missing data.
 data/raw/pangaea_river_ice/*.tsv -text whitespace=-blank-at-eol
+# Satellite manifests hash exact bytes: preserve XML/STAC/crop files across Windows/Linux.
+data/flood/satellite/** -text
