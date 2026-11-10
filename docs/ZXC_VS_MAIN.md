@@ -24,6 +24,19 @@ v1 — RMSE и симметричные интервалы; v2 — кванти�
 models/flood_m1_quantile/, reports/flood_m1_quantile*, tests/test_flood_m1_quantile.py.
 Изменены app/flood_m1_view.py и описание источников в README/FLOOD_METHOD.
 
+## М2 паводков, 10.11.2026
+
+Добавлен отдельный пункт «М2 · вода со спутника» и вход `?module=flood_m2`.
+Sentinel-2 L2A: вода/новая вода относительно летней базы/суша/неизвестное.
+Пять участков, реальные примеры 2024 и обработанные сцены 2026, карта дорог,
+RGB до/после, дата/возраст/видимость, источники и хеши. М2 не корректирует М1.
+Независимая точность затопления и проезд дороги не подтверждены.
+Новые файлы: okno/flood_m2.py, app/flood_m2_view.py,
+scripts/download_flood_m2.py, scripts/validate_flood_m2.py, tests/test_flood_m2.py,
+data/flood/satellite/, docs/FLOOD_M2*.md, reports/flood_m2*.
+Изменены dashboard, README и шаг ежедневного workflow.
+[Описание и ограничения](FLOOD_M2.md).
+
 ## Что увидит пользователь
 
 | Область | В main | В ZXC |

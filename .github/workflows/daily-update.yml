@@ -62,6 +62,13 @@ jobs:
           python scripts/s1_chips.py --days 10 --no-preview
           python scripts/m2_predict.py   # М2: лёд/вода на новых снимках, автодаты событий, автофакты журнала
 
+      - name: Новые снимки открытой воды Sentinel-2 (М2 паводков)
+        continue-on-error: true   # нет сцены/снег/облака не подменяются отсутствием воды
+        run: |
+          pip install -r requirements-data.txt
+          python scripts/download_flood_m2.py --recent --days 14
+          python scripts/validate_flood_m2.py
+
       - name: Есть ли новые данные
         id: diff
         run: |

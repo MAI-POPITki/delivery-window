@@ -93,6 +93,8 @@ st.set_page_config(page_title="Окно завоза", page_icon="🧊", layout=
 _requested_module = st.query_params.get("module")
 if _requested_module == "flood" and not st.session_state.get("flood_link_processed"):
     st.session_state.update(dashboard_open=True, service_mode="Паводки", flood_link_processed=True)
+if _requested_module == "flood_m2" and not st.session_state.get("flood_m2_link_processed"):
+    st.session_state.update(dashboard_open=True, service_mode="Паводки", flood_model_source="М2 · вода со спутника", flood_m2_link_processed=True)
 _requested_plan = _requested_module in ("routes", "backhaul", "journey")
 if _requested_plan and not st.session_state.get("journey_link_processed"):
     st.session_state["dashboard_open"] = True
@@ -116,8 +118,8 @@ import plotly.graph_objects as go
 _service = st.sidebar.radio("Направление", ["Зимники и переправы", "Паводки"], key="service_mode")
 if _service == "Паводки":
     # Обновляем зависимости и представление в живом процессе Streamlit после git pull.
-    for _name in ("okno.map_style", "okno.flood", "okno.flood_routes", "okno.flood_planning", "okno.flood_m1", "okno.flood_m1_quantile",
-                  "app.flood_workspace", "app.flood_view", "app.flood_m1_view"):
+    for _name in ("okno.map_style", "okno.flood", "okno.flood_routes", "okno.flood_planning", "okno.flood_m1", "okno.flood_m1_quantile", "okno.flood_m2",
+                  "app.flood_workspace", "app.flood_view", "app.flood_m1_view", "app.flood_m2_view"):
         _mod = sys.modules.get(_name)
         if _mod is None:
             _mod = importlib.import_module(_name)
@@ -125,10 +127,13 @@ if _service == "Паводки":
             _mod = importlib.reload(_mod)
         _mod._loaded_mtime_ns = os.stat(_mod.__file__).st_mtime_ns
     st.sidebar.button("О проекте", key="flood_welcome", on_click=show_welcome, width="stretch")
-    _flood_source=st.sidebar.radio('Источник прогноза',['М1 · уровень по измерениям','GloFAS · внешний расход'],key='flood_model_source')
+    _flood_source=st.sidebar.radio('Модуль паводков',['М1 · уровень по измерениям','М2 · вода со спутника','GloFAS · внешний расход'],key='flood_model_source')
     if _flood_source.startswith('М1'):
         from app.flood_m1_view import render_m1
         render_m1()
+    elif _flood_source.startswith('М2'):
+        from app.flood_m2_view import render_m2
+        render_m2()
     else:
         from app.flood_view import render_flood
         render_flood()
