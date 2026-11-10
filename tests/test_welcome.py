@@ -21,7 +21,7 @@ sys.path.insert(0, str(ROOT))
 from app.welcome import PROJECT_PDF
 
 DASHBOARD = ROOT / "app" / "dashboard.py"
-UPLOADED_PDF_SHA256 = "76274782f02c4b7df40b33e9528d25c4fa654ec580e966b8da6cf40af61337b3"  # паспорт v4: проверка на реальных данных (одна версия с docs/project.pdf)
+UPLOADED_PDF_SHA256 = "506a6d22d2cc607c18a3b39786433f9c05085e15241290f463c502de61072ce2"  # полное описание проекта v5 (одна версия с docs/project.pdf)
 DASHBOARD_TABS = ["Карта путей", "Карточка пути", "Сквозной коридор (А3)", "Планировщик",
                   "Риски и рекомендации", "До / после", "О данных"]
 
