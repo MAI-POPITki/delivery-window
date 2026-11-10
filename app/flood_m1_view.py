@@ -108,7 +108,11 @@ def render_m1():
             st.write('4. Диапазон — прогноз ± 80-й процентиль абсолютных ошибок выбранного метода в прошлом году.')
         st.write('Уровень относительно нуля поста не равен глубине воды на дороге. '
                  'Без подтверждённых опасных отметок и рельефа этот расчёт не определяет затопление или возможность проезда.')
-    tabs=st.tabs(['Карта','М1: прогноз','Проверка','Данные'],key='m1_flood_tab',on_change='rerun')
+    tabs=st.tabs(['Карта','М1: прогноз','Проверка','Данные','М3: план доставки'],key='m1_flood_tab',on_change='rerun')
+    with tabs[4]:
+        if tabs[4].open is not False:
+            from app.flood_m3_view import render_m3
+            render_m3(pid,issue,forecast)
     with tabs[0]:
         if tabs[0].open is not False:
             roads,_=load_routes(pid)

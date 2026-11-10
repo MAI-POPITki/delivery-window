@@ -1,0 +1,54 @@
+"""Условный план доставки по собственному прогнозу М1; без вымышленных тарифов."""
+import hashlib
+import pandas as pd
+import streamlit as st
+from okno.flood_m3 import plan_variants
+
+
+def render_m3(pid,decision,forecast):
+    st.subheader('М3 · план доставки по М1')
+    st.write('Минимизирует перевозку и хранение по подтверждённым датам и мощностям. '
+             'Основной вариант требует, чтобы верхняя граница М1 оставалась ниже вашего порога весь рейс.')
+    st.warning('Это условная политика предосторожности, а не вероятность закрытия дороги. '
+               '80%-й диапазон уровня не даёт 80%-й гарантии проезда. М2 не закрывает дорогу автоматически.')
+    route=st.text_input('Маршрут / участок',key='own_m3_route')
+    a,b=st.columns(2)
+    threshold=a.number_input('Порог уровня этого гидропоста, см',value=None,key='own_m3_threshold')
+    evidence=b.text_input('Основание порога и связь с участком',key='own_m3_evidence')
+    travel=a.number_input('Длительность проезда, суток',min_value=1,max_value=7,value=1,key='own_m3_travel')
+    quantity=b.number_input('Объём груза, т',min_value=0.,value=None,key='own_m3_quantity')
+    road=a.number_input('Перевозка по участку, ₽/т',min_value=0.,value=None,key='own_m3_road')
+    backup=b.number_input('Оценка довоза остатка, ₽/т',min_value=0.,value=None,key='own_m3_backup')
+    holding=a.number_input('Хранение, ₽/т·сут',min_value=0.,value=None,key='own_m3_holding')
+    st.caption('Тарифы и порог не подставляются. Порог — см над нулём выбранного поста, не глубина на дороге. '
+               'Остаток для другого способа не считается доставленным.')
+    context=hashlib.sha256(f'{pid}|{decision}|{route}|{len(forecast)}'.encode()).hexdigest()[:12]
+    records=pd.DataFrame(dict(date=pd.to_datetime(forecast.date).dt.date,confirmed=False,
+                              capacity_t=[None]*len(forecast),source='',published=[None]*len(forecast)))
+    edited=st.data_editor(records,key='own_m3_calendar_'+context,hide_index=True,disabled=['date'],
+        column_config={'date':st.column_config.DateColumn('Дата',format='DD.MM.YYYY'),
+            'confirmed':st.column_config.CheckboxColumn('Допуск подтверждён'),
+            'capacity_t':st.column_config.NumberColumn('Мощность отправки, т',min_value=0.),
+            'source':st.column_config.TextColumn('Основание допуска'),
+            'published':st.column_config.DateColumn('Сведения получены',format='DD.MM.YYYY')})
+    if not st.button('Рассчитать М3',key='own_m3_run',type='primary'):return
+    if not route.strip() or not evidence.strip() or any(x is None for x in [threshold,quantity,road,backup,holding]):
+        st.info('Введите маршрут, порог с основанием, объём и тарифы. Неизвестные условия не заменяются примерами.');return
+    try:
+        variants=plan_variants(edited,forecast,decision,int(travel),threshold,quantity,road,backup,holding)
+    except ValueError as exc:
+        st.error(str(exc));return
+    plan,summary=variants['upper']
+    st.dataframe(pd.DataFrame([{'Вариант':label,'Расходы, ₽':variants[name][1]['cost'],
+        'По участку, т':variants[name][1]['road_t'],'Остаток, т':variants[name][1]['backup_t']}
+        for name,label in [('lower','Нижняя граница'),('median','Медиана'),('upper','Верхняя граница · основной')]]),hide_index=True)
+    st.caption('Три варианта — чувствительность к прогнозу, не три независимых вероятностных сценария. '
+               'Тарифы и подтверждения одинаковы во всех вариантах.')
+    st.bar_chart(plan.set_index('date')[['optimized_t','uniform_t']].rename(
+        columns={'optimized_t':'М3, т','uniform_t':'Равномерный план, т'}))
+    st.write(f"Основной план: {summary['cost']:.0f} ₽; равномерный на тех же разрешённых мощностях: "
+             f"{summary['baseline_cost']:.0f} ₽. Фактическая экономия на реальных рейсах не подтверждена.")
+    st.dataframe(plan.drop(columns=['fraction']).rename(columns={'date':'Отправка','arrival':'Окончание проезда',
+        'capacity_t':'Мощность, т','confirmed':'Допуск подтверждён','policy_allowed':'Проходит политику',
+        'max_level_cm':'Максимум верхней границы, см','optimized_t':'М3, т','uniform_t':'Равномерно, т'}),hide_index=True)
+    st.download_button('Скачать план М3',plan.to_csv(index=False).encode('utf-8-sig'),'flood-m3.csv','text/csv')
