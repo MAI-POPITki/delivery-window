@@ -639,7 +639,18 @@ with tabs[2]:
 with tabs[3]:
     from app.planner_view import render_planner
     q = fc_cached(pid, hy, issue_day, "close")
-    P = render_planner(q, hy, issue_day, margin, label(pid))
+    # Начало сезона отправок: опубликованный факт или график открытия → прогноз открытия М1 → прежнее допущение (29 января).
+    from okno.journey import planned_opening
+    _opening = planned_opening(pid, hy, issue_date)
+    if _opening:
+        _start_day, _start_note = _opening
+    else:
+        _qo = fc_cached(pid, hy, issue_day, "open")
+        if _qo and "error" not in _qo and np.isfinite(_qo.get("q50", np.nan)):
+            _start_day, _start_note = int(round(_qo["q50"])), f"прогноз М1 (лёд держит 20 т) — {_qo['q50_date']:%d.%m.%Y}; официального графика в реестре нет"
+        else:
+            _start_day, _start_note = None, "нет ни графика, ни прогноза открытия — принято 29 января (допущение)"
+    P = render_planner(q, hy, issue_day, margin, label(pid), start_day=_start_day, start_note=_start_note)
     if q and 'error' not in q and np.isfinite(q.get('actual', np.nan)):
         with st.expander('Прежний ретроспективный тест М3: календарь и пересчёт по прогнозу'):
             st.caption('Отдельная проверка на фактическом закрытии. Здесь введённый объём считается заказом '

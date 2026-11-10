@@ -48,6 +48,24 @@ def road_rows(point_id,hydro_year):
     return frame[(frame.point_id==point_id)&(frame.hydro_year==hydro_year)].drop(columns='point_id').copy()
 
 
+def planned_opening(point_id,hydro_year,decision):
+    """Самое раннее открытие дорог точки в сезоне, известное на дату решения: (день сезона, пояснение) или None.
+
+    Факт используется, если он уже опубликован; иначе опубликованный график. Ничего не додумывается."""
+    decision=pd.Timestamp(decision).normalize()
+    frame=road_rows(point_id,hydro_year)
+    best=None
+    for _,row in frame[frame.kind.isin(['open','open10'])].iterrows():
+        for basis,effective,published in (('факт','actual_date','actual_published'),('график','announced_date','announced_published')):
+            when=pd.to_datetime(row[effective],errors='coerce');known=pd.to_datetime(row[published],errors='coerce')
+            if pd.isna(when) or pd.isna(known) or known>decision: continue
+            if basis=='факт' and when>decision: continue
+            if best is None or when<best[0]: best=(when,basis,row['road'])
+            break
+    if best is None: return None
+    return int(to_season_day(best[0],hydro_year)),f"{best[1]} открытия {best[0]:%d.%m.%Y} — {best[2]} (реестр)"
+
+
 def registry_coverage(point_id=None,hydro_year=None):
     """Какие точки и сезоны вообще есть в реестре — для подсказки «где данные есть»."""
     frame=_registry(_registry_version())

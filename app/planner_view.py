@@ -7,7 +7,7 @@ from okno.ice import from_season_day
 from okno.planner import Params, compare_ml_weekly_plans
 
 
-def render_planner(forecast, hydro_year, issue_day, margin, point_name, *, transit_days=None,quantity_t=None,require_quantity=False,availability=None,start_day=None):
+def render_planner(forecast, hydro_year, issue_day, margin, point_name, *, transit_days=None,quantity_t=None,require_quantity=False,availability=None,start_day=None,start_note=None):
     if require_quantity: st.session_state.pop('journey_m3_summary',None)
     st.subheader('Планировщик отправок (М3)')
     st.caption('Оба графика используют путь, сезон и дату решения из левой панели и параметры ниже. '
@@ -18,6 +18,7 @@ def render_planner(forecast, hydro_year, issue_day, margin, point_name, *, trans
         st.caption(f'Объём завоза взят из ваших заявок: {quantity_t:g} т. Для изменения объёма исправьте заявки выше.')
     if transit_days is not None:
         st.caption(f'Время рейса взято из выбранного маршрута: {transit_days*24:.1f} ч. Ограничения полной массы и возврат проверяются в рейсовом плане выше.')
+    if start_note: st.caption('Начало сезона отправок: '+start_note+'.')
     c1, c2, c3 = st.columns(3)
     p = Params(Q_t=c1.number_input('Осталось вывезти на дату решения, т', 0.1, 100000.0, quantity_t if quantity_t else None if require_quantity else 12000.0, 1.0,
                                    format='%.1f', key='planner_quantity',disabled=quantity_t is not None and quantity_t>0),

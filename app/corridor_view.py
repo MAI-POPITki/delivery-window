@@ -183,6 +183,12 @@ def render_corridor():
                  "Это факты для оценки: до наступления события план их не получает.")
         for i,url in enumerate(c['sources']):
             st.markdown(f"[Источник {'закрытия' if i==0 else 'открытия'}]({url})")
+    # Сначала — проверенный результат без допущения о цене ожидания; сравнение шести способов ниже зависит от «штрафа ожидания».
+    render_service(cfg,case,version,ras)
+    st.subheader('Сравнение шести способов планирования')
+    st.caption('Это сравнение включает условный «штраф ожидания» из параметров выше (по умолчанию 12 000 ₽ за тонну в сутки — '
+               'допущение, реальную цену знает только получатель). При высоком штрафе экономический план выглядит намного выгоднее, '
+               'при низком — почти нет. Вывод без этого допущения — в режиме «сервис» выше.')
     summary=pd.DataFrame([dict(policy=p,**r[0]) for p,r in results.items()]).set_index('policy')
     if st.session_state.get('corr_focus') not in results:
         st.session_state['corr_focus']='economic_ml'
@@ -217,7 +223,6 @@ def render_corridor():
                'оценён будущий довоз оставшегося заказанного груза: ж/д для остатка в хабе и штатная переправа '
                'для груза в хабе, в пути и в Нижнем Бестяхе. Это расчётная оценка без будущего хранения, '
                'а не выполненные рейсы. Расходы за период показаны отдельно.')
-    render_service(cfg,case,version,ras)
     render_weekly_dispatches(results,c,names)
     chart=go.Figure()
     for col,title in [('cost_rail_rub','Ж/д'),('cost_holding_nb_rub','Хранение Н.Бестях'),
