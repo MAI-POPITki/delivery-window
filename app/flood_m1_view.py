@@ -22,7 +22,7 @@ def render_m1():
         if name.startswith('own_m3_') and not name.startswith('own_m3_calendar_') and name!='own_m3_run':
             st.session_state[name]=st.session_state[name]
     st.title('Паводки')
-    st.caption('Оценка участка: спутниковая обстановка, прогноз уровня на 1–7 суток и план доставки')
+    st.caption('Когда проезд может закрыться и возобновиться: даты риска, прогноз уровня и план доставки')
     regions=list(dict.fromkeys(p['region'] for p in POINTS.values()))
     if st.session_state.get('m1_flood_region')=='Все четыре региона':
         st.session_state['m1_flood_region']='Все регионы'
@@ -71,6 +71,8 @@ def render_m1():
     st.session_state['flood_overview_date']=issue
     from app.flood_overview import render_overview
     render_overview(issue,horizon,pid)
+    from app.flood_road_window_view import render_road_window
+    render_road_window(pid,issue,series,forecast)
     st.subheader('2. Оцените обстановку на выбранном участке')
     current=float(series.loc[pd.Timestamp(issue)])
     validation_path=engine.MODELS/'validation.json'
