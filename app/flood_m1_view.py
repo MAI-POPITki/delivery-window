@@ -16,8 +16,12 @@ NAMES={'catboost':'CatBoost','persistence':'Последнее измерени�
 
 
 def render_m1():
+    # Сохраняем ввод даже на проходе, где вкладка М3 не отрисовывается.
+    for name in list(st.session_state):
+        if name.startswith('own_m3_') and not name.startswith('own_m3_calendar_') and name!='own_m3_run':
+            st.session_state[name]=st.session_state[name]
     st.title('Паводки')
-    st.caption('М1 · собственный прогноз измеренного уровня воды на 1–7 суток')
+    st.caption('Оценка участка: спутниковая обстановка, прогноз уровня на 1–7 суток и план доставки')
     regions=list(dict.fromkeys(p['region'] for p in POINTS.values()))
     region=st.sidebar.selectbox('Регион',['Все четыре региона',*regions],index=1,key='m1_flood_region')
     points=[pid for pid,p in POINTS.items() if region=='Все четыре региона' or p['region']==region]
@@ -31,7 +35,8 @@ def render_m1():
         st.markdown('Источники и покрытие: [Уровень-Спутник](https://level-satellite.ru). '
                     'Внешний расход GloFAS доступен отдельным пунктом в боковой панели.')
         return
-    version=st.sidebar.radio('Версия М1',['v2 · квантили уровня','v1 · точечная модель'],key='m1_flood_version')
+    with st.sidebar.expander('Настройки модели'):
+        version=st.radio('Версия М1',['v2 · квантили уровня','v1 · точечная модель'],key='m1_flood_version')
     engine=Q if version.startswith('v2') else M
     series=M.load_levels(pid)
     manifest=json.loads((M.DATA/f'{pid}.manifest.json').read_text(encoding='utf-8'))
@@ -67,7 +72,7 @@ def render_m1():
     st.caption(f"Уровни — сантиметры над нулём этого гидропоста. Выбран по предыдущему году: {NAMES[selected.method]}. "
                f"Обучение по {meta['train_until']}; калибровка — {meta['calibration_year']} год.")
     if engine is Q:
-        with st.expander('Шанс превышения заданного уровня',expanded=True):
+        with st.expander('Событие и вероятность превышения уровня',expanded=False):
             kind=st.radio('Какое событие оцениваем',['Высокий уровень · q80','Очень высокий уровень · q90','Своя отметка'],index=1,key='own_probability_kind_'+pid)
             q=.8 if 'q80' in kind else .9
             historical=series[(series.index.year<issue.year-1)&series.index.month.isin([4,5,6,7])].dropna()
@@ -114,25 +119,26 @@ def render_m1():
             report=M.ROOT/'reports/flood_probability.md'
             if report.exists():
                 st.download_button('Проверка вероятностей: Brier score и соперники',report.read_bytes(),report.name)
-    if check.get('point_skill_success'):
-        if engine is Q:
-            st.info('На повторной архивной оценке точечный прогноз прошёл критерии сравнения с простыми правилами. '
-                    'Эти годы уже изучались при создании v1; независимое подтверждение v2 ещё требуется.')
+    with st.expander('Надёжность прогноза и ограничения'):
+        if check.get('point_skill_success'):
+            if engine is Q:
+                st.info('На повторной архивной оценке точечный прогноз прошёл критерии сравнения с простыми правилами. '
+                        'Эти годы уже изучались при создании v1; независимое подтверждение v2 ещё требуется.')
+            else:
+                st.success('Точечный прогноз для этой точки и горизонта прошёл критерий сравнения с простыми правилами на отдельных будущих годах.')
         else:
-            st.success('Точечный прогноз для этой точки и горизонта прошёл критерий сравнения с простыми правилами на отдельных будущих годах.')
-    else:
-        st.warning('Для этой точки/горизонта преимущество по всем критериям не подтверждено. Модель остаётся экспериментальной.')
-    if not check.get('interval_valid'):
-        coverage=check.get('spring_coverage')
-        st.warning('Диапазон ещё ненадёжен в половодье'
-                   +(f': в проверке апреля–июля факт попадал в него только в {coverage:.0%} случаев.' if coverage is not None else '.')
-                   +' Это не гарантия 80%-й вероятности и не разрешение проезда.')
-    elif engine is Q:
-        st.caption(f"На повторной проверке весной покрытие диапазона — {check['spring_coverage']:.0%}. "
-                   'Оценка по прошлым годам не гарантирует покрытие следующего паводка.')
-    if engine is Q and check.get('worst_spring_coverage',1)<.75:
-        st.warning(f"В отдельном паводке диапазон был ненадёжен: весна {check['worst_spring_year']} года — "
-                   f"покрытие {check['worst_spring_coverage']:.0%}. Среднее по годам скрывает этот провал.")
+            st.warning('Для этой точки/горизонта преимущество по всем критериям не подтверждено. Модель остаётся экспериментальной.')
+        if not check.get('interval_valid'):
+            coverage=check.get('spring_coverage')
+            st.warning('Диапазон ещё ненадёжен в половодье'
+                       +(f': в проверке апреля–июля факт попадал в него только в {coverage:.0%} случаев.' if coverage is not None else '.')
+                       +' Это не гарантия 80%-й вероятности и не разрешение проезда.')
+        elif engine is Q:
+            st.caption(f"На повторной проверке весной покрытие диапазона — {check['spring_coverage']:.0%}. "
+                       'Оценка по прошлым годам не гарантирует покрытие следующего паводка.')
+        if engine is Q and check.get('worst_spring_coverage',1)<.75:
+            st.warning(f"В отдельном паводке диапазон был ненадёжен: весна {check['worst_spring_year']} года — "
+                       f"покрытие {check['worst_spring_coverage']:.0%}. Среднее по годам скрывает этот провал.")
     with st.expander('Как получен этот прогноз'):
         known=series.loc[:pd.Timestamp(issue)]
         features=engine.feature_frame(known,horizon).loc[pd.Timestamp(issue)]
@@ -156,13 +162,17 @@ def render_m1():
             st.write('4. Диапазон — прогноз ± 80-й процентиль абсолютных ошибок выбранного метода в прошлом году.')
         st.write('Уровень относительно нуля поста не равен глубине воды на дороге. '
                  'Без подтверждённых опасных отметок и рельефа этот расчёт не определяет затопление или возможность проезда.')
-    tabs=st.tabs(['Карта','М1: прогноз','Проверка','Данные','М3: план доставки'],key='m1_flood_tab',on_change='rerun')
-    with tabs[4]:
-        if tabs[4].open is not False:
-            from app.flood_m3_view import render_m3
-            render_m3(pid,issue,forecast)
+    tabs=st.tabs(['Общий результат','Карта','М1: прогноз','Проверка','Данные','М3: план доставки'],key='m1_flood_tab',on_change='rerun')
     with tabs[0]:
         if tabs[0].open is not False:
+            from app.flood_assessment_view import render_assessment
+            render_assessment(pid,issue,forecast,threshold if engine is Q else None,engine is Q)
+    with tabs[5]:
+        if tabs[5].open is not False:
+            from app.flood_m3_view import render_m3
+            render_m3(pid,issue,forecast)
+    with tabs[1]:
+        if tabs[1].open is not False:
             roads,_=load_routes(pid)
             fig=go.Figure()
             lat,lon=[],[]
@@ -181,8 +191,8 @@ def render_m1():
             st.plotly_chart(fig,width='stretch',config={'scrollZoom':True,'displaylogo':False})
             st.caption('Красный — прогноз роста уровня, зелёный — снижения. Это не вероятность безопасности дороги. '
                        'Координаты взяты из метаданных гидропоста, а не из ячейки GloFAS. © OpenStreetMap contributors.')
-    with tabs[1]:
-        if tabs[1].open is not False:
+    with tabs[2]:
+        if tabs[2].open is not False:
             known=series.loc[:pd.Timestamp(issue)].tail(45)
             fig=go.Figure()
             fig.add_scatter(x=known.index,y=known,name='Измерено до решения',line=dict(color='#64748b'))
@@ -201,8 +211,12 @@ def render_m1():
             view['Выбранный метод']=view['Выбранный метод'].map(NAMES)
             st.dataframe(view,hide_index=True,width='stretch')
             st.download_button('Скачать прогноз М1',view.to_csv(index=False).encode('utf-8-sig'),'flood-m1.csv','text/csv')
-    with tabs[2]:
-        if tabs[2].open is not False:
+    with tabs[3]:
+        if tabs[3].open is not False:
+            benchmark=M.ROOT/'reports/flood_m2_benchmark.md'
+            if benchmark.exists():
+                with st.expander('М2: независимая ручная разметка — полный тест и перенос на другое событие'):
+                    st.markdown(benchmark.read_text(encoding='utf-8'))
             report=M.ROOT/('reports/flood_m1_quantile.md' if engine is Q else 'reports/flood_m1.md')
             if report.exists(): st.markdown(report.read_text(encoding='utf-8'))
             scores=pd.read_csv(M.ROOT/('reports/flood_m1_quantile_scores.csv' if engine is Q else 'reports/flood_m1_scores.csv'))
@@ -210,8 +224,8 @@ def render_m1():
             st.write('MAE — средняя абсолютная ошибка в сантиметрах. Сравниваются целые будущие годы, '
                      'которые не использовались ни при обучении, ни при выборе алгоритма и калибровке интервала.')
             st.download_button('Скачать проверку по годам',scores.to_csv(index=False).encode('utf-8-sig'),'flood-m1-scores.csv','text/csv')
-    with tabs[3]:
-        if tabs[3].open is not False:
+    with tabs[4]:
+        if tabs[4].open is not False:
             st.markdown('Источник: [Уровень-Спутник](https://level-satellite.ru), '
                         'Головлев П.П., Иннокентьев А.И. (2026). Записи gmvo опубликованы как данные АИС ГМВО; '
                         'vodinfo — отдельный источник. Источники в обучающем ряду одной точки не смешиваются.')

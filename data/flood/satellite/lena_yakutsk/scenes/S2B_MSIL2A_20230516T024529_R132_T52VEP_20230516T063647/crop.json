@@ -1,0 +1,19 @@
+{
+  "grid": {
+    "crs": "EPSG:32652",
+    "transform": [
+      20.0,
+      0.0,
+      536820.0,
+      0.0,
+      -20.0,
+      6887320.0
+    ],
+    "width": 600,
+    "height": 600
+  },
+  "sha256": "f3dfb1d1eaa1bd0ec9f24b592e87a9396912a07113dbe6dc33d4be8b13abc638",
+  "resampling": "bilinear spectral DN / nearest SCL",
+  "nodata": 0,
+  "fetched_at": "2026-11-10T03:43:42.535237+00:00"
+}

@@ -87,7 +87,11 @@ class FloodM2Tests(unittest.TestCase):
             self.assertTrue(runs,pid)
             for path in runs:
                 row=validate(path)
-                self.assertGreater(row['observed_fraction'],0)
+                self.assertGreaterEqual(row['observed_fraction'],0)
+                self.assertLessEqual(row['observed_fraction'],1)
+                if row['observed_fraction']==0:
+                    self.assertEqual(row['water_km2'],0)
+                    self.assertEqual(row['new_water_km2'],0)
                 self.assertLessEqual(row['water_km2'],row['observed_km2'])
                 self.assertLessEqual(row['new_water_km2'],row['comparable_km2'])
                 meta=M.load_run(path)

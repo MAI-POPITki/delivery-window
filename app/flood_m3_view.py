@@ -6,16 +6,26 @@ from okno.flood_m3 import plan_variants
 
 
 def render_m3(pid,decision,forecast):
+    for name in list(st.session_state):
+        if name.startswith('own_m3_') and not name.startswith('own_m3_calendar_') and name!='own_m3_run':
+            st.session_state[name]=st.session_state[name]
+    if st.session_state.get('_own_m3_post') not in (None,pid):
+        st.session_state['own_m3_threshold']=None
+        st.session_state['own_m3_evidence']=''
+    st.session_state['_own_m3_post']=pid
+    st.session_state.setdefault('own_m3_route','')
+    st.session_state.setdefault('own_m3_evidence','')
+    st.session_state.setdefault('own_m3_travel',1)
     st.subheader('М3 · план доставки по М1')
     st.write('Минимизирует перевозку и хранение по подтверждённым датам и мощностям. '
              'Основной вариант требует, чтобы верхняя граница М1 оставалась ниже вашего порога весь рейс.')
     st.warning('Это условная политика предосторожности, а не вероятность закрытия дороги. '
                '80%-й диапазон уровня не даёт 80%-й гарантии проезда. М2 не закрывает дорогу автоматически.')
-    route=st.text_input('Маршрут / участок',key='own_m3_route')
+    route=st.text_input('Маршрут / участок',value=None,key='own_m3_route') or ''
     a,b=st.columns(2)
     threshold=a.number_input('Порог уровня этого гидропоста, см',value=None,key='own_m3_threshold')
-    evidence=b.text_input('Основание порога и связь с участком',key='own_m3_evidence')
-    travel=a.number_input('Длительность проезда, суток',min_value=1,max_value=7,value=1,key='own_m3_travel')
+    evidence=b.text_input('Основание порога и связь с участком',value=None,key='own_m3_evidence') or ''
+    travel=a.number_input('Длительность проезда, суток',min_value=1,max_value=7,value=None,key='own_m3_travel')
     quantity=b.number_input('Объём груза, т',min_value=0.,value=None,key='own_m3_quantity')
     road=a.number_input('Перевозка по участку, ₽/т',min_value=0.,value=None,key='own_m3_road')
     backup=b.number_input('Оценка довоза остатка, ₽/т',min_value=0.,value=None,key='own_m3_backup')
@@ -25,12 +35,15 @@ def render_m3(pid,decision,forecast):
     context=hashlib.sha256(f'{pid}|{decision}|{route}|{len(forecast)}'.encode()).hexdigest()[:12]
     records=pd.DataFrame(dict(date=pd.to_datetime(forecast.date).dt.date,confirmed=False,
                               capacity_t=[None]*len(forecast),source='',published=[None]*len(forecast)))
+    saved=st.session_state.setdefault('_own_m3_confirmations',{})
+    records=saved.get(context,records)
     edited=st.data_editor(records,key='own_m3_calendar_'+context,hide_index=True,disabled=['date'],
         column_config={'date':st.column_config.DateColumn('Дата',format='DD.MM.YYYY'),
             'confirmed':st.column_config.CheckboxColumn('Допуск подтверждён'),
             'capacity_t':st.column_config.NumberColumn('Мощность отправки, т',min_value=0.),
             'source':st.column_config.TextColumn('Основание допуска'),
             'published':st.column_config.DateColumn('Сведения получены',format='DD.MM.YYYY')})
+    saved[context]=edited.copy()
     if not st.button('Рассчитать М3',key='own_m3_run',type='primary'):return
     if not route.strip() or not evidence.strip() or any(x is None for x in [threshold,quantity,road,backup,holding]):
         st.info('Введите маршрут, порог с основанием, объём и тарифы. Неизвестные условия не заменяются примерами.');return

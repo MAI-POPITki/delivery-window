@@ -1,0 +1,2400 @@
+{
+  "source": "Sen1Floods11 v1.1, Bonafilia et al. 2020",
+  "splits": {
+    "train": [
+      "Ghana_103272",
+      "Ghana_1089161",
+      "Ghana_11745",
+      "Ghana_128663",
+      "Ghana_134751",
+      "Ghana_135389",
+      "Ghana_141910",
+      "Ghana_144050",
+      "India_1017769",
+      "India_103447",
+      "India_1072277",
+      "India_135434",
+      "India_136196",
+      "India_166709",
+      "India_177319",
+      "India_179238",
+      "Mekong_1111068",
+      "Mekong_1191208",
+      "Mekong_119477",
+      "Mekong_1248200",
+      "Mekong_1282475",
+      "Mekong_1395593",
+      "Mekong_1396181",
+      "Mekong_1439641",
+      "Nigeria_143329",
+      "Nigeria_35845",
+      "Nigeria_439488",
+      "Nigeria_529525",
+      "Nigeria_598959",
+      "Nigeria_600295",
+      "Nigeria_707067",
+      "Nigeria_78061",
+      "Pakistan_1036366",
+      "Pakistan_132143",
+      "Pakistan_211386",
+      "Pakistan_246510",
+      "Pakistan_246718",
+      "Pakistan_35915",
+      "Pakistan_366265",
+      "Pakistan_401863",
+      "Paraguay_1029042",
+      "Paraguay_1056717",
+      "Paraguay_1076204",
+      "Paraguay_11869",
+      "Paraguay_126224",
+      "Paraguay_12870",
+      "Paraguay_148318",
+      "Paraguay_149787",
+      "Somalia_1068756",
+      "Somalia_1087508",
+      "Somalia_195014",
+      "Somalia_205466",
+      "Somalia_230192",
+      "Somalia_295782",
+      "Somalia_32375",
+      "Somalia_371421",
+      "Spain_1167260",
+      "Spain_2472849",
+      "Spain_2523247",
+      "Spain_2594119",
+      "Spain_2938657",
+      "Spain_3285448",
+      "Spain_337094",
+      "Spain_4915752",
+      "Sri-Lanka_1038087",
+      "Sri-Lanka_120804",
+      "Sri-Lanka_135713",
+      "Sri-Lanka_14484",
+      "Sri-Lanka_152185",
+      "Sri-Lanka_163406",
+      "Sri-Lanka_178753",
+      "Sri-Lanka_233609",
+      "USA_1010394",
+      "USA_1068362",
+      "USA_11422",
+      "USA_114964",
+      "USA_115033",
+      "USA_170264",
+      "USA_179917",
+      "USA_181263"
+    ],
+    "valid": [
+      "Ghana_1033830",
+      "Ghana_124834",
+      "Ghana_132163",
+      "India_1018317",
+      "India_1050276",
+      "India_1068117",
+      "Mekong_1149855",
+      "Mekong_1413877",
+      "Mekong_293769",
+      "Nigeria_1095404",
+      "Nigeria_31096",
+      "Nigeria_820924",
+      "Pakistan_1027214",
+      "Pakistan_210595",
+      "Pakistan_336228",
+      "Paraguay_1019808",
+      "Paraguay_153941",
+      "Paraguay_172476",
+      "Somalia_12849",
+      "Somalia_167787",
+      "Somalia_256539",
+      "Spain_1199913",
+      "Spain_4282030",
+      "Spain_6537196",
+      "Sri-Lanka_101973",
+      "Sri-Lanka_132922",
+      "Sri-Lanka_236030",
+      "USA_1039203",
+      "USA_1082482",
+      "USA_19225"
+    ],
+    "test": [
+      "Ghana_1078550",
+      "Ghana_141271",
+      "Ghana_167233",
+      "Ghana_313799",
+      "Ghana_319168",
+      "Ghana_359826",
+      "Ghana_406026",
+      "Ghana_53713",
+      "Ghana_83483",
+      "Ghana_866994",
+      "Ghana_97059",
+      "India_1018327",
+      "India_399883",
+      "India_44475",
+      "India_570384",
+      "India_591317",
+      "India_592446",
+      "India_631692",
+      "India_747992",
+      "India_772630",
+      "India_79637",
+      "India_80221",
+      "India_828067",
+      "India_900498",
+      "India_952728",
+      "Mekong_1443339",
+      "Mekong_254910",
+      "Mekong_333434",
+      "Mekong_382276",
+      "Mekong_424793",
+      "Mekong_45934",
+      "Nigeria_22088",
+      "Nigeria_225131",
+      "Nigeria_417184",
+      "Nigeria_812045",
+      "Pakistan_167553",
+      "Pakistan_528249",
+      "Pakistan_664885",
+      "Pakistan_694942",
+      "Pakistan_70625",
+      "Pakistan_849790",
+      "Paraguay_1029191",
+      "Paraguay_232281",
+      "Paraguay_271769",
+      "Paraguay_280900",
+      "Paraguay_34417",
+      "Paraguay_40936",
+      "Paraguay_511199",
+      "Paraguay_59731",
+      "Paraguay_651904",
+      "Paraguay_683296",
+      "Paraguay_790830",
+      "Paraguay_80102",
+      "Paraguay_868895",
+      "Paraguay_913449",
+      "Somalia_166342",
+      "Somalia_322855",
+      "Somalia_60129",
+      "Somalia_685158",
+      "Somalia_699062",
+      "Somalia_94102",
+      "Spain_5650136",
+      "Spain_6095801",
+      "Spain_6860600",
+      "Spain_7370579",
+      "Spain_7387658",
+      "Spain_7558720",
+      "Sri-Lanka_1049830",
+      "Sri-Lanka_117737",
+      "Sri-Lanka_377277",
+      "Sri-Lanka_450918",
+      "Sri-Lanka_534068",
+      "Sri-Lanka_649970",
+      "Sri-Lanka_713926",
+      "Sri-Lanka_849649",
+      "Sri-Lanka_922192",
+      "USA_1049586",
+      "USA_350244",
+      "USA_430764",
+      "USA_504150",
+      "USA_519181",
+      "USA_527077",
+      "USA_595451",
+      "USA_66511",
+      "USA_670826",
+      "USA_67102",
+      "USA_758178",
+      "USA_778194",
+      "USA_905409",
+      "USA_933610"
+    ],
+    "bolivia": [
+      "Bolivia_103757",
+      "Bolivia_129334",
+      "Bolivia_195474",
+      "Bolivia_23014",
+      "Bolivia_233925",
+      "Bolivia_242570",
+      "Bolivia_290290",
+      "Bolivia_294583",
+      "Bolivia_312675",
+      "Bolivia_314919",
+      "Bolivia_360519",
+      "Bolivia_379434",
+      "Bolivia_432776",
+      "Bolivia_60373",
+      "Bolivia_76104"
+    ]
+  },
+  "files": [
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/splits/flood_handlabeled/flood_train_data.csv",
+      "path": "data/flood/benchmark/flood_train_data.csv",
+      "sha256": "57be4dc440bf8a526effa77e06d4b8cb7a8484589c0bffa201d8e0f49e994beb"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/splits/flood_handlabeled/flood_valid_data.csv",
+      "path": "data/flood/benchmark/flood_valid_data.csv",
+      "sha256": "04999b82b93e393c32a54ac85b2bf8a18b671f7a6f43a9478b340e8a9b9647fb"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/splits/flood_handlabeled/flood_test_data.csv",
+      "path": "data/flood/benchmark/flood_test_data.csv",
+      "sha256": "8b598c9438042f3ed8aed4484268387fae1aa5b660882e1c5b4c1218eba63d67"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/splits/flood_handlabeled/flood_bolivia_data.csv",
+      "path": "data/flood/benchmark/flood_bolivia_data.csv",
+      "sha256": "4775d100fae1f1ca66a842b8af6d2a97b8bfc5847f29d88ff0affff2c1e22768"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Bolivia_103757_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_103757_S2Hand.tif",
+      "sha256": "d16f68d9fffa6235b44cc31b186ec4ab5179420892fc59589d597717afeb19ad"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Bolivia_103757_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_103757_LabelHand.tif",
+      "sha256": "3a48e1af6d70db96895a3a196dc86e6264c97772d85308039b0a2095e3154b6e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Bolivia_129334_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_129334_S2Hand.tif",
+      "sha256": "49eb5631caafcec4759494d0fc7a5e9a7d48329d878c0b4d81d5e97dfbdb783c"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Bolivia_129334_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_129334_LabelHand.tif",
+      "sha256": "8dc1ea3c75551a72dfe64ebf03286fdaa1c1c83e200f13a75c8c6b5c75a6bedf"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Bolivia_195474_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_195474_S2Hand.tif",
+      "sha256": "4c6ed5a8d81f959c29b09704c44dfbccb4bf5069a4238abfa78538bb0888e425"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Bolivia_195474_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_195474_LabelHand.tif",
+      "sha256": "abde104335e832d1e928c89d8af7fa730397abbb21f6edbb186be60f375b2c3c"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Bolivia_23014_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_23014_S2Hand.tif",
+      "sha256": "86c247e6bd36bc9e722823c9de971b0137ee1e08f47430aa930a8b583c68b4b5"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Bolivia_23014_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_23014_LabelHand.tif",
+      "sha256": "f10968b70fd631dad0db2058e19dbc35904c380f9c5ed3b66cbb2b1a20ff9a5a"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Bolivia_233925_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_233925_S2Hand.tif",
+      "sha256": "5be5554dfaa1d03b3bd6755bd5a91bca50f15f88a4c39e5811b69769bf80b926"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Bolivia_233925_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_233925_LabelHand.tif",
+      "sha256": "f792ca8b079652aaaf2b477436a49a7fce656315270730035e95a8fd0ae7ad40"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Bolivia_242570_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_242570_S2Hand.tif",
+      "sha256": "e0f92aa79f453264736c5ad1133b1d007ae0e0934922ad74d14e5a43a3502dbc"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Bolivia_242570_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_242570_LabelHand.tif",
+      "sha256": "6e3717264855a6054a7805614d902622cff98bae1c4a23d9b05f84fb9d61cac5"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Bolivia_290290_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_290290_S2Hand.tif",
+      "sha256": "a6aa4a21b277b9cdc88f7360281d700fcd620b53249632989cd23c6007d73294"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Bolivia_290290_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_290290_LabelHand.tif",
+      "sha256": "686089e1a8bcb602e3311900743a854313bb7d0718479e82a6ee0128b3fde0b6"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Bolivia_294583_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_294583_S2Hand.tif",
+      "sha256": "01d1123b262b6c39690e17c619502b9e6166161601494b89c4c9164e6af60693"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Bolivia_294583_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_294583_LabelHand.tif",
+      "sha256": "aa0d9f8c3783ea88587161a556165a405c0b7be8ccf29d99a3ba8dabbf53ec16"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Bolivia_312675_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_312675_S2Hand.tif",
+      "sha256": "543e3ff39f67fb6160e987b07ee2cefdb7daa3b3b6848c2989280c35ead3193f"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Bolivia_312675_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_312675_LabelHand.tif",
+      "sha256": "00d901a6687a31ff7a30a5bee7029fafb0eed33b88462f997981ab7b3ea4333e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Bolivia_314919_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_314919_S2Hand.tif",
+      "sha256": "d9573d1726baa3902c53cd6515ff438413b37dcfb01551468a044e719a490dff"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Bolivia_314919_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_314919_LabelHand.tif",
+      "sha256": "8f4e3bdd6a36f5e85a88e8a02e30e63f3f215fda00b7c70f279081a90b39af18"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Bolivia_360519_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_360519_S2Hand.tif",
+      "sha256": "e12642a061266b1fea23feb71adbe8eb23bdc5a92025a619cbf01900fe4f4cd2"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Bolivia_360519_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_360519_LabelHand.tif",
+      "sha256": "5f2df254fd117a7bbb8a4dbdce76ce1c96c629706c35fc975d7f54db8e5541b0"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Bolivia_379434_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_379434_S2Hand.tif",
+      "sha256": "b256d4a37c606c38d1c3945627234e6631dae149be6dab4bb975a7c257f054b5"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Bolivia_379434_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_379434_LabelHand.tif",
+      "sha256": "70125223f6fe6493ae7c836eb839ced1f7b8731dd1ac04166363238907506de1"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Bolivia_432776_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_432776_S2Hand.tif",
+      "sha256": "75d815071750e2c57cea204770cb7e7c7dfda7311f67e9d5b180771ef68b9fe9"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Bolivia_432776_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_432776_LabelHand.tif",
+      "sha256": "436c22ee850e8e381cfc62106f44aafe0df5e8ef9d7597d16a5db449bd7ece85"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Bolivia_60373_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_60373_S2Hand.tif",
+      "sha256": "cf1e87403a450515661a65605cfbe225cff829424933f74728f78ad6f8c19be8"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Bolivia_60373_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_60373_LabelHand.tif",
+      "sha256": "1a8f9a061535da2976d813d194b6f2f02a69b3f8af943516de1758680863b0c1"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Bolivia_76104_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_76104_S2Hand.tif",
+      "sha256": "2334976cc3a6431f7f57791a7ce70f696099096be54fe9079c25328c9d4440ab"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Bolivia_76104_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Bolivia_76104_LabelHand.tif",
+      "sha256": "754f397d38f8bce498e9f3bd0c38f18c6f25e6018e7bbb42e79dc2c7f1fa4ffa"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_103272_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_103272_S2Hand.tif",
+      "sha256": "c0a9f13051af9b7debf412f5f351ce6fbc8e4e1677f33b92a9de911b32136f71"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_103272_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_103272_LabelHand.tif",
+      "sha256": "0b295adc1c5831a534b9d285a1e079cb48715220a4c47e11c7fd59550830bb59"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_1033830_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_1033830_S2Hand.tif",
+      "sha256": "aebdf646e05e688da22d47ba947045f6af5df5e9d4b0d669903f998509043c69"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_1033830_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_1033830_LabelHand.tif",
+      "sha256": "dd9a3431971bbff8204a37dcb8699c23e896e3d2e48dda5fd0abeccfb50f8d13"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_1078550_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_1078550_S2Hand.tif",
+      "sha256": "34ed826c9e19dfe667b89f541259698d2ed6826bf6883c7a4c05cb8df3393f81"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_1078550_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_1078550_LabelHand.tif",
+      "sha256": "a4cdde6d206b3e151171f37cf8a287d6ded59a3d6da5a848a5cc79b38772d111"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_1089161_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_1089161_S2Hand.tif",
+      "sha256": "ccf5a89213af664ff3ad7ca21e831f557de53f33afb52f30be79ee83066d9187"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_1089161_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_1089161_LabelHand.tif",
+      "sha256": "45a19ca98d84d24670be6121df1c2645ec88f2159fd30d5947f98569776fef8c"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_11745_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_11745_S2Hand.tif",
+      "sha256": "406c7c271d8dbbb42046e7bcadf6cb49b6057af454bffc47e623ecc2c2f066b9"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_11745_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_11745_LabelHand.tif",
+      "sha256": "070f09094d54abd3c52ffe2fd9d2ac0351f8d8199aa7c98f4d7ce44f3059a564"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_124834_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_124834_S2Hand.tif",
+      "sha256": "d9e93716421446c8f90ec115bd1413777c6b8f2948ab40146f4db51f3a1878b4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_124834_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_124834_LabelHand.tif",
+      "sha256": "0fabf34ab2ac36f8ce6df181ac054fcdb45c1cb118d119e93785b943e9a92086"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_128663_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_128663_S2Hand.tif",
+      "sha256": "bd3fa4806df7e925d18bdf3c7e37708960d3776554b37fb5b4426622696ce717"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_128663_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_128663_LabelHand.tif",
+      "sha256": "4620ba9c43318f88d7b6e1be6ae5fc3ccdcd4b7f443c9e409788c2f4f0a45aa4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_132163_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_132163_S2Hand.tif",
+      "sha256": "ee24ddf0e855bd5032f312ff12da76b080cd0d31cab1f1e744b6d7e9a7cf857b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_132163_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_132163_LabelHand.tif",
+      "sha256": "c36e39ceb5d45cf844a1d70ae9c733878bfbf716e4e68c8db2f5be74edc49dff"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_134751_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_134751_S2Hand.tif",
+      "sha256": "8b0fd0303b33c26782cce36d0f48240e39cfb4c3ea9fc59d484a9841da3d4568"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_134751_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_134751_LabelHand.tif",
+      "sha256": "55573317fa6059f51812a3a8a2ff0b826c1e7f6902af7b047c24789785e7ce40"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_135389_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_135389_S2Hand.tif",
+      "sha256": "a19b4a3889e5e61ee83482cbc50e3aa2d706f362b42a1679ed8fb8ef68617e5b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_135389_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_135389_LabelHand.tif",
+      "sha256": "aa0966ce96243b433feae59d8cb3fa82f1a7e4465c298f71ff7718eda68ab314"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_141271_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_141271_S2Hand.tif",
+      "sha256": "5cd6e716eef8717f8c0c087d5c590a7667a75d74eeb817fba0c56d15fbb8dc94"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_141271_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_141271_LabelHand.tif",
+      "sha256": "90c670e754bc537ec6968b44f66398c48f74cbe516955e7ed9556c85aa2b3a1a"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_141910_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_141910_S2Hand.tif",
+      "sha256": "9d47e96a72447591200939350171395aa0c0a7c4d25e135d354c90e8889f1d6b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_141910_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_141910_LabelHand.tif",
+      "sha256": "e6dd6c0eb8f2bc5e5e64b12e99f7398d27a0e56a4670f8be5382055504c4602b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_144050_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_144050_S2Hand.tif",
+      "sha256": "b9eea00b41ad81c68948d36616514c9e51429c6c302f5bca7e808ca9282841c0"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_144050_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_144050_LabelHand.tif",
+      "sha256": "4f1afc7c4e1d8e02419835b7df5e8db4005ba24db684b75bf1508daf9d8044d6"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_167233_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_167233_S2Hand.tif",
+      "sha256": "18a32d007279e7342b3c9ed51153d7f08456bf8fe487a565e9d1e6c983386126"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_167233_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_167233_LabelHand.tif",
+      "sha256": "a34117d8a069fe9ddbaf4d6144301ca966da316fc977dc47aa2e4794d71f9dda"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_313799_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_313799_S2Hand.tif",
+      "sha256": "621f5c19765e6e6a28d3a3b8bb357188ecb4d65ab4f14dba38e30bd84b93ce40"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_313799_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_313799_LabelHand.tif",
+      "sha256": "3bde81b5172d5017ec561ce137cdf8d59fbf3a69fc7796d08188b97219a32862"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_319168_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_319168_S2Hand.tif",
+      "sha256": "2a46104f1a75903ce2b0dd98b82e3e20236ea997071c6e4e801af903ad9d0445"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_319168_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_319168_LabelHand.tif",
+      "sha256": "da46da70d9b18f8851a58c3868a4a4b6262ebfa4433ff9306feaa101b634f33e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_359826_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_359826_S2Hand.tif",
+      "sha256": "9ec6b8d4a5f560329903beaf075b5510c3f83f5b49b1763897ef9ffbddcfd0bf"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_359826_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_359826_LabelHand.tif",
+      "sha256": "540d6a14417a5b3cb689f338b3f2261ae8386bd1e2f8f7b4bd38d125f64d69b8"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_406026_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_406026_S2Hand.tif",
+      "sha256": "b1582dc56044fa88abed5ea9c87e07f3ed649570ba63db0b5dda03bb826f0c73"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_406026_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_406026_LabelHand.tif",
+      "sha256": "17dd70f6385cb0e9ba9778ecec974eeb7fdece11ea58eae1084422da86eac819"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_53713_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_53713_S2Hand.tif",
+      "sha256": "0554141877a37d6609f97f357fc7335b9a5212e5617ea8fc3706e7f919855817"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_53713_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_53713_LabelHand.tif",
+      "sha256": "56871d87fc542b0a23a622312d57a0fd9f65769eef94e54b18d50b903c6096f0"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_83483_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_83483_S2Hand.tif",
+      "sha256": "8db319acf8cb6ce0cadbc99fdcbac836fa059017ad6a9af9fdf2e6d7e54f9346"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_83483_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_83483_LabelHand.tif",
+      "sha256": "59cfc6cdee9743ec3f8a8fa60dc91df774fa6641eab1b8dda6f56383c180d3e7"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_866994_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_866994_S2Hand.tif",
+      "sha256": "cc6260c76b762a8c9b5c6fd3c50a8ea83d80adaded58c5ed28d246a75bdb38d5"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_866994_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_866994_LabelHand.tif",
+      "sha256": "7ee5f6c06fbf23b686db0f53beb6ceed9fe462c429eb4aa8155cd9aec134c352"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Ghana_97059_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_97059_S2Hand.tif",
+      "sha256": "3796055b2a41a5365044702dd99278346787cc5af2d5555781188f23ef23495d"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Ghana_97059_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Ghana_97059_LabelHand.tif",
+      "sha256": "0763674773d153069073b7674ff5cc438144c53d2b5bee6447a1c6004e03c8fd"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_1017769_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_1017769_S2Hand.tif",
+      "sha256": "9a10d092b705ad9f17998c893b3fbd6e4f945b9b70a794767ad256a70b0c7efd"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_1017769_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_1017769_LabelHand.tif",
+      "sha256": "c5535788f6eaaeb5386c10102f9c4923ebc1eedf794dd8c408cf8a2780629796"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_1018317_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_1018317_S2Hand.tif",
+      "sha256": "5abc50957e9f234ee9b273f017fa0a633e1c69e02ee363344df23f7d0d681f31"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_1018317_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_1018317_LabelHand.tif",
+      "sha256": "f6e9adf73f782c7778c7ea911d6c8bc86300d9d9cafc139c5215cc3dfeb84a23"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_1018327_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_1018327_S2Hand.tif",
+      "sha256": "2d162175fec6842370d1bb224414f132dbc5463d0a0ef64baae8692942b5d585"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_1018327_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_1018327_LabelHand.tif",
+      "sha256": "98290650b74df82e3acc22aaef90bcb4272821b2afb53f05af683f94b5fe1b56"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_103447_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_103447_S2Hand.tif",
+      "sha256": "8128e525cb7b3e002d89865fdf24ed0f79fe39ef14ac028636056da2d583ffeb"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_103447_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_103447_LabelHand.tif",
+      "sha256": "74b9f50208d5162af149a527579b303dd94eeb5c6ca58895419469954bca254b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_1050276_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_1050276_S2Hand.tif",
+      "sha256": "6109c1e20d0595e6a5659832bfab44370fd3a22ae9194a2a186860c3cb3db8a6"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_1050276_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_1050276_LabelHand.tif",
+      "sha256": "b0f21694aa0a1e5a48ccc4f66e12f5a8b3f16e606164e6cafd789b6aed121ba9"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_1068117_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_1068117_S2Hand.tif",
+      "sha256": "6a59c927e6f0cabd3206e5303154e6cabe7c2d0669266ffe2649f56a0b39e7ff"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_1068117_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_1068117_LabelHand.tif",
+      "sha256": "db5284a5cd91eab5c70eb310350f4e77e861adef6d1daf26244fbfdd1b4c83e0"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_1072277_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_1072277_S2Hand.tif",
+      "sha256": "37b482968ce5c38b132212d493a35fbaad4d79cfd1c4fd9fe35f69055e0509e8"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_1072277_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_1072277_LabelHand.tif",
+      "sha256": "3c666009079d0fc3d5a4db049358b36516a069b425528d8288a85b07a8b0a206"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_135434_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_135434_S2Hand.tif",
+      "sha256": "25636078df96d6b3db00326384beb93a059b3438030ffbd0e80a0568074eb079"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_135434_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_135434_LabelHand.tif",
+      "sha256": "b47d474f91a2e495bc6f894e431abeba42b4b3e1d8e2d00c123da319dd808b46"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_136196_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_136196_S2Hand.tif",
+      "sha256": "2fcc935afa1608f8eaf684acd58c94572a9f0800845366e51ff4fdb31cec7e6e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_136196_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_136196_LabelHand.tif",
+      "sha256": "e7c519b5873ad75214005e00dac6dcbd6342c8695fe3641076af8b719cd4daf4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_166709_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_166709_S2Hand.tif",
+      "sha256": "b29cf29cb89d3409a9583c72d112deaf6d4076e0497af5de75704b6f36e74715"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_166709_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_166709_LabelHand.tif",
+      "sha256": "706f6b729d8ba713688daf93158d566c136b806a5669b90f91cc71e3c39af82e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_177319_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_177319_S2Hand.tif",
+      "sha256": "9f707b42a68b20406028b8b4f22abe1ba7f7674cc747014637f3b0f4edc22267"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_177319_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_177319_LabelHand.tif",
+      "sha256": "8693a4b3ce9b6e06ac1d281de4fd184ddea8241f30078092db7b311c5fa79113"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_179238_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_179238_S2Hand.tif",
+      "sha256": "5921e49004f31b08531460558354d27ceaadf8d6b78b42c6a55be70fcc99d7d2"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_179238_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_179238_LabelHand.tif",
+      "sha256": "38107d87b1327813ec83b10d75e49c564cf1de649ac2488eced8d3c5bf693c3f"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_399883_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_399883_S2Hand.tif",
+      "sha256": "3af2d0b68c1615fbf3ccf93a1ceeaee50145810854c9bab14d8f9ed77c584079"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_399883_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_399883_LabelHand.tif",
+      "sha256": "2024277074e45016fa82d8300353d8ff1476dfe68eb72d6623b838b1d4dfe973"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_44475_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_44475_S2Hand.tif",
+      "sha256": "2dbd91c4139219897ce278ee9df0d0969d2a1441e013bc9c98f233f76fd042ac"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_44475_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_44475_LabelHand.tif",
+      "sha256": "6bac2a7734377a8721f38c8abe4c66f267375f88b780dee75fad552bb24e4b85"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_570384_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_570384_S2Hand.tif",
+      "sha256": "615bb89a7871fdb5bcb577e4cb3ad5a3b7ce581779d1d54a470fd36594fa57d3"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_570384_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_570384_LabelHand.tif",
+      "sha256": "15345107b9bef08c30951b22fe5240758bfbff1873daf55b6ff7c4ff9c83e96b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_591317_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_591317_S2Hand.tif",
+      "sha256": "399e75dcc6b3bc268f427cb3aa70c47d828eb09eccb08f9ae8866b75c6cb3937"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_591317_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_591317_LabelHand.tif",
+      "sha256": "6f5f4c7a34bae3b62348af93b642b2e6e420c9a2d77a857145b46fda8348873a"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_592446_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_592446_S2Hand.tif",
+      "sha256": "4a041b3f3f28e5219da53c56d3715bc7a75925b235b69a5d1628951fd9e5805c"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_592446_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_592446_LabelHand.tif",
+      "sha256": "23cf1fcd9882fac00552bc25ec4202e95d58421eff597c9cf659c4f733c49cd0"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_631692_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_631692_S2Hand.tif",
+      "sha256": "fce9accbd4ba2399ea09cc3601afdea707aea30c381591795f92b19754676578"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_631692_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_631692_LabelHand.tif",
+      "sha256": "897f9a2e1ea8235de93e0b7309c8187612fa0fa3e857a1819363dc08919b681d"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_747992_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_747992_S2Hand.tif",
+      "sha256": "4e9cf7dff2a8b6495b18e4abf12cfe587a4b3d28deadccfe4354b60b1f40c9ae"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_747992_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_747992_LabelHand.tif",
+      "sha256": "c63a63987d65748a87ddd4c7685c7334eaa37955ce4e4cad6ce26af764bab8a9"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_772630_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_772630_S2Hand.tif",
+      "sha256": "a3c875a655a799e582285a8d6fb294980998c9fb3dcf550763eb702ac8748087"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_772630_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_772630_LabelHand.tif",
+      "sha256": "0c50650a37be41a29aeeacf5de3fd39109d3dc99e4ef3136e15f19834d8ff21c"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_79637_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_79637_S2Hand.tif",
+      "sha256": "a4d4f44f80385eaf92ce39a91ea97db3a5397a5c4210a20c396365b9c7b2d1dc"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_79637_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_79637_LabelHand.tif",
+      "sha256": "8e33736ec8e68d7dddf9eb4e45bdd2533e929e0e2c1300dbbc74546b1dbb293d"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_80221_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_80221_S2Hand.tif",
+      "sha256": "75fa5a39b82912f3cd46ff18d01d0daff0a28764a1a164d1866aa6748ef41b65"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_80221_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_80221_LabelHand.tif",
+      "sha256": "3f05b6b9ec449b23729d23a8d14770fc8209337178faed7bbb6d98b38ac63dd4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_828067_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_828067_S2Hand.tif",
+      "sha256": "77cb8feb1c094931f7bc23ca97d6fa12e2dd6cfe8c7d2e16c772350ee03af7b6"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_828067_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_828067_LabelHand.tif",
+      "sha256": "5f32ba153c9fa448b9ebdd8368bfff54b74c724a22ff644aaac1c55ace122237"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_900498_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_900498_S2Hand.tif",
+      "sha256": "ee898621b387a731503a01960397599f209b45c268d4e088689928c704dbe968"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_900498_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_900498_LabelHand.tif",
+      "sha256": "b39f6854a1fd5ef262de184064b2fafd59da2314131e7b25ab792a76b27559c1"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/India_952728_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/India_952728_S2Hand.tif",
+      "sha256": "55dca19c550154c560dcee7df23f7866eff90b96856e7c5f931f0d704c4a9b47"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/India_952728_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/India_952728_LabelHand.tif",
+      "sha256": "45edbf83b77d384bff6a15dd23d8a4e3ff5ddc3df28efe0704be843ca7b0583b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_1111068_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1111068_S2Hand.tif",
+      "sha256": "ff78d65504794afa20a0d14e064c42a856119404cb7522153be7fa9836b587f2"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_1111068_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1111068_LabelHand.tif",
+      "sha256": "f5a3832d5dd82a8cda98748bad2fbcd1a2d213e31b126cd12f9921cb61ce98cc"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_1149855_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1149855_S2Hand.tif",
+      "sha256": "2602b6296dbba88515b4fe0695c54279760243c9cbc81125ccb4168c9b65ff5f"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_1149855_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1149855_LabelHand.tif",
+      "sha256": "e90aaedbb51c617c6250c06cbeff13a14c992c46e5df1fe5b8988a5b239308b6"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_1191208_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1191208_S2Hand.tif",
+      "sha256": "be09dcfca01c3651cfb69479d5c130b57c2a71a0d44e9d1a2558d9c7267e3ca8"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_1191208_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1191208_LabelHand.tif",
+      "sha256": "15c5dafbd4086efea9a26d530eee8b8b0bb01c8963e1c885cee87155fe96fee4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_119477_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_119477_S2Hand.tif",
+      "sha256": "c35c8c189cc7513a6c67a2d9dea9758749f2b652deb751a8bfac52cb43c4e755"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_119477_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_119477_LabelHand.tif",
+      "sha256": "79f8ee17455cb29225e1d21b5ff03861f55371ef0f9a84cc3452aa00550bbeff"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_1248200_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1248200_S2Hand.tif",
+      "sha256": "a07c333d61e967446b442d3f8ce52e33451aabc3e8dc6a921354b1f8d05f00f4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_1248200_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1248200_LabelHand.tif",
+      "sha256": "df8a678b6e2bb86caf5297520870206c3efc5f38f27346a2797fed047e1b5980"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_1282475_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1282475_S2Hand.tif",
+      "sha256": "9784b96ba5351733bccc7dd8955b631b28c06e2adc25a6f074182bdc4dba4abc"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_1282475_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1282475_LabelHand.tif",
+      "sha256": "7c988815de0a983fc782a9e9172532a1b9738372152d29361018845704aed06e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_1395593_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1395593_S2Hand.tif",
+      "sha256": "5801ddf5e82800104cd0960013d802e5a09e3446274702e931c3d87dbd9bfea7"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_1395593_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1395593_LabelHand.tif",
+      "sha256": "1af6cfa337b64420d70631b16570efca84ab95c42414b5f140beb97ba1c2ef45"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_1396181_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1396181_S2Hand.tif",
+      "sha256": "7441b4ce03633d3bb477d38383b9495081f80619644f4006c8cf0344fbd01be2"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_1396181_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1396181_LabelHand.tif",
+      "sha256": "3cba6ca75f2c277d5e681437ebd8da0e45707e37b82c026b3bc799791ca16438"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_1413877_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1413877_S2Hand.tif",
+      "sha256": "9844947a2fadfdc1ee29d0ba9bfa427773b7eb709769b3c15d8987097a86bf6c"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_1413877_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1413877_LabelHand.tif",
+      "sha256": "d128c72dd6406ddb8212c895c9eda567a503c39577a5ecf2a942a6ac47956d18"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_1439641_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1439641_S2Hand.tif",
+      "sha256": "e5e0d887c3ff12cf8e15e21089bf0f0572477b292144ce6879f577c0e6dd9d33"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_1439641_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1439641_LabelHand.tif",
+      "sha256": "5e6a8e0a4a240ec67402dba79be7535f0a90df3f52be777b6d2133e55ee3c3f5"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_1443339_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1443339_S2Hand.tif",
+      "sha256": "afbc01a747e5c6d7b6b51c733c92c187323f25d7a24f8f7411836a326b09201b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_1443339_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_1443339_LabelHand.tif",
+      "sha256": "e306812aaf1587c46f9b2a0c63e4af4fe46ac9fd46a9e6286dd41d70f824454e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_254910_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_254910_S2Hand.tif",
+      "sha256": "eaadda0ce7539421fcb2cdd79816a1f790b744f052c57c1c0dcaa58998971afa"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_254910_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_254910_LabelHand.tif",
+      "sha256": "6bc5cf165f540b5a0c437a30c75e5ec3b561980d9ddb94ee135a97cb491db8f2"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_293769_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_293769_S2Hand.tif",
+      "sha256": "4d9b10a1e4c7dc05a47d74397c334f25096acc9e1887659b3c0e2986ea6e6a98"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_293769_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_293769_LabelHand.tif",
+      "sha256": "629304ae517b2c7dd0dc6cb8dd72d5943b4a2943965bd782a7b309f28077ef73"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_333434_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_333434_S2Hand.tif",
+      "sha256": "d55946471ba35b4877ae09b5d830a5b5440ec77031da6c3c1d11752a8d5f9047"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_333434_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_333434_LabelHand.tif",
+      "sha256": "1719be41e6a0ac8b224c7d460d7ca1605433b42774d886966929f0c1f02b19c4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_382276_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_382276_S2Hand.tif",
+      "sha256": "3065622535054f19f5c517dcfe2308dea0a71825e2a86479d914be4932c9b31f"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_382276_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_382276_LabelHand.tif",
+      "sha256": "9ff60aa49161aec241227fd6e9fed2c89a6f22ec839ef9dbf76268d399996631"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_424793_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_424793_S2Hand.tif",
+      "sha256": "195ce1d132746ad6a26257672fb1771e583daf074a09a4d14785818e5b1d7373"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_424793_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_424793_LabelHand.tif",
+      "sha256": "b0dbcf26ae252bf3b08bee0c21e1e5db1ddaa24e930ce1fa4962cb57970178ef"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Mekong_45934_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_45934_S2Hand.tif",
+      "sha256": "55d2a9e5a3b0558e129a2048f9415283f943cfc61db46b8b9e85354802e6f0fa"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Mekong_45934_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Mekong_45934_LabelHand.tif",
+      "sha256": "febef62270ee0ce2d407ee26a075bfb90240f25efec7425db8554841bf215a77"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Nigeria_1095404_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_1095404_S2Hand.tif",
+      "sha256": "d02a179f6e11b1b14126d35c77e81adb5fb1fda91e7c3e8dc5f69382efbe14b5"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Nigeria_1095404_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_1095404_LabelHand.tif",
+      "sha256": "be4f39b67216e4ada16d571ae1d4e6551b4070e5dd580269e1383145af8741b4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Nigeria_143329_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_143329_S2Hand.tif",
+      "sha256": "fdadc251e2e328bb7f5c470dc0b71382ce1dcfe869ab0fd43e2e818363c43aef"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Nigeria_143329_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_143329_LabelHand.tif",
+      "sha256": "c6732c47603d03521fe9223b690a3a4cc6c3f719621486de078c495fb05ac4fa"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Nigeria_22088_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_22088_S2Hand.tif",
+      "sha256": "f302e7a0e42b8def57374ed8c31461da7b8e80d9ce46c876ea4d1d625c6fa384"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Nigeria_22088_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_22088_LabelHand.tif",
+      "sha256": "464255f3f16e174990246f7fb563190271aa0c4f577f16963de752af7ba07034"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Nigeria_225131_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_225131_S2Hand.tif",
+      "sha256": "4de0de499ac85b0ec0ff0e89c4812ae257fb39c64ac24e268aa9578c68e6cfe8"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Nigeria_225131_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_225131_LabelHand.tif",
+      "sha256": "872b6b4373286b9b9d31e80bd9c607f93e983b1bbb6cff78fdcf18a162433c95"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Nigeria_31096_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_31096_S2Hand.tif",
+      "sha256": "d0adf4bf27c2c750344eb590dc5ce094595c546c0b353b639560ec9fcd26177c"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Nigeria_31096_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_31096_LabelHand.tif",
+      "sha256": "c8da655114d488f6097de39492da9e27f065feef58764c70ef5d7b8683ae8542"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Nigeria_35845_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_35845_S2Hand.tif",
+      "sha256": "e650e1f877f651e5511353f4007163d94f8929de16a695a8b8ef3e8bc2058aba"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Nigeria_35845_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_35845_LabelHand.tif",
+      "sha256": "c61c8bafed9eaa97c515d991c4e402e2dfc9b3cb3823e3d404ceb674db609f7b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Nigeria_417184_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_417184_S2Hand.tif",
+      "sha256": "4c0772d6fb10a0c1288e649fc9ee9d354de3fe33c937e5df56cf3f8f2fc4e74b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Nigeria_417184_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_417184_LabelHand.tif",
+      "sha256": "f0d0acbdd9483dfa0873dc6baf577e9f97b4e07f12c6d5de5088ec675976e6a4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Nigeria_439488_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_439488_S2Hand.tif",
+      "sha256": "cc952cbdc9cd3f5a12495247c6cea277a21f562c50b7a993f07c6ff5bbffd389"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Nigeria_439488_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_439488_LabelHand.tif",
+      "sha256": "7c53908b2fdb14bf24bdadceaf1f7b4ccea127f74cb0c4517400114c0d6bf462"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Nigeria_529525_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_529525_S2Hand.tif",
+      "sha256": "d84bb2914e73bdb952b820ad63c2c75363a85b2d0c5cf6ff8a5734d33abccc49"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Nigeria_529525_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_529525_LabelHand.tif",
+      "sha256": "8a64830e6d1558ec6af8b52b6f4b1fe0ef8920d7f317cfdd8b37bac40f9e8fc9"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Nigeria_598959_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_598959_S2Hand.tif",
+      "sha256": "79ef6c663599c2acb2360613989fd614f16ec72c8898a31c3ea00aa6feccebb4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Nigeria_598959_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_598959_LabelHand.tif",
+      "sha256": "286acf57009d5ffc94e535306f0f7ffd01ee65a3060f9a702fdd21db16dd58a9"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Nigeria_600295_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_600295_S2Hand.tif",
+      "sha256": "b418a36e2bd30dbb9452e64e30ec176258ea6a0691630ea980da9d705fa7c9c8"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Nigeria_600295_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_600295_LabelHand.tif",
+      "sha256": "7bce532830162964a4d0283046affb74c09f2a1ce3ec5a3c32aa4a6fe2fc629f"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Nigeria_707067_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_707067_S2Hand.tif",
+      "sha256": "fc52d5f55ed05a16356f7f1a31893c6a1e8fda971760e56cd629e43c5da07844"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Nigeria_707067_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_707067_LabelHand.tif",
+      "sha256": "89a36972a4efa30b0a8488af035e07e350ef4a1453402ed603717d66884c482f"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Nigeria_78061_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_78061_S2Hand.tif",
+      "sha256": "a668952ea0a5566078e4ce75d7f218a8153feb7526084863af6b54a83a683811"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Nigeria_78061_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_78061_LabelHand.tif",
+      "sha256": "7ee3d569c47828220be55b4a5f759c3c6813923d02f376ac13d1351a7e9c7681"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Nigeria_812045_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_812045_S2Hand.tif",
+      "sha256": "14053b65f4f4d453c1cc7d7a4ff7b0a1124880f81404985d798ff616364699b6"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Nigeria_812045_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_812045_LabelHand.tif",
+      "sha256": "77386f8586a6a825430b11d74619fd39391f2c5d3fc2fc93d829bc15f4933308"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Nigeria_820924_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_820924_S2Hand.tif",
+      "sha256": "5f45cb44fec01c2028c0436bf00386125b78ec2e8f6ffb32265c3d9aee3ce4b7"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Nigeria_820924_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Nigeria_820924_LabelHand.tif",
+      "sha256": "26f9574ba9d28df0c180330f8f7590ccb45b5a9fe6c3a188fd0628f2a3d09fb9"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_1027214_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_1027214_S2Hand.tif",
+      "sha256": "c78cc47a8eeae63dfe57eb426dbe01c8d9b7f364d07889b0ce55d607869e2c85"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_1027214_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_1027214_LabelHand.tif",
+      "sha256": "82f1a0c7677d4b14ebda580884a6e8e854c2bf00ba5f470c439456e3da2c1902"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_1036366_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_1036366_S2Hand.tif",
+      "sha256": "04157da12849cd2795848779c23ce6c0ea677eb5f65827b81d09a0f4fe35a986"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_1036366_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_1036366_LabelHand.tif",
+      "sha256": "b58e0956f6d9464aa6ef99f5e7368e4f8af4a3afb29d0c30b19a9438527f18d1"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_132143_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_132143_S2Hand.tif",
+      "sha256": "04154a44b71266ceddf0343a3c72974677dd45568720398b1240ebd1405d4246"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_132143_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_132143_LabelHand.tif",
+      "sha256": "a2e4bb6aa10893792565d76043867379820474b05ca74157618c718f58094bd9"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_167553_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_167553_S2Hand.tif",
+      "sha256": "d281452b0c955c1ffd72a3d812a014954908343fd030136be5e1aa5ee8cc7439"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_167553_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_167553_LabelHand.tif",
+      "sha256": "7284487345eded3bdafa305ce08a9ca15106131f89cd1c7f2633f245c845bed6"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_210595_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_210595_S2Hand.tif",
+      "sha256": "796d6f38a52a4dd22d75524ed988c8c6aee0be35b9e2d4300104d8339a1b59fe"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_210595_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_210595_LabelHand.tif",
+      "sha256": "ab297a56535cb8b0ad842f1a4843740632c46b6c23df80e4a888a6db80f43c95"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_211386_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_211386_S2Hand.tif",
+      "sha256": "3ef69b7c6aceeac0170fda9c212b0cd4f16be1a1770e96e4cd52cfc94c9f2f75"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_211386_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_211386_LabelHand.tif",
+      "sha256": "7d68fbaf729b2e9187a0ccb55c7d3ee79f78c8663035657471d4e3792d15007e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_246510_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_246510_S2Hand.tif",
+      "sha256": "4115017a9b122d7398822060ab7fe25e55d08543beaa24217ae394d6210eb2e4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_246510_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_246510_LabelHand.tif",
+      "sha256": "2ecb22ece2e6ea5c462a9844f1a5f90b813f60366a76eab369b8779ae31be519"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_246718_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_246718_S2Hand.tif",
+      "sha256": "2ac7f7d76e8d23a06d8a5ae61026b6e6ce187b171d80a7ae30c72ac4afb7f7b0"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_246718_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_246718_LabelHand.tif",
+      "sha256": "ccb3aff350660460b4916565cd5de3451e398bf5d2f28e59b98c5761a2ba63e7"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_336228_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_336228_S2Hand.tif",
+      "sha256": "e04ae9da31cebaf9dd97d30f0ece09adc20c7c2bbbe9e3596f11bb82afcb3262"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_336228_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_336228_LabelHand.tif",
+      "sha256": "9e1a677ba348048fa78f9fa52885c5889b8d49767ceb1018f6932eb4c3a845de"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_35915_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_35915_S2Hand.tif",
+      "sha256": "e8593273928d5a207c4e00f2125e5ce7d044b7d2474a6cc4f2fec976516ea854"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_35915_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_35915_LabelHand.tif",
+      "sha256": "7dda33f8301ef2e86426f79af678c0b4389823f8e96579cb8476efe242e5f16e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_366265_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_366265_S2Hand.tif",
+      "sha256": "f79d4ce5cd06d72715b5face9bc5d9476e9cef92fad39c24d63bae4715ed4af7"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_366265_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_366265_LabelHand.tif",
+      "sha256": "e358cbf9173ffa769e524089db729c1046a77d3e2d90b146b04f72cef52969f5"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_401863_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_401863_S2Hand.tif",
+      "sha256": "6e39dfc7a8df0b107de75e1e05559ff91927830ce49edd5cbc07f694dc837962"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_401863_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_401863_LabelHand.tif",
+      "sha256": "dfd7dcfd50fb300146e1c143742defbca27335aabc7a8387f2f38a308d1e3a3d"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_528249_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_528249_S2Hand.tif",
+      "sha256": "72f114eb74ce795f3fbed7dbeb360db923b9f1750658c3e1faab0fa382183a27"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_528249_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_528249_LabelHand.tif",
+      "sha256": "f1517de67af03fe9997448a04a16bd6e7f129707ba0e05b383216eecf3c09292"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_664885_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_664885_S2Hand.tif",
+      "sha256": "46e2612147dc0d7721edf8da2a042f7cbe2985282ac9d279ac8c3b638561a635"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_664885_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_664885_LabelHand.tif",
+      "sha256": "1aa975e13dac53e1f6c5116fed47090604f0158dda85e75d8afda5b3e4262e99"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_694942_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_694942_S2Hand.tif",
+      "sha256": "e6706858531cf83702787164c6b58125e55ce658cd28155c99fba14c7fccbb40"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_694942_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_694942_LabelHand.tif",
+      "sha256": "095b3e78ea2bed54ed45f453344afd9067fec33fc96b9e3ce8f9d144a4301323"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_70625_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_70625_S2Hand.tif",
+      "sha256": "442030257744bdf398dc3067ad6aced47005b384e6b7ab1598c56ae0a6f8d53a"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_70625_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_70625_LabelHand.tif",
+      "sha256": "ffccb829cb5d0315e83dc6953ace2f72a7900eac6b49a5613348007651cd8199"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Pakistan_849790_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_849790_S2Hand.tif",
+      "sha256": "facb36e9d7ad50bce80d8af8be7a95af3ad20c696b77896120db86d460cc8dce"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Pakistan_849790_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Pakistan_849790_LabelHand.tif",
+      "sha256": "669bcd99f5cedcf37db82c7eff7dc0c20036588eb1462321cf8fecf727945586"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_1019808_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_1019808_S2Hand.tif",
+      "sha256": "4f7c896ec0e0e85b4867c4298fb2ef2c0974bc25beb63b6bc28c4570cf588da1"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_1019808_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_1019808_LabelHand.tif",
+      "sha256": "aa335f3a0fe96f260e035231b15c39efbb2515ef0dda6a07e90478f617baa729"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_1029042_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_1029042_S2Hand.tif",
+      "sha256": "9390cc9319900ef7736b64b74c5e9666c470178f024d144d6a9e9545cfbbec37"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_1029042_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_1029042_LabelHand.tif",
+      "sha256": "9764f11187564c4533da437a572b0a60a53ce2c1d8fb456d0e833bf75ae7f68a"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_1029191_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_1029191_S2Hand.tif",
+      "sha256": "fc6a1bab4c554bb3370396e5412ff446302941dad1226ef6465fb3a1def39892"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_1029191_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_1029191_LabelHand.tif",
+      "sha256": "4186a68dae7bee570685f0c4879441ae5a9af6977e1097f215a685a098dd3cf5"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_1056717_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_1056717_S2Hand.tif",
+      "sha256": "943883141e8baafb04577372506124d881fc8aba7a650ce4e27f35747cb9c50f"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_1056717_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_1056717_LabelHand.tif",
+      "sha256": "7418b6b9d656007f05b7a4cae4faf2709426691c91bde7add13dfab323f7cda1"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_1076204_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_1076204_S2Hand.tif",
+      "sha256": "0c0b032bff9e74d7cd29042acd978b58ef90da2885cc7101e307ca2993d91b24"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_1076204_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_1076204_LabelHand.tif",
+      "sha256": "b7e2eb383a0172eb4959e9cf5d7408036ea9997014724f5740cccc3a1f0ead2f"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_11869_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_11869_S2Hand.tif",
+      "sha256": "d54c17b152eb1841c1677f0cffdc86eb317e576bac20c28bafaa4826e9a59ea4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_11869_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_11869_LabelHand.tif",
+      "sha256": "e2ce62acd217b840073aa1ae46ed071caab3aa81355915430070fbe5ecf69d7e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_126224_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_126224_S2Hand.tif",
+      "sha256": "0801c5886ee0072707dd2aeadf99c4c5418a1c40784008cbdda46f1fd122b7fa"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_126224_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_126224_LabelHand.tif",
+      "sha256": "c8547c0d6031f040bd4e67804eb83339d17e1fd7753b8f18648e9f05f69aeaa8"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_12870_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_12870_S2Hand.tif",
+      "sha256": "47194d9eebea64429e08f13e371763b3ab4f6aa9a9f328ee047950acc6a4756e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_12870_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_12870_LabelHand.tif",
+      "sha256": "8f73d16b6e7e09c8646dea8cfed8506ec0cd9a081936ce3d78b2ee1b431e783d"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_148318_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_148318_S2Hand.tif",
+      "sha256": "46ac039242136ba142dac0d9d86681e08dcae3c0caabe1f7610a25f55fc9b4f2"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_148318_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_148318_LabelHand.tif",
+      "sha256": "76bf0caa419e6a55611e4ef5300d28b79cb5c5c57b0ff530be920c3d9001d360"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_149787_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_149787_S2Hand.tif",
+      "sha256": "1e8972f1958bf406f139e76f9c5aa8d449c7bdf502517d7b4ec0cd05b73e834b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_149787_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_149787_LabelHand.tif",
+      "sha256": "ae2e2b1a60a95329328c751216886f94012b3bf835c609bb0245a83ba1db5a7c"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_153941_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_153941_S2Hand.tif",
+      "sha256": "d5a245c8d4410688812b3ec505da324aefa6690d862cf40a24d443c7a809201b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_153941_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_153941_LabelHand.tif",
+      "sha256": "21e2dee799bf465fbdfc0b61f61135100d9aeb4a969847bfbd48462340d7a4d9"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_172476_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_172476_S2Hand.tif",
+      "sha256": "353c9d578680eb821cb4bb006510d19a91cf713950f28f0fbda028361018eb8b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_172476_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_172476_LabelHand.tif",
+      "sha256": "76e760b8d8730af9571e54eb84abd60125c69c5f257ece9116eceea5017205e4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_232281_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_232281_S2Hand.tif",
+      "sha256": "b03027bb22e7940e541ec74b5a0f50a6a2c4d9a5d28cbe5610e3a017acab9fdd"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_232281_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_232281_LabelHand.tif",
+      "sha256": "ce0d15ffd97158c4340641268b31f7e73687c81ec3e2184c0a7d6881fd7e2f06"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_271769_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_271769_S2Hand.tif",
+      "sha256": "d10ee7e00c28f044dc2b41dd1fc20e244a64a094eec1063d07da68917206ff09"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_271769_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_271769_LabelHand.tif",
+      "sha256": "c14f99ad696048e5aec9dcec37d106061d1ee189e56c730cbfee02ba172d6932"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_280900_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_280900_S2Hand.tif",
+      "sha256": "651bc030547df2e0a7ae3c696d48930433205e9066981750ab7e80ebc91308cf"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_280900_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_280900_LabelHand.tif",
+      "sha256": "f74f42299a0b360e6ea4474417efc6e740ee6611d3a159f4410a9df993a095ce"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_34417_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_34417_S2Hand.tif",
+      "sha256": "792ea20abeee3e845403496aa1a87de9e5aa52413806549f4ceb719b1789a7c2"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_34417_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_34417_LabelHand.tif",
+      "sha256": "11cef03399b25373abbc5c6354dde920dcd3511eb276967944b557eaff63c0bf"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_40936_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_40936_S2Hand.tif",
+      "sha256": "c7d5ecfbf394426175f642b30d93b4f0ee808517b9312e3571c33d4bac694eba"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_40936_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_40936_LabelHand.tif",
+      "sha256": "249fb6d4e057c9c6dd22e9c20a120fd67d154d954a439cbeaa90061addec73a3"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_511199_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_511199_S2Hand.tif",
+      "sha256": "47dec4832e5ec24df44d6286f5251b7bbc00907ed2eb8340d2649f57a27045da"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_511199_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_511199_LabelHand.tif",
+      "sha256": "2ed431be505531a2147a4237d9d927ad89690b1a59e2b2d20d0b47ae70f2b0a8"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_59731_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_59731_S2Hand.tif",
+      "sha256": "76503bdc984ffc281f4aa14947a426d56feb9ee464ccf19c7e1326212879aa1a"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_59731_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_59731_LabelHand.tif",
+      "sha256": "1f925e6c6582254f7fbf8a70c0af3b999a25049643501799b676122d783ded18"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_651904_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_651904_S2Hand.tif",
+      "sha256": "180ab057b125584b7e83581e79be763b9e8b3368909ab388587b5f4119aa0fa9"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_651904_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_651904_LabelHand.tif",
+      "sha256": "44d1514eeef21b3a0c04aa0fa7c1c49ef780f4c4835c734bfa2db172b455d289"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_683296_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_683296_S2Hand.tif",
+      "sha256": "b428b56d81b36cc7f8c159145022d9019aaf1eff18761d56f21f2148c20a36f5"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_683296_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_683296_LabelHand.tif",
+      "sha256": "801856a8b87b294b53e7fd12d705f0f369b318f42dba46046f6b714c00eb1b08"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_790830_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_790830_S2Hand.tif",
+      "sha256": "8bba3ef74cefe2f53d05043a5fd8dac50c1f94642b78ea5e58039706021d6189"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_790830_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_790830_LabelHand.tif",
+      "sha256": "256861e8f5e55203471d81b6dcdfe70c2ec9a915dc52eb3805fdd540f950a435"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_80102_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_80102_S2Hand.tif",
+      "sha256": "39f88a46114e89f835b461a76dd5e9aa28caeeca12d60c8c1527c8835dc23ed1"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_80102_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_80102_LabelHand.tif",
+      "sha256": "98e2849b6897a81a8013cb097d2db0d0b1a1a6eb63c6c0647a39a3a58ed84d7e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_868895_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_868895_S2Hand.tif",
+      "sha256": "a33f701211cd8a509e2c1428378d2e88039d162a8f1fcab68bf682882aa200e6"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_868895_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_868895_LabelHand.tif",
+      "sha256": "c4da12e7aa9eb2a42f3594c9744f63322b2ea6cdb0ce17963bfb114452e5d3c1"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Paraguay_913449_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_913449_S2Hand.tif",
+      "sha256": "c38dfcf7b2ef60e39d57cfe88494ac5e3b73a5ccff69fc4d2e068233d164348a"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Paraguay_913449_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Paraguay_913449_LabelHand.tif",
+      "sha256": "7292d7566b46869ea95132a2b0d623f9f47c5de3144f1158b7e46191f90efeb9"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_1068756_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_1068756_S2Hand.tif",
+      "sha256": "27f3f6c953ea74a439d640ed2f15611c8b7cfd812a42b6b2c60b60c502fa5ae7"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_1068756_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_1068756_LabelHand.tif",
+      "sha256": "d4bdda41da19f55b03f2e013fdcd717a113221b461ba95c359f9cd54b47dc62d"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_1087508_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_1087508_S2Hand.tif",
+      "sha256": "d9a9a359407cdd14b96c8561cf9094fe1f02c05fc025bf77497793466797d4d9"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_1087508_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_1087508_LabelHand.tif",
+      "sha256": "869ec4bb24f5216b2092e6c8bb8a6a88a18244294212a4053d12771adf3741ee"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_12849_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_12849_S2Hand.tif",
+      "sha256": "43781ffe14ff9604d0538ec9a6f7c49ffb9ae488b0f08ffa3dcbbb1dc207b7d9"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_12849_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_12849_LabelHand.tif",
+      "sha256": "9b7cb1c8a378c193b1be9405c6ea200c38c3fc80300d190184c0226383c0afcb"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_166342_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_166342_S2Hand.tif",
+      "sha256": "62f3d353cae2f5bc1bfb9db0dd9978a2947d1291a6f52894c0f2a0ead2cf6153"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_166342_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_166342_LabelHand.tif",
+      "sha256": "f9020a92cb30e2975bd5b5bbad99c1c9708adc4cfd4892e6f161c5190cf826f4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_167787_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_167787_S2Hand.tif",
+      "sha256": "afee5b7a07452375e69aa450a74a3e3884c9849763c789e14b6027f68c86247e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_167787_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_167787_LabelHand.tif",
+      "sha256": "aa1ec0c7aa330e38e3669a4607cbdcad6d7fcda8a03301303e46daa7cbf6eb34"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_195014_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_195014_S2Hand.tif",
+      "sha256": "6c7767003f629bfb91240017459bf797998430811fa33023bd9de306c408507d"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_195014_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_195014_LabelHand.tif",
+      "sha256": "76f0315b267c347c794b7935d04ab968519c09080b1f8dec008a0ec0a8a9defc"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_205466_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_205466_S2Hand.tif",
+      "sha256": "829704b09decfcfcc138ccf3f338f8f39f1c35104d1bb70169dfe8cd9356361a"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_205466_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_205466_LabelHand.tif",
+      "sha256": "b3c232a970749d02bfc2c4d55cb414981ef1cab233a36cc1e4a1acdb6b359746"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_230192_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_230192_S2Hand.tif",
+      "sha256": "3da538fe1195e9f3cdd76c64ee9a0d19ea92e52d2222d9d05cd807f0881340fc"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_230192_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_230192_LabelHand.tif",
+      "sha256": "d82ce2935011ace3453038bd41f5965e964a7a3a81df384a156999b757f8faab"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_256539_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_256539_S2Hand.tif",
+      "sha256": "8deda7da8f5f184c214f9374085a31cba4b83286f5015fe4db44c6ed2ce46096"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_256539_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_256539_LabelHand.tif",
+      "sha256": "86c4e983ebd968057527e651594b6bc2a89ea51a7fe052de5248dc4aabcf652b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_295782_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_295782_S2Hand.tif",
+      "sha256": "8efb0cae2aba427a943cce3e362caffe9af03b0ab89956e8f1ce782966f8bebf"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_295782_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_295782_LabelHand.tif",
+      "sha256": "715722c99b6c6eb9bef3bf26fe2cf7fa8c1a336d0cf6a3eadf2cdfd5f7e2d15d"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_322855_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_322855_S2Hand.tif",
+      "sha256": "908f9600f5d9537542656315f3dc1f79f5f6c92ca9fb72d53b2722f1d81e42af"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_322855_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_322855_LabelHand.tif",
+      "sha256": "c38f887de34306b7a40e8a0edbbc756f5dad289ee52c41f559cae9b29dcf4e43"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_32375_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_32375_S2Hand.tif",
+      "sha256": "42a0f68177f6ced45ce462b99b36731a8072f3ccd83b86914e3a8442d55798dc"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_32375_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_32375_LabelHand.tif",
+      "sha256": "a0a51b4c1d5d2db1b5cb13575ef942dc73d912c50a4bf98596e37cd6c170273c"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_371421_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_371421_S2Hand.tif",
+      "sha256": "da6858c7fe2d77313efbe849013c9f57c0ce503403929d4ec8d64960f8ca5717"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_371421_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_371421_LabelHand.tif",
+      "sha256": "f4f16eb1d1c0b74adc2e105ed35d6a457a5695c87980c6b017084fece1a6b9d5"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_60129_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_60129_S2Hand.tif",
+      "sha256": "2d50f16589543465df0b23c0841469b6cf33d90a63bdb41b3a7a38362345bc00"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_60129_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_60129_LabelHand.tif",
+      "sha256": "ce9430585089b9f1e4130152d6b3862747082db37963b0890d86ce1930e71ebc"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_685158_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_685158_S2Hand.tif",
+      "sha256": "20d281d5cc8cafb963a89bdddbceb711e35b6b7784e64fcae38923db4d53283b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_685158_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_685158_LabelHand.tif",
+      "sha256": "9a7bed202008b4ac9525d07c98c3d3882a9f1f121125df5b6c150731c9d6ff3a"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_699062_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_699062_S2Hand.tif",
+      "sha256": "8bd50eb3cdd28c9e2d6f2672ee2fd0377480c4c6ab3f3e00227ef2f85c1f88d6"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_699062_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_699062_LabelHand.tif",
+      "sha256": "9864be374d11bd6855a909c946ce09cddb4aff3f7ef211092f5d9a75a79d893f"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Somalia_94102_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_94102_S2Hand.tif",
+      "sha256": "a7b40d8260e5e3f055c42e8e6c661f47fcb78a4b90b21d5522763ba335691b7a"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Somalia_94102_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Somalia_94102_LabelHand.tif",
+      "sha256": "5177ba119333f3d31a94c18f113bfe593925286dacbbb86780ff664b0ca49681"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_1167260_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_1167260_S2Hand.tif",
+      "sha256": "057206b8fdd951ddf0c68201d4271a05c44cd4de38866ebfa2a34c053b976160"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_1167260_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_1167260_LabelHand.tif",
+      "sha256": "7fb2d9b5f65885b57b0f7a2e2ac02e3342ece255d3e2a6f6cb10645937f6f6e3"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_1199913_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_1199913_S2Hand.tif",
+      "sha256": "f76d9be2ab682c7c88fcaa3bf621aa19fa697fc82b848c1fe2034d0c36be5138"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_1199913_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_1199913_LabelHand.tif",
+      "sha256": "27fedadf6819805196eb1061a21e11ccb7ba26648a2424917b9de3174d45f2e0"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_2472849_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_2472849_S2Hand.tif",
+      "sha256": "b784557b7c6d172e5090fb84f36353cbb89724df6f6a6f6bf10b15e35b479ecc"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_2472849_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_2472849_LabelHand.tif",
+      "sha256": "132c53d39495cd51b37a46c43812bee5a315421a8322633151114d43a42c625a"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_2523247_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_2523247_S2Hand.tif",
+      "sha256": "5b599c5335170a42b096180ffca5e4144184191aa3ae2a30f99a79f4bd707faf"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_2523247_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_2523247_LabelHand.tif",
+      "sha256": "3300f1d01688ff4ffcf674dd9da763b914f29e75496919addddb2562eb694158"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_2594119_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_2594119_S2Hand.tif",
+      "sha256": "479fd38646e1847f58278ea26006aaa00c8a9da055f7ddbfbfa61cc7cc104d23"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_2594119_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_2594119_LabelHand.tif",
+      "sha256": "8acda7a66c4690cd299c23e70ee552bbbb91b6f1619a333d7cd86b3aaa305241"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_2938657_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_2938657_S2Hand.tif",
+      "sha256": "ccc542052c18bcb9fc2c97cbc384df01075f30d07f3586761c9329bf22ee2476"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_2938657_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_2938657_LabelHand.tif",
+      "sha256": "9d9c2a1bdd688d7665388e8404832908a6b906bcc818f40743bb8ca267f7218f"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_3285448_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_3285448_S2Hand.tif",
+      "sha256": "f1aee8a10d28079776d16d4257d79a2aa4b53944b5b407b46a9f36b7120a047e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_3285448_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_3285448_LabelHand.tif",
+      "sha256": "e6051455dfa3725ca63a740c78a29228afe207c5de9c70306b629555fdc4e59e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_337094_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_337094_S2Hand.tif",
+      "sha256": "43e0cb910764e9c8068d331fbb8fc0b6751135844bad0d7ac953558d30511f7d"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_337094_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_337094_LabelHand.tif",
+      "sha256": "b6a3bac5d508b4bab7a4bd1b676d04cc1174f8f6f6e6839c715000aee9bd24b1"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_4282030_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_4282030_S2Hand.tif",
+      "sha256": "3dc78accc630d283595f77d2e9f3bfaa461e723d14380388252b26882c47deb1"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_4282030_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_4282030_LabelHand.tif",
+      "sha256": "b0a7b46630704964b74436f042d67996c0baaadfc9973ae4721f104d54078696"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_4915752_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_4915752_S2Hand.tif",
+      "sha256": "6c9c8f9ae374a622cdda65106fa9d011807d415e2243abb1d8daa0235388e31d"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_4915752_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_4915752_LabelHand.tif",
+      "sha256": "12af333d480bd7f901ae89af3b70abf4fb572ab90a53f52b931de72cd5f93beb"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_5650136_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_5650136_S2Hand.tif",
+      "sha256": "7d56099682c125ad85a5bcaac6623c0768ec3bb567dc8982ef3e8a4b36fc8a24"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_5650136_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_5650136_LabelHand.tif",
+      "sha256": "c0a53cf82bd45a0fb9b7f1c2e9408e9dd817c06a633045fce88b017b7aa990b5"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_6095801_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_6095801_S2Hand.tif",
+      "sha256": "a21c5574a35f058bb3e3cefb1d6625b7a156bde8b38ad2b34ef09685863a01c9"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_6095801_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_6095801_LabelHand.tif",
+      "sha256": "f0c9a7ad9c7049ca43363580eb8c6849812b51bb8095901fcc2796400817f512"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_6537196_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_6537196_S2Hand.tif",
+      "sha256": "dcaa3435b88abb6efb6983aebf8e66445be559d97c4dd34551cc4115b55802ab"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_6537196_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_6537196_LabelHand.tif",
+      "sha256": "f33396772875e0a162e4f7000ee640fd622fa7540fd7f0cb96287861a37261b1"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_6860600_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_6860600_S2Hand.tif",
+      "sha256": "9d9068dc0db5959536fe54f588f7a2d58091e8f52ee4d81e919ecd5f34791611"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_6860600_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_6860600_LabelHand.tif",
+      "sha256": "ebf990071fcaa4f20a86d141b4cb25df0ce9a310178740b697dde22b4af4ea7b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_7370579_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_7370579_S2Hand.tif",
+      "sha256": "16e997e6a7159fa11160faf00591da763eb37ac82faf806f7fe733991944a048"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_7370579_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_7370579_LabelHand.tif",
+      "sha256": "b81224e01540b262faffd82cb42762c3c77df2ba084a5fb82d49bae421dd12d4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_7387658_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_7387658_S2Hand.tif",
+      "sha256": "80b0abea99212e477d4925d04df7226b98d151218598631282dd6fb6d6da3d8d"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_7387658_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_7387658_LabelHand.tif",
+      "sha256": "d7f6c03457e5191733d46f9d52f8342af1d73cfbeafeeba100794443b01f79fd"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Spain_7558720_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Spain_7558720_S2Hand.tif",
+      "sha256": "a1de3f284bf48be6b95191b90e4cf07f7afb3dc8600299f13650736d79c63582"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Spain_7558720_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Spain_7558720_LabelHand.tif",
+      "sha256": "718ea7b5fec00b009700659fd06fb6c2d49caafbcea7c2aee01c7c16cc518fc9"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_101973_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_101973_S2Hand.tif",
+      "sha256": "1615ac24e81013545f862acd5059d2f6f816a7fa6a05b6bd80ffe25d83a1c7c1"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_101973_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_101973_LabelHand.tif",
+      "sha256": "afb7a8c1f08662a43a99a0ce424ed90d179fc650e63bf2c059283f1eab03c73b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_1038087_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_1038087_S2Hand.tif",
+      "sha256": "41feb548b2a238bbdb41e84da2be6d576f2667781859cd566790f3e836d4f6a8"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_1038087_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_1038087_LabelHand.tif",
+      "sha256": "88c87d915169fb1af98869557509b995a449aad0c44b673beedca6227588483c"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_1049830_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_1049830_S2Hand.tif",
+      "sha256": "7fc267479e95174b3a407e275c359dfca5213d8d7f0f2c38a415532c6847a123"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_1049830_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_1049830_LabelHand.tif",
+      "sha256": "c805545a4b7f69133ad24be229dafaa463f8970e03ea6da22d4a47e587881544"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_117737_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_117737_S2Hand.tif",
+      "sha256": "dfcc52cac34589699c084359464e3c94bcbcdac0eaf3388fe5a2e2de0c67f101"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_117737_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_117737_LabelHand.tif",
+      "sha256": "c45f8823594be4b8f4c4ce5949a4962a48425ec8b51558d340d93151f955f92b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_120804_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_120804_S2Hand.tif",
+      "sha256": "37e34702aa01efd30631da06a701e25cdd1364677f1fab57b0c950efb620af45"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_120804_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_120804_LabelHand.tif",
+      "sha256": "6de1d3b06e5c3bc4c451c49577311b82a397c014147b48b66577492a11cfdfb4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_132922_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_132922_S2Hand.tif",
+      "sha256": "e1544e49786f46e0fc1351af5c5693e5c961dd88fb82377252a215cc7ab49996"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_132922_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_132922_LabelHand.tif",
+      "sha256": "b3944ac3160760b1cf17d8a87d788ff57b086980668e3c09daaab55732222c0a"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_135713_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_135713_S2Hand.tif",
+      "sha256": "4514ebf6ce653ced12863df0b76b2672c8cda001b8e6edbe87a49d037b5ef0ba"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_135713_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_135713_LabelHand.tif",
+      "sha256": "13c46800abfc49e319ad58d62f89fb65040b0f4ec88a1cdb6d88aab9a49ef701"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_14484_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_14484_S2Hand.tif",
+      "sha256": "d7ce574e3d393f4521f8238f620529683152079d5f5a394ee5db5209eb59b9a7"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_14484_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_14484_LabelHand.tif",
+      "sha256": "8f3dad7aa8c25de9de9060cc3f0d5465952729a754e6f6e72b8793aca1352f53"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_152185_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_152185_S2Hand.tif",
+      "sha256": "37d7e27cdb2a2ff18c7ae03156218eabe7345a71b5af94b42d0672b6243b8120"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_152185_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_152185_LabelHand.tif",
+      "sha256": "49c5f8ca91c9c184ae5ecad35f96ba06744f1f86fbb6e9f4675e54ff1cf5de80"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_163406_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_163406_S2Hand.tif",
+      "sha256": "a567d6d9198b7211dba119e460649b6e2c469d19cb8d4bba6340b95d6796f279"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_163406_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_163406_LabelHand.tif",
+      "sha256": "423492bb8238744d3809d7458e200aed001a91850bc04c218e14fe9702f47b68"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_178753_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_178753_S2Hand.tif",
+      "sha256": "76bdc58bb94369c987b864d84f9fc4df1068c6581116b35d5fbee8145a12d95a"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_178753_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_178753_LabelHand.tif",
+      "sha256": "542dd1c6e16feb8c0ffd1025afad568c7d17d8782367e36e76c2669edd5888a1"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_233609_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_233609_S2Hand.tif",
+      "sha256": "c835521a4a6940b12cc070849dd7e81fc65cb78fb32769de293f82142e819cdd"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_233609_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_233609_LabelHand.tif",
+      "sha256": "e5ac9397969af55a2bc70c48b8657626aa753ea41a10fe38d20085a18aac380f"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_236030_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_236030_S2Hand.tif",
+      "sha256": "34055680e9e28af9fa3e521a9d875b263c1d927c2be68e488df8579ba3ae2561"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_236030_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_236030_LabelHand.tif",
+      "sha256": "856a70db1e0343058296908de5e293f870919693ab01a3249ced9ac91361237b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_377277_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_377277_S2Hand.tif",
+      "sha256": "3caae5b0815a852bc6c8dae352c0906d13c2d63c1f04e8bc7d94537c94c4bf2d"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_377277_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_377277_LabelHand.tif",
+      "sha256": "6540085bae0fa58de10f7b6e0cdbb1df3498c2276b8c7b7f14628759c7cbc063"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_450918_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_450918_S2Hand.tif",
+      "sha256": "a2983509cf871d35db23869ffeaa28ef3ec1e10685fb21b79cef4dcd7ad5eb2d"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_450918_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_450918_LabelHand.tif",
+      "sha256": "3c8072f419372cae4c475772227e3520da35cb61738e86917f561224724b566a"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_534068_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_534068_S2Hand.tif",
+      "sha256": "5aae329bce9537116dbff0de3d1fac40039a49f4b6c45447fe7a5eb62eff098c"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_534068_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_534068_LabelHand.tif",
+      "sha256": "e77e5e64025852b82ab5f8624ed126e866a6fff9c661635313aab9276522ad4b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_649970_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_649970_S2Hand.tif",
+      "sha256": "ea8a1788c248cfcd4217189cb67eefc30d0b3bc8235cd79b067b41fb70f743f6"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_649970_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_649970_LabelHand.tif",
+      "sha256": "d9ad0a6879b7a507e4030e7228ca021ee96666c15eb72e6b7700b7243ac5bc78"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_713926_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_713926_S2Hand.tif",
+      "sha256": "40239d792db24b7c3027370699782b189fde8b10cd696422b17c68f596d7fcf6"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_713926_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_713926_LabelHand.tif",
+      "sha256": "b07e813683173d668958cb456048d9904ac9f7ed9e5c8d4791d93cdec04412cc"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_849649_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_849649_S2Hand.tif",
+      "sha256": "cb4d4e5c2c39eb7dd18f8247706daf9327f1d993c33e79231a0a1bcfd1a27f1c"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_849649_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_849649_LabelHand.tif",
+      "sha256": "ac0b446a87a65133501745c04d8a9d58ad689f1c2d45bc55cb07378586c61e96"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/Sri-Lanka_922192_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_922192_S2Hand.tif",
+      "sha256": "41baafbd76605287c498523585ed83aaf922e173bf224bab8019187df68249b6"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/Sri-Lanka_922192_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/Sri-Lanka_922192_LabelHand.tif",
+      "sha256": "aff07a84de353b152fe8f651f0a57b9b78b97bccd1d94fceef8fbc0464d3f46b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_1010394_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_1010394_S2Hand.tif",
+      "sha256": "5c7d0414299d44450bb1f3a79b6ce2abdbc95de1fc8c0e7effebdcd8daed806c"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_1010394_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_1010394_LabelHand.tif",
+      "sha256": "db7eff663a64d2cb7c890f1190d65739248066c7492323f42791e5d319021355"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_1039203_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_1039203_S2Hand.tif",
+      "sha256": "74c8cad7fe1e66c78b283bdca23207af00104107f19a319a3bcc6d8313475b95"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_1039203_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_1039203_LabelHand.tif",
+      "sha256": "70429f95dbcc4399c6b09e0fe7bfd196a3ca098ac2d1048b680d79f53f601922"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_1049586_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_1049586_S2Hand.tif",
+      "sha256": "8bdf63327fcfcc29ee735bef726d10116f08f8622b41b7d0c904d63d8f2ed82a"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_1049586_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_1049586_LabelHand.tif",
+      "sha256": "abbee43f946828278436402fa5f8bc63ee9047f60f2e2a0b152a2ebcb927593f"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_1068362_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_1068362_S2Hand.tif",
+      "sha256": "82cca7cf72570d3fe2d8ce90c4b36ac326b3561d1dfee7741de98fceb9532f64"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_1068362_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_1068362_LabelHand.tif",
+      "sha256": "7cc38de430cf6908daa96a8800857f0b23c6aaa0377fbf04bcc5676f91dd15db"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_1082482_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_1082482_S2Hand.tif",
+      "sha256": "12fdc9c7922fbf881e9d175cc6dc7337788586ea046754af9b57ae5f2bf11426"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_1082482_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_1082482_LabelHand.tif",
+      "sha256": "751a265fa4ca723bfb765c8cf7543a06d6d8f0ef0736fcf644e82de18e69eea4"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_11422_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_11422_S2Hand.tif",
+      "sha256": "c889975d53c2a0d8a6383f4b099d18bbbddfe969057a14474d86c9c932623d6a"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_11422_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_11422_LabelHand.tif",
+      "sha256": "8a87cf3ca5407973a8a038a731280234f6e1d3360e9baaeb3d487005195b6c6e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_114964_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_114964_S2Hand.tif",
+      "sha256": "eb1d84e2b7fd85014bd2f4d6885b92cb2c21274036c93eb7577efbba771620fe"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_114964_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_114964_LabelHand.tif",
+      "sha256": "63aab4213e55f0f5a8b096d3e316fc69a0a11a63712b72122158344d2243d747"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_115033_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_115033_S2Hand.tif",
+      "sha256": "88022acc4a3e022acff550368f416a90666807b5d62dfedfe2f6406d1e70cef6"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_115033_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_115033_LabelHand.tif",
+      "sha256": "dace72713d774e31f82007b974e64c0622c2f13cc9a9b48e7a57001a67d35573"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_170264_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_170264_S2Hand.tif",
+      "sha256": "f66a4cf19a6ed3349aac2678991f29519b31e0735fbe12dacba7ad23f89d761e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_170264_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_170264_LabelHand.tif",
+      "sha256": "04dbbbe8fcc47a87426d1fde3391e4f9e84b566ccb6503446b49470131b26af5"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_179917_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_179917_S2Hand.tif",
+      "sha256": "25b8f21e3f1b304d78908f865031e68dcad0ecdbedc594cf8d83212cd14ec720"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_179917_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_179917_LabelHand.tif",
+      "sha256": "83c561041bb456908f569eb96a118bb8ed6e00b5967c01dc2cd57b890ed9e836"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_181263_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_181263_S2Hand.tif",
+      "sha256": "dd4711452b7bec3175edacd648e5f26f334a6363f30ec984a40ba523d0ee1704"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_181263_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_181263_LabelHand.tif",
+      "sha256": "9efce1ea17cb6ea46695116ee4e9c3230aab5a94e3060d3d6e120297e5d0375b"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_19225_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_19225_S2Hand.tif",
+      "sha256": "6b460644ee07e16ef61b1ac9671cc3835f5a632b361b2a5551e0dea8e69d23ee"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_19225_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_19225_LabelHand.tif",
+      "sha256": "f0621c9070e0ad11fc3cd8bc19cf2c8215b011a0a2fbfd7805f60c720dc5c43e"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_350244_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_350244_S2Hand.tif",
+      "sha256": "a14336ada0746645d9bf93b2d783a11bcd4ddba732b79a845ce3d6feefac38fe"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_350244_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_350244_LabelHand.tif",
+      "sha256": "78530fc37890049bb7bbd1f61af8305acdd98991a46fd093c357da19480a9ecc"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_430764_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_430764_S2Hand.tif",
+      "sha256": "385418e105dc1068a7d78585e4395bcdc134e7b0d092ba942867ef74393d8d12"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_430764_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_430764_LabelHand.tif",
+      "sha256": "ae84a33d041a947fc20d36bdeb2176d80f50bc5161dafa4b372df9f9d75ebe50"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_504150_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_504150_S2Hand.tif",
+      "sha256": "318d5e6f82f400bf9e28ad68970eac2b3209653b3a41520eb024c97968af2da8"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_504150_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_504150_LabelHand.tif",
+      "sha256": "e7a244d3a2a20b39cd8d57ae26103a931321baa34583c74b70c9870dd19018fa"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_519181_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_519181_S2Hand.tif",
+      "sha256": "906b784267c764f495688cad5f57ef1b47c9bbab90ae89f2e8d9642b5f9617c8"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_519181_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_519181_LabelHand.tif",
+      "sha256": "aa057638557e880d4c69268afc6ee7750b88ba5a5d3960d7975799e539234725"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_527077_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_527077_S2Hand.tif",
+      "sha256": "8f1ced1aae5de69803f4e54fbf9790bc1bf6b60394eb7002120a2fdfed4fbc80"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_527077_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_527077_LabelHand.tif",
+      "sha256": "903f28338ff4ea357729047d91b9e3abf99db8c7db44973e79ee0cd548fa5026"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_595451_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_595451_S2Hand.tif",
+      "sha256": "0bef53ef00039674cde3ddc984d27c822a619c81467546be726c90126693b9be"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_595451_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_595451_LabelHand.tif",
+      "sha256": "5bd0328de97ba3435661ef47a313d96541234fb21240bba5e9f8c65f19b5317d"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_66511_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_66511_S2Hand.tif",
+      "sha256": "700cb758693a6fe25e0cab5f30adb2301954f37cbcf416b560373da5ad832642"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_66511_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_66511_LabelHand.tif",
+      "sha256": "07d074f8237dde167b8736ca7c64700c08aa2a2ee3964aa2e8b5f409fc5e2182"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_670826_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_670826_S2Hand.tif",
+      "sha256": "867b3dfd9f8ed702bfd2a5ea6bc1b0bd5e9551faa41be3ed55582c66a0e308b3"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_670826_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_670826_LabelHand.tif",
+      "sha256": "34a02314522f6d12a99dfd92e8eac82016dc18208b92d4f8c86cead1973e2edc"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_67102_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_67102_S2Hand.tif",
+      "sha256": "d2f7395fcd935345d9435866ccb1c556c520c53ecf7acebd2325fac04cd0e98d"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_67102_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_67102_LabelHand.tif",
+      "sha256": "48c52abfe9c81476960a6a22924e5dbb42fe9016674ff13f3fa9e68693bcfe50"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_758178_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_758178_S2Hand.tif",
+      "sha256": "a76fbf345d1fab68c8200c45eccc56496266804f02e41711db35a3d07f87da63"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_758178_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_758178_LabelHand.tif",
+      "sha256": "8daf6af1a5c780086106a9ae18c69e25433ec0527fe8e6ccd0fa382bb0a9b00c"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_778194_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_778194_S2Hand.tif",
+      "sha256": "617434c0bb6d50321ed866888ce6b63dfb74229899bc9be35b788674651a2a2c"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_778194_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_778194_LabelHand.tif",
+      "sha256": "34deaea946483609529ed2093b2790bb84fb2729564f7d650b8d818689ff7760"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_905409_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_905409_S2Hand.tif",
+      "sha256": "e44a749f3d8cbbaebdb56c1284354040d7b965899dcdbb40454f5c4ba46c60eb"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_905409_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_905409_LabelHand.tif",
+      "sha256": "dfb9d85d04740b0f4555043171b581fef080ea989120c6d43694def8df416de1"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/S2Hand/USA_933610_S2Hand.tif",
+      "path": "data/flood/benchmark/cache/USA_933610_S2Hand.tif",
+      "sha256": "7360da94b6245b5f9272e0dccbbea98a678820c171b61bb30c8a4c6b1579c2f7"
+    },
+    {
+      "url": "https://storage.googleapis.com/sen1floods11/v1.1/data/flood_events/HandLabeled/LabelHand/USA_933610_LabelHand.tif",
+      "path": "data/flood/benchmark/cache/USA_933610_LabelHand.tif",
+      "sha256": "735d2e7d32e52f49d42ec9a21aaa4d1b675bb3ec955c7f49c9750aff8fb2cd31"
+    }
+  ]
+}

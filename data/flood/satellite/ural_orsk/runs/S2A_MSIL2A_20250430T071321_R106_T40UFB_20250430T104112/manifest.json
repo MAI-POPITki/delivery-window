@@ -1,0 +1,192 @@
+{
+  "algorithm": "s2-water-v1.1",
+  "parameters": {
+    "mndwi_min": 0.1,
+    "ndvi_max": 0.3,
+    "nir_max": 0.15,
+    "buffer_pixels": 2,
+    "pixel_size_m": 20,
+    "baseline_min_observations": 2,
+    "abstain_scl_water_conflict": true
+  },
+  "pid": "ural_orsk",
+  "acquired_at": "2025-04-30T07:13:21.024000Z",
+  "product_generated_at": "2025-04-30T10:41:12.000000Z",
+  "processed_at": "2026-11-10T03:38:59.899234+00:00",
+  "source": "Copernicus Sentinel-2 L2A / Microsoft Planetary Computer",
+  "station": {
+    "geometry": {
+      "coordinates": [
+        58.59978,
+        51.243693
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "basin_code": "01",
+      "basin_name": null,
+      "bo_code": "12",
+      "bo_name": null,
+      "catchment_area_km2": 46100.0,
+      "has_discharge": false,
+      "name": "р.Урал - г.Орск",
+      "opened": "1931-04-19",
+      "post_code": "19054",
+      "subbasin_code": "00",
+      "subbasin_name": null,
+      "vhu_code": "12.01.00.004",
+      "vhu_name": null
+    },
+    "type": "Feature"
+  },
+  "grid": {
+    "crs": "EPSG:32640",
+    "transform": [
+      20.0,
+      0.0,
+      605660.0,
+      0.0,
+      -20.0,
+      5684160.0
+    ],
+    "width": 600,
+    "height": 600
+  },
+  "overlay_coordinates": [
+    [
+      58.512036457086275,
+      51.29894260320264
+    ],
+    [
+      58.68757791623854,
+      51.29894260320264
+    ],
+    [
+      58.68757791623854,
+      51.18878500737834
+    ],
+    [
+      58.512036457086275,
+      51.18878500737834
+    ]
+  ],
+  "statistics": {
+    "total_km2": 144.0,
+    "observed_fraction": 0.9213388888888889,
+    "observed_km2": 132.6728,
+    "water_km2": 0.7220000000000001,
+    "new_water_km2": 0.0008,
+    "comparable_km2": 131.2364,
+    "water_unknown_baseline_km2": 0.07,
+    "scl_water_agreement_iou": 0.17618206788306848
+  },
+  "observation": {
+    "item_id": "S2A_MSIL2A_20250430T071321_R106_T40UFB_20250430T104112",
+    "acquired_at": "2025-04-30T07:13:21.024000Z",
+    "fetched_at": "2026-11-10T03:38:56.255868+00:00",
+    "generated_at": "2025-04-30T10:41:12.000000Z",
+    "cloud_scene_percent": 0.044466,
+    "stac_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-2-l2a/items/S2A_MSIL2A_20250430T071321_R106_T40UFB_20250430T104112",
+    "files": {
+      "scenes/S2A_MSIL2A_20250430T071321_R106_T40UFB_20250430T104112/dn.npz": "01db82f36c0a348969812dfd47209a6d3d6e206d62d1b33a22a4ef1661c77b28",
+      "scenes/S2A_MSIL2A_20250430T071321_R106_T40UFB_20250430T104112/product.xml": "59f4f885bbf92f494085ea1c1fb360ef6a5ba085b6665cef9beff25db7b894c6",
+      "scenes/S2A_MSIL2A_20250430T071321_R106_T40UFB_20250430T104112/stac.json": "615918eb6e6986db1ea372c921b8aa6b41cf0894c1cc695815421868db923377",
+      "scenes/S2A_MSIL2A_20250430T071321_R106_T40UFB_20250430T104112/crop.json": "e2f7c2cace6b5082498d35cd970d8385f3d3d4908dc32932d65561f0fd18566e"
+    },
+    "radiometry": {
+      "quantification": 10000.0,
+      "offsets": {
+        "B02": -1000.0,
+        "B03": -1000.0,
+        "B04": -1000.0,
+        "B08": -1000.0,
+        "B11": -1000.0
+      }
+    }
+  },
+  "references": [
+    {
+      "item_id": "S2A_MSIL2A_20240612T070631_R106_T40UFB_20240612T124929",
+      "acquired_at": "2024-06-12T07:06:31.024000Z",
+      "fetched_at": "2026-11-10T03:38:43.444716+00:00",
+      "generated_at": "2024-06-12T12:49:29.81620Z",
+      "cloud_scene_percent": 1.196595,
+      "stac_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-2-l2a/items/S2A_MSIL2A_20240612T070631_R106_T40UFB_20240612T124929",
+      "files": {
+        "scenes/S2A_MSIL2A_20240612T070631_R106_T40UFB_20240612T124929/dn.npz": "bf3f73f00ce0339a502b9d8e344d92cc28488174a8338e48850cd2f1f0e7037a",
+        "scenes/S2A_MSIL2A_20240612T070631_R106_T40UFB_20240612T124929/product.xml": "6e424240f91ac55ae201166715115c2a0e6d70b4d346a6e9f8718c172afcfc90",
+        "scenes/S2A_MSIL2A_20240612T070631_R106_T40UFB_20240612T124929/stac.json": "e9350d9be8184a5647e52ebac58c2bce1de1193fefb43c5528ff7638ee041ce5",
+        "scenes/S2A_MSIL2A_20240612T070631_R106_T40UFB_20240612T124929/crop.json": "7b6fd55e686c34cd18a6859118fa175fb42059cfca77cf65723cef18f54661ca"
+      },
+      "radiometry": {
+        "quantification": 10000.0,
+        "offsets": {
+          "B02": -1000.0,
+          "B03": -1000.0,
+          "B04": -1000.0,
+          "B08": -1000.0,
+          "B11": -1000.0
+        }
+      }
+    },
+    {
+      "item_id": "S2A_MSIL2A_20240602T070631_R106_T40UFB_20240602T130826",
+      "acquired_at": "2024-06-02T07:06:31.024000Z",
+      "fetched_at": "2026-11-10T03:38:46.804782+00:00",
+      "generated_at": "2024-06-02T13:08:26.137268Z",
+      "cloud_scene_percent": 1.880803,
+      "stac_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-2-l2a/items/S2A_MSIL2A_20240602T070631_R106_T40UFB_20240602T130826",
+      "files": {
+        "scenes/S2A_MSIL2A_20240602T070631_R106_T40UFB_20240602T130826/dn.npz": "b48a0583870fc5debc7abdbe95ed87d35eb5b418bef620289ac852b2a078a74e",
+        "scenes/S2A_MSIL2A_20240602T070631_R106_T40UFB_20240602T130826/product.xml": "e5d97ff359947cf66e18f7f1f052ea344b8712a0b262c466d4d521d66a37320a",
+        "scenes/S2A_MSIL2A_20240602T070631_R106_T40UFB_20240602T130826/stac.json": "f2d6fb0d9f68d7dfc5db1aa1425b11cc4cac1494bfd81886108ab41de41b7ee9",
+        "scenes/S2A_MSIL2A_20240602T070631_R106_T40UFB_20240602T130826/crop.json": "e52c4666ffa1fc40826261fe863b25f025b438914300bba04645a93c9de06cd8"
+      },
+      "radiometry": {
+        "quantification": 10000.0,
+        "offsets": {
+          "B02": -1000.0,
+          "B03": -1000.0,
+          "B04": -1000.0,
+          "B08": -1000.0,
+          "B11": -1000.0
+        }
+      }
+    },
+    {
+      "item_id": "S2B_MSIL2A_20240610T071619_R006_T40UFB_20240610T102208",
+      "acquired_at": "2024-06-10T07:16:19.024000Z",
+      "fetched_at": "2026-11-10T03:38:50.177675+00:00",
+      "generated_at": "2024-06-10T10:22:08.994199Z",
+      "cloud_scene_percent": 3.471811,
+      "stac_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-2-l2a/items/S2B_MSIL2A_20240610T071619_R006_T40UFB_20240610T102208",
+      "files": {
+        "scenes/S2B_MSIL2A_20240610T071619_R006_T40UFB_20240610T102208/dn.npz": "680d8a01f2d0b7a6f3d8a49a604cf5f6cf8e1f60c210d8f06defcb07712b817c",
+        "scenes/S2B_MSIL2A_20240610T071619_R006_T40UFB_20240610T102208/product.xml": "7bba1491b5a1e6e547db1e346f11efab76b763e712f8b12040a91b4dde71b686",
+        "scenes/S2B_MSIL2A_20240610T071619_R006_T40UFB_20240610T102208/stac.json": "fde6375a9db60a4f8c7a287e233c4990c9cce0f11478ef571925fd2eee2c3a84",
+        "scenes/S2B_MSIL2A_20240610T071619_R006_T40UFB_20240610T102208/crop.json": "255c821aa98077264c8c4367712e86fc731e69b1afa8dc9f240dffc9b5f8f025"
+      },
+      "radiometry": {
+        "quantification": 10000.0,
+        "offsets": {
+          "B02": -1000.0,
+          "B03": -1000.0,
+          "B04": -1000.0,
+          "B08": -1000.0,
+          "B11": -1000.0
+        }
+      }
+    }
+  ],
+  "selection_window": [
+    "2025-04-20",
+    "2025-05-01"
+  ],
+  "selection": "minimum scene cloud cover, no tuning of water thresholds",
+  "files": {
+    "mask.npz": "1059fd22231555e86a61f64c9d7e8b1ef5d849a9d56871f10c0296be252f0a85",
+    "rgb.png": "75c943880dd6631c949061b8c6ff020febf5675ac256494885ecb781c1f1395d",
+    "baseline.png": "89e49788ce4539ab281524a326fb7d926181f5cefb105c2f679445cb8fdc3435",
+    "overlay.png": "ffa1c079c1a7a8948b5d0ed9ed200068b8d10278f59cbc0b9d632f5918d239f1"
+  }
+}

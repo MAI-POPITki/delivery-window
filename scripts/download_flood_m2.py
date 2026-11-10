@@ -8,6 +8,7 @@ import sys
 import xml.etree.ElementTree as ET
 
 import numpy as np
+from scipy.ndimage import binary_dilation
 from PIL import Image
 import requests
 
@@ -67,6 +68,34 @@ def grid(lon, lat):
     # Привязка к 20-метровой сетке, один и тот же квадрат для всех дат.
     west, north = np.floor(x / 20) * 20 - 6000, np.ceil(y / 20) * 20 + 6000
     return dict(crs=f'EPSG:{epsg}', transform=list(from_origin(west, north, 20, 20))[:6], width=600, height=600)
+
+
+def local_visibility(item,location):
+    import planetary_computer as pc
+    import rasterio
+    from affine import Affine
+    from rasterio.vrt import WarpedVRT
+    from rasterio.enums import Resampling
+    with rasterio.Env(GDAL_DISABLE_READDIR_ON_OPEN='EMPTY_DIR',GDAL_HTTP_TIMEOUT=60,GDAL_HTTP_MAX_RETRY=2):
+        with rasterio.open(pc.sign(item['assets']['SCL']['href'])) as src:
+            if src.crs is None:raise ValueError('У SCL отсутствует CRS')
+            with WarpedVRT(src,crs=location['crs'],transform=Affine(*location['transform']),
+                width=location['width'],height=location['height'],src_nodata=0,nodata=0,resampling=Resampling.nearest) as vrt:
+                scl=vrt.read(1)
+    bad=binary_dilation(np.isin(scl,[1,2,3,7,8,9,10,11]),iterations=2)
+    return float((np.isin(scl,[4,5,6])&~bad).mean())
+
+
+def choose_scene(scenes,location):
+    # Сначала локальная видимость, а не облачность большого тайла.
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        visibility=list(pool.map(lambda item:local_visibility(item,location),scenes))
+    good=[(i,v) for i,v in zip(scenes,visibility) if v>=.5]
+    current=(max(good,key=lambda pair:pair[0]['properties']['datetime'])[0] if good else
+             max(zip(scenes,visibility),key=lambda pair:(pair[1],pair[0]['properties']['datetime']))[0])
+    ranking=[dict(item_id=i['id'],acquired_at=i['properties']['datetime'],local_scl_visible_fraction=v)
+             for i,v in zip(scenes,visibility)]
+    return current,ranking
 
 
 def read_scene(item, location, destination):
@@ -138,16 +167,21 @@ def overlay(mask, location, out):
     return [[west, north], [east, north], [east, south], [west, south]]
 
 
-def process(pid, start, end, selected=None):
+def process(pid, start, end, selected=None, available_by=None):
     station = json.loads((M.ROOT / f'data/flood/levels/{pid}.manifest.json').read_text(encoding='utf-8'))
     lon, lat = station['station']['geometry']['coordinates']
+    location = grid(lon, lat)
+    ranking=[]
     if selected is not None:
         current,chosen=selected
     else:
         scenes = search(lon, lat, start, end)
+        if available_by:
+            cutoff=datetime.fromisoformat(available_by+'T23:59:59+00:00')
+            scenes=[i for i in scenes if datetime.fromisoformat(i['properties']['s2:generation_time'].replace('Z','+00:00'))<=cutoff]
         if not scenes:
             raise ValueError('Нет сцен за указанный период')
-        current = min(scenes, key=lambda i: (i['properties']['eo:cloud_cover'], i['id']))
+        current,ranking = choose_scene(scenes,location)
         tile = current['properties']['s2:mgrs_tile']
         year = int(current['properties']['datetime'][:4]) - 1
         references = search(lon, lat, f'{year}-06-01', f'{year}-08-31', tile=tile)
@@ -166,7 +200,6 @@ def process(pid, start, end, selected=None):
         raise ValueError('Недостаточно разных дат для летней базы')
     M.require_past(current, chosen)
     destination = M.DATA / pid
-    location = grid(lon, lat)
     masks, provenance, base_rgb = [], [], []
     for item in chosen:
         bands, scl, meta = read_scene(item, location, destination)
@@ -196,7 +229,8 @@ def process(pid, start, end, selected=None):
         processed_at=datetime.now(timezone.utc).isoformat(), source='Copernicus Sentinel-2 L2A / Microsoft Planetary Computer',
         station=station['station'], grid=location, overlay_coordinates=coordinates, statistics=stats,
         observation=meta, references=provenance, selection_window=[start, end],
-        selection='minimum scene cloud cover, no tuning of water thresholds',
+        selection=('latest scene with local SCL visibility >=50%, otherwise maximum local visibility'
+                   if ranking else 'rebuild of frozen saved selection'),selection_candidates=ranking,
         files={name: M.sha256(folder / name) for name in ['mask.npz', 'rgb.png', 'baseline.png', 'overlay.png']})
     (folder / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf-8')
     M.load_run(folder / 'manifest.json')
@@ -210,6 +244,7 @@ def main():
     parser.add_argument('--end')
     parser.add_argument('--recent', action='store_true')
     parser.add_argument('--rebuild',action='store_true',help='Пересчитать сохранённые сцены без сетевых запросов')
+    parser.add_argument('--available-by',help='Исключить продукты, сгенерированные позже YYYY-MM-DD')
     parser.add_argument('--days', type=int, default=14)
     args = parser.parse_args()
     if bool(args.start) != bool(args.end):
@@ -235,7 +270,7 @@ def main():
                         selected.append(json.loads((destination/'scenes'/scene['item_id']/'stac.json').read_text(encoding='utf-8')))
                     process(pid,*record['selection_window'],selected=(selected[0],selected[1:]))
             else:
-                process(pid, start, end)
+                process(pid, start, end,available_by=args.available_by)
         except Exception as exc:
             failures.append(pid)
             # В исключении rasterio бывает временный SAS-токен; не выводим URL.

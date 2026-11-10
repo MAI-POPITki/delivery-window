@@ -119,7 +119,7 @@ _service = st.sidebar.radio("Направление", ["Зимники и пер
 if _service == "Паводки":
     # Обновляем зависимости и представление в живом процессе Streamlit после git pull.
     for _name in ("okno.map_style", "okno.flood", "okno.flood_routes", "okno.flood_planning", "okno.flood_m1", "okno.flood_m1_quantile", "okno.flood_m2",
-                  "okno.flood_m3", "app.flood_workspace", "app.flood_view", "app.flood_m1_view", "app.flood_m2_view", "app.flood_m3_view"):
+                  "okno.flood_probability", "okno.flood_m3", "okno.flood_assessment", "app.flood_assessment_view", "app.flood_workspace", "app.flood_view", "app.flood_m1_view", "app.flood_m2_view", "app.flood_m3_view"):
         _mod = sys.modules.get(_name)
         if _mod is None:
             _mod = importlib.import_module(_name)
@@ -127,11 +127,15 @@ if _service == "Паводки":
             _mod = importlib.reload(_mod)
         _mod._loaded_mtime_ns = os.stat(_mod.__file__).st_mtime_ns
     st.sidebar.button("О проекте", key="flood_welcome", on_click=show_welcome, width="stretch")
-    _flood_source=st.sidebar.radio('Модуль паводков',['М1 · уровень по измерениям','М2 · вода со спутника','GloFAS · внешний расход'],key='flood_model_source')
-    if _flood_source.startswith('М1'):
+    _old_sources={'М1 · уровень по измерениям':'Общая оценка участка','М2 · вода со спутника':'Спутниковые наблюдения · М2',
+                  'GloFAS · внешний расход':'Внешний расход · GloFAS'}
+    if st.session_state.get('flood_model_source') in _old_sources:
+        st.session_state['flood_model_source']=_old_sources[st.session_state['flood_model_source']]
+    _flood_source=st.sidebar.radio('Режим',['Общая оценка участка','Спутниковые наблюдения · М2','Внешний расход · GloFAS'],key='flood_model_source')
+    if _flood_source=='Общая оценка участка':
         from app.flood_m1_view import render_m1
         render_m1()
-    elif _flood_source.startswith('М2'):
+    elif _flood_source=='Спутниковые наблюдения · М2':
         from app.flood_m2_view import render_m2
         render_m2()
     else:
