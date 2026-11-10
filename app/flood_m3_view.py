@@ -16,7 +16,7 @@ def render_m3(pid,decision,forecast):
     st.session_state.setdefault('own_m3_route','')
     st.session_state.setdefault('own_m3_evidence','')
     st.session_state.setdefault('own_m3_travel',1)
-    st.subheader('М3 · план доставки по М1')
+    st.subheader('3. Рассчитайте доставку')
     st.write('Минимизирует перевозку и хранение по подтверждённым датам и мощностям. '
              'Основной вариант требует, чтобы верхняя граница М1 оставалась ниже вашего порога весь рейс.')
     st.warning('Это условная политика предосторожности, а не вероятность закрытия дороги. '
@@ -44,7 +44,7 @@ def render_m3(pid,decision,forecast):
             'source':st.column_config.TextColumn('Основание допуска'),
             'published':st.column_config.DateColumn('Сведения получены',format='DD.MM.YYYY')})
     saved[context]=edited.copy()
-    if not st.button('Рассчитать М3',key='own_m3_run',type='primary'):return
+    if not st.button('Рассчитать план доставки',key='own_m3_run',type='primary'):return
     if not route.strip() or not evidence.strip() or any(x is None for x in [threshold,quantity,road,backup,holding]):
         st.info('Введите маршрут, порог с основанием, объём и тарифы. Неизвестные условия не заменяются примерами.');return
     try:
@@ -61,7 +61,8 @@ def render_m3(pid,decision,forecast):
         columns={'optimized_t':'М3, т','uniform_t':'Равномерный план, т'}))
     st.write(f"Основной план: {summary['cost']:.0f} ₽; равномерный на тех же разрешённых мощностях: "
              f"{summary['baseline_cost']:.0f} ₽. Фактическая экономия на реальных рейсах не подтверждена.")
-    st.dataframe(plan.drop(columns=['fraction']).rename(columns={'date':'Отправка','arrival':'Окончание проезда',
+    output=plan.drop(columns=['fraction']).rename(columns={'date':'Отправка','arrival':'Окончание проезда',
         'capacity_t':'Мощность, т','confirmed':'Допуск подтверждён','policy_allowed':'Проходит политику',
-        'max_level_cm':'Максимум верхней границы, см','optimized_t':'М3, т','uniform_t':'Равномерно, т'}),hide_index=True)
-    st.download_button('Скачать план М3',plan.to_csv(index=False).encode('utf-8-sig'),'flood-m3.csv','text/csv')
+        'max_level_cm':'Максимум верхней границы, см','optimized_t':'М3, т','uniform_t':'Равномерно, т'})
+    st.dataframe(output,hide_index=True)
+    st.download_button('Скачать план М3',output.to_csv(index=False).encode('utf-8-sig'),'flood-m3.csv','text/csv')

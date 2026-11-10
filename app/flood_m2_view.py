@@ -1,3 +1,4 @@
+from okno import map_style as _flood_map_style
 """Отдельная спутниковая карта открытой воды, без подмены прогноза М1."""
 import base64
 from datetime import date
@@ -94,7 +95,7 @@ def render_m2():
             fig.add_trace(go.Scattermap(lon=[lon],lat=[lat],mode='markers',marker=dict(size=10,color='#111827'),
                 text=[meta['station']['properties']['name']],hoverinfo='text'))
             source='data:image/png;base64,'+base64.b64encode((folder/'overlay.png').read_bytes()).decode()
-            fig.update_layout(map=dict(style='carto-voyager',center=dict(lon=lon,lat=lat),zoom=10,
+            fig.update_layout(map=dict(style=_flood_map_style.FLOOD_MAP_STYLE,center=dict(lon=lon,lat=lat),zoom=10,
                 layers=[dict(sourcetype='image',source=source,coordinates=meta['overlay_coordinates'],below='traces',opacity=.85)]),
                 height=550,margin=dict(l=0,r=0,t=0,b=0),showlegend=False)
             st.plotly_chart(fig,width='stretch',config={'scrollZoom':True,'displaylogo':False})

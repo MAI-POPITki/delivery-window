@@ -1,3 +1,4 @@
+from okno import map_style as _flood_map_style
 """Общая рабочая область прогноза паводков и доставки."""
 from datetime import date, datetime, timedelta, timezone
 import math
@@ -67,7 +68,7 @@ def make_map(rows, selected=None, routes=(), selected_route=None):
         south, north = min(p[1] for p in coords), max(p[1] for p in coords)
         center = dict(lat=(south+north)/2, lon=(west+east)/2)
         zoom = min(11., math.log2(180/max((north-south)*2, east-west, .1)))
-    fig.update_layout(map=dict(style='carto-voyager', center=center, zoom=zoom), height=530,
+    fig.update_layout(map=dict(style=_flood_map_style.FLOOD_MAP_STYLE, center=center, zoom=zoom), height=530,
                       margin=dict(l=0, r=0, t=0, b=65), showlegend=False)
     return fig
 

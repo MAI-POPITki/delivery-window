@@ -119,7 +119,7 @@ _service = st.sidebar.radio("Направление", ["Зимники и пер
 if _service == "Паводки":
     # Обновляем зависимости и представление в живом процессе Streamlit после git pull.
     for _name in ("okno.map_style", "okno.flood", "okno.flood_routes", "okno.flood_planning", "okno.flood_m1", "okno.flood_m1_quantile", "okno.flood_m2",
-                  "okno.flood_probability", "okno.flood_m3", "okno.flood_assessment", "app.flood_assessment_view", "app.flood_workspace", "app.flood_view", "app.flood_m1_view", "app.flood_m2_view", "app.flood_m3_view"):
+                  "okno.flood_probability", "okno.flood_m3", "okno.flood_assessment", "app.flood_assessment_view", "app.flood_overview", "app.flood_workspace", "app.flood_view", "app.flood_m1_view", "app.flood_m2_view", "app.flood_m3_view"):
         _mod = sys.modules.get(_name)
         if _mod is None:
             _mod = importlib.import_module(_name)

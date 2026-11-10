@@ -1,3 +1,4 @@
+from okno import map_style as _flood_map_style
 """Собственный М1 по измеренным уровням: исторический прогноз и независимая проверка."""
 import json
 from datetime import date
@@ -23,17 +24,20 @@ def render_m1():
     st.title('Паводки')
     st.caption('Оценка участка: спутниковая обстановка, прогноз уровня на 1–7 суток и план доставки')
     regions=list(dict.fromkeys(p['region'] for p in POINTS.values()))
-    region=st.sidebar.selectbox('Регион',['Все четыре региона',*regions],index=1,key='m1_flood_region')
+    region=st.sidebar.selectbox('Регион',['Все четыре региона',*regions],index=0,key='m1_flood_region')
     points=[pid for pid,p in POINTS.items() if region=='Все четыре региона' or p['region']==region]
     if st.session_state.get('m1_flood_point') not in points:
         st.session_state['m1_flood_point']=points[0]
-    pid=st.sidebar.selectbox('Гидропост',points,key='m1_flood_point',
+    pid=st.sidebar.selectbox('Участок реки',points,key='m1_flood_point',
                             format_func=lambda p:f"{POINTS[p]['river']} · {POINTS[p]['name']}")
     if pid not in M.STATIONS:
+        from app.flood_overview import render_overview,open_satellite
+        render_overview(st.session_state.get('flood_overview_date',date(2023,5,1)),7,pid)
         st.warning('Курган: М1 пока не обучена. В доступном архиве всего один полный год ГМВО; другие записи имеют большие разрывы. '
                    'Прогноз другой реки сюда не переносится.')
         st.markdown('Источники и покрытие: [Уровень-Спутник](https://level-satellite.ru). '
                     'Внешний расход GloFAS доступен отдельным пунктом в боковой панели.')
+        st.button('Посмотреть спутниковые снимки Кургана',on_click=open_satellite,args=(pid,),key='kurgan_satellite')
         return
     with st.sidebar.expander('Настройки модели'):
         version=st.radio('Версия М1',['v2 · квантили уровня','v1 · точечная модель'],key='m1_flood_version')
@@ -47,9 +51,9 @@ def render_m1():
     st.session_state.setdefault(key,min(latest,date(latest.year,5,1)))
     if st.session_state[key]<earliest:
         st.session_state[key]=earliest
-    issue=st.sidebar.date_input('Дата измерения / решения',value=None,min_value=earliest,max_value=latest,
+    issue=st.sidebar.date_input('Дата расчёта (архив)',value=None,min_value=earliest,max_value=latest,
                                 format='DD.MM.YYYY',key=key)
-    horizon=st.sidebar.slider('Горизонт М1, суток',1,7,7,key='m1_flood_horizon')
+    horizon=st.sidebar.slider('На сколько суток вперёд',1,7,7,key='m1_flood_horizon')
     st.sidebar.caption(f"Наблюдения: {valid.index.min():%d.%m.%Y} — {valid.index.max():%d.%m.%Y}. "
                        f"Источник ряда: {M.STATIONS[pid][1]}. Данные за 2026 год отсутствуют.")
     st.info('Исторический расчёт по реальным измерениям. Модель использует только данные до выбранной даты. '
@@ -60,6 +64,10 @@ def render_m1():
         st.warning(str(exc));return
     forecast=forecast.iloc[:horizon]
     selected=forecast.iloc[-1]
+    st.session_state['flood_overview_date']=issue
+    from app.flood_overview import render_overview
+    render_overview(issue,horizon,pid)
+    st.subheader('2. Оцените обстановку на выбранном участке')
     current=float(series.loc[pd.Timestamp(issue)])
     validation_path=engine.MODELS/'validation.json'
     validation=json.loads(validation_path.read_text(encoding='utf-8')) if validation_path.exists() else {}
@@ -69,8 +77,7 @@ def render_m1():
     b.metric(f'Прогноз на {selected.date:%d.%m.%Y}',f'{selected.predicted_cm:.0f} см',
               delta=f'{selected.predicted_cm-current:+.0f} см')
     c.metric('Оценочный диапазон 80%',f'{selected.lower_cm:.0f} … {selected.upper_cm:.0f} см')
-    st.caption(f"Уровни — сантиметры над нулём этого гидропоста. Выбран по предыдущему году: {NAMES[selected.method]}. "
-               f"Обучение по {meta['train_until']}; калибровка — {meta['calibration_year']} год.")
+    st.caption('Уровень указан относительно нулевой отметки гидропоста. Это не глубина воды на дороге.')
     if engine is Q:
         with st.expander('Событие и вероятность превышения уровня',expanded=False):
             kind=st.radio('Какое событие оцениваем',['Высокий уровень · q80','Очень высокий уровень · q90','Своя отметка'],index=1,key='own_probability_kind_'+pid)
@@ -140,6 +147,8 @@ def render_m1():
             st.warning(f"В отдельном паводке диапазон был ненадёжен: весна {check['worst_spring_year']} года — "
                        f"покрытие {check['worst_spring_coverage']:.0%}. Среднее по годам скрывает этот провал.")
     with st.expander('Как получен этот прогноз'):
+        st.caption(f"Уровни — сантиметры над нулём этого гидропоста. Выбран по предыдущему году: {NAMES[selected.method]}. "
+                   f"Обучение по {meta['train_until']}; калибровка — {meta['calibration_year']} год.")
         known=series.loc[:pd.Timestamp(issue)]
         features=engine.feature_frame(known,horizon).loc[pd.Timestamp(issue)]
         st.write(f"1. На {issue:%d.%m.%Y} измерено {current:.0f} см. "
@@ -186,7 +195,7 @@ def render_m1():
                             ticktext=['Рост ≥100','Без изменения','Снижение ≥100'],orientation='h',thickness=10,y=-.06)),
                 hovertext=[f"{manifest['station']['properties']['name']}<br>Измерено: {current:.0f} см"
                            f"<br>М1 на {selected.date:%d.%m.%Y}: {selected.predicted_cm:.0f} см"],hoverinfo='text'))
-            fig.update_layout(map=dict(style='carto-voyager',center=dict(lat=gauge_lat,lon=gauge_lon),zoom=10),
+            fig.update_layout(map=dict(style=_flood_map_style.FLOOD_MAP_STYLE,center=dict(lat=gauge_lat,lon=gauge_lon),zoom=10),
                               height=500,margin=dict(l=0,r=0,t=0,b=65),showlegend=False)
             st.plotly_chart(fig,width='stretch',config={'scrollZoom':True,'displaylogo':False})
             st.caption('Красный — прогноз роста уровня, зелёный — снижения. Это не вероятность безопасности дороги. '
