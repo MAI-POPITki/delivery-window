@@ -1,0 +1,338 @@
+{
+  "ishim_ishim:1:0.8": {
+    "repeated_evaluation": true,
+    "skill": true,
+    "gain_ci90": {
+      "persistence": [
+        0.0037346897869364225,
+        0.012278236468159873
+      ],
+      "climatology": [
+        0.10742779891165284,
+        0.26538623104348263
+      ]
+    }
+  },
+  "ishim_ishim:1:0.9": {
+    "repeated_evaluation": true,
+    "skill": false,
+    "gain_ci90": {
+      "persistence": [
+        0.0,
+        0.007022227529383668
+      ],
+      "climatology": [
+        0.027034360553385307,
+        0.13972520513126702
+      ]
+    }
+  },
+  "ishim_ishim:3:0.8": {
+    "repeated_evaluation": true,
+    "skill": true,
+    "gain_ci90": {
+      "persistence": [
+        0.014026228868494231,
+        0.033244165913239275
+      ],
+      "climatology": [
+        0.11147178485525666,
+        0.2630181323672403
+      ]
+    }
+  },
+  "ishim_ishim:3:0.9": {
+    "repeated_evaluation": true,
+    "skill": true,
+    "gain_ci90": {
+      "persistence": [
+        0.0004489538731853773,
+        0.01760354651063612
+      ],
+      "climatology": [
+        0.025214193718974424,
+        0.1334964219307075
+      ]
+    }
+  },
+  "ishim_ishim:7:0.8": {
+    "repeated_evaluation": true,
+    "skill": true,
+    "gain_ci90": {
+      "persistence": [
+        0.025082068499343236,
+        0.0608488212415346
+      ],
+      "climatology": [
+        0.10573473563228195,
+        0.2487766755940704
+      ]
+    }
+  },
+  "ishim_ishim:7:0.9": {
+    "repeated_evaluation": true,
+    "skill": true,
+    "gain_ci90": {
+      "persistence": [
+        0.003260243769297692,
+        0.03406149246856928
+      ],
+      "climatology": [
+        0.02062720697361014,
+        0.12403021101652996
+      ]
+    }
+  },
+  "lena_yakutsk:1:0.8": {
+    "repeated_evaluation": true,
+    "skill": true,
+    "gain_ci90": {
+      "persistence": [
+        0.013848173009672305,
+        0.024367440848842563
+      ],
+      "climatology": [
+        0.11520220995888844,
+        0.19624174783780557
+      ]
+    }
+  },
+  "lena_yakutsk:1:0.9": {
+    "repeated_evaluation": true,
+    "skill": true,
+    "gain_ci90": {
+      "persistence": [
+        0.004018504460858737,
+        0.009287520683714029
+      ],
+      "climatology": [
+        0.03618956943757357,
+        0.1194741432251241
+      ]
+    }
+  },
+  "lena_yakutsk:3:0.8": {
+    "repeated_evaluation": true,
+    "skill": true,
+    "gain_ci90": {
+      "persistence": [
+        0.0401824857986046,
+        0.05569825659746508
+      ],
+      "climatology": [
+        0.0821530466897528,
+        0.16297657835929105
+      ]
+    }
+  },
+  "lena_yakutsk:3:0.9": {
+    "repeated_evaluation": true,
+    "skill": true,
+    "gain_ci90": {
+      "persistence": [
+        0.01181157349755207,
+        0.030381177393766744
+      ],
+      "climatology": [
+        0.020744805615734982,
+        0.09930848160215625
+      ]
+    }
+  },
+  "lena_yakutsk:7:0.8": {
+    "repeated_evaluation": true,
+    "skill": true,
+    "gain_ci90": {
+      "persistence": [
+        0.0475921598062128,
+        0.0607238660207093
+      ],
+      "climatology": [
+        0.011064187748417794,
+        0.08560488135651048
+      ]
+    }
+  },
+  "lena_yakutsk:7:0.9": {
+    "repeated_evaluation": true,
+    "skill": false,
+    "gain_ci90": {
+      "persistence": [
+        0.018227576295184324,
+        0.045338381296804904
+      ],
+      "climatology": [
+        -0.007179061257910982,
+        0.04722870217157675
+      ]
+    }
+  },
+  "ural_orenburg:1:0.8": {
+    "repeated_evaluation": true,
+    "skill": false,
+    "gain_ci90": {
+      "persistence": [
+        -4.885268571183258e-05,
+        0.004546181297798543
+      ],
+      "climatology": [
+        0.04082520632080876,
+        0.16620443307184857
+      ]
+    }
+  },
+  "ural_orenburg:1:0.9": {
+    "repeated_evaluation": true,
+    "skill": false,
+    "gain_ci90": {
+      "persistence": [
+        -0.0025917388391900843,
+        8.076667091781113e-05
+      ],
+      "climatology": [
+        0.021666038133579636,
+        0.1408025070310441
+      ]
+    }
+  },
+  "ural_orenburg:3:0.8": {
+    "repeated_evaluation": true,
+    "skill": true,
+    "gain_ci90": {
+      "persistence": [
+        0.004813233271678197,
+        0.015177622028835757
+      ],
+      "climatology": [
+        0.03998973734424766,
+        0.1639788227402938
+      ]
+    }
+  },
+  "ural_orenburg:3:0.9": {
+    "repeated_evaluation": true,
+    "skill": false,
+    "gain_ci90": {
+      "persistence": [
+        -0.0106905565868644,
+        0.00019406847537978
+      ],
+      "climatology": [
+        0.017164356477566547,
+        0.136213450190587
+      ]
+    }
+  },
+  "ural_orenburg:7:0.8": {
+    "repeated_evaluation": true,
+    "skill": true,
+    "gain_ci90": {
+      "persistence": [
+        0.007168637824730618,
+        0.021973492166781097
+      ],
+      "climatology": [
+        0.020347562752216258,
+        0.1419256243293278
+      ]
+    }
+  },
+  "ural_orenburg:7:0.9": {
+    "repeated_evaluation": true,
+    "skill": false,
+    "gain_ci90": {
+      "persistence": [
+        -0.009536211976412407,
+        0.0005746457672815123
+      ],
+      "climatology": [
+        0.009415202255651926,
+        0.12857685461938306
+      ]
+    }
+  },
+  "ural_orsk:1:0.8": {
+    "repeated_evaluation": true,
+    "skill": false,
+    "gain_ci90": {
+      "persistence": [
+        -1.4469461212096102e-05,
+        0.003060824131771404
+      ],
+      "climatology": [
+        0.01613992243150309,
+        0.48840607766110145
+      ]
+    }
+  },
+  "ural_orsk:1:0.9": {
+    "repeated_evaluation": true,
+    "skill": false,
+    "gain_ci90": {
+      "persistence": [
+        -1.5231011802206423e-06,
+        0.0017085387489125061
+      ],
+      "climatology": [
+        0.0069652940072670215,
+        0.20655886968833695
+      ]
+    }
+  },
+  "ural_orsk:3:0.8": {
+    "repeated_evaluation": true,
+    "skill": true,
+    "gain_ci90": {
+      "persistence": [
+        0.0009983318995874224,
+        0.010382165886432704
+      ],
+      "climatology": [
+        0.013718686562835845,
+        0.4756382936271009
+      ]
+    }
+  },
+  "ural_orsk:3:0.9": {
+    "repeated_evaluation": true,
+    "skill": false,
+    "gain_ci90": {
+      "persistence": [
+        -5.4896374288102584e-05,
+        0.009008305775355979
+      ],
+      "climatology": [
+        0.004726156307954001,
+        0.19599007059878587
+      ]
+    }
+  },
+  "ural_orsk:7:0.8": {
+    "repeated_evaluation": true,
+    "skill": false,
+    "gain_ci90": {
+      "persistence": [
+        -0.01010748220408581,
+        0.006766384608636103
+      ],
+      "climatology": [
+        -0.006311122050362253,
+        0.4620224582792126
+      ]
+    }
+  },
+  "ural_orsk:7:0.9": {
+    "repeated_evaluation": true,
+    "skill": false,
+    "gain_ci90": {
+      "persistence": [
+        -0.0004381962095494795,
+        0.012373217057758438
+      ],
+      "climatology": [
+        -0.003934627278863985,
+        0.17795388719790808
+      ]
+    }
+  }
+}

@@ -66,6 +66,54 @@ def render_m1():
     c.metric('Оценочный диапазон 80%',f'{selected.lower_cm:.0f} … {selected.upper_cm:.0f} см')
     st.caption(f"Уровни — сантиметры над нулём этого гидропоста. Выбран по предыдущему году: {NAMES[selected.method]}. "
                f"Обучение по {meta['train_until']}; калибровка — {meta['calibration_year']} год.")
+    if engine is Q:
+        with st.expander('Шанс превышения заданного уровня',expanded=True):
+            kind=st.radio('Какое событие оцениваем',['Высокий уровень · q80','Очень высокий уровень · q90','Своя отметка'],index=1,key='own_probability_kind_'+pid)
+            q=.8 if 'q80' in kind else .9
+            historical=series[(series.index.year<issue.year-1)&series.index.month.isin([4,5,6,7])].dropna()
+            threshold=(st.number_input('Проверяемый уровень, см над нулём поста',value=None,key='own_probability_threshold_'+pid)
+                       if kind=='Своя отметка' else float(historical.quantile(q)))
+            if kind!='Своя отметка':
+                st.write(f'Порог события: **{threshold:.0f} см**, квантиль измерений апреля–июля учебных лет по {issue.year-2}. '
+                         'Это относительная высокая вода, не официальная опасная отметка.')
+            st.caption('Вы задаёте событие: уровень ≥ этой отметки. Это не вероятность затопления или закрытия дороги. '
+                       'Опасная отметка автоматически не подставляется.')
+            if threshold is not None:
+                from okno.flood_probability import exceedance
+                try:
+                    probabilities=exceedance(pid,issue,forecast,threshold)
+                    st.dataframe(probabilities.assign(probability=probabilities.probability*100).rename(
+                        columns={'date':'Дата','lead':'Суток вперёд','probability':'Оценка превышения, %',
+                                 'n':'Примеров ошибок','calibration_year':'Год ошибок'}),hide_index=True)
+                    st.warning('Экспериментальная эмпирическая оценка по ошибкам предыдущего года. '
+                               'Её точность зависит от режима реки; новая надстройка проверена повторно на уже изученном архиве. '
+                               'Проценты не являются гарантией проезда.')
+                    evidence_path=M.ROOT/'models/flood_probability/validation.json'
+                    if evidence_path.exists():
+                        evidence=json.loads(evidence_path.read_text()).get(f'{pid}:{horizon}:{q}',{})
+                        if kind=='Своя отметка' or issue.month not in (4,5,6,7):
+                            st.caption('Доказательная таблица относится к весенним q80/q90; для этого события отдельный критерий не проверен.')
+                        elif evidence.get('skill'):
+                            st.info('Для этого поста, горизонта и типа события Brier score лучше обоих простых правил '
+                                    'с положительным 90%-интервалом выигрыша на повторной архивной оценке.')
+                        else:
+                            st.warning('Для этого события преимущество вероятностей над обоими простыми правилами не подтверждено.')
+                    calibration_path=M.ROOT/'reports/flood_probability_reliability.csv'
+                    if kind!='Своя отметка' and calibration_path.exists():
+                        with st.expander('Насколько проценты совпали с фактами'):
+                            reliability=pd.read_csv(calibration_path)
+                            subset=reliability[(reliability.pid==pid)&(reliability.lead==horizon)&(reliability.threshold_quantile==q)]
+                            if not subset.empty:
+                                st.dataframe(subset[['predicted','observed','n']].assign(
+                                    predicted=subset.predicted*100,observed=subset.observed*100).rename(
+                                    columns={'predicted':'Средний прогноз, %','observed':'Фактические превышения, %','n':'Примеров'}),hide_index=True)
+                                st.caption('Близкие проценты означают хорошую калибровку. Малые корзины ненадёжны; '
+                                           'соседние дни зависимы. Это повторная архивная проверка, не гарантия для следующего паводка.')
+                except (ValueError,FileNotFoundError,KeyError) as exc:
+                    st.info('Для этой версии нет проверенных сохранённых ошибок; вероятность не показана.')
+            report=M.ROOT/'reports/flood_probability.md'
+            if report.exists():
+                st.download_button('Проверка вероятностей: Brier score и соперники',report.read_bytes(),report.name)
     if check.get('point_skill_success'):
         if engine is Q:
             st.info('На повторной архивной оценке точечный прогноз прошёл критерии сравнения с простыми правилами. '
