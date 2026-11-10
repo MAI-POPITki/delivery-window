@@ -1,13 +1,15 @@
 """Анализ рисков и проверяемые предложения для выбранной карточки пути."""
 import datetime as dt
+import numpy as np
 import pandas as pd
 import streamlit as st
-from okno.journey import road_rows
+from okno.journey import road_rows, registry_coverage, evidence
 from okno.risk_advice import scenarios
 from okno.regions import label
-from okno.ice import from_season_day
+from okno.ice import from_season_day, to_season_day
+from okno.planner import sample_quantiles
 
-NAMES={'unknown':'Нет опубликованных сведений','closed':'Путь закрыт',
+NAMES={'unknown':'Нет опубликованных сведений на эту дату','closed':'Путь закрыт',
        'overweight':'Масса превышена','limited':'Предел массы опубликован',
        'mass_unknown':'Предел массы не указан'}
 
@@ -21,7 +23,20 @@ def render_journey(pid,hy,issue_date,issue_day,margin,points,forecast):
     roads=sorted(events.road.unique())
     road=st.selectbox('Дорога из реестра',roads,index=0 if len(roads)==1 else None,
                       placeholder='Выберите конкретную дорогу',key='risk_road_'+pid+str(hy)) if roads else None
-    if not roads: st.info('В реестре нет дорог этой точки за выбранный сезон. Допуск и предел массы неизвестны; прогноз не заменяет их.')
+    if not roads:
+        st.info('В реестре нет дорог этой точки за выбранный сезон. Допуск и предел массы неизвестны; прогноз не заменяет их.')
+        _seasons=sorted(registry_coverage(point_id=pid).hydro_year.unique())
+        _here=registry_coverage(hydro_year=hy)
+        _hint=[]
+        if _seasons:
+            _hint.append('По этой точке сведения есть за сезоны: '+', '.join(f'{y-1}/{str(y)[2:]}' for y in _seasons)+
+                         ' — выберите сезон в левой панели.')
+        if len(_here):
+            _hint.append('В сезоне '+f'{hy-1}/{str(hy)[2:]}'+' сведения есть по точкам: '+
+                         ', '.join(sorted({label(p) for p in _here.point_id.unique()}))+'.')
+        if _hint:
+            st.caption(' '.join(_hint)+' Реестр пополняет команда по официальным сообщениям (data/external/road_events.csv, '
+                       'график текущего сезона — road_schedule_2027.csv).')
     a,b=st.columns(2)
     passage=a.date_input('Планируемая дата проезда',value=issue_date+dt.timedelta(days=7),min_value=issue_date,
                          key='risk_passage_'+str(issue_date))
@@ -32,15 +47,44 @@ def render_journey(pid,hy,issue_date,issue_day,margin,points,forecast):
     q=forecast(pid,hy,issue_day,'close')
     rows=scenarios(events,road,q,issue_date,passage,hy,margin,gross)
     current=rows[0]
+    _kinds={'open':'открытие','open10':'открытие до 10 т','limit20':'предел 20 т','limit30':'предел 30 т','close':'закрытие'}
+    if not road and len(events):
+        st.info('У этой точки несколько дорог, ограничения у каждой свои. Выберите дорогу в списке «Дорога из реестра». '
+                'Ниже — что известно по каждой на выбранную дату проезда.')
+        _tab=[]
+        for _r in sorted(events.road.unique()):
+            _ev=evidence(events,_r,issue_date,passage,gross)
+            _rec=_ev['record']
+            _tab.append({'Дорога':_r,'Состояние на дату проезда':NAMES[_ev['status']],
+                         'Последняя запись':(f"{_kinds.get(_rec['kind'],_rec['kind'])} с {_rec['date']:%d.%m.%Y} ({_rec['basis'].lower()})" if _rec else '—'),
+                         'Предел массы, т':'—' if _ev['limit_t'] is None else f"{_ev['limit_t']:g}"})
+        st.dataframe(pd.DataFrame(_tab),hide_index=True,width='stretch')
+    elif road and current['status']=='unknown':
+        _all=evidence(events,road,issue_date,pd.Timestamp('2100-01-01'),gross)['records']
+        _later=sorted([r for r in _all if r['date']>pd.Timestamp(passage)],key=lambda r:r['date'])
+        if _later:
+            st.info('На выбранную дату проезда сведений ещё нет, но опубликовано дальше: '+
+                    '; '.join(f"{_kinds.get(r['kind'],r['kind'])} с {r['date']:%d.%m.%Y} ({r['basis'].lower()})" for r in _later[:4])+
+                    '. Выберите дату проезда не раньше первой из них.')
     st.subheader('Что известно о рисках')
-    st.write('**Опубликованные ограничения: '+NAMES[current['status']]+'**')
+    st.write('**Опубликованные ограничения: '+(NAMES[current['status']] if road or not len(events) else 'выберите дорогу')+'**')
     record=current['record']
     if record:
         st.markdown(f"{record['basis']} · действует с {record['date']:%d.%m.%Y} · опубликовано {record['publication']:%d.%m.%Y} · [Источник]({record['source']})")
         st.caption(record['comment'])
+    q_open=forecast(pid,hy,issue_day,'open')
+    if q_open and 'error' not in q_open and all(np.isfinite(q_open.get(k,np.nan)) for k in ('q10','q50','q90')):
+        _s=sample_quantiles(q_open['q10'],q_open['q50'],q_open['q90'],4000,np.random.default_rng(0))
+        _day=float(to_season_day(pd.Timestamp(passage),hy))
+        p_not_open=float((_s>_day).mean())
+        if p_not_open>0.005 or _day<q_open['q90']:
+            st.metric('М1: риск, что к дате проезда лёд ещё не держит 20 т',f'{p_not_open:.1%}')
+            st.caption(f"Прогноз открытия (лёд держит 20 т): медиана {q_open['q50_date']:%d.%m.%Y}, "
+                       f"диапазон {q_open['q10_date']:%d.%m}–{q_open['q90_date']:%d.%m}. Физическая готовность льда, "
+                       'а не приказ об открытии: ехать можно только после официального открытия.')
     risk=current['risk']
     if risk is not None:
-        st.metric('М1: риск закрытия участка к дате проезда',f'{risk:.1%}')
+        st.metric('М1: риск весеннего закрытия к дате проезда',f'{risk:.1%}')
         st.caption(f"Выпуск модели: {from_season_day(q['issue_day'],hy):%d.%m.%Y}; запас до физического закрытия: {margin} сут. "
                    'Это модельная оценка для порога 20 т, не вероятность аварии или недовоза всей поставки. '
                    'Она не учитывает отдельным процентом административное открытие и другие причины недоступности.')
@@ -77,3 +121,30 @@ def render_journey(pid,hy,issue_date,issue_day,margin,points,forecast):
     st.dataframe(table,hide_index=True,width='stretch')
     st.download_button('Скачать сравнение дат',table.to_csv(index=False).encode('utf-8-sig'),'risk-scenarios.csv','text/csv')
     st.caption('Расчёт всей цепочки хаб → ж/д → Нижний Бестях → переправа → Якутск и режим «сервис» — на вкладке «Сквозной коридор (А3)».')
+    _render_registry(pid,hy)
+
+
+def _render_registry(pid,hy):
+    """Просмотр реестра официальных приказов и графиков (идея — ветка dmitrii, 09.11.2026)."""
+    from okno.journey import _registry, _registry_version
+    reg=_registry(_registry_version())
+    with st.expander(f'Реестр официальных приказов и ограничений массы — {len(reg)} записей'):
+        st.caption('Факты и опубликованные графики открытия, ограничений 30/20 т и закрытия из data/external/road_events.csv '
+                   'и графика текущего сезона. Каждая запись — со ссылкой на первоисточник; записи без подтверждённого '
+                   'источника в реестр не вносятся (сверка — reports/source_audit.md).')
+        mode=st.radio('Показать',['эта точка, все сезоны','выбранный сезон, все точки','ограничения массы 30/20 т, все сезоны','весь реестр'],
+                      horizontal=True,key='registry_view')
+        view=reg
+        if mode.startswith('эта точка'): view=reg[reg.point_id==pid]
+        elif mode.startswith('выбранный сезон'): view=reg[reg.hydro_year==hy]
+        elif mode.startswith('ограничения'): view=reg[reg.kind.isin(['limit30','limit20','open10'])]
+        kinds={'open':'открытие','open10':'открытие до 10 т','limit30':'предел 30 т','limit20':'предел 20 т','close':'закрытие'}
+        rows=[{'Дорога':r.road,'Сезон':f'{int(r.hydro_year)-1}/{str(int(r.hydro_year))[2:]}','Событие':kinds.get(r.kind,r.kind),
+               'По графику':r.announced_date or '—','Факт':r.actual_date or '—',
+               'Источник':r.source_actual or r.source_announced,'Комментарий':r.comment}
+              for r in view.sort_values(['hydro_year','road']).itertuples()]
+        if rows:
+            st.dataframe(pd.DataFrame(rows),hide_index=True,width='stretch',key='registry_table',
+                         column_config={'Источник':st.column_config.LinkColumn('Источник',display_text='открыть')})
+        else:
+            st.info('По выбранному фильтру записей нет.')
