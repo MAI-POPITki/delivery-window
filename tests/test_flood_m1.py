@@ -76,6 +76,7 @@ class FloodM1Tests(unittest.TestCase):
     def test_replay_ui_changes_date_and_shows_model_provenance(self):
         at=AppTest.from_string('from app.flood_m1_view import render_m1\nrender_m1()',default_timeout=60)
         at.session_state['m1_flood_tab']='М1: прогноз'
+        at.session_state['m1_flood_version']='v1 · точечная модель'
         at.run()
         self.assertFalse(at.exception,[e.message for e in at.exception])
         before=at.metric[1].value

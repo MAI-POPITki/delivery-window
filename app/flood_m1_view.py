@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from okno import flood_m1 as M
+from okno import flood_m1_quantile as Q
 from okno.flood import POINTS
 from okno.flood_routes import load_routes
 from okno.map_style import AVAILABILITY_SCALE
@@ -30,13 +31,17 @@ def render_m1():
         st.markdown('Источники и покрытие: [Уровень-Спутник](https://level-satellite.ru). '
                     'Внешний расход GloFAS доступен отдельным пунктом в боковой панели.')
         return
+    version=st.sidebar.radio('Версия М1',['v2 · квантили уровня','v1 · точечная модель'],key='m1_flood_version')
+    engine=Q if version.startswith('v2') else M
     series=M.load_levels(pid)
     manifest=json.loads((M.DATA/f'{pid}.manifest.json').read_text(encoding='utf-8'))
     valid=series.dropna()
-    earliest=max(valid.index.min().date(),date(2017,1,1))
+    earliest=max(valid.index.min().date(),date(2019 if engine is Q else 2017,1,1))
     latest=valid.index.max().date()
     key=f'm1_issue_{pid}'
     st.session_state.setdefault(key,min(latest,date(latest.year,5,1)))
+    if st.session_state[key]<earliest:
+        st.session_state[key]=earliest
     issue=st.sidebar.date_input('Дата измерения / решения',value=None,min_value=earliest,max_value=latest,
                                 format='DD.MM.YYYY',key=key)
     horizon=st.sidebar.slider('Горизонт М1, суток',1,7,7,key='m1_flood_horizon')
@@ -45,13 +50,13 @@ def render_m1():
     st.info('Исторический расчёт по реальным измерениям. Модель использует только данные до выбранной даты. '
             'Свежего собственного прогноза на 2026 год нет: не получены текущие уровни гидропостов.')
     try:
-        forecast,meta=M.forecast(pid,issue)
+        forecast,meta=engine.forecast(pid,issue)
     except ValueError as exc:
         st.warning(str(exc));return
     forecast=forecast.iloc[:horizon]
     selected=forecast.iloc[-1]
     current=float(series.loc[pd.Timestamp(issue)])
-    validation_path=M.MODELS/'validation.json'
+    validation_path=engine.MODELS/'validation.json'
     validation=json.loads(validation_path.read_text(encoding='utf-8')) if validation_path.exists() else {}
     check=validation.get(f'{pid}:{horizon}',{})
     a,b,c=st.columns(3)
@@ -62,7 +67,11 @@ def render_m1():
     st.caption(f"Уровни — сантиметры над нулём этого гидропоста. Выбран по предыдущему году: {NAMES[selected.method]}. "
                f"Обучение по {meta['train_until']}; калибровка — {meta['calibration_year']} год.")
     if check.get('point_skill_success'):
-        st.success('Точечный прогноз для этой точки и горизонта прошёл критерий сравнения с простыми правилами на отдельных будущих годах.')
+        if engine is Q:
+            st.info('На повторной архивной оценке точечный прогноз прошёл критерии сравнения с простыми правилами. '
+                    'Эти годы уже изучались при создании v1; независимое подтверждение v2 ещё требуется.')
+        else:
+            st.success('Точечный прогноз для этой точки и горизонта прошёл критерий сравнения с простыми правилами на отдельных будущих годах.')
     else:
         st.warning('Для этой точки/горизонта преимущество по всем критериям не подтверждено. Модель остаётся экспериментальной.')
     if not check.get('interval_valid'):
@@ -70,6 +79,35 @@ def render_m1():
         st.warning('Диапазон ещё ненадёжен в половодье'
                    +(f': в проверке апреля–июля факт попадал в него только в {coverage:.0%} случаев.' if coverage is not None else '.')
                    +' Это не гарантия 80%-й вероятности и не разрешение проезда.')
+    elif engine is Q:
+        st.caption(f"На повторной проверке весной покрытие диапазона — {check['spring_coverage']:.0%}. "
+                   'Оценка по прошлым годам не гарантирует покрытие следующего паводка.')
+    if engine is Q and check.get('worst_spring_coverage',1)<.75:
+        st.warning(f"В отдельном паводке диапазон был ненадёжен: весна {check['worst_spring_year']} года — "
+                   f"покрытие {check['worst_spring_coverage']:.0%}. Среднее по годам скрывает этот провал.")
+    with st.expander('Как получен этот прогноз'):
+        known=series.loc[:pd.Timestamp(issue)]
+        features=engine.feature_frame(known,horizon).loc[pd.Timestamp(issue)]
+        st.write(f"1. На {issue:%d.%m.%Y} измерено {current:.0f} см. "
+                 f"За сутки уровень изменился на {features.d1:+.0f} см, за 7 суток — на {features.d7:+.0f} см.")
+        st.write('2. Модель получает текущий уровень, прошлые измерения за 30 суток, изменения, средние, '
+                 'сезон и число суток до целевой даты. Последующие измерения в расчёт не входят.')
+        st.write(f"3. На горизонте {horizon} суток выбран метод «{NAMES[selected.method]}» по ошибке {meta['calibration_year']} года. "
+                 f"Изменение от текущего уровня до прогноза: {selected.predicted_cm-current:+.0f} см.")
+        comparison=pd.DataFrame([{'Метод':NAMES[name],'Ошибка на прошлом году, см':value}
+                                for name,value in meta['calibration_mae'][str(horizon)].items()])
+        st.dataframe(comparison,hide_index=True,width='stretch')
+        if engine is Q:
+            season='spring' if pd.Timestamp(issue).month in (4,5,6,7) else 'other'
+            correction=meta['corrections'][str(horizon)][season]
+            st.write(f"4. CatBoost оценивает квантили 10/50/90%. Диапазон выбранного метода расширен по ошибкам "
+                     f"прошлого года на {correction['cm']:.1f} см с каждой стороны "
+                     f"({correction['n']} примеров; {'весь год' if correction['fallback_all_year'] else 'апрель–июль' if season=='spring' else 'остальные месяцы'}). "
+                     'Если выбрано простое правило, диапазон строится по его собственным ошибкам.')
+        else:
+            st.write('4. Диапазон — прогноз ± 80-й процентиль абсолютных ошибок выбранного метода в прошлом году.')
+        st.write('Уровень относительно нуля поста не равен глубине воды на дороге. '
+                 'Без подтверждённых опасных отметок и рельефа этот расчёт не определяет затопление или возможность проезда.')
     tabs=st.tabs(['Карта','М1: прогноз','Проверка','Данные'],key='m1_flood_tab',on_change='rerun')
     with tabs[0]:
         if tabs[0].open is not False:
@@ -113,9 +151,9 @@ def render_m1():
             st.download_button('Скачать прогноз М1',view.to_csv(index=False).encode('utf-8-sig'),'flood-m1.csv','text/csv')
     with tabs[2]:
         if tabs[2].open is not False:
-            report=M.ROOT/'reports/flood_m1.md'
+            report=M.ROOT/('reports/flood_m1_quantile.md' if engine is Q else 'reports/flood_m1.md')
             if report.exists(): st.markdown(report.read_text(encoding='utf-8'))
-            scores=pd.read_csv(M.ROOT/'reports/flood_m1_scores.csv')
+            scores=pd.read_csv(M.ROOT/('reports/flood_m1_quantile_scores.csv' if engine is Q else 'reports/flood_m1_scores.csv'))
             st.dataframe(scores[scores.pid.eq(pid)],hide_index=True,width='stretch')
             st.write('MAE — средняя абсолютная ошибка в сантиметрах. Сравниваются целые будущие годы, '
                      'которые не использовались ни при обучении, ни при выборе алгоритма и калибровке интервала.')
@@ -130,12 +168,14 @@ def render_m1():
                      'Пропуски не интерполируются. Отрицательные уровни сохраняются.')
             st.write('Признаки: текущий уровень, лаги 1/3/7/14/30 суток, скорость изменения, средние за 7/30 дней, '
                      'сезонность и горизонт. Цель — изменение уровня. Погода, спутниковые снимки и GloFAS '
-                     'в эту первую собственную модель не входят. Обучение — CatBoost; алгоритм выбирается по прошлому году.')
-            st.write('Диапазон — по ошибкам предыдущего года. Его фактическое покрытие указано в проверке. '
+                     'в собственный М1 уровней не входят. Обучение — CatBoost; алгоритм выбирается по прошлому году.')
+            st.write(('v2: CatBoost MultiQuantile оценивает 10/50/90%; сезонная CQR-калибровка по предыдущему году. '
+                      if engine is Q else 'v1: симметричный диапазон по ошибкам предыдущего года. ')
+                     +'Его фактическое покрытие указано в проверке. '
                      'Рельеф, площадь затопления, опасные отметки и допуск дорог не прогнозируются. '
                      'Архив получен позднее: исторический расчёт не равен сохранённому оперативному выпуску.')
             st.json(manifest['summary'].get('zero_marks',[]))
             st.download_button('Метаданные и источник',json.dumps(manifest,ensure_ascii=False,indent=2).encode('utf-8'),
                                f'{pid}-source.json','application/json')
-            protocol=M.ROOT/'docs/FLOOD_M1_VALIDATION_PLAN.md'
+            protocol=M.ROOT/('docs/FLOOD_M1_V2_PLAN.md' if engine is Q else 'docs/FLOOD_M1_VALIDATION_PLAN.md')
             st.download_button('Протокол проверки М1',protocol.read_bytes(),protocol.name,'text/markdown')

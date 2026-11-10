@@ -116,7 +116,7 @@ import plotly.graph_objects as go
 _service = st.sidebar.radio("Направление", ["Зимники и переправы", "Паводки"], key="service_mode")
 if _service == "Паводки":
     # Обновляем зависимости и представление в живом процессе Streamlit после git pull.
-    for _name in ("okno.map_style", "okno.flood", "okno.flood_routes", "okno.flood_planning", "okno.flood_m1",
+    for _name in ("okno.map_style", "okno.flood", "okno.flood_routes", "okno.flood_planning", "okno.flood_m1", "okno.flood_m1_quantile",
                   "app.flood_workspace", "app.flood_view", "app.flood_m1_view"):
         _mod = sys.modules.get(_name)
         if _mod is None:

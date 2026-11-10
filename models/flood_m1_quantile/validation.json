@@ -1,0 +1,856 @@
+{
+  "ishim_ishim:1": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.7852459016393444,
+    "worst_spring_year": 2023,
+    "worst_spring_coverage": 0.6721311475409836,
+    "gain_ci90_cm": {
+      "persistence": [
+        2.243076729040518,
+        3.7946533327812753
+      ],
+      "calendar": [
+        53.35115864776738,
+        95.98300820108744
+      ],
+      "last_year": [
+        43.922508836944736,
+        85.45240731022977
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ishim_ishim:2": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8147540983606557,
+    "worst_spring_year": 2023,
+    "worst_spring_coverage": 0.7213114754098361,
+    "gain_ci90_cm": {
+      "persistence": [
+        4.679043652908552,
+        7.687264601445456
+      ],
+      "calendar": [
+        51.71997645972357,
+        96.72157163467
+      ],
+      "last_year": [
+        43.08356602213045,
+        84.44765991347761
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ishim_ishim:3": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8081967213114755,
+    "worst_spring_year": 2023,
+    "worst_spring_coverage": 0.7049180327868853,
+    "gain_ci90_cm": {
+      "persistence": [
+        6.827170672597731,
+        11.3803569800266
+      ],
+      "calendar": [
+        50.30468213719969,
+        94.14929907556147
+      ],
+      "last_year": [
+        41.79551306117967,
+        83.32543447866972
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ishim_ishim:4": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8295081967213115,
+    "worst_spring_year": 2023,
+    "worst_spring_coverage": 0.7131147540983607,
+    "gain_ci90_cm": {
+      "persistence": [
+        8.540497983362254,
+        14.696092677671496
+      ],
+      "calendar": [
+        48.561092579094385,
+        94.4975614719153
+      ],
+      "last_year": [
+        39.014442863477214,
+        81.90796582819328
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ishim_ishim:5": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8098360655737705,
+    "worst_spring_year": 2023,
+    "worst_spring_coverage": 0.7131147540983607,
+    "gain_ci90_cm": {
+      "persistence": [
+        10.008383508936053,
+        17.562157264283503
+      ],
+      "calendar": [
+        46.84907504615612,
+        92.90297528483957
+      ],
+      "last_year": [
+        38.37262917359799,
+        79.82828388669427
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ishim_ishim:6": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.7803278688524591,
+    "worst_spring_year": 2020,
+    "worst_spring_coverage": 0.7295081967213115,
+    "gain_ci90_cm": {
+      "persistence": [
+        11.43480733133195,
+        20.34320160380114
+      ],
+      "calendar": [
+        45.6913092933553,
+        89.64029791358942
+      ],
+      "last_year": [
+        36.219902315655055,
+        79.28230348727502
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ishim_ishim:7": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8065573770491803,
+    "worst_spring_year": 2020,
+    "worst_spring_coverage": 0.7295081967213115,
+    "gain_ci90_cm": {
+      "persistence": [
+        12.590003830725504,
+        22.219237450587748
+      ],
+      "calendar": [
+        42.5551270053988,
+        89.53464929670483
+      ],
+      "last_year": [
+        33.22959894532979,
+        76.05890596939425
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "lena_yakutsk:1": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.7950819672131149,
+    "worst_spring_year": 2019,
+    "worst_spring_coverage": 0.7377049180327869,
+    "gain_ci90_cm": {
+      "persistence": [
+        3.9262556965565794,
+        5.80695560981879
+      ],
+      "calendar": [
+        59.97965469155897,
+        82.19272695525675
+      ],
+      "last_year": [
+        93.16187822908195,
+        104.02474598334209
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "lena_yakutsk:2": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8229508196721312,
+    "worst_spring_year": 2022,
+    "worst_spring_coverage": 0.7295081967213115,
+    "gain_ci90_cm": {
+      "persistence": [
+        8.902963947911557,
+        11.307633437424652
+      ],
+      "calendar": [
+        54.195303179160796,
+        77.37620531560418
+      ],
+      "last_year": [
+        88.45012221479206,
+        98.58553817908337
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "lena_yakutsk:3": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8459016393442622,
+    "worst_spring_year": 2022,
+    "worst_spring_coverage": 0.7459016393442623,
+    "gain_ci90_cm": {
+      "persistence": [
+        12.53238610985075,
+        15.448708520365397
+      ],
+      "calendar": [
+        47.828116565444,
+        71.73777459817322
+      ],
+      "last_year": [
+        82.35390869312265,
+        93.48257802536492
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "lena_yakutsk:4": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8573770491803279,
+    "worst_spring_year": 2022,
+    "worst_spring_coverage": 0.7622950819672131,
+    "gain_ci90_cm": {
+      "persistence": [
+        15.03730172080457,
+        18.634311281186946
+      ],
+      "calendar": [
+        41.54022874915108,
+        66.06774315298091
+      ],
+      "last_year": [
+        75.76803426682439,
+        88.63371981200905
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "lena_yakutsk:5": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8573770491803279,
+    "worst_spring_year": 2022,
+    "worst_spring_coverage": 0.7540983606557377,
+    "gain_ci90_cm": {
+      "persistence": [
+        16.718773193585644,
+        20.505803150326123
+      ],
+      "calendar": [
+        36.26952713455356,
+        60.51729077682055
+      ],
+      "last_year": [
+        70.18213808102442,
+        83.06655851995797
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "lena_yakutsk:6": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8508196721311474,
+    "worst_spring_year": 2022,
+    "worst_spring_coverage": 0.7540983606557377,
+    "gain_ci90_cm": {
+      "persistence": [
+        18.350694260238566,
+        22.230884339502435
+      ],
+      "calendar": [
+        30.273891888743957,
+        55.444850780172985
+      ],
+      "last_year": [
+        63.75735966745462,
+        78.48253761402908
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "lena_yakutsk:7": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8360655737704917,
+    "worst_spring_year": 2022,
+    "worst_spring_coverage": 0.7213114754098361,
+    "gain_ci90_cm": {
+      "persistence": [
+        19.434447280771145,
+        23.21753669632482
+      ],
+      "calendar": [
+        25.2611190742813,
+        50.84587063382574
+      ],
+      "last_year": [
+        58.36397699253022,
+        73.61925991667088
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ural_orenburg:1": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.7722222222222221,
+    "worst_spring_year": 2024,
+    "worst_spring_coverage": 0.6333333333333333,
+    "gain_ci90_cm": {
+      "persistence": [
+        0.14633304343342765,
+        0.6512329494899801
+      ],
+      "calendar": [
+        22.933691455130226,
+        68.38642528616977
+      ],
+      "last_year": [
+        19.945297422255372,
+        62.570394292215134
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ural_orenburg:2": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.7591378263509411,
+    "worst_spring_year": 2020,
+    "worst_spring_coverage": 0.6147540983606558,
+    "gain_ci90_cm": {
+      "persistence": [
+        0.4632474622760305,
+        1.832239975123452
+      ],
+      "calendar": [
+        21.969866587269266,
+        65.84928168108054
+      ],
+      "last_year": [
+        18.965155656410666,
+        61.237232922527255
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ural_orenburg:3": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.7508500303582272,
+    "worst_spring_year": 2020,
+    "worst_spring_coverage": 0.6065573770491803,
+    "gain_ci90_cm": {
+      "persistence": [
+        0.727102445076962,
+        2.770749441170872
+      ],
+      "calendar": [
+        20.331691597107422,
+        61.781209224787624
+      ],
+      "last_year": [
+        16.87132017640298,
+        57.33594997236899
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ural_orenburg:4": {
+    "success": false,
+    "point_skill_success": true,
+    "interval_valid": false,
+    "spring_coverage": 0.7431390406800245,
+    "worst_spring_year": 2020,
+    "worst_spring_coverage": 0.5983606557377049,
+    "gain_ci90_cm": {
+      "persistence": [
+        1.06873110072192,
+        3.8427684006765346
+      ],
+      "calendar": [
+        18.70365402530997,
+        60.23810645495897
+      ],
+      "last_year": [
+        16.20027758122706,
+        53.8959297649565
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ural_orenburg:5": {
+    "success": false,
+    "point_skill_success": true,
+    "interval_valid": false,
+    "spring_coverage": 0.7408014571948999,
+    "worst_spring_year": 2020,
+    "worst_spring_coverage": 0.5901639344262295,
+    "gain_ci90_cm": {
+      "persistence": [
+        1.1835594256735236,
+        4.957344617844527
+      ],
+      "calendar": [
+        17.403768657816958,
+        57.1433019893777
+      ],
+      "last_year": [
+        14.646813784386245,
+        52.03071047251821
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ural_orenburg:6": {
+    "success": false,
+    "point_skill_success": true,
+    "interval_valid": false,
+    "spring_coverage": 0.7302671523983001,
+    "worst_spring_year": 2020,
+    "worst_spring_coverage": 0.5983606557377049,
+    "gain_ci90_cm": {
+      "persistence": [
+        1.2649997462618048,
+        5.707933579807727
+      ],
+      "calendar": [
+        15.55546362199314,
+        55.40414205847082
+      ],
+      "last_year": [
+        13.43154562378186,
+        51.319128390718696
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ural_orenburg:7": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.7534001214329084,
+    "worst_spring_year": 2020,
+    "worst_spring_coverage": 0.5491803278688525,
+    "gain_ci90_cm": {
+      "persistence": [
+        1.3822590071656233,
+        6.575933979890273
+      ],
+      "calendar": [
+        14.388172575348776,
+        52.24765963620467
+      ],
+      "last_year": [
+        11.741382801335819,
+        47.696568972574774
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ural_orsk:1": {
+    "success": false,
+    "point_skill_success": false,
+    "interval_valid": true,
+    "spring_coverage": 0.7937158469945356,
+    "worst_spring_year": 2021,
+    "worst_spring_coverage": 0.6721311475409836,
+    "gain_ci90_cm": {
+      "persistence": [
+        -0.0746684076391803,
+        0.4100134345710898
+      ],
+      "calendar": [
+        22.862880099352697,
+        63.89338887531601
+      ],
+      "last_year": [
+        14.500184470323333,
+        59.152970871134045
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ural_orsk:2": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8073770491803277,
+    "worst_spring_year": 2024,
+    "worst_spring_coverage": 0.7540983606557377,
+    "gain_ci90_cm": {
+      "persistence": [
+        0.20225922286250203,
+        1.293957718238542
+      ],
+      "calendar": [
+        22.016618040857313,
+        60.50148563584036
+      ],
+      "last_year": [
+        13.314817798066477,
+        56.136363122313774
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ural_orsk:3": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8237704918032787,
+    "worst_spring_year": 2024,
+    "worst_spring_coverage": 0.7540983606557377,
+    "gain_ci90_cm": {
+      "persistence": [
+        0.3414287528514384,
+        1.6598156522586347
+      ],
+      "calendar": [
+        20.94220744217978,
+        56.33280133693265
+      ],
+      "last_year": [
+        12.161571196265752,
+        52.65216892089203
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ural_orsk:4": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8155737704918032,
+    "worst_spring_year": 2024,
+    "worst_spring_coverage": 0.7295081967213115,
+    "gain_ci90_cm": {
+      "persistence": [
+        0.34314851012625186,
+        2.104761890702161
+      ],
+      "calendar": [
+        19.575639053763297,
+        54.150834332969055
+      ],
+      "last_year": [
+        10.992056248961276,
+        49.58201478429049
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ural_orsk:5": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8251366120218581,
+    "worst_spring_year": 2024,
+    "worst_spring_coverage": 0.7049180327868853,
+    "gain_ci90_cm": {
+      "persistence": [
+        0.4504727776851776,
+        2.4280054910777285
+      ],
+      "calendar": [
+        18.677620531788325,
+        50.66308706008781
+      ],
+      "last_year": [
+        10.069855175192256,
+        46.49962678902629
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ural_orsk:6": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8224043715846995,
+    "worst_spring_year": 2024,
+    "worst_spring_coverage": 0.6885245901639344,
+    "gain_ci90_cm": {
+      "persistence": [
+        0.5675189909639586,
+        2.80469702955009
+      ],
+      "calendar": [
+        17.966645810368714,
+        47.42177255041155
+      ],
+      "last_year": [
+        9.019161475840322,
+        43.23895868228013
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  },
+  "ural_orsk:7": {
+    "success": true,
+    "point_skill_success": true,
+    "interval_valid": true,
+    "spring_coverage": 0.8237704918032785,
+    "worst_spring_year": 2024,
+    "worst_spring_coverage": 0.6721311475409836,
+    "gain_ci90_cm": {
+      "persistence": [
+        0.5588144303863904,
+        2.993952148607503
+      ],
+      "calendar": [
+        16.863026441032478,
+        44.81781493995308
+      ],
+      "last_year": [
+        8.186133561302663,
+        40.917443736476145
+      ]
+    },
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "evaluation": "reused 2019\u20132024 archive"
+  }
+}
