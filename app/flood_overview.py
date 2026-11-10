@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 import streamlit as st
 from okno import flood_m1_quantile as M
 from okno.flood_probability import exceedance
+from okno.flood_day import event_definition
 from okno.flood_sites import SITES as POINTS
 from okno import map_style as _flood_map_style
 from okno.map_style import AVAILABILITY_SCALE,UNKNOWN_COLOR
@@ -22,10 +23,10 @@ def overview_rows(issue,horizon):
         try:
             series=M.load_levels(pid)
             forecast,_=M.forecast(pid,issue);forecast=forecast.iloc[:horizon]
-            past=series[(series.index.year<pd.Timestamp(issue).year-1)&series.index.month.isin([4,5,6,7])].dropna()
-            threshold=float(past.quantile(.9))
+            definition=event_definition(pid,series,pd.Timestamp(issue).year)
+            threshold=definition['threshold']
             p=exceedance(pid,issue,forecast,threshold).iloc[-1]
-            row.update(probability=float(p.probability),status=f'Превышение {threshold:.0f} см: {p.probability:.1%}')
+            row.update(probability=float(p.probability),status=f"{definition['label']}: {p.probability:.1%} (≥{threshold:.0f} см)")
         except (ValueError,OSError,KeyError):pass
         rows.append(row)
     return rows
@@ -76,7 +77,8 @@ def render_overview(issue,horizon,selected):
         height=370,margin=dict(l=0,r=0,t=0,b=0),showlegend=False)
     st.plotly_chart(fig,key='flood_overview_map',width='stretch',
         config={'displaylogo':False,'scrollZoom':True,'modeBarButtonsToRemove':['toImage','lasso2d','select2d']})
-    st.caption('Зелёный → красный: оценка вероятности очень высокого уровня (q90 прошлых лет). '
+    st.caption('Зелёный → красный: вероятность события в выбранные сутки. Урал: выход на пойму '
+               '(Орск — верхняя отметка 450 см); Якутск/Ишим: высокая вода q90, порог разлива не подтверждён. '
                'Синий: только спутниковый режим. Серый: нет расчёта на выбранную дату. '
                'Это не разрешение проезда. Наведите на точку для просмотра оценки. Выбор участка — кнопками ниже.')
     columns=st.columns(len(rows))

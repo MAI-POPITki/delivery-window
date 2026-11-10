@@ -22,7 +22,7 @@ def render_m1():
         if name.startswith('own_m3_') and not name.startswith('own_m3_calendar_') and name!='own_m3_run':
             st.session_state[name]=st.session_state[name]
     st.title('Паводки')
-    st.caption('Когда проезд может закрыться и возобновиться: даты риска, прогноз уровня и план доставки')
+    st.caption('Выберите участок и дату — получите вероятность разлива или высокой воды на эти сутки')
     regions=list(dict.fromkeys(p['region'] for p in POINTS.values()))
     if st.session_state.get('m1_flood_region')=='Все четыре региона':
         st.session_state['m1_flood_region']='Все регионы'
@@ -57,7 +57,17 @@ def render_m1():
         st.session_state[key]=earliest
     issue=st.sidebar.date_input('Дата расчёта (архив)',value=None,min_value=earliest,max_value=latest,
                                 format='DD.MM.YYYY',key=key)
-    horizon=st.sidebar.slider('На сколько суток вперёд',1,7,7,key='m1_flood_horizon')
+    target_key='flood_target_date_'+pid
+    lower=pd.Timestamp(issue)+pd.Timedelta(days=1)
+    upper=pd.Timestamp(issue)+pd.Timedelta(days=7)
+    if target_key not in st.session_state or not lower.date()<=st.session_state[target_key]<=upper.date():
+        st.session_state[target_key]=upper.date()
+    target=st.date_input('На какую дату нужен прогноз?',min_value=lower.date(),max_value=upper.date(),
+                         value=None,format='DD.MM.YYYY',key=target_key)
+    horizon=(target-issue).days
+    st.session_state['m1_flood_horizon']=horizon
+    st.caption('Вероятностный прогноз доступен на 1–7 суток после даты исходных измерений. '
+               'Дату исходных измерений можно изменить слева для архивной проверки.')
     st.sidebar.caption(f"Наблюдения: {valid.index.min():%d.%m.%Y} — {valid.index.max():%d.%m.%Y}. "
                        f"Источник ряда: {M.STATIONS[pid][1]}. Данные за 2026 год отсутствуют.")
     st.info('Исторический расчёт по реальным измерениям. Модель использует только данные до выбранной даты. '
@@ -68,11 +78,14 @@ def render_m1():
         st.warning(str(exc));return
     forecast=forecast.iloc[:horizon]
     selected=forecast.iloc[-1]
+    from app.flood_day_view import render_day
+    day_result=render_day(pid,issue,target)
     st.session_state['flood_overview_date']=issue
     from app.flood_overview import render_overview
     render_overview(issue,horizon,pid)
-    from app.flood_road_window_view import render_road_window
-    render_road_window(pid,issue,series,forecast)
+    with st.expander('Дополнительно: приблизительные даты ограничения дороги',expanded=False):
+        from app.flood_road_window_view import render_road_window
+        render_road_window(pid,issue,series,forecast)
     st.subheader('2. Оцените обстановку на выбранном участке')
     current=float(series.loc[pd.Timestamp(issue)])
     validation_path=engine.MODELS/'validation.json'
@@ -85,7 +98,7 @@ def render_m1():
     c.metric('Оценочный диапазон 80%',f'{selected.lower_cm:.0f} … {selected.upper_cm:.0f} см')
     st.caption('Уровень указан относительно нулевой отметки гидропоста. Это не глубина воды на дороге.')
     if engine is Q:
-        with st.expander('Событие и вероятность превышения уровня',expanded=False):
+        with st.expander('Дополнительно: другие пороги высокой воды',expanded=False):
             kind=st.radio('Какое событие оцениваем',['Высокий уровень · q80','Очень высокий уровень · q90','Своя отметка'],index=1,key='own_probability_kind_'+pid)
             q=.8 if 'q80' in kind else .9
             historical=series[(series.index.year<issue.year-1)&series.index.month.isin([4,5,6,7])].dropna()
@@ -181,7 +194,7 @@ def render_m1():
     with tabs[0]:
         if tabs[0].open is not False:
             from app.flood_assessment_view import render_assessment
-            render_assessment(pid,issue,forecast,threshold if engine is Q else None,engine is Q)
+            render_assessment(pid,issue,forecast,day_result['threshold'] if day_result else threshold if engine is Q else None,engine is Q)
     with tabs[5]:
         if tabs[5].open is not False:
             from app.flood_m3_view import render_m3
