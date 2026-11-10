@@ -70,7 +70,17 @@ def gauge_coordinates():
     return pd.read_csv(RAW/'hydro_ice/River_ice_station_attributes.csv').set_index('Code')
 
 
+class RateLimited(RuntimeError):
+    """Open-Meteo упорно отвечает «слишком много запросов» — дальше в этом запуске архив не трогаем."""
+
+
+RATE_LIMITED = False
+
+
 def _get_weather_chunk(p, start, end, tries=8):
+    global RATE_LIMITED
+    if RATE_LIMITED:
+        raise RateLimited("лимит запросов Open-Meteo исчерпан в этом запуске")
     params = {
         "latitude": p["lat"], "longitude": p["lon"],
         "start_date": start, "end_date": end,
@@ -86,6 +96,11 @@ def _get_weather_chunk(p, start, end, tries=8):
             time.sleep(10 * (attempt + 1))
             continue
         if r.status_code == 429:  # лимит запросов
+            # Раньше ждали до 8 раз с ростом паузы (до ~18 мин на точку) — на общих IP GitHub задача не укладывалась
+            # в лимит времени. Теперь две короткие попытки, затем остальные точки откладываются до следующего запуска.
+            if attempt >= 2:
+                RATE_LIMITED = True
+                raise RateLimited(f"лимит запросов Open-Meteo ({r.text[:80]})")
             log(f"  {p['id']} {start[:4]}: лимит запросов, жду")
             time.sleep(30 * (attempt + 1))
             continue
@@ -139,6 +154,9 @@ FAILED = []
 
 def safe_update(p, out, start, end):
     """Сбой на одной точке не останавливает загрузку остальных; недокачанное подтянется в следующий раз."""
+    if RATE_LIMITED:
+        FAILED.append(p["id"])
+        return
     try:
         update_point(p, out, start, end)
     except Exception as e:  # noqa: BLE001

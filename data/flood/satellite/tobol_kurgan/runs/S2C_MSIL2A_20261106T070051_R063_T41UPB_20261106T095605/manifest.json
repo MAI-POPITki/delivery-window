@@ -12,6 +12,7 @@
   "pid": "tobol_kurgan",
   "acquired_at": "2026-11-06T07:00:51.025000Z",
   "product_generated_at": "2026-11-06T09:56:05.000000Z",
+  "processed_at": "2026-11-10T12:47:55.571864+00:00",
   "source": "Copernicus Sentinel-2 L2A / Microsoft Planetary Computer",
   "station": {
     "geometry": {
@@ -82,6 +83,7 @@
   "observation": {
     "item_id": "S2C_MSIL2A_20261106T070051_R063_T41UPB_20261106T095605",
     "acquired_at": "2026-11-06T07:00:51.025000Z",
+    "fetched_at": null,
     "generated_at": "2026-11-06T09:56:05.000000Z",
     "cloud_scene_percent": 7.748283,
     "stac_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-2-l2a/items/S2C_MSIL2A_20261106T070051_R063_T41UPB_20261106T095605",
@@ -106,6 +108,7 @@
     {
       "item_id": "S2C_MSIL2A_20250611T064641_R020_T41UPB_20250611T111705",
       "acquired_at": "2025-06-11T06:46:41.025000Z",
+      "fetched_at": null,
       "generated_at": "2025-06-11T11:17:05.000000Z",
       "cloud_scene_percent": 0.003875,
       "stac_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-2-l2a/items/S2C_MSIL2A_20250611T064641_R020_T41UPB_20250611T111705",
@@ -129,6 +132,7 @@
     {
       "item_id": "S2B_MSIL2A_20250828T065619_R063_T41UPB_20250828T091523",
       "acquired_at": "2025-08-28T06:56:19.024000Z",
+      "fetched_at": null,
       "generated_at": "2025-08-28T09:15:23.000000Z",
       "cloud_scene_percent": 1.034559,
       "stac_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-2-l2a/items/S2B_MSIL2A_20250828T065619_R063_T41UPB_20250828T091523",
@@ -152,6 +156,7 @@
     {
       "item_id": "S2C_MSIL2A_20250601T064641_R020_T41UPB_20250601T103614",
       "acquired_at": "2025-06-01T06:46:41.025000Z",
+      "fetched_at": null,
       "generated_at": "2025-06-01T10:36:14.000000Z",
       "cloud_scene_percent": 6.471591,
       "stac_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-2-l2a/items/S2C_MSIL2A_20250601T064641_R020_T41UPB_20250601T103614",
@@ -177,12 +182,48 @@
     "2026-10-27",
     "2026-11-10"
   ],
-  "selection": "minimum scene cloud cover, no tuning of water thresholds",
+  "selection": "latest scene with local SCL visibility >=50%, otherwise maximum local visibility",
+  "selection_candidates": [
+    {
+      "item_id": "S2A_MSIL2A_20261108T070311_R063_T41UPB_20261108T104208",
+      "acquired_at": "2026-11-08T07:03:11.024000Z",
+      "local_scl_visible_fraction": 0.0
+    },
+    {
+      "item_id": "S2B_MSIL2A_20261108T065109_R020_T41UPB_20261108T091235",
+      "acquired_at": "2026-11-08T06:51:09.024000Z",
+      "local_scl_visible_fraction": 0.0
+    },
+    {
+      "item_id": "S2C_MSIL2A_20261106T070051_R063_T41UPB_20261106T095605",
+      "acquired_at": "2026-11-06T07:00:51.025000Z",
+      "local_scl_visible_fraction": 0.6925527777777778
+    },
+    {
+      "item_id": "S2C_MSIL2A_20261103T065031_R020_T41UPB_20261103T095815",
+      "acquired_at": "2026-11-03T06:50:31.025000Z",
+      "local_scl_visible_fraction": 0.0
+    },
+    {
+      "item_id": "S2B_MSIL2A_20261101T070029_R063_T41UPB_20261101T235140",
+      "acquired_at": "2026-11-01T07:00:29.024000Z",
+      "local_scl_visible_fraction": 0.0
+    },
+    {
+      "item_id": "S2B_MSIL2A_20261029T065009_R020_T41UPB_20261029T122802",
+      "acquired_at": "2026-10-29T06:50:09.024000Z",
+      "local_scl_visible_fraction": 0.00943611111111111
+    },
+    {
+      "item_id": "S2C_MSIL2A_20261027T070001_R063_T41UPB_20261027T101403",
+      "acquired_at": "2026-10-27T07:00:01.025000Z",
+      "local_scl_visible_fraction": 0.028897222222222223
+    }
+  ],
   "files": {
     "mask.npz": "1e2033e96da1d2f43cb7810a70543ab6f156cf8760af25494fd62f30516ec19d",
     "rgb.png": "74a5071b6905caaac7b4296b7c7428bcfe3dcb275eb03611e2c2c8c31756eb7f",
     "baseline.png": "55cce1eedf15c0e17a7dce2b9c638cea4ab43aa2165e243ae9e5003a2d5db4da",
     "overlay.png": "f6773917415c2971db2bf30f032c944e6cbcc5d32576329043cef22f81bee0ee"
-  },
-  "processed_at": "2026-11-10T02:49:46.909386+00:00"
+  }
 }

@@ -17470,3 +17470,6 @@ gauge_11574,2026-10-28,-5.0,-7.5,-1.6,1.82,2.5,ERA5 via Open-Meteo archive API
 gauge_11574,2026-10-29,-10.1,-14.7,-7.5,1.61,2.3,ERA5 via Open-Meteo archive API
 gauge_11574,2026-10-30,-14.1,-15.9,-12.1,0.0,0.0,ERA5 via Open-Meteo archive API
 gauge_11574,2026-10-31,-14.1,-15.9,-12.3,0.0,0.0,ERA5 via Open-Meteo archive API
+gauge_11574,2026-11-01,-16.2,-17.8,-14.0,0.0,0.0,ERA5 via Open-Meteo archive API
+gauge_11574,2026-11-02,-17.1,-18.8,-15.1,0.0,0.0,ERA5 via Open-Meteo archive API
+gauge_11574,2026-11-03,-15.2,-17.0,-13.7,0.14,0.2,ERA5 via Open-Meteo archive API

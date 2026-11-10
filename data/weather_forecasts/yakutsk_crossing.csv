@@ -317,3 +317,15 @@ yakutsk_crossing,2026-11-08T00:00:00,2026-11-11T00:00:00,-12.079166666666666,gfs
 yakutsk_crossing,2026-11-08T00:00:00,2026-11-12T00:00:00,-17.5,gfs_seamless,2026-11-07T00:00:00,5,2026-11-08T06:00:00+0000,https://previous-runs-api.open-meteo.com/v1/forecast
 yakutsk_crossing,2026-11-08T00:00:00,2026-11-13T00:00:00,-15.229166666666666,gfs_seamless,2026-11-07T00:00:00,6,2026-11-08T06:00:00+0000,https://previous-runs-api.open-meteo.com/v1/forecast
 yakutsk_crossing,2026-11-08T00:00:00,2026-11-14T00:00:00,-18.091666666666665,gfs_seamless,2026-11-07T00:00:00,7,2026-11-08T06:00:00+0000,https://previous-runs-api.open-meteo.com/v1/forecast
+yakutsk_crossing,2026-11-09T00:00:00,2026-11-10T00:00:00,-14.254166666666668,gfs_seamless,2026-11-08T00:00:00,2,2026-11-09T06:00:00+0000,https://previous-runs-api.open-meteo.com/v1/forecast
+yakutsk_crossing,2026-11-09T00:00:00,2026-11-11T00:00:00,-13.695833333333335,gfs_seamless,2026-11-08T00:00:00,3,2026-11-09T06:00:00+0000,https://previous-runs-api.open-meteo.com/v1/forecast
+yakutsk_crossing,2026-11-09T00:00:00,2026-11-12T00:00:00,-19.954166666666666,gfs_seamless,2026-11-08T00:00:00,4,2026-11-09T06:00:00+0000,https://previous-runs-api.open-meteo.com/v1/forecast
+yakutsk_crossing,2026-11-09T00:00:00,2026-11-13T00:00:00,-14.270833333333334,gfs_seamless,2026-11-08T00:00:00,5,2026-11-09T06:00:00+0000,https://previous-runs-api.open-meteo.com/v1/forecast
+yakutsk_crossing,2026-11-09T00:00:00,2026-11-14T00:00:00,-17.304166666666664,gfs_seamless,2026-11-08T00:00:00,6,2026-11-09T06:00:00+0000,https://previous-runs-api.open-meteo.com/v1/forecast
+yakutsk_crossing,2026-11-09T00:00:00,2026-11-15T00:00:00,-22.5125,gfs_seamless,2026-11-08T00:00:00,7,2026-11-09T06:00:00+0000,https://previous-runs-api.open-meteo.com/v1/forecast
+yakutsk_crossing,2026-11-10T00:00:00,2026-11-11T00:00:00,-14.475000000000001,gfs_seamless,2026-11-09T00:00:00,2,2026-11-10T06:00:00+0000,https://previous-runs-api.open-meteo.com/v1/forecast
+yakutsk_crossing,2026-11-10T00:00:00,2026-11-12T00:00:00,-18.845833333333335,gfs_seamless,2026-11-09T00:00:00,3,2026-11-10T06:00:00+0000,https://previous-runs-api.open-meteo.com/v1/forecast
+yakutsk_crossing,2026-11-10T00:00:00,2026-11-13T00:00:00,-21.854166666666668,gfs_seamless,2026-11-09T00:00:00,4,2026-11-10T06:00:00+0000,https://previous-runs-api.open-meteo.com/v1/forecast
+yakutsk_crossing,2026-11-10T00:00:00,2026-11-14T00:00:00,-21.48333333333333,gfs_seamless,2026-11-09T00:00:00,5,2026-11-10T06:00:00+0000,https://previous-runs-api.open-meteo.com/v1/forecast
+yakutsk_crossing,2026-11-10T00:00:00,2026-11-15T00:00:00,-24.75,gfs_seamless,2026-11-09T00:00:00,6,2026-11-10T06:00:00+0000,https://previous-runs-api.open-meteo.com/v1/forecast
+yakutsk_crossing,2026-11-10T00:00:00,2026-11-16T00:00:00,-32.1,gfs_seamless,2026-11-09T00:00:00,7,2026-11-10T06:00:00+0000,https://previous-runs-api.open-meteo.com/v1/forecast
