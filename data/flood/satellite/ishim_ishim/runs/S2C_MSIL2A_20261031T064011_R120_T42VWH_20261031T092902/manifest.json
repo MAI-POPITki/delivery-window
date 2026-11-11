@@ -12,7 +12,7 @@
   "pid": "ishim_ishim",
   "acquired_at": "2026-10-31T06:40:11.025000Z",
   "product_generated_at": "2026-10-31T09:29:02.000000Z",
-  "processed_at": "2026-11-10T12:47:50.953453+00:00",
+  "processed_at": "2026-11-11T10:49:30.361776+00:00",
   "source": "Copernicus Sentinel-2 L2A / Microsoft Planetary Computer",
   "station": {
     "geometry": {
@@ -55,19 +55,19 @@
   "overlay_coordinates": [
     [
       69.37052095533147,
-      56.155601607045924
+      56.15560160704593
     ],
     [
       69.56464140897607,
-      56.155601607045924
+      56.15560160704593
     ],
     [
       69.56464140897607,
-      56.04712253000923
+      56.04712253000925
     ],
     [
       69.37052095533147,
-      56.04712253000923
+      56.04712253000925
     ]
   ],
   "statistics": {
@@ -90,7 +90,7 @@
     "files": {
       "scenes/S2C_MSIL2A_20261031T064011_R120_T42VWH_20261031T092902/dn.npz": "2c5a898d19642c2746b1a5b9169f0dea7e1ab323f0efc2aa300fac3a988b12f3",
       "scenes/S2C_MSIL2A_20261031T064011_R120_T42VWH_20261031T092902/product.xml": "af0f833fca0610cc8006475bbe9b25b1735cb5110fff7a4df769a10f64f582b8",
-      "scenes/S2C_MSIL2A_20261031T064011_R120_T42VWH_20261031T092902/stac.json": "6921b641687b65fe5cbf8fbc097bd0f4dfb825accd634a14b688fc3dfa1671f2",
+      "scenes/S2C_MSIL2A_20261031T064011_R120_T42VWH_20261031T092902/stac.json": "c8bd278500c5c9acffb8a3b5ed294f2875710066ab6ca02d13c98a063407174b",
       "scenes/S2C_MSIL2A_20261031T064011_R120_T42VWH_20261031T092902/crop.json": "5ca6d91576d95e25842a5877e31bf022d951a1246087e1198ed7eafdb355f693"
     },
     "radiometry": {
@@ -115,7 +115,7 @@
       "files": {
         "scenes/S2C_MSIL2A_20250608T063651_R120_T42VWH_20250608T102014/dn.npz": "b300231caaef0726f44025df1e4d38ef9224e53b633f773970923316fc6acc65",
         "scenes/S2C_MSIL2A_20250608T063651_R120_T42VWH_20250608T102014/product.xml": "23269175d363f166ccb8d1dd443758c20a24d7715d29c108a26ee4a205bede4a",
-        "scenes/S2C_MSIL2A_20250608T063651_R120_T42VWH_20250608T102014/stac.json": "59cd293f8d63577c3d4455f9aebfdecff72a34bcfa5359d07a41b4493010be2b",
+        "scenes/S2C_MSIL2A_20250608T063651_R120_T42VWH_20250608T102014/stac.json": "eae27e097470fc8327feb59d6d9c52d331a20663aa0daabd829b3555b35f085d",
         "scenes/S2C_MSIL2A_20250608T063651_R120_T42VWH_20250608T102014/crop.json": "01ade353ab6f0c77fb3047c9a07ecce21d1cd656ab74bfa961b2c27c9ca9d561"
       },
       "radiometry": {
@@ -139,7 +139,7 @@
       "files": {
         "scenes/S2B_MSIL2A_20250603T063629_R120_T42VWH_20250603T084512/dn.npz": "f261f31036c527a2f4fee9a5c8e4b6d299ade199b69fca3e865ca9b59a52d128",
         "scenes/S2B_MSIL2A_20250603T063629_R120_T42VWH_20250603T084512/product.xml": "36ed64f6ecba86c4e652249876d51ce551803ab672697428d580fa59ece37bf1",
-        "scenes/S2B_MSIL2A_20250603T063629_R120_T42VWH_20250603T084512/stac.json": "3084ed229ba026599ef9c07cec79e378c1102aa91c32bd8b2974b8ed71a882c5",
+        "scenes/S2B_MSIL2A_20250603T063629_R120_T42VWH_20250603T084512/stac.json": "fdf7278fa8c3600df2223c0273a108517bea5c8718a787cc04aef44a44002716",
         "scenes/S2B_MSIL2A_20250603T063629_R120_T42VWH_20250603T084512/crop.json": "e96c29efa38d540b886e4646348d0e0d6983366395994da58067a885e7b40cf4"
       },
       "radiometry": {
@@ -163,7 +163,7 @@
       "files": {
         "scenes/S2A_MSIL2A_20250610T064321_R120_T42VWH_20250610T092820/dn.npz": "c40fe229ab1a1073f7cbd57295c7f3ace2e4fb27446c15913adeeb1fb95ec8a8",
         "scenes/S2A_MSIL2A_20250610T064321_R120_T42VWH_20250610T092820/product.xml": "480c558c1ff7acd64919f8e4008d4e2c3b272af131581213840bfe2e188b1650",
-        "scenes/S2A_MSIL2A_20250610T064321_R120_T42VWH_20250610T092820/stac.json": "8a7aaeb34a01ed126606c06774439532afc66f4c0ef6b9cbc2631f970547927e",
+        "scenes/S2A_MSIL2A_20250610T064321_R120_T42VWH_20250610T092820/stac.json": "9e4ed155cbb1c33a411052d0fecc2806882af87df3a9db98fc7809a43b730308",
         "scenes/S2A_MSIL2A_20250610T064321_R120_T42VWH_20250610T092820/crop.json": "e4b8c64717c0815d09c7e49387279782d98e9eaf89c5b31ac02517280f907c20"
       },
       "radiometry": {
@@ -179,11 +179,16 @@
     }
   ],
   "selection_window": [
-    "2026-10-27",
-    "2026-11-10"
+    "2026-10-28",
+    "2026-11-11"
   ],
   "selection": "latest scene with local SCL visibility >=50%, otherwise maximum local visibility",
   "selection_candidates": [
+    {
+      "item_id": "S2C_MSIL2A_20261110T064101_R120_T42VWH_20261110T094801",
+      "acquired_at": "2026-11-10T06:41:01.025000Z",
+      "local_scl_visible_fraction": 0.0
+    },
     {
       "item_id": "S2B_MSIL2A_20261108T065109_R020_T42VWH_20261108T091235",
       "acquired_at": "2026-11-08T06:51:09.024000Z",
@@ -216,9 +221,9 @@
     }
   ],
   "files": {
-    "mask.npz": "2beb86ed5ad8ae51511fe7b7b3382b6b9000d67406838d953e3c375115dd2d58",
-    "rgb.png": "f89331a84a04427e673c89aab2a4e8276cb385d88da8007e4517adef18665043",
-    "baseline.png": "cd2fd9ca12d73ccfd5186de08e25ef9faefd4ceffcc5c58f3ec8511371d1228b",
-    "overlay.png": "da71fffc02a07295776a384a9a55525cc5c9a4e00e1a62d548c69e84b07fa0ea"
+    "mask.npz": "b3d70eb7001022d3357e4fa730962a2fa38763d5661c2dca6c64525a74dea7f2",
+    "rgb.png": "6f428573e84aa5e5afddf61b8be9c5ec47360b99785ad98a4127fe554c4f3984",
+    "baseline.png": "1f92fe3f9374a638a06232247b3fba8e3331072d4ce47872b61404e08c56b229",
+    "overlay.png": "5a8e6e4766ac1a223cf969d72ce5e7c59eace5801cd1f363f6daa2f1d1608e5f"
   }
 }

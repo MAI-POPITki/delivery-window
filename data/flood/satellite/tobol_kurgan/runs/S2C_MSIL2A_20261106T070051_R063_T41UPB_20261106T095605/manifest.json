@@ -12,7 +12,7 @@
   "pid": "tobol_kurgan",
   "acquired_at": "2026-11-06T07:00:51.025000Z",
   "product_generated_at": "2026-11-06T09:56:05.000000Z",
-  "processed_at": "2026-11-10T12:47:55.571864+00:00",
+  "processed_at": "2026-11-11T10:49:34.066134+00:00",
   "source": "Copernicus Sentinel-2 L2A / Microsoft Planetary Computer",
   "station": {
     "geometry": {
@@ -90,7 +90,7 @@
     "files": {
       "scenes/S2C_MSIL2A_20261106T070051_R063_T41UPB_20261106T095605/dn.npz": "7c69d67de5a8645f6279467a40b2f1bf30b8d971b95bae5c37a06e63dfb22132",
       "scenes/S2C_MSIL2A_20261106T070051_R063_T41UPB_20261106T095605/product.xml": "06992bfde11c2e0fc2398326fc464931406ae281cca1132e29e974248196c441",
-      "scenes/S2C_MSIL2A_20261106T070051_R063_T41UPB_20261106T095605/stac.json": "cd304fae7596b8d3145277f0a68c612c2474125429fef573606fc54f23b3f39d",
+      "scenes/S2C_MSIL2A_20261106T070051_R063_T41UPB_20261106T095605/stac.json": "8fdd3ee5c9a413ca11c576c173435aa66bcdee0c95494f45df38a2789f7312ab",
       "scenes/S2C_MSIL2A_20261106T070051_R063_T41UPB_20261106T095605/crop.json": "fcb21e7704d562df860be2d0955a8f87ff9d5f8c225561b77707e9a9ee1a1ecf"
     },
     "radiometry": {
@@ -115,7 +115,7 @@
       "files": {
         "scenes/S2C_MSIL2A_20250611T064641_R020_T41UPB_20250611T111705/dn.npz": "10fc40efd183785e605d0ecacd7b5bcbc149f7671994ce3fb96b4025ba77e0a9",
         "scenes/S2C_MSIL2A_20250611T064641_R020_T41UPB_20250611T111705/product.xml": "0b52a13a45f733e0145c959afa33c76aa984d04138c9456abee6ee25bae2c580",
-        "scenes/S2C_MSIL2A_20250611T064641_R020_T41UPB_20250611T111705/stac.json": "6116f47752197bed07ca7aee70f5a724e552fac883be8fef4b92100adc7923be",
+        "scenes/S2C_MSIL2A_20250611T064641_R020_T41UPB_20250611T111705/stac.json": "18abd28e952808ca591ef4696a72bd28d627a0d7fd03b980f6421b5904d2403f",
         "scenes/S2C_MSIL2A_20250611T064641_R020_T41UPB_20250611T111705/crop.json": "d9d6d5213647cbda728208450cf01969bb45a5e18b6b0563414b706e2090b49d"
       },
       "radiometry": {
@@ -139,7 +139,7 @@
       "files": {
         "scenes/S2B_MSIL2A_20250828T065619_R063_T41UPB_20250828T091523/dn.npz": "11bef577886470f8f0761b4d34687dae56bd6e1a400d410c3642eb519ef02158",
         "scenes/S2B_MSIL2A_20250828T065619_R063_T41UPB_20250828T091523/product.xml": "b96c7f9b40f74f29950a369f2d98d6c7be989d54d22a2191c52c1093f33c0e7a",
-        "scenes/S2B_MSIL2A_20250828T065619_R063_T41UPB_20250828T091523/stac.json": "02af6af564cb192aeb9e0d9172c5153060de115671d31fa5bb39ba1fcba20293",
+        "scenes/S2B_MSIL2A_20250828T065619_R063_T41UPB_20250828T091523/stac.json": "974c401cc4bb092f68fdd16f3c294f397fbb6832acc724592f3880142d902beb",
         "scenes/S2B_MSIL2A_20250828T065619_R063_T41UPB_20250828T091523/crop.json": "5a5beb3474bddeee60c2e9a6349fefcdd2f9d5a35e0e93ef139b5bdb2aac4541"
       },
       "radiometry": {
@@ -163,7 +163,7 @@
       "files": {
         "scenes/S2C_MSIL2A_20250601T064641_R020_T41UPB_20250601T103614/dn.npz": "bdaf6284fea5058012990abc0041697bfdb5921e39e8e231610a4e20920b5904",
         "scenes/S2C_MSIL2A_20250601T064641_R020_T41UPB_20250601T103614/product.xml": "ec99c4a9151278007584c2c938287c3694880ad84ac60e642b28f6654fe625e8",
-        "scenes/S2C_MSIL2A_20250601T064641_R020_T41UPB_20250601T103614/stac.json": "9c8f28ea9d6b81b924765f77df9c06a596109c98f42e6fbe04e0e795d36b15ff",
+        "scenes/S2C_MSIL2A_20250601T064641_R020_T41UPB_20250601T103614/stac.json": "f9710a17ffc65f1950ff72d92f4273247383f2316bc9336bd654734d89a7007f",
         "scenes/S2C_MSIL2A_20250601T064641_R020_T41UPB_20250601T103614/crop.json": "e1551774af4afe5abda9e5f8df670775a806cf86e759e8f9ee73f62bd6b90d42"
       },
       "radiometry": {
@@ -179,8 +179,8 @@
     }
   ],
   "selection_window": [
-    "2026-10-27",
-    "2026-11-10"
+    "2026-10-28",
+    "2026-11-11"
   ],
   "selection": "latest scene with local SCL visibility >=50%, otherwise maximum local visibility",
   "selection_candidates": [
@@ -213,17 +213,12 @@
       "item_id": "S2B_MSIL2A_20261029T065009_R020_T41UPB_20261029T122802",
       "acquired_at": "2026-10-29T06:50:09.024000Z",
       "local_scl_visible_fraction": 0.00943611111111111
-    },
-    {
-      "item_id": "S2C_MSIL2A_20261027T070001_R063_T41UPB_20261027T101403",
-      "acquired_at": "2026-10-27T07:00:01.025000Z",
-      "local_scl_visible_fraction": 0.028897222222222223
     }
   ],
   "files": {
-    "mask.npz": "1e2033e96da1d2f43cb7810a70543ab6f156cf8760af25494fd62f30516ec19d",
-    "rgb.png": "74a5071b6905caaac7b4296b7c7428bcfe3dcb275eb03611e2c2c8c31756eb7f",
-    "baseline.png": "55cce1eedf15c0e17a7dce2b9c638cea4ab43aa2165e243ae9e5003a2d5db4da",
-    "overlay.png": "f6773917415c2971db2bf30f032c944e6cbcc5d32576329043cef22f81bee0ee"
+    "mask.npz": "45bca0a4e0e75ba7e7389d6aef3bdf110016c81c13670425185da9b77264ec2b",
+    "rgb.png": "5fdca235b33e1e7199884c9069235aab3b415da8fd58fc60d5d5fb16ade2f19f",
+    "baseline.png": "781c6b08bfa6c3530374e8bc2c3ab33e28af7f98c7ab1d4fee7dedad9c26efcc",
+    "overlay.png": "00a1dd8d751363c4b8c2cb05e2eca62dcc0d57f8f4c60dbe47388be8b446f82a"
   }
 }
