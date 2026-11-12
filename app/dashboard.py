@@ -138,7 +138,7 @@ if _service == "Паводки":
 # остаются в памяти процесса. Сначала обновляем зависимости, затем импортируем зависимые
 # модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
 _MODULE_NAMES = (
-    "okno.paths", "okno.northeast", "okno.regions", "okno.official_hydro", "app.official_hydro_view", "okno.report", "okno.ice", "okno.calib", "okno.features", "okno.snow",
+    "okno.paths", "okno.northeast", "okno.regions", "okno.official_hydro", "app.official_hydro_view", "okno.gaofen", "app.gaofen_view", "okno.report", "okno.ice", "okno.calib", "okno.features", "okno.snow",
     "okno.planner", "okno.decision_support", "app.decision_view", "okno.truck_load", "okno.backhaul", "okno.backhaul_io", "okno.routing", "okno.journey", "okno.risk_advice", "app.truck_load_view", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "okno.bottlenecks", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
     "okno.yakutsk_replay", "app.yakutsk_experiment", "app.backhaul_view", "app.journey_view",
 )
@@ -180,6 +180,8 @@ DATA_VER = FC.data_version()
 
 from app.official_hydro_view import watch_updates, render_point as render_official_point, render_overview as render_official_overview
 watch_updates()
+from okno.gaofen_refresh import start_auto_update as start_gaofen_update
+start_gaofen_update()
 
 
 @st.cache_data(show_spinner=False, max_entries=5000, ttl=3600)
@@ -615,6 +617,8 @@ with tabs[1]:
                          hide_index=True, width="stretch")
             st.caption("Классификатор лёд/вода: точность 0,95 на годах вне обучения. Снимок примерно раз в 12 дней; "
                        "даты вскрытия по ряду снимков — с точностью ≈ 9 сут.")
+        from app.gaofen_view import render_gaofen
+        render_gaofen(pid)
 
 # ------------------------------------------------------------------ 3. сквозной коридор (А3)
 with tabs[2]:

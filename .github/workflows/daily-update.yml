@@ -69,6 +69,10 @@ jobs:
           python scripts/s1_chips.py --days 10 --no-preview
           python scripts/m2_predict.py   # М2: лёд/вода на новых снимках, автодаты событий, автофакты журнала
 
+      - name: Обзорные снимки Гаофэнь-3 (семь точек М2, без изменения прогнозов)
+        continue-on-error: true
+        run: python scripts/download_gaofen.py
+
       - name: Есть ли новые данные
         id: diff
         run: |
