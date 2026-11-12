@@ -1,0 +1,109 @@
+{
+  "coverage": {
+    "labelled": 1126,
+    "used": 1126,
+    "excluded": 0
+  },
+  "seeds": [
+    42,
+    7,
+    2026
+  ],
+  "features": {
+    "radar": [
+      "vv_p10",
+      "vv_p25",
+      "vv_p50",
+      "vv_p75",
+      "vv_p90",
+      "vv_std",
+      "vh_p10",
+      "vh_p50",
+      "vh_p90",
+      "vh_std",
+      "diff_p50",
+      "bright_share",
+      "vv_grad",
+      "river_px"
+    ],
+    "radar_speed": [
+      "vv_p10",
+      "vv_p25",
+      "vv_p50",
+      "vv_p75",
+      "vv_p90",
+      "vv_std",
+      "vh_p10",
+      "vh_p50",
+      "vh_p90",
+      "vh_std",
+      "diff_p50",
+      "bright_share",
+      "vv_grad",
+      "river_px",
+      "wind_speed_ms",
+      "wind_mean6_ms",
+      "wind_max6_ms"
+    ],
+    "radar_wind": [
+      "vv_p10",
+      "vv_p25",
+      "vv_p50",
+      "vv_p75",
+      "vv_p90",
+      "vv_std",
+      "vh_p10",
+      "vh_p50",
+      "vh_p90",
+      "vh_std",
+      "diff_p50",
+      "bright_share",
+      "vv_grad",
+      "river_px",
+      "wind_speed_ms",
+      "wind_mean6_ms",
+      "wind_max6_ms",
+      "wind_u_ms",
+      "wind_v_ms"
+    ],
+    "wind_only": [
+      "wind_speed_ms",
+      "wind_mean6_ms",
+      "wind_max6_ms",
+      "wind_u_ms",
+      "wind_v_ms"
+    ]
+  },
+  "interval": {
+    "metric": "balanced_accuracy",
+    "unit": "fraction",
+    "candidate": "radar_wind",
+    "baseline": "radar",
+    "scheme": "past_only",
+    "seed": 42,
+    "cluster": "hydro_year",
+    "clusters": 4,
+    "iterations": 5000,
+    "low": -0.005573224291988477,
+    "high": 0.00994325191216372
+  },
+  "primary_delta_by_seed": {
+    "42": 0.0012315270935960854,
+    "7": 0.004537703675634774,
+    "2026": 0.002614626752557858
+  },
+  "source_manifest_sha256": "36b3044d0dabd0e880f4b545f33b27eb0c25437b5b1ed3d2448380e7ed3e6c9c",
+  "model_params": {
+    "iterations": 400,
+    "depth": 4,
+    "learning_rate": 0.05,
+    "thread_count": 2
+  },
+  "production_artifacts": {
+    "models/m2_ice.cbm": "c7109f320dd8f3b9db5297f017841b18e1fd278e1ca079100a0bd820a033c4b5",
+    "data/s1/river_masks.npz": "9d9ddf96e07b0bf701bb12b20d13da7a88bf9ae3840273f2d4249d1d44f35c95",
+    "data/s1/predictions.csv": "b9b172482d35e1632f2fb75860c2268390c09c8258b6fbd06938f2588377490a"
+  },
+  "working_model_replaced": false,
+  "independent_end_to_end_validation": false
+}
