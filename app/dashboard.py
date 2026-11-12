@@ -138,7 +138,7 @@ if _service == "Паводки":
 # остаются в памяти процесса. Сначала обновляем зависимости, затем импортируем зависимые
 # модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
 _MODULE_NAMES = (
-    "okno.paths", "okno.northeast", "okno.regions", "okno.report", "okno.ice", "okno.calib", "okno.features", "okno.snow",
+    "okno.paths", "okno.northeast", "okno.regions", "okno.official_hydro", "app.official_hydro_view", "okno.report", "okno.ice", "okno.calib", "okno.features", "okno.snow",
     "okno.planner", "okno.decision_support", "app.decision_view", "okno.truck_load", "okno.backhaul", "okno.backhaul_io", "okno.routing", "okno.journey", "okno.risk_advice", "app.truck_load_view", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "okno.bottlenecks", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
     "okno.yakutsk_replay", "app.yakutsk_experiment", "app.backhaul_view", "app.journey_view",
 )
@@ -177,6 +177,9 @@ def season_name(hy):
 # версия данных входит в ключ кэша: после ежедневного обновления погоды (GitHub Actions)
 # дашборд пересчитает прогнозы сам, без перезапуска
 DATA_VER = FC.data_version()
+
+from app.official_hydro_view import watch_updates, render_point as render_official_point, render_overview as render_official_overview
+watch_updates()
 
 
 @st.cache_data(show_spinner=False, max_entries=5000, ttl=3600)
@@ -556,6 +559,7 @@ with tabs[1]:
                         {"conflict": st.error, "warn": st.warning}.get(_st, st.caption)(_msg)
                     else:
                         st.caption("М1 и снимок: свежего снимка (≤ 14 сут) нет — сверка невозможна")
+    render_official_point(pid, issue_date)
     if is_new_gauge:
         with st.expander('Архив измерений льда и снега на посту'):
             observed=measured_ice_snow(int(pid.split('_')[1]),DATA_VER)
@@ -663,6 +667,8 @@ with tabs[5]:
 
 # ------------------------------------------------------------------ 7. о данных
 with tabs[6]:
+    render_official_overview(region)
+    st.divider()
     _val_a3 = DOCS / "validation_report.md"
     if _val_a3.exists():
         st.markdown(_val_a3.read_text(encoding="utf-8"))

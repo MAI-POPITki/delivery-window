@@ -88,7 +88,8 @@ def data_version() -> float:
     files = (list(WEATHER.glob("*.csv")) + list((WEATHER / "gauges").glob("*.csv")) + list(MODELS.glob("*"))
              + list(RECENT.glob("*.csv")) + list(WEATHER_FORECASTS.glob("*.csv"))
              + list((PROCESSED.parent/'snow_depth').glob('*.csv'))
-             + [PROCESSED/'hydro_snow_on_ice.csv',PROCESSED/'gauges.csv',PROCESSED/'hydro_ice_seasons.csv'])
+             + [PROCESSED/'hydro_snow_on_ice.csv',PROCESSED/'gauges.csv',PROCESSED/'hydro_ice_seasons.csv',
+                PROCESSED.parent/'official_hydro'/'snapshot.json'])
     return max((_mtime(f) for f in files), default=0.0)
 
 
