@@ -129,6 +129,51 @@ def observations(pid,*,directory=DATA,now=None):
     return [r for r in rows if r and H.stamp(r['observed_at'])<=now and H.stamp(r['available_at'])<=now]
 
 
+def backfill_meteo(pid='lena_yakutsk',*,days=31,directory=DATA,now=None):
+    """Read prior weekly guest graphs; caller must hold the regular levels lock.
+
+    This adds observed levels only. It never changes model archives or starts ML.
+    """
+    if pid!='lena_yakutsk':raise ValueError('Нет проверенной привязки Метео ДВ')
+    if not isinstance(days,int) or not 7<=days<=93:raise ValueError('Ожидается от 7 до 93 суток')
+    live_clock=now is None
+    now=now or datetime.now(timezone.utc)
+    directory=Path(directory)
+    path=directory/f'{pid}.json'
+    previous=read_json(path)
+    rows=[];sources=[]
+    code=str(station(pid)['properties']['post_code'])
+    for offset in range(0,days,7):
+        date=(now-timedelta(days=offset)).date().isoformat()
+        params=dict(station_code=code,date_loc=date+' 00:00',time_offset=0)
+        try:
+            response=requests.get(METEO_API,params=params,timeout=(8,35))
+            response.raise_for_status()
+            received=datetime.now(timezone.utc) if live_clock else now
+            digest=save_raw(directory,response.content)
+            parsed=parse_meteo(pid,response.json(),response.url,digest,received)
+            rows.extend(parsed)
+            sources.append(dict(source='meteo_dv_backfill',state='ok' if parsed else 'no_data',
+                                records=len(parsed),url=response.url,raw_sha256=digest,request=params,
+                                fetched_at=received.isoformat()))
+        except (requests.RequestException,ValueError,KeyError,TypeError) as exc:
+            sources.append(dict(source='meteo_dv_backfill',state='error',request=params,error=type(exc).__name__))
+            if isinstance(exc,requests.HTTPError) and exc.response is not None and exc.response.status_code==429:
+                break
+    if not rows:raise RuntimeError('Датированных замеров при догрузке не получено; прежний ряд сохранён')
+    merged=merge(previous.get('records',[]),rows)
+    completed=datetime.now(timezone.utc) if live_clock else now
+    # Keep every prior request provenance; deduplicate repeated successful captures.
+    history=previous.get('backfill_sources',[])
+    captures={json.dumps(s,sort_keys=True):s for s in [*history,*sources]}
+    atomic_json(path,{**previous,'schema_version':1,'pid':pid,'station':station(pid),
+                     'records':merged,'backfill_sources':list(captures.values()),
+                     'last_backfill_at':completed.isoformat()})
+    state=summary(pid,directory=directory,now=completed)
+    return dict(records=len(merged),days=state['days'],continuous=state['continuous'],
+                latest=state['latest']['observed_at'],failed_windows=sum(s['state']=='error' for s in sources))
+
+
 def summary(pid,*,directory=DATA,now=None):
     now=now or datetime.now(timezone.utc)
     rows=observations(pid,directory=directory,now=now)

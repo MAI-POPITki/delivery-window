@@ -89,6 +89,9 @@ LEGEND_HTML = '\n<style>.okno-legend{display:flex;flex-wrap:wrap;gap:8px;margin:
 
 st.set_page_config(page_title="Окно завоза", page_icon="🧊", layout="wide")
 
+from app.local_preview import render_local_preview
+render_local_preview()
+
 # Старые ссылки открывают общую рабочую вкладку, не отдельные страницы.
 _requested_module = st.query_params.get("module")
 if _requested_module == "flood" and not st.session_state.get("flood_link_processed"):
