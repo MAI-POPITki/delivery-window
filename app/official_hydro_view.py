@@ -44,7 +44,9 @@ def render_point(point_id, issue_date):
             for metric, row in latest.items():
                 age = (now-H.stamp(row["observed_at"])).days
                 state = "свежий замер" if age <= H.MAX_AGE[metric] else f"архивный замер, {age} сут назад"
-                st.write(f"**{H.METRICS[metric]}: {row['value']:g}** · {_date(row['observed_at'])} · {state}")
+                observed_label = (f"{H.stamp(row['observed_at']):%d.%m.%Y} (время не указано)"
+                                  if row.get("observation_precision") == "day" else _date(row['observed_at']))
+                st.write(f"**{H.METRICS[metric]}: {row['value']:g}** · {observed_label} · {state}")
                 if row["scope"] == "reference_post":
                     st.caption("Гидропост «Лена — Якутск» служит ориентиром для переправы. "
                                "Это измерение на посту, а не обследование ледовой дороги.")
@@ -53,7 +55,8 @@ def render_point(point_id, issue_date):
                 if H.stamp(row['available_at']) > H.stamp(issue_date):
                     st.caption(f"На дату решения {issue_date:%d.%m.%Y} этих сведений ещё не было у проекта; "
                                "в прогноз на эту дату они не подставляются.")
-                st.markdown(f"[Источник измерения — Росгидромет / «Метео ДВ»]({row['source_url']})")
+                source_name = "Якутское УГМС" if row.get("source") == "yakutia_bulletin" else "Росгидромет / «Метео ДВ»"
+                st.markdown(f"[Источник измерения — {source_name}]({row['source_url']})")
         else:
             st.info("Точных датированных замеров для этой точки пока нет. "
                     "Прогноз использует имеющиеся погодные и исторические данные.")

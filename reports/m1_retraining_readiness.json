@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-11-12T21:55:33.044196+00:00",
+  "status": "blocked_missing_event_targets",
+  "measured_water_levels": 94,
+  "undated_ice": 3,
+  "dated_ice": 3,
+  "new_opening_targets": 0,
+  "new_closing_targets": 0,
+  "weights_overwritten": false,
+  "candidates": [
+    {
+      "point_id": "gauge_1018",
+      "hydro_year": 2023,
+      "measured_dates": 1,
+      "min_ice_cm": 81.0,
+      "max_ice_cm": 81.0,
+      "eligible": false,
+      "reason": "Меньше трёх датированных замеров в сезоне"
+    },
+    {
+      "point_id": "gauge_3414",
+      "hydro_year": 2023,
+      "measured_dates": 1,
+      "min_ice_cm": 84.0,
+      "max_ice_cm": 84.0,
+      "eligible": false,
+      "reason": "Меньше трёх датированных замеров в сезоне"
+    }
+  ],
+  "targets": []
+}

@@ -413,6 +413,12 @@ def update(*, directory=None, bootstrap=False, history_pages=1, now=None):
                 if error:
                     statuses.append(error)
         successful = bool(measured or bulletins)
+        from .hydro_training import extract_dated_ice
+        # Preserve exact dated values embedded in a bulletin as measurements;
+        # the rest of its text remains river-reach context. This also backfills
+        # verified old bulletins when the source is temporarily unreachable.
+        for report in merge_records(previous.get("bulletins", []), bulletins):
+            measured.extend(extract_dated_ice(report, now, points=points))
         payload = dict(schema_version=1, checked_at=now.isoformat(),
                        last_success_at=now.isoformat() if successful else previous.get("last_success_at"),
                        observations=merge_records(previous.get("observations", []), measured),
