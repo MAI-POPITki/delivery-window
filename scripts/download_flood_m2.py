@@ -4,6 +4,9 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta, timezone
 import json
 import hashlib
+import os
+import shutil
+import tempfile
 from pathlib import Path
 import sys
 import xml.etree.ElementTree as ET
@@ -196,6 +199,21 @@ def overlay(mask, location, out):
     return [[west, north], [east, north], [east, south], [west, south]]
 
 
+def publish_run(folder,final,mask,reference):
+    """Validate a complete hidden run before atomically making it visible."""
+    meta=M.load_run(folder/'manifest.json')
+    final.parent.mkdir(parents=True,exist_ok=True)
+    if final.exists():
+        saved=M.load_run(final/'manifest.json')
+        with np.load(final/'mask.npz',allow_pickle=False) as old:
+            np.testing.assert_array_equal(mask,old['mask'])
+            np.testing.assert_array_equal(reference,old['reference'])
+        shutil.rmtree(folder)
+        return saved
+    os.replace(folder,final)
+    return meta
+
+
 def process(pid, start, end, selected=None, available_by=None):
     station = json.loads((M.ROOT / f'data/flood/levels/{pid}.manifest.json').read_text(encoding='utf-8'))
     lon, lat = station['station']['geometry']['coordinates']
@@ -211,6 +229,9 @@ def process(pid, start, end, selected=None, available_by=None):
         if not scenes:
             raise ValueError('Нет сцен за указанный период')
         current,ranking = choose_scene(scenes,location)
+        existing=M.DATA/pid/'runs'/current['id']/'manifest.json'
+        if existing.exists():
+            return M.load_run(existing)
         tile = current['properties']['s2:mgrs_tile']
         year = int(current['properties']['datetime'][:4]) - 1
         references = search(lon, lat, f'{year}-06-01', f'{year}-08-31', tile=tile)
@@ -240,8 +261,9 @@ def process(pid, start, end, selected=None, available_by=None):
     bands, scl, meta = read_scene(current, location, destination)
     valid, water = M.classify(bands, scl)
     mask, stats = M.compare(valid, water, reference)
-    folder = destination / 'runs' / current['id']
-    folder.mkdir(parents=True, exist_ok=True)
+    staging=destination/'.staging'
+    staging.mkdir(parents=True,exist_ok=True)
+    folder=Path(tempfile.mkdtemp(prefix=current['id']+'-',dir=staging))
     np.savez_compressed(folder / 'mask.npz', mask=mask, reference=reference)
     Image.fromarray(rgb(bands)).save(folder / 'rgb.png')
     with __import__('warnings').catch_warnings():
@@ -262,8 +284,10 @@ def process(pid, start, end, selected=None, available_by=None):
                    if ranking else 'rebuild of frozen saved selection'),selection_candidates=ranking,
         files={name: M.sha256(folder / name) for name in ['mask.npz', 'rgb.png', 'baseline.png', 'overlay.png']})
     (folder / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf-8')
-    M.load_run(folder / 'manifest.json')
+    final=destination/'runs'/current['id']
+    published=publish_run(folder,final,mask,reference)
     print(pid, current['id'], json.dumps(stats), flush=True)
+    return published
 
 
 def main():

@@ -1,0 +1,13 @@
+{
+  "kind": "levels",
+  "pid": "tom_tomsk",
+  "state": "no_data",
+  "checked_at": "2026-11-12T23:08:52.687029+00:00",
+  "last_success_at": null,
+  "result": {
+    "state": "no_data",
+    "records": 0,
+    "observed_at": null,
+    "version": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  }
+}

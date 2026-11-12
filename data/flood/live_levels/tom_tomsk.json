@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "pid": "tom_tomsk",
+  "station": {
+    "geometry": {
+      "coordinates": [
+        84.960621,
+        56.447785
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "basin_code": "01",
+      "basin_name": null,
+      "bo_code": "13",
+      "bo_name": null,
+      "catchment_area_km2": 57000.0,
+      "has_discharge": true,
+      "name": "р.Томь - г.Томск",
+      "opened": "1963-08-15",
+      "post_code": "10251",
+      "subbasin_code": "03",
+      "subbasin_name": null,
+      "vhu_code": "13.01.03.004",
+      "vhu_name": null
+    },
+    "type": "Feature"
+  },
+  "checked_at": "2026-11-12T23:08:52.685715+00:00",
+  "last_success_at": null,
+  "records": [],
+  "sources": [
+    {
+      "source": "level_satellite",
+      "state": "no_data",
+      "records": 0,
+      "raw_sha256": "ae3879b9033367cbe8ff6aeec84903d4dfef68414208bbca94163910c602deb7",
+      "url": "https://level-satellite.ru/api/series",
+      "request": {
+        "post_code": "10251",
+        "date_from": "2026-09-28",
+        "date_to": "2026-11-12"
+      }
+    }
+  ]
+}

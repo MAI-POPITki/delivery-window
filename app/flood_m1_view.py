@@ -32,6 +32,8 @@ def render_m1():
         st.session_state['m1_flood_point']=points[0]
     pid=st.sidebar.selectbox('Участок реки',points,key='m1_flood_point',
                             format_func=lambda p:f"{POINTS[p]['river']} · {POINTS[p]['name']}")
+    from app.flood_live_view import render_live
+    render_live(pid)
     if pid not in M.STATIONS:
         from app.flood_overview import render_overview,open_satellite
         render_overview(st.session_state.get('flood_overview_date',date(2023,5,1)),7,pid)

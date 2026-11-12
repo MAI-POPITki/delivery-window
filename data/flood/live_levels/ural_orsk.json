@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "pid": "ural_orsk",
+  "station": {
+    "geometry": {
+      "coordinates": [
+        58.59978,
+        51.243693
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "basin_code": "01",
+      "basin_name": null,
+      "bo_code": "12",
+      "bo_name": null,
+      "catchment_area_km2": 46100.0,
+      "has_discharge": false,
+      "name": "р.Урал - г.Орск",
+      "opened": "1931-04-19",
+      "post_code": "19054",
+      "subbasin_code": "00",
+      "subbasin_name": null,
+      "vhu_code": "12.01.00.004",
+      "vhu_name": null
+    },
+    "type": "Feature"
+  },
+  "checked_at": "2026-11-12T23:08:50.862416+00:00",
+  "last_success_at": null,
+  "records": [],
+  "sources": [
+    {
+      "source": "level_satellite",
+      "state": "no_data",
+      "records": 0,
+      "raw_sha256": "8af6159bdbab61cc9e6aa06d3f8c1a92cec261c9fa6960d265af0df79b85ece7",
+      "url": "https://level-satellite.ru/api/series",
+      "request": {
+        "post_code": "19054",
+        "date_from": "2026-09-28",
+        "date_to": "2026-11-12"
+      }
+    }
+  ]
+}

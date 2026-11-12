@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "pid": "ural_orenburg",
+  "station": {
+    "geometry": {
+      "coordinates": [
+        55.1266,
+        51.7546
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "basin_code": "01",
+      "basin_name": null,
+      "bo_code": "12",
+      "bo_name": null,
+      "catchment_area_km2": 82300.0,
+      "has_discharge": true,
+      "name": "р.Урал - г.Оренбург",
+      "opened": "1926-11-01",
+      "post_code": "19063",
+      "subbasin_code": "00",
+      "subbasin_name": null,
+      "vhu_code": "12.01.00.008",
+      "vhu_name": null
+    },
+    "type": "Feature"
+  },
+  "checked_at": "2026-11-12T23:08:50.249161+00:00",
+  "last_success_at": null,
+  "records": [],
+  "sources": [
+    {
+      "source": "level_satellite",
+      "state": "no_data",
+      "records": 0,
+      "raw_sha256": "489ed669982a4de3dc8e06519d071323c22847816ce029d771ac4200addd64da",
+      "url": "https://level-satellite.ru/api/series",
+      "request": {
+        "post_code": "19063",
+        "date_from": "2026-09-28",
+        "date_to": "2026-11-12"
+      }
+    }
+  ]
+}

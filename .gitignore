@@ -12,4 +12,6 @@ data/raw/*.zip
 # вырезки Sentinel-1 для М2 (сотни МБ) — генерируются scripts/s1_chips.py
 data/s1/chips/
 data/flood/benchmark/cache/
+data/flood/refresh/locks/
+data/flood/satellite/**/.staging/
 docs/build/

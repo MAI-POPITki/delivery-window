@@ -1,0 +1,7 @@
+{
+  "kind": "satellite",
+  "pid": "lena_yakutsk",
+  "state": "error",
+  "checked_at": "2026-11-12T23:12:13.000418+00:00",
+  "error": "RasterioIOError"
+}

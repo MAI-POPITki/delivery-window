@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 from functools import lru_cache
+from .flood_store import atomic_json
 
 import numpy as np
 import pandas as pd
@@ -29,10 +30,7 @@ def save_response(path, payload, url, fetched_at):
                     url=url, fetched_at=fetched_at, source=SOURCE,
                     model=("GloFAS v4 seamless (models=seamless_v4)" if "models=seamless_v4" in url
                            else "GloFAS v4 seamless (API default at retrieval)"))
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temp = path.with_suffix(".tmp")
-    temp.write_text(json.dumps(envelope, ensure_ascii=True), encoding="utf-8")
-    temp.replace(path)
+    atomic_json(path,envelope)
 
 
 def read_response(path):
@@ -120,9 +118,15 @@ def _history_reference(path, pid, mtime_ns, size, before_year):
     return threshold(frame, before_year=before_year)
 
 
+def forecast_paths(pid,data_dir=DATA):
+    """Legacy daily first captures and every subsequent dynamic capture."""
+    return [data_dir/'latest'/f'{pid}.json',*(data_dir/'runs').glob(f'*/{pid}.json'),
+            *(data_dir/'runs').glob(f'*/{pid}--*.json')]
+
+
 def forecast_as_of(pid, decision_time, data_dir=DATA):
     """Только действительно сохранённые ответы, полученные не позже решения."""
-    paths = [data_dir / "latest" / f"{pid}.json", *(data_dir / "runs").glob(f"*/{pid}.json")]
+    paths = forecast_paths(pid,data_dir)
     candidates = []
     for path in paths:
         if path.exists():
@@ -139,7 +143,7 @@ def forecast_as_of(pid, decision_time, data_dir=DATA):
 
 def available_forecast_dates(pid, data_dir=DATA):
     days = set()
-    for path in [data_dir/'latest'/f'{pid}.json', *(data_dir/'runs').glob(f'*/{pid}.json')]:
+    for path in forecast_paths(pid,data_dir):
         try:
             fetched = datetime.fromisoformat(read_response(path)['fetched_at'])
             if fetched.tzinfo is not None:

@@ -53,7 +53,7 @@ jobs:
       - name: Прогноз высокой воды GloFAS (четыре региона)
         continue-on-error: true   # старый прогноз станет серым через 48 ч; данные не подменяются
         run: |
-          python scripts/download_flood.py
+          python scripts/refresh_flood.py --sources levels glofas --force
           python scripts/validate_flood.py
 
       - name: Высота снежного покрова ERA5-Land (докачка хвоста)
@@ -76,7 +76,7 @@ jobs:
         continue-on-error: true   # нет сцены/снег/облака не подменяются отсутствием воды
         run: |
           pip install -r requirements-data.txt
-          python scripts/download_flood_m2.py --recent --days 14
+          python scripts/refresh_flood.py --sources satellite --force
           python scripts/validate_flood_m2.py
 
       - name: Есть ли новые данные
