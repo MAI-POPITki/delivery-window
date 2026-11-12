@@ -12,7 +12,7 @@
   "pid": "ishim_ishim",
   "acquired_at": "2026-10-31T06:40:11.025000Z",
   "product_generated_at": "2026-10-31T09:29:02.000000Z",
-  "processed_at": "2026-11-11T10:49:30.361776+00:00",
+  "processed_at": "2026-11-12T12:04:47.921426+00:00",
   "source": "Copernicus Sentinel-2 L2A / Microsoft Planetary Computer",
   "station": {
     "geometry": {
@@ -179,8 +179,8 @@
     }
   ],
   "selection_window": [
-    "2026-10-28",
-    "2026-11-11"
+    "2026-10-29",
+    "2026-11-12"
   ],
   "selection": "latest scene with local SCL visibility >=50%, otherwise maximum local visibility",
   "selection_candidates": [

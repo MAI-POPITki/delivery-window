@@ -12,7 +12,7 @@
   "pid": "lena_yakutsk",
   "acquired_at": "2026-11-06T02:49:09.024000Z",
   "product_generated_at": "2026-11-06T11:37:06.000000Z",
-  "processed_at": "2026-11-11T10:49:26.547623+00:00",
+  "processed_at": "2026-11-12T12:04:44.295766+00:00",
   "source": "Copernicus Sentinel-2 L2A / Microsoft Planetary Computer",
   "station": {
     "geometry": {
@@ -179,11 +179,16 @@
     }
   ],
   "selection_window": [
-    "2026-10-28",
-    "2026-11-11"
+    "2026-10-29",
+    "2026-11-12"
   ],
   "selection": "latest scene with local SCL visibility >=50%, otherwise maximum local visibility",
   "selection_candidates": [
+    {
+      "item_id": "S2C_MSIL2A_20261111T024931_R132_T52VEP_20261111T055708",
+      "acquired_at": "2026-11-11T02:49:31.024000Z",
+      "local_scl_visible_fraction": 0.00043055555555555555
+    },
     {
       "item_id": "S2B_MSIL2A_20261109T025929_R032_T52VEP_20261109T045421",
       "acquired_at": "2026-11-09T02:59:29.024000Z",

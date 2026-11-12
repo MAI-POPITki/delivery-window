@@ -17473,3 +17473,5 @@ gauge_3210,2026-10-31,-21.0,-24.0,-15.8,0.0,0.0,ERA5 via Open-Meteo archive API
 gauge_3210,2026-11-01,-22.2,-24.5,-17.8,0.0,0.0,ERA5 via Open-Meteo archive API
 gauge_3210,2026-11-02,-22.5,-25.6,-18.6,0.0,0.0,ERA5 via Open-Meteo archive API
 gauge_3210,2026-11-03,-18.5,-22.6,-15.4,0.63,0.9,ERA5 via Open-Meteo archive API
+gauge_3210,2026-11-04,-17.2,-18.4,-16.0,1.61,2.3,ERA5 via Open-Meteo archive API
+gauge_3210,2026-11-05,-17.6,-20.5,-15.5,1.19,1.7,ERA5 via Open-Meteo archive API

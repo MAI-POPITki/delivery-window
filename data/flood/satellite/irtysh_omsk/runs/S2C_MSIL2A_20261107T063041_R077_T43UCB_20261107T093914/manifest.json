@@ -12,7 +12,7 @@
   "pid": "irtysh_omsk",
   "acquired_at": "2026-11-07T06:30:41.025000Z",
   "product_generated_at": "2026-11-07T09:39:14.000000Z",
-  "processed_at": "2026-11-11T10:49:46.213507+00:00",
+  "processed_at": "2026-11-12T12:05:03.815092+00:00",
   "source": "Copernicus Sentinel-2 L2A / Microsoft Planetary Computer",
   "station": {
     "geometry": {
@@ -179,8 +179,8 @@
     }
   ],
   "selection_window": [
-    "2026-10-28",
-    "2026-11-11"
+    "2026-10-29",
+    "2026-11-12"
   ],
   "selection": "latest scene with local SCL visibility >=50%, otherwise maximum local visibility",
   "selection_candidates": [
@@ -243,16 +243,6 @@
       "item_id": "S2B_MSIL2A_20261030T061959_R034_T43UCA_20261030T082300",
       "acquired_at": "2026-10-30T06:19:59.024000Z",
       "local_scl_visible_fraction": 0.0
-    },
-    {
-      "item_id": "S2C_MSIL2A_20261028T062951_R077_T43UCB_20261028T095005",
-      "acquired_at": "2026-10-28T06:29:51.025000Z",
-      "local_scl_visible_fraction": 0.9987527777777778
-    },
-    {
-      "item_id": "S2C_MSIL2A_20261028T062951_R077_T43UCA_20261028T095005",
-      "acquired_at": "2026-10-28T06:29:51.025000Z",
-      "local_scl_visible_fraction": 0.8053611111111111
     }
   ],
   "files": {

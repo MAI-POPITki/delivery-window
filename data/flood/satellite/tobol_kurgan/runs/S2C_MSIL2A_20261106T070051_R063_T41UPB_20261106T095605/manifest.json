@@ -12,7 +12,7 @@
   "pid": "tobol_kurgan",
   "acquired_at": "2026-11-06T07:00:51.025000Z",
   "product_generated_at": "2026-11-06T09:56:05.000000Z",
-  "processed_at": "2026-11-11T10:49:34.066134+00:00",
+  "processed_at": "2026-11-12T12:04:51.795449+00:00",
   "source": "Copernicus Sentinel-2 L2A / Microsoft Planetary Computer",
   "station": {
     "geometry": {
@@ -179,11 +179,16 @@
     }
   ],
   "selection_window": [
-    "2026-10-28",
-    "2026-11-11"
+    "2026-10-29",
+    "2026-11-12"
   ],
   "selection": "latest scene with local SCL visibility >=50%, otherwise maximum local visibility",
   "selection_candidates": [
+    {
+      "item_id": "S2B_MSIL2A_20261111T070119_R063_T41UPB_20261111T092016",
+      "acquired_at": "2026-11-11T07:01:19.024000Z",
+      "local_scl_visible_fraction": 0.0
+    },
     {
       "item_id": "S2A_MSIL2A_20261108T070311_R063_T41UPB_20261108T104208",
       "acquired_at": "2026-11-08T07:03:11.024000Z",

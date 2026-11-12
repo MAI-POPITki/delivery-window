@@ -12,7 +12,7 @@
   "pid": "ural_orsk",
   "acquired_at": "2026-11-09T07:11:11.025000Z",
   "product_generated_at": "2026-11-09T10:28:04.000000Z",
-  "processed_at": "2026-11-11T10:49:42.122204+00:00",
+  "processed_at": "2026-11-12T12:04:59.747507+00:00",
   "source": "Copernicus Sentinel-2 L2A / Microsoft Planetary Computer",
   "station": {
     "geometry": {
@@ -179,8 +179,8 @@
     }
   ],
   "selection_window": [
-    "2026-10-28",
-    "2026-11-11"
+    "2026-10-29",
+    "2026-11-12"
   ],
   "selection": "latest scene with local SCL visibility >=50%, otherwise maximum local visibility",
   "selection_candidates": [
@@ -213,11 +213,6 @@
       "item_id": "S2C_MSIL2A_20261030T071021_R106_T40UFB_20261030T103115",
       "acquired_at": "2026-10-30T07:10:21.025000Z",
       "local_scl_visible_fraction": 1.0
-    },
-    {
-      "item_id": "S2B_MSIL2A_20261028T072019_R006_T40UFB_20261028T113751",
-      "acquired_at": "2026-10-28T07:20:19.024000Z",
-      "local_scl_visible_fraction": 0.9998138888888889
     }
   ],
   "files": {
