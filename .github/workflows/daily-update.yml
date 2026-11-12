@@ -43,6 +43,13 @@ jobs:
         continue-on-error: true   # частичная докачка лучше, чем пропуск журнала прогнозов и коммита
         run: python scripts/download_data.py --weather --gauges --lena --recent
 
+      - name: Официальные гидропосты и сводки Росгидромета (семь регионов)
+        continue-on-error: true   # загрузчик сохраняет последние корректные данные
+        run: python scripts/download_official_hydro.py
+
+      - name: Целостность официальных гидрологических данных
+        run: python -m unittest tests.test_official_hydro.SavedOfficialDataTests.test_snapshot_preserves_all_regions_and_has_verifiable_originals
+
       - name: Прогноз высокой воды GloFAS (четыре региона)
         continue-on-error: true   # старый прогноз станет серым через 48 ч; данные не подменяются
         run: |

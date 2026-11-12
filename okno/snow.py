@@ -69,6 +69,18 @@ def features(point_id,year,issue_day):
     if k and issue_day-od[k-1]<=MAX_OBSERVATION_AGE:
         result.update(snow_on_ice_cm=float(os[k-1]),snow_on_ice_age_days=float(issue_day-od[k-1]),
                       snow_on_ice_observed=1.)
+    # New official snow measurements must have an explicit date at THIS post
+    # and must already have been available to the project on the issue date.
+    # Regional snow depth and undated ice-card values are never substituted.
+    from .official_hydro import latest_measurement, stamp
+    cutoff=(pd.Timestamp(year-1,9,1)+pd.Timedelta(days=int(issue_day))).date()
+    latest=latest_measurement(point_id,'snow_on_ice_cm',cutoff,max_age=MAX_OBSERVATION_AGE)
+    if latest:
+        observation_date=stamp(latest['observed_at']).date()
+        age=(cutoff-observation_date).days
+        if observation_date>=pd.Timestamp(year-1,9,1).date() and (
+                not result['snow_on_ice_observed'] or age<=result['snow_on_ice_age_days']):
+            result.update(snow_on_ice_cm=latest['value'],snow_on_ice_age_days=float(age),snow_on_ice_observed=1.)
     return result
 
 
