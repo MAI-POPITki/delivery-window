@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-13T08:28:02.620752+00:00",
+  "checked_at": "2026-11-13T11:31:15.769726+00:00",
   "url": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/1.0.0/WMTSCapabilities.xml",
   "layers": {
     "modis_aqua": {

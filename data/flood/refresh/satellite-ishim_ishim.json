@@ -1,0 +1,13 @@
+{
+  "kind": "satellite",
+  "pid": "ishim_ishim",
+  "state": "ok",
+  "checked_at": "2026-11-13T11:30:16.766875+00:00",
+  "last_success_at": "2026-11-13T11:30:16.766875+00:00",
+  "result": {
+    "state": "ok",
+    "acquired_at": "2026-10-31T06:40:11.025000Z",
+    "observed_fraction": 0.43711666666666665,
+    "version": "S2C_MSIL2A_20261031T064011_R120_T42VWH_20261031T092902"
+  }
+}

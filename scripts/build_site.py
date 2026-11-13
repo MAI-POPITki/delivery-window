@@ -8,6 +8,7 @@ GitHub Pages: Settings → Pages → Deploy from a branch → main, папка /
 """
 
 import html
+import shutil
 import sys
 from pathlib import Path
 
@@ -148,6 +149,7 @@ def main():
     page = f"""<!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Окно завоза</title>
+<link rel="icon" type="image/png" href="logo.png">
 <meta name="description" content="Прогноз окон сезонных путей Якутии и график северного завоза">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -157,6 +159,8 @@ def main():
 *{{box-sizing:border-box}} body{{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 Inter,Arial,sans-serif}}
 .wrap{{max-width:1040px;margin:0 auto;padding:0 16px}}
 header{{padding:56px 0 28px}} h1{{font-size:clamp(32px,6vw,52px);margin:0 0 8px;letter-spacing:-.02em}}
+.hero{{display:flex;align-items:center;gap:20px;flex-wrap:wrap}}
+.hero-logo{{width:96px;height:96px;object-fit:contain;flex:0 0 auto}}
 .lead{{font-size:19px;color:var(--muted);max-width:760px;margin:0}}
 .actions{{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}}
 .btn{{display:inline-block;padding:10px 16px;border-radius:10px;background:var(--accent);color:#fff;text-decoration:none;font-weight:600}}
@@ -172,9 +176,14 @@ a{{color:var(--accent)}} ul{{padding-left:20px;margin:6px 0}}
 </style></head><body>
 <div class="wrap">
 <header>
+<div class="hero">
+<img class="hero-logo" src="logo.png" alt="Логотип Окно завоза">
+<div>
 <h1>Окно завоза</h1>
 <p class="lead">Прогнозируем, когда откроется и закроется каждый ледовый путь Якутии, и строим по прогнозу график
 северного завоза. Только открытые данные, без датчиков.</p>
+</div>
+</div>
 <div class="actions">{dash}
 <a class="btn ghost" href="project.pdf">Документ проекта (PDF)</a>
 <a class="btn ghost" href="{REPO_URL}">Код и данные</a></div>
@@ -221,6 +230,9 @@ a{{color:var(--accent)}} ul{{padding-left:20px;margin:6px 0}}
 (doi:10.5281/zenodo.17054619); ERA5 через Open-Meteo. Кейс-чемпионат, кейс А3.</footer>
 </div></body></html>"""
     DOCS.mkdir(exist_ok=True)
+    logo_src = ROOT / "app" / "assets" / "logo.png"
+    if logo_src.exists():
+        shutil.copy2(logo_src, DOCS / "logo.png")
     (DOCS / "index.html").write_text(page, encoding="utf-8")
     (DOCS / ".nojekyll").write_text("")
     print("готово:", DOCS / "index.html")

@@ -87,7 +87,15 @@ def place_labels(df, zoom, obstacles=()):
 
 LEGEND_HTML = '\n<style>.okno-legend{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 10px}\n.okno-legend div{flex:1 1 220px;border:1px solid rgba(128,128,128,.25);border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.35}\n.okno-legend b{font-size:14px}.okno-sw{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle;margin:0 3px 0 0;border:2px solid #fff;box-shadow:0 0 0 1px #999}\n.okno-bar{display:inline-block;width:70px;height:10px;border-radius:5px;vertical-align:middle;background:linear-gradient(90deg,#a50026,#fdae61,#ffffbf,#a6d96a,#006837)}</style>\n<div class="okno-legend">\n<div>🚚 <b>Пути с прогнозом</b><br>крупные точки с подписью; цвет — вероятность, что путь открыт через N дней<br>\n<span class="okno-bar"></span> 0% → 100% &nbsp; <span class="okno-sw" style="background:#9e9e9e"></span>нет данных</div>\n<div>🛰️ <b>Лена со спутника (М2)</b><br>что на реке по последнему пригодному снимку Sentinel-1 или Landsat<br>\n<span class="okno-sw" style="background:#bfe9ff"></span>лёд &nbsp; <span class="okno-sw" style="background:#0b3d91"></span>вода &nbsp;\n<span class="okno-sw" style="background:#0b3d91;opacity:.35"></span>снимок старше 14 дней</div>\n<div>🌊 <b>Притоки Лены</b><br>мелкие бирюзовые точки — прогноз даты вскрытия (отдельная модель)<br>\n<span class="okno-sw" style="background:#0f9d8a"></span>точка на реке</div>\n<div>🛣️ <b>Зимники и переправы</b><br>линии из OpenStreetMap: где проходят сезонные пути региона</div>\n</div>'
 
-st.set_page_config(page_title="Окно завоза", page_icon="🧊", layout="wide")
+_ASSETS = Path(__file__).resolve().parent / "assets"
+_LOGO_PNG = _ASSETS / "logo.png"
+_LOGO_ICON = _ASSETS / "logo_icon.png"
+
+st.set_page_config(
+    page_title="Окно завоза",
+    page_icon=str(_LOGO_ICON) if _LOGO_ICON.exists() else "🧊",
+    layout="wide",
+)
 
 from app.local_preview import render_local_preview
 render_local_preview()
@@ -109,6 +117,9 @@ if _requested_plan and not st.session_state.get("journey_link_processed"):
 if not st.session_state.get("dashboard_open", False):
     render_welcome()
     st.stop()
+
+if _LOGO_PNG.exists():
+    st.logo(str(_LOGO_PNG), icon_image=str(_LOGO_ICON) if _LOGO_ICON.exists() else None)
 
 import datetime as dt
 import importlib
@@ -317,7 +328,19 @@ def p_by(q, t):
 
 
 # ------------------------------------------------------------------ боковая панель
-st.sidebar.title("🧊 Окно завоза")
+if _LOGO_PNG.exists():
+    import base64
+    _logo_b64 = base64.b64encode(_LOGO_PNG.read_bytes()).decode("ascii")
+    st.sidebar.markdown(
+        f'<div style="display:flex;align-items:center;gap:10px;margin:0 0 0.5rem 0;">'
+        f'<img src="data:image/png;base64,{_logo_b64}" width="42" height="42" '
+        f'style="object-fit:contain;flex:0 0 auto;">'
+        f'<h1 style="margin:0;padding:0;font-size:1.75rem;font-weight:700;line-height:1.2;">Окно завоза</h1>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+else:
+    st.sidebar.title("🧊 Окно завоза")
 st.sidebar.button("О проекте", key="show_welcome", on_click=show_welcome,
                   icon=":material/arrow_back:", width="stretch")
 st.sidebar.caption("Прогноз окон сезонных путей и график завоза. Открытые данные, без датчиков.")

@@ -1,0 +1,13 @@
+{
+  "kind": "satellite",
+  "pid": "irtysh_omsk",
+  "state": "ok",
+  "checked_at": "2026-11-13T11:30:27.284237+00:00",
+  "last_success_at": "2026-11-13T11:30:27.284237+00:00",
+  "result": {
+    "state": "ok",
+    "acquired_at": "2026-11-07T06:30:41.025000Z",
+    "observed_fraction": 0.9614666666666667,
+    "version": "S2C_MSIL2A_20261107T063041_R077_T43UCB_20261107T093914"
+  }
+}
