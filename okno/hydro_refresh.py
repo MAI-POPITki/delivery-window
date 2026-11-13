@@ -35,6 +35,12 @@ def _loop():
             # A remote source must never bring down the dashboard or replace
             # the last good data with invented defaults.
             log.exception("Official hydrological refresh failed; keeping last snapshot")
+        try:
+            from .ykut_phenology import due as phenology_due, update as phenology_update
+            if phenology_due():
+                phenology_update()
+        except Exception:
+            log.exception("Yakutia phenology refresh failed; keeping last CSV")
         _stop.wait(3600)
 
 
