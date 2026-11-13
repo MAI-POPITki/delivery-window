@@ -131,5 +131,25 @@ if result is not None:st.session_state['test_capacities']=[t.capacity_t.tolist()
         self.assertFalse(app.exception)
         self.assertEqual(app.session_state['test_capacities'],[[120.],[120.]])
 
+    def test_known_site_fills_coordinates_and_route_point_is_default(self):
+        from streamlit.testing.v1 import AppTest
+        from app.handling_wind_view import known_sites
+        script="""from datetime import date
+from app.handling_wind_view import render_wind
+render_wind('site_wind',date(2026,11,13),[date(2026,11,14)],[date(2026,11,14)],default_point='gauge_3414')
+"""
+        app=AppTest.from_string(script,default_timeout=30).run()
+        app.checkbox(key='site_wind_enabled').check().run()
+        self.assertFalse(app.exception)
+        sites=known_sites()
+        load=app.selectbox(key='site_wind_load_site')
+        self.assertTrue(load.value.endswith('пост пути'))
+        self.assertEqual((app.number_input(key='site_wind_load_lat').value,app.number_input(key='site_wind_load_lon').value),sites[load.value])
+        self.assertEqual(app.selectbox(key='site_wind_unload_site').value,'Ввести координаты вручную')
+        bank='Нижний Бестях — берег ледовой переправы (OSM)'
+        app.selectbox(key='site_wind_unload_site').set_value(bank).run()
+        self.assertFalse(app.exception)
+        self.assertEqual((app.number_input(key='site_wind_unload_lat').value,app.number_input(key='site_wind_unload_lon').value),sites[bank])
+
 
 if __name__=='__main__':unittest.main()

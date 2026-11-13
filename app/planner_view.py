@@ -7,7 +7,7 @@ from okno.ice import from_season_day
 from okno.planner import Params, compare_ml_weekly_plans
 
 
-def render_planner(forecast, hydro_year, issue_day, margin, point_name, *, transit_days=None,quantity_t=None,require_quantity=False,availability=None,start_day=None,start_note=None):
+def render_planner(forecast, hydro_year, issue_day, margin, point_name, *, transit_days=None,quantity_t=None,require_quantity=False,availability=None,start_day=None,start_note=None,point_id=None):
     if require_quantity: st.session_state.pop('journey_m3_summary',None)
     st.subheader('Планировщик отправок (М3)')
     st.caption('Оба графика используют путь, сезон и дату решения из левой панели и параметры ниже. '
@@ -49,7 +49,7 @@ def render_planner(forecast, hydro_year, issue_day, margin, point_name, *, trans
     from okno.handling_wind import constrain
     days=[from_season_day(d,hydro_year).date() for d in range(int(issue_day),300)]
     arrivals=sorted({from_season_day(d+p.transit_days,hydro_year).date() for d in range(int(issue_day),300)})
-    wind=render_wind('winter_m3_wind',from_season_day(issue_day,hydro_year).date(),days,arrivals)
+    wind=render_wind('winter_m3_wind',from_season_day(issue_day,hydro_year).date(),days,arrivals,default_point=point_id)
     handling_capacity=None
     if wind is not None:
         def handling_capacity(starts,ends):

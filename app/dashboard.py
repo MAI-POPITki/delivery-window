@@ -671,7 +671,7 @@ with tabs[3]:
             _start_day, _start_note = int(round(_qo["q50"])), f"прогноз М1 (лёд держит 20 т) — {_qo['q50_date']:%d.%m.%Y}; подходящего открытия в реестре нет, требуется подтверждение допуска"
         else:
             _start_day, _start_note = None, "нет ни графика, ни прогноза открытия — принято 29 января (допущение)"
-    P = render_planner(q, hy, issue_day, margin, label(pid), start_day=_start_day, start_note=_start_note)
+    P = render_planner(q, hy, issue_day, margin, label(pid), start_day=_start_day, start_note=_start_note, point_id=pid)
     if q and 'error' not in q and np.isfinite(q.get('actual', np.nan)):
         with st.expander('Прежний ретроспективный тест М3: календарь и пересчёт по прогнозу'):
             st.caption('Отдельная проверка на фактическом закрытии. Здесь введённый объём считается заказом '
