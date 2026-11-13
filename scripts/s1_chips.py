@@ -40,23 +40,12 @@ import numpy as np
 import pandas as pd
 
 from okno.paths import DATA, RAW, REPORTS
+from okno.s1_points import LENA_POINTS
 
 OUT = DATA / "s1"
 CHIP_HALF_M = 1500  # вырезка 3 × 3 км
 MARGIN = 7          # сут вокруг событий — «переход»
 STAC = "https://planetarycomputer.microsoft.com/api/stac/v1"
-
-# Ориентиры по Лене (приблизительно, у населённых пунктов); скрипт сам сдвигает точку на русло
-LENA_POINTS = {
-    "lensk": ("Ленск", 60.72, 114.92),
-    "olekminsk": ("Олёкминск", 60.38, 120.42),
-    "pokrovsk": ("Покровск", 61.48, 129.15),
-    "yakutsk_crossing": ("Переправа Якутск — Нижний Бестях", 62.00, 129.82),
-    "sangar": ("Сангар", 63.92, 127.47),
-    "zhigansk": ("Жиганск", 66.77, 123.37),
-    "kyusyur": ("Кюсюр", 70.68, 127.37),
-}
-
 
 def snap_to_river(lat, lon, radius_px=8):
     """Ближайший пиксель набора Qiu с данными (то есть русло Лены) в радиусе radius_px."""

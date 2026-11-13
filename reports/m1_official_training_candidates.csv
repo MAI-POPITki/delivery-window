@@ -1,0 +1,3 @@
+point_id,hydro_year,measured_dates,min_ice_cm,max_ice_cm,eligible,reason
+gauge_1018,2023,1,81.0,81.0,False,Меньше трёх датированных замеров в сезоне
+gauge_3414,2023,1,84.0,84.0,False,Меньше трёх датированных замеров в сезоне
