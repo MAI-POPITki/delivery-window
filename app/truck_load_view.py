@@ -37,6 +37,7 @@ def render_truck_load(point_id, decision_date):
         a,b=st.columns(2)
         tare=a.number_input('Масса пустой машины с оборудованием, т',0.,200.,12.,.1,key='truck_tare')
         cargo=b.number_input('Масса груза, т',0.,200.,10.,.1,key='truck_cargo')
+        st.caption('Расчёт по типовому профилю техники.')
         st.write(f'Полная масса: **{tare+cargo:.1f} т**.')
         result=limit_as_of(frame,road,decision_date)
         if 'source' in result:

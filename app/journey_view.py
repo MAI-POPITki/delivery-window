@@ -43,6 +43,7 @@ def render_journey(pid,hy,issue_date,issue_day,margin,points,forecast):
     tare=a.number_input('Масса пустой машины с оборудованием, т',0.,200.,12.,.1,key='risk_tare')
     cargo=b.number_input('Масса груза, т',0.,200.,6.,.1,key='risk_cargo')
     gross=tare+cargo
+    st.caption('Расчёт по типовому профилю техники.')
     st.write(f'Полная масса машины: **{gross:g} т**. Измените значения под свою машину.')
     q=forecast(pid,hy,issue_day,'close')
     rows=scenarios(events,road,q,issue_date,passage,hy,margin,gross)

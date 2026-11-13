@@ -1,0 +1,94 @@
+{
+  "version": "waterbody-area-beta-v1",
+  "algorithm": "s2-water-v1.1",
+  "parameters": {
+    "mndwi_min": 0.1,
+    "ndvi_max": 0.3,
+    "nir_max": 0.15,
+    "buffer_pixels": 2,
+    "pixel_size_m": 20,
+    "baseline_min_observations": 2,
+    "abstain_scl_water_conflict": true
+  },
+  "name": "Верх-Исетское водохранилище",
+  "region": "Свердловская область",
+  "grid": {
+    "crs": "EPSG:32641",
+    "transform": [
+      20.0,
+      0.0,
+      340220.0,
+      0.0,
+      -20.0,
+      6310320.0
+    ],
+    "width": 600,
+    "height": 600
+  },
+  "scenes": [
+    {
+      "item_id": "S2A_41VLD_20210601_0_L2A",
+      "acquired_at": "2021-06-01T07:23:37.696000Z",
+      "grid": {
+        "crs": "EPSG:32641",
+        "transform": [
+          20.0,
+          0.0,
+          340220.0,
+          0.0,
+          -20.0,
+          6310320.0
+        ],
+        "width": 600,
+        "height": 600
+      },
+      "product_generated_at": "2021-06-01T10:32:46.000000Z",
+      "processing_baseline": "03.00",
+      "source_url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2A_41VLD_20210601_0_L2A",
+      "rgb": "rgb_0.jpg"
+    },
+    {
+      "item_id": "S2B_41VLD_20210921_0_L2A",
+      "acquired_at": "2021-09-21T07:13:36.698000Z",
+      "grid": {
+        "crs": "EPSG:32641",
+        "transform": [
+          20.0,
+          0.0,
+          340220.0,
+          0.0,
+          -20.0,
+          6310320.0
+        ],
+        "width": 600,
+        "height": 600
+      },
+      "product_generated_at": "2021-09-21T10:43:14.000000Z",
+      "processing_baseline": "03.01",
+      "source_url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2B_41VLD_20210921_0_L2A",
+      "rgb": "rgb_1.jpg"
+    }
+  ],
+  "aoi": {
+    "source": "OpenStreetMap / Nominatim",
+    "osm_type": "relation",
+    "osm_id": 1827751,
+    "source_url": "https://www.openstreetmap.org/relation/1827751",
+    "note": "Фиксированный полигон OSM с буфером 8 пикселей (приблизительно 160 м); не историческая разметка берега"
+  },
+  "radiometry": "pre-04 baseline, explicit asset scale, zero offset; no additional BOA subtraction",
+  "fetched_at": "2026-11-13T13:04:47.407410+00:00",
+  "files": {
+    "osm_response.json": "9e9bab1ee72d1dc5a0a7e6786d8f2c82ebdde98226ea5c29da1a693f70ef2ae7",
+    "search.json": "22dc914f96f0142bd4c74019456a96ca7a3bba441f2140f11eb71419d1c6c8cd",
+    "masks.npz": "453c87d5c4f346b02c372f71a9a759a53f60a10f62a18849236f275e6c42346f",
+    "rgb_0.jpg": "351258b6bd50b6f20c8e03e62d36c4eb6cf706eaf9c71aa1dc7f8a23b64ffbea",
+    "rgb_1.jpg": "7b0299f3496abd24602d8a5fd2faf37760932c1aa1718e8f03b90498fdb95103",
+    "scenes/S2A_41VLD_20210601_0_L2A/stac.json": "3685d9d1cc3214f7ef718b3caae64f4545b6a04e8a8be0ad0d6738c0cc02e87e",
+    "scenes/S2A_41VLD_20210601_0_L2A/dn.npz": "4b5fb58d335cce3a7ba03ab88e73029049bfd696d0ff01e70bf3cf2b34657ef2",
+    "scenes/S2A_41VLD_20210601_0_L2A/crop.json": "8f5a8bae7f2a67dd0e32c1e6a291e6618bc47c36dd595efc81fd2159cbfe7d27",
+    "scenes/S2B_41VLD_20210921_0_L2A/stac.json": "d3e8ffa2af2b46eebbaa567702b28d8c460fda96ff3841db14b62039d184e7f3",
+    "scenes/S2B_41VLD_20210921_0_L2A/dn.npz": "1a1bc9709e9d8b1a5b8eccbf4a89e6b99536bc175fa00f2ef4ae8e83a3c459dd",
+    "scenes/S2B_41VLD_20210921_0_L2A/crop.json": "babbe3689bd25360be6beef85f695da2cb56ace0ee522f798840f5e221142a49"
+  }
+}

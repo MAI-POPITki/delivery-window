@@ -94,6 +94,8 @@ render_local_preview()
 
 # Старые ссылки открывают общую рабочую вкладку, не отдельные страницы.
 _requested_module = st.query_params.get("module")
+if _requested_module == "waterbodies" and not st.session_state.get("waterbody_link_processed"):
+    st.session_state.update(dashboard_open=True, service_mode="Водоёмы · бета", waterbody_link_processed=True)
 if _requested_module == "low_water" and not st.session_state.get("low_water_link_processed"):
     st.session_state.update(dashboard_open=True, service_mode="Маловодье · бета", low_water_link_processed=True)
 if _requested_module == "flood" and not st.session_state.get("flood_link_processed"):
@@ -120,7 +122,13 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 
-_service = st.sidebar.radio("Направление", ["Зимники и переправы", "Паводки", "Маловодье · бета"], key="service_mode")
+_service = st.sidebar.radio("Направление", ["Зимники и переправы", "Паводки", "Маловодье · бета", "Водоёмы · бета"], key="service_mode")
+if _service == "Водоёмы · бета":
+    from app.waterbody_view import render_waterbody
+    st.sidebar.button("О проекте", key="waterbody_welcome", on_click=show_welcome, width="stretch")
+    render_waterbody()
+    st.stop()
+
 if _service == "Маловодье · бета":
     from app.low_water_view import render_low_water
     st.sidebar.button("О проекте", key="low_water_welcome", on_click=show_welcome, width="stretch")
