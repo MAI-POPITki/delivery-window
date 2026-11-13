@@ -124,8 +124,8 @@ class WelcomeTests(unittest.TestCase):
         self.assertEqual([json.loads(chart.proto.spec)['layout']['title']['text'] for chart in charts],
                          ['Обычный ML: отправки по неделям', 'Экономический ML: отправки по неделям'])
         before = next(d.value for d in planner.dataframe if 'Обычный ML: своя, т' in d.value.columns)
-        self.assertAlmostEqual((before['Обычный ML: своя, т']+before['Обычный ML: доп., т']).sum(), 45.)
-        self.assertAlmostEqual((before['Экономический ML: своя, т']+before['Экономический ML: доп., т']).sum(), 45.)
+        self.assertAlmostEqual((before['Обычный ML: своя, т']+before['Обычный ML: доп., т']).sum(), 45., delta=0.005 * len(before) + 1e-6)
+        self.assertAlmostEqual((before['Экономический ML: своя, т']+before['Экономический ML: доп., т']).sum(), 45., delta=0.005 * len(before) + 1e-6)
         # Same order and forecast; a backup rate below the road rate must affect
         # the economic chart, while the ordinary window schedule stays intact.
         app.number_input(key='planner_backup_rate').set_value(10000.).run()

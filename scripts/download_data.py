@@ -183,16 +183,28 @@ GAUGE_OTHER = [11558, 11574, 9425, 9422, 9372, 9380, 9384, 3003, 3074, 3087, 319
                70334, 70378, 70275, 70302, 70366, 70043, 70047]
 
 
+def _gauge_coords() -> pd.DataFrame:
+    """Координаты гидропостов из data/processed/gauges.csv (или сырых ADC + PANGAEA)."""
+    gp = DATA / "processed" / "gauges.csv"
+    if gp.exists():
+        return pd.read_csv(gp).set_index("gauge_code")[["lat", "lon"]]
+    st = pd.read_csv(RAW / "hydro_ice" / "River_ice_station_attributes.csv").set_index("Code")
+    st = st.rename(columns={"Lat": "lat", "Long": "lon"})[["lat", "lon"]]
+    st.index.name = "gauge_code"
+    return st
+
+
 def download_gauge_weather(start="1979-01-01", end=None, codes=None):
     """Погода в точках постов. Если файл уже есть — докачивает только недостающий хвост
     (ряд нужен до сегодняшнего дня для живого прогноза текущего сезона)."""
     end = end or (dt.date.today() - dt.timedelta(days=7)).isoformat()
-    st = pd.read_csv(RAW / "hydro_ice" / "River_ice_station_attributes.csv")
-    st = st.set_index("Code")
+    st = _gauge_coords()
     out_dir = DATA / "weather" / "gauges"
     out_dir.mkdir(parents=True, exist_ok=True)
     for code in (codes or all_gauges()):
-        p = {"id": f"gauge_{code}", "lat": float(st.loc[code, "Lat"]), "lon": float(st.loc[code, "Long"])}
+        if code not in st.index:
+            continue
+        p = {"id": f"gauge_{code}", "lat": float(st.loc[code, "lat"]), "lon": float(st.loc[code, "lon"])}
         safe_update(p, out_dir / f"gauge_{code}.csv", start, end)
 
 
@@ -229,9 +241,11 @@ def download_recent(past_days=14, forecast_days=16):
     Перезаписывается при каждом запуске; в обучении не участвует — только в живом прогнозе."""
     out_dir = DATA / "weather_recent"
     out_dir.mkdir(parents=True, exist_ok=True)
-    st = pd.read_csv(RAW / "hydro_ice" / "River_ice_station_attributes.csv").set_index("Code")
+    st = _gauge_coords()
     pts = [p for p in POINTS if p["kind"] != "city"] + [
-        {"id": f"gauge_{c}", "lat": float(st.loc[c, "Lat"]), "lon": float(st.loc[c, "Long"])} for c in all_gauges()] +         lena_basin_points()
+        {"id": f"gauge_{c}", "lat": float(st.loc[c, "lat"]), "lon": float(st.loc[c, "lon"])}
+        for c in all_gauges() if c in st.index
+    ] + lena_basin_points()
     today = dt.date.today().isoformat()
     for p in pts:
         params = {"latitude": p["lat"], "longitude": p["lon"], "daily": DAILY_VARS, "timezone": "auto",

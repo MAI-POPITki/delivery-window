@@ -22,9 +22,12 @@ import pandas as pd
 
 from okno import m1
 from okno.features import build_m1_dataset
+from okno.northeast import STATIONS
 from okno.paths import MODELS, PROCESSED, REPORTS
-from okno.regions import all_gauges, region_of
+from okno.regions import all_gauges, all_training_gauges, region_of
 from okno.report import md_table
+
+_NE_REGIONS = {f"gauge_{c}": reg for c, (_, reg, _) in STATIONS.items()}
 
 
 def train_lena_model() -> pd.DataFrame:
@@ -32,6 +35,7 @@ def train_lena_model() -> pd.DataFrame:
     Обучается на гидропостах + переправе + точках Лены, применяется ТОЛЬКО к точкам Лены: эксперимент
     (reports/lena_experiment.md) показал, что старым точкам такие данные не помогают."""
     df = build_m1_dataset("close", codes=all_gauges(), lena=True)
+    df = df[df["hydro_year"] < 2026].copy()
     if not df.point_id.str.startswith("lena_").any():
         return pd.DataFrame()
     bt = m1.backtest(df, "close")
@@ -63,9 +67,13 @@ def main():
     MODELS.mkdir(exist_ok=True)
     all_metrics = []
     for kind in ("open", "close"):
-        # одна общая модель на все подтверждённые регионы (okno/regions.py)
-        df = build_m1_dataset(kind, codes=all_gauges())
-        df["region"] = df.point_id.map(region_of)
+        # одна общая модель на все подтверждённые регионы (для open — ещё и посты PANGAEA Магадана и Чукотки)
+        codes = all_training_gauges() if kind == "open" else all_gauges()
+        df = build_m1_dataset(kind, codes=codes)
+        if kind == "close":
+            # Сезон 2026 остаётся вне обучения М1 (строгий OOS-контроль переправы Якутск и сводок ЯУГМС 2026).
+            df = df[df["hydro_year"] < 2026].copy()
+        df["region"] = df.point_id.map(lambda p: region_of(p) or _NE_REGIONS.get(p))
         df.to_csv(PROCESSED / f"m1_dataset_{kind}.csv", index=False)
         print(f"{kind}: {len(df)} строк, точек {df.point_id.nunique()}, сезонов {df.hydro_year.nunique()}")
         bt = m1.backtest(df, kind)
