@@ -63,6 +63,24 @@ class LowWaterTests(unittest.TestCase):
         self.assertFalse(app.exception)
         self.assertEqual(app.radio(key='service_mode').value,'Маловодье · бета')
         self.assertEqual(app.title[0].value,'Маловодье · бета')
+        self.assertTrue(app.checkbox(key='beta_features').value)
+
+    def test_beta_checkbox_hides_options_and_restores_stable_direction(self):
+        app=AppTest.from_file(str(L.M.ROOT/'app/dashboard.py'))
+        app.session_state['dashboard_open']=True
+        app.session_state['service_mode']='Паводки'
+        app.run(timeout=45)
+        self.assertFalse(app.exception)
+        self.assertFalse(app.checkbox(key='beta_features').value)
+        self.assertEqual(app.radio(key='service_mode').options,['Зимники и переправы','Паводки'])
+        app.checkbox(key='beta_features').check().run(timeout=45)
+        app.radio(key='service_mode').set_value('Маловодье · бета').run(timeout=45)
+        self.assertFalse(app.exception)
+        app.checkbox(key='beta_features').uncheck().run(timeout=45)
+        self.assertFalse(app.exception)
+        self.assertEqual(app.radio(key='service_mode').value,'Паводки')
+        self.assertNotIn('Маловодье · бета',app.radio(key='service_mode').options)
+
 
     def test_ui_archive_and_operator_threshold(self):
         app=AppTest.from_function(low_water_app).run(timeout=30)

@@ -95,9 +95,9 @@ render_local_preview()
 # Старые ссылки открывают общую рабочую вкладку, не отдельные страницы.
 _requested_module = st.query_params.get("module")
 if _requested_module == "waterbodies" and not st.session_state.get("waterbody_link_processed"):
-    st.session_state.update(dashboard_open=True, service_mode="Водоёмы · бета", waterbody_link_processed=True)
+    st.session_state.update(dashboard_open=True, service_mode="Водоёмы · бета", beta_features=True, waterbody_link_processed=True)
 if _requested_module == "low_water" and not st.session_state.get("low_water_link_processed"):
-    st.session_state.update(dashboard_open=True, service_mode="Маловодье · бета", low_water_link_processed=True)
+    st.session_state.update(dashboard_open=True, service_mode="Маловодье · бета", beta_features=True, low_water_link_processed=True)
 if _requested_module == "flood" and not st.session_state.get("flood_link_processed"):
     st.session_state.update(dashboard_open=True, service_mode="Паводки", flood_link_processed=True)
 if _requested_module == "flood_m2" and not st.session_state.get("flood_m2_link_processed"):
@@ -122,7 +122,16 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 
-_service = st.sidebar.radio("Направление", ["Зимники и переправы", "Паводки", "Маловодье · бета", "Водоёмы · бета"], key="service_mode")
+_stable_services = ["Зимники и переправы", "Паводки"]
+_beta_services = ["Маловодье · бета", "Водоёмы · бета"]
+_beta_enabled = st.sidebar.checkbox("Бета-возможности", key="beta_features")
+_services = _stable_services + (_beta_services if _beta_enabled else [])
+# Hiding the selected beta must also leave that screen and restore a valid choice.
+if st.session_state.get("service_mode") not in _services:
+    st.session_state["service_mode"] = st.session_state.get("last_stable_service", _stable_services[0])
+_service = st.sidebar.radio("Направление", _services, key="service_mode")
+if _service in _stable_services:
+    st.session_state["last_stable_service"] = _service
 if _service == "Водоёмы · бета":
     from app.waterbody_view import render_waterbody
     st.sidebar.button("О проекте", key="waterbody_welcome", on_click=show_welcome, width="stretch")
