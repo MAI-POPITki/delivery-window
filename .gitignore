@@ -20,3 +20,7 @@ data/gaofen/.update.lock
 data/landsat/chips/
 data/landsat/previews/
 data/landsat/.update.lock
+
+# Ежедневные обзорные PNG NASA GIBS; каталог и даты сохраняются в git.
+data/daily_imagery/previews/
+data/daily_imagery/.update.lock

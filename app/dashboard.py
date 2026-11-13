@@ -138,7 +138,7 @@ if _service == "Паводки":
 # остаются в памяти процесса. Сначала обновляем зависимости, затем импортируем зависимые
 # модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
 _MODULE_NAMES = (
-    "okno.paths", "okno.northeast", "okno.regions", "okno.official_hydro", "app.official_hydro_view", "okno.gaofen", "app.gaofen_view", "okno.landsat", "okno.m2_landsat", "okno.m2_observations", "app.landsat_view", "okno.report", "okno.ice", "okno.calib", "okno.features", "okno.snow",
+    "okno.paths", "okno.northeast", "okno.regions", "okno.official_hydro", "app.official_hydro_view", "okno.gaofen", "app.gaofen_view", "okno.landsat", "okno.m2_landsat", "okno.m2_observations", "app.landsat_view", "okno.daily_imagery", "app.daily_imagery_view", "okno.report", "okno.ice", "okno.calib", "okno.features", "okno.snow",
     "okno.planner", "okno.decision_support", "app.decision_view", "okno.truck_load", "okno.backhaul", "okno.backhaul_io", "okno.routing", "okno.journey", "okno.risk_advice", "app.truck_load_view", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "okno.bottlenecks", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
     "okno.yakutsk_replay", "app.yakutsk_experiment", "app.backhaul_view", "app.journey_view",
 )
@@ -184,6 +184,8 @@ from okno.gaofen_refresh import start_auto_update as start_gaofen_update
 start_gaofen_update()
 from app.landsat_view import watch_updates as watch_landsat_updates
 watch_landsat_updates()
+from app.daily_imagery_view import watch_updates as watch_daily_imagery
+watch_daily_imagery()
 
 
 @st.cache_data(show_spinner=False, max_entries=5000, ttl=3600)
@@ -625,6 +627,8 @@ with tabs[1]:
         render_gaofen(pid)
         from app.landsat_view import render_landsat
         render_landsat(pid)
+        from app.daily_imagery_view import render_daily_imagery
+        render_daily_imagery(pid)
 
 # ------------------------------------------------------------------ 3. сквозной коридор (А3)
 with tabs[2]:

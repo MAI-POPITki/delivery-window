@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-11-13T08:28:02.620752+00:00",
+  "url": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/1.0.0/WMTSCapabilities.xml",
+  "layers": {
+    "modis_aqua": {
+      "layer": "MODIS_Aqua_CorrectedReflectance_TrueColor",
+      "dates": [
+        "2002-07-03/2002-07-30/P1D",
+        "2002-08-07/2002-09-12/P1D",
+        "2002-09-14/2022-03-31/P1D",
+        "2022-04-17/2026-11-13/P1D"
+      ],
+      "title": "Corrected Reflectance (True Color, MODIS, Aqua)"
+    },
+    "modis_terra": {
+      "layer": "MODIS_Terra_CorrectedReflectance_TrueColor",
+      "dates": [
+        "2000-02-24/2000-04-25/P1D",
+        "2000-04-28/2000-08-06/P1D",
+        "2000-08-18/2001-06-15/P1D",
+        "2001-07-03/2002-03-19/P1D",
+        "2002-03-28/2003-12-16/P1D",
+        "2003-12-24/2008-12-20/P1D",
+        "2008-12-23/2016-02-18/P1D",
+        "2016-02-27/2022-10-10/P1D",
+        "2022-10-23/2026-11-13/P1D"
+      ],
+      "title": "Corrected Reflectance (True Color, MODIS, Terra)"
+    },
+    "viirs_noaa20": {
+      "layer": "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
+      "dates": [
+        "2018-01-05/2018-02-21/P1D",
+        "2018-02-24/2018-03-12/P1D",
+        "2018-03-14/2019-12-31/P1D",
+        "2020-01-02/2022-01-12/P1D",
+        "2022-01-14/2026-11-13/P1D"
+      ],
+      "title": "Corrected Reflectance (True Color, VIIRS, NOAA-20)"
+    },
+    "viirs_noaa21": {
+      "layer": "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
+      "dates": [
+        "2023-02-10/2023-02-23/P1D",
+        "2023-02-25/2023-03-09/P1D",
+        "2023-03-11/2024-02-26/P1D",
+        "2024-02-29/2026-11-13/P1D"
+      ],
+      "title": "Corrected Reflectance (True Color, VIIRS, NOAA-21)"
+    }
+  }
+}

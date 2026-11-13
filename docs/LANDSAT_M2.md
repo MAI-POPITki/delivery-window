@@ -85,7 +85,7 @@ python scripts/train_m2_landsat.py --download
 python scripts/download_landsat.py --days 90
 
 # Детерминированная проверка без фоновых сетевых запросов:
-OKNO_LANDSAT_AUTO_REFRESH=0 OKNO_GAOFEN_AUTO_REFRESH=0 OKNO_HYDRO_AUTO_REFRESH=0 python -m unittest discover -s tests
+OKNO_DAILY_IMAGERY_AUTO_REFRESH=0 OKNO_LANDSAT_AUTO_REFRESH=0 OKNO_GAOFEN_AUTO_REFRESH=0 OKNO_HYDRO_AUTO_REFRESH=0 python -m unittest discover -s tests
 ```
 
 В GitHub workflow также добавлено обновление Landsat. Расписание GitHub выполняется
