@@ -24,7 +24,9 @@ import pandas as pd
 from okno import hydro
 from okno import northeast
 from okno.ice import required_thickness_cm, to_season_day
-from okno.paths import DATA, PROCESSED
+from okno.paths import DATA, EXTERNAL, PROCESSED
+
+YKUT_SOURCE = "ФГБУ «Якутское УГМС», бюллетени (https://ykuthydromet.ru/reki/)"
 
 LOADS_T = [10, 20, 30]  # нагрузки, для которых считаем дату «лёд держит»
 
@@ -89,6 +91,27 @@ def flag_spikes(thick: pd.DataFrame) -> pd.DataFrame:
     return thick
 
 
+def _load_ykut_events():
+    """Датированные ледовые события 2022–2027 из бюллетеней ФГБУ «Якутское УГМС» (data/external/ykut_reki_phenology.csv,
+    у каждой строки дословная цитата). Только посты с числовым кодом. «Вскрытие» в бюллетене — ледоход (drift_start);
+    цель М1 закрытия — начало таяния (melt_start) берётся только там, где оно прямо названо."""
+    p = EXTERNAL / "ykut_reki_phenology.csv"
+    if not p.exists():
+        return pd.DataFrame(), set()
+    df = pd.read_csv(p, dtype={"gauge_code": str})
+    df = df[df["gauge_code"].notna() & (df["gauge_code"].str.strip() != "")].copy()
+    ev_map = {"freezeup": "freezeup", "melt_start": "melt_start", "breakup": "drift_start"}
+    df = df[df["event_type"].isin(ev_map)].copy()
+    if df.empty:
+        return pd.DataFrame(), set()
+    df["gauge_code"] = df["gauge_code"].astype(int)
+    df["hydro_year"] = df["hydro_year"].astype(int)
+    df["event"] = df["event_type"].map(ev_map)
+    df["date"] = df["event_date"]
+    df["raw"] = ""
+    return df[["gauge_code", "hydro_year", "event", "date", "raw"]], set(zip(df["gauge_code"], df["hydro_year"]))
+
+
 def build_hydro():
     st, thick, events = hydro.read_all()
     st["yakutia"] = st["region"].str.contains("Sakha")
@@ -99,6 +122,9 @@ def build_hydro():
         st=pd.concat([st,extra_st],ignore_index=True)
         thick=pd.concat([thick,extra_th],ignore_index=True)
     thick = flag_spikes(thick)
+    ykut_ev, ykut_keys = _load_ykut_events()
+    if not ykut_ev.empty:  # архивные события поста приоритетнее, бюллетени добавляют только новые сезоны
+        events = pd.concat([events, ykut_ev], ignore_index=True).drop_duplicates(["gauge_code", "hydro_year", "event"], keep="first")
 
     # сезонная таблица
     ev = events.copy()
@@ -130,8 +156,10 @@ def build_hydro():
     seasons["valid"] = seasons["flags"] == ""
     seasons = seasons.drop(columns=[c for c in seasons.columns if c.endswith("_raw")])
     seasons = seasons.sort_values(["gauge_code", "hydro_year"]).reset_index(drop=True)
-    seasons["source_type"] = np.where(seasons.gauge_code.isin(northeast.STATIONS),'оценка по толщине','замер')
-    seasons["source"] = seasons.gauge_code.map(st.set_index('gauge_code').source)
+    is_ykut = pd.Series([k in ykut_keys for k in zip(seasons.gauge_code, seasons.hydro_year)], index=seasons.index)
+    seasons["source_type"] = np.where(is_ykut, 'бюллетень ЯУГМС',
+                                      np.where(seasons.gauge_code.isin(northeast.STATIONS),'оценка по толщине','замер'))
+    seasons["source"] = np.where(is_ykut, YKUT_SOURCE, seasons.gauge_code.map(st.set_index('gauge_code').source))
     return st, thick, seasons
 
 
