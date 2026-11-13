@@ -203,4 +203,11 @@
      - **2021 (20.05.2021):** `sakhalife.ru` — «По информации Якутского УГМС и Службы спасения РС(Я), 17 мая в районе с. Табага густой ледоход... 20 мая вскрытие реки завершилось ниже Кангаласс».
    - В отчёт `reports/m1_fresh_lena_eval.md` добавлена таблица первоисточников калибровочных пар.
 
+## 8. Выгрузка актуальных данных по гидропостам из Open-Meteo Global Flood API (12.11.2026)
+
+- Добавлен воспроизводимый скрипт пакетной выгрузки `scripts/download_glofas_gauges.py` для **Open-Meteo Global Flood API** (`https://flood-api.open-meteo.com/v1/flood`, модель Copernicus GloFAS `seamless_v4`).
+- Собраны суточные ряды расхода воды (`river_discharge`, `mean`, `median`, `p25`, `p75`, м³/с) по **32 точкам** (31 гидропост из `data/processed/gauges.csv` по всем 5 регионам + створ переправы Якутск — Нижний Бестях) за период **01.01.2015 – 12.11.2026** (4 334 суток наблюдений/реанализа на каждый пост) плюс 14-дневный прогноз до **26.11.2026** (всего **139 136 строк**).
+- Результаты сохранены в `data/external/glofas_gauge_discharge.csv.gz` (1,1 МБ), сводка по постам — в `data/external/glofas_gauges_summary.csv` и `reports/glofas_gauges_summary.md`.
+
+
 
