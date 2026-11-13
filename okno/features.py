@@ -46,6 +46,8 @@ def season_matrix(point_id: str, var: str = "t") -> pd.DataFrame:
 
 def past_mean(series: pd.Series, year: int, window: int, min_n: int):
     past = series[(series.index < year) & (series.index >= year - window)].dropna()
+    if len(past) < min_n:
+        past = series[series.index < year].dropna().tail(window)
     return float(past.mean()) if len(past) >= min_n else np.nan
 
 

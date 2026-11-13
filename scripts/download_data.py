@@ -220,10 +220,12 @@ def download_gauge_weather(start="1979-01-01", end=None, codes=None):
     out_dir = DATA / "weather" / "gauges"
     out_dir.mkdir(parents=True, exist_ok=True)
     for code in (codes or all_gauges()):
+        if code not in st.index:
+            continue
         p = {"id": f"gauge_{code}", "lat": float(st.loc[code, "Lat"]), "lon": float(st.loc[code, "Long"])}
         if code in STATIONS:
-            p.update(archive_model='era5_seamless',archive_timezone='UTC',
-                     archive_source='Open-Meteo ERA5-Seamless (ERA5-Land temperature)')
+            p.update(archive_model="era5_seamless", archive_timezone="UTC",
+                     archive_source="Open-Meteo ERA5-Seamless (ERA5-Land temperature)")
         safe_update(p, out_dir / f"gauge_{code}.csv", start, end)
 
 
@@ -262,7 +264,9 @@ def download_recent(past_days=14, forecast_days=16):
     out_dir.mkdir(parents=True, exist_ok=True)
     st = gauge_coordinates()
     pts = [p for p in POINTS if p["kind"] != "city"] + [
-        {"id": f"gauge_{c}", "lat": float(st.loc[c, "Lat"]), "lon": float(st.loc[c, "Long"])} for c in all_gauges()] +         lena_basin_points()
+        {"id": f"gauge_{c}", "lat": float(st.loc[c, "Lat"]), "lon": float(st.loc[c, "Long"])}
+        for c in all_gauges() if c in st.index
+    ] + lena_basin_points()
     today = dt.date.today().isoformat()
     for p in pts:
         params = {"latitude": p["lat"], "longitude": p["lon"], "daily": DAILY_VARS, "timezone": "auto",

@@ -60,16 +60,17 @@ def hydro_checks():
     g = pd.read_csv(PROCESSED / "gauges.csv")
     yak = g.loc[g.yakutia, "gauge_code"]
     sy = s[s.gauge_code.isin(yak)]
-    phase_known=s[['first_ice_day','freezeup_day','melt_start_day','drift_start_day','ice_end_day']].notna().any(axis=1)
+    phase_known = s[["first_ice_day", "freezeup_day", "melt_start_day", "drift_start_day", "ice_end_day"]].notna().any(axis=1)
     bad = s[phase_known & ~s.valid]
     check("гидропосты: даты ледовых явлений в правильном порядке и в правдоподобных месяцах",
           len(bad) / phase_known.sum() < 0.05,
-          f"сезонов с известными фазами {phase_known.sum()}, с флагами {len(bad)} ({len(bad) / phase_known.sum():.1%}) — исключаются из обучения; "
+          f"сезонов всего {len(s)} (с известными фазами {int(phase_known.sum())}), "
+          f"с флагами {len(bad)} ({len(bad) / phase_known.sum():.1%}) — исключаются из обучения; "
           f"по Якутии {(~sy.valid).sum()} из {len(sy)}")
     dur = (sy.drift_start_day - sy.freezeup_day)[sy.valid].dropna()
     check("длительность ледостава в Якутии в пределах литературы (180–250 сут)",
           dur.between(170, 260).mean() > 0.9,
-          f"медиана {dur.median():.0f} сут, 5–95%: {dur.quantile(.05):.0f}–{dur.quantile(.95):.0f}")
+          f"сезонов с обеими датами {len(dur)}, медиана {dur.median():.0f} сут, 5–95%: {dur.quantile(.05):.0f}–{dur.quantile(.95):.0f}")
     th = pd.read_csv(PROCESSED / "hydro_ice_thickness.csv")
     thy = th[th.gauge_code.isin(yak)]
     spikes = thy[thy.spike]
@@ -80,16 +81,22 @@ def hydro_checks():
           f"после очистки максимум {thy.ice_cm.max():.0f} см (наледи на горных реках, напр. Алгий); "
           f"«промерзание до дна»: {int(thy.frozen_to_bottom.sum())}")
     from okno.northeast import STATIONS
-    new=th[th.gauge_code.isin(STATIONS)]
-    after=new[new.date>='2013-01-01']
-    check('Новые посты: данные после 2012 и неповторяющиеся даты',
-          len(after)>0 and not new.duplicated(['gauge_code','date']).any(),
-          f'{new.gauge_code.nunique()} постов, {len(after)} строк после 2012, последняя дата {after.date.max()}; '
-          'противоречивые повторные даты в сыром файле исключены')
-    new_phases=s[s.gauge_code.isin(STATIONS)]
-    check('Недостающие фазы PANGAEA не подменены датами замеров',
-          new_phases[['first_ice_day','freezeup_day','melt_start_day','drift_start_day','ice_end_day']].isna().all().all(),
-          'Доступны оценки достижения пороговой толщины; начала таяния и ледохода в источнике нет')
+    new = th[th.gauge_code.isin(STATIONS)]
+    after = new[new.date >= "2013-01-01"]
+    check("Новые посты: данные после 2012 и неповторяющиеся даты",
+          len(after) > 0 and not new.duplicated(["gauge_code", "date"]).any(),
+          f"{new.gauge_code.nunique()} постов, {len(after)} строк после 2012, последняя дата {after.date.max()}; "
+          "противоречивые повторные даты в сыром файле исключены")
+    new_phases = s[s.gauge_code.isin(STATIONS) & (s.source_type != "бюллетень ЯУГМС")]
+    check("Недостающие фазы PANGAEA не подменены датами замеров",
+          new_phases[["first_ice_day", "freezeup_day", "melt_start_day", "drift_start_day", "ice_end_day"]].isna().all().all(),
+          "Доступны оценки достижения пороговой толщины; начала таяния и ледохода для строк без бюллетеней ЯУГМС нет")
+    ykut = s[s.source_type == "бюллетень ЯУГМС"]
+    check("бюллетени ФГБУ «Якутское УГМС» 2022–2026: свежие фазы без флагов брака",
+          len(ykut) >= 30 and ykut.valid.all(),
+          f"{len(ykut)} пост-сезонов ({ykut.gauge_code.nunique()} постов Якутии, {int(ykut.hydro_year.min())}–{int(ykut.hydro_year.max())}), "
+          f"начало таяния {int(ykut.melt_start_day.notna().sum())}, вскрытие {int(ykut.drift_start_day.notna().sum())}, "
+          f"ледостав {int(ykut.freezeup_day.notna().sum())}")
     return s, g
 
 
@@ -218,7 +225,8 @@ def main():
     comp = satellite_checks(seasons, gauges)
     write_report(comp, pooled, per)
     from src.validate_data import main as run_a3_validation
-    if run_a3_validation() or any(row['результат']=='НЕ прошла' for row in CHECKS):
+    bad = any(r["результат"] == "НЕ прошла" for r in CHECKS)
+    if run_a3_validation() or bad:
         raise SystemExit(1)
 
 

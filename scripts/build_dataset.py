@@ -21,10 +21,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import numpy as np
 import pandas as pd
 
-from okno import hydro
-from okno import northeast
+from okno import hydro, northeast
 from okno.ice import required_thickness_cm, to_season_day
-from okno.paths import DATA, PROCESSED
+from okno.paths import DATA, EXTERNAL, PROCESSED
+
+YKUT_SOURCE = "ФГБУ «Якутское УГМС», бюллетени (https://ykuthydromet.ru/reki/)"
 
 LOADS_T = [10, 20, 30]  # нагрузки, для которых считаем дату «лёд держит»
 
@@ -79,7 +80,7 @@ def flag_spikes(thick: pd.DataFrame) -> pd.DataFrame:
     сохраняем в ice_cm_raw, в ice_cm ставим пусто. Стабильно толстый лёд (наледи на горных
     реках, ~300 см много замеров подряд) выбросом не считается."""
     thick = thick.sort_values(["gauge_code", "hydro_year", "date"]).reset_index(drop=True)
-    thick["ice_cm_raw"] = thick.get('ice_cm_raw', thick['ice_cm']).fillna(thick['ice_cm'])
+    thick["ice_cm_raw"] = thick.get("ice_cm_raw", thick["ice_cm"]).fillna(thick["ice_cm"])
     g = thick.groupby(["gauge_code", "hydro_year"])["ice_cm"]
     prev_, next_ = g.shift(1), g.shift(-1)
     neigh = pd.concat([prev_, next_], axis=1).median(axis=1)
@@ -89,16 +90,41 @@ def flag_spikes(thick: pd.DataFrame) -> pd.DataFrame:
     return thick
 
 
+def _load_ykut_events() -> tuple[pd.DataFrame, set[tuple[int, int]]]:
+    """События 2022–2027 гг. из ежедневных бюллетеней ФГБУ «Якутское УГМС» для числовых гидропостов."""
+    p = EXTERNAL / "ykut_reki_phenology.csv"
+    if not p.exists():
+        return pd.DataFrame(), set()
+    df = pd.read_csv(p, dtype={"gauge_code": str})
+    df = df[df["gauge_code"].notna() & (df["gauge_code"].str.strip() != "")].copy()
+    if df.empty:
+        return pd.DataFrame(), set()
+    ev_map = {"freezeup": "freezeup", "melt_start": "melt_start", "breakup": "drift_start"}
+    df = df[df["event_type"].isin(ev_map)].copy()
+    df["gauge_code"] = df["gauge_code"].astype(int)
+    df["hydro_year"] = df["hydro_year"].astype(int)
+    df["event"] = df["event_type"].map(ev_map)
+    df["date"] = df["event_date"]
+    df["raw"] = ""
+    keys = set(zip(df["gauge_code"], df["hydro_year"]))
+    return df[["gauge_code", "hydro_year", "event", "date", "raw"]], keys
+
+
 def build_hydro():
     st, thick, events = hydro.read_all()
     st["yakutia"] = st["region"].str.contains("Sakha")
     st["source_type"] = "замер"
     st["source"] = hydro.SOURCE
-    if (northeast.DIRECTORY/'ice_snow.tsv').exists():
-        extra_st,extra_th=northeast.load_observations()
-        st=pd.concat([st,extra_st],ignore_index=True)
-        thick=pd.concat([thick,extra_th],ignore_index=True)
+    if (northeast.DIRECTORY / "ice_snow.tsv").exists():
+        extra_st, extra_th = northeast.load_observations()
+        st = pd.concat([st, extra_st], ignore_index=True)
+        thick = pd.concat([thick, extra_th], ignore_index=True)
     thick = flag_spikes(thick)
+
+    ykut_ev, ykut_keys = _load_ykut_events()
+    if not ykut_ev.empty:
+        events = pd.concat([events, ykut_ev], ignore_index=True)
+        events = events.drop_duplicates(["gauge_code", "hydro_year", "event"], keep="first")
 
     # сезонная таблица
     ev = events.copy()
@@ -109,9 +135,8 @@ def build_hydro():
     seasons = pd.concat([
         wide_date.add_suffix("_date"), wide_day.add_suffix("_day"), wide_raw.add_suffix("_raw"),
     ], axis=1).reset_index()
-    # PANGAEA contains thickness/snow, not dates of freeze-up or breakup.
-    # Add measured seasons without manufacturing those missing phases.
-    seasons=seasons.merge(thick[['gauge_code','hydro_year']].drop_duplicates(),how='outer')
+    # PANGAEA содержит толщину льда и снега, но не даты фаз; добавляем измеренные сезоны без домысливания фаз
+    seasons = seasons.merge(thick[["gauge_code", "hydro_year"]].drop_duplicates(), how="outer")
 
     # даты достижения нормативной толщины — по реальным замерам
     max_h = thick.groupby(["gauge_code", "hydro_year"])["ice_cm"].max().rename("max_ice_cm")
@@ -130,8 +155,12 @@ def build_hydro():
     seasons["valid"] = seasons["flags"] == ""
     seasons = seasons.drop(columns=[c for c in seasons.columns if c.endswith("_raw")])
     seasons = seasons.sort_values(["gauge_code", "hydro_year"]).reset_index(drop=True)
-    seasons["source_type"] = np.where(seasons.gauge_code.isin(northeast.STATIONS),'оценка по толщине','замер')
-    seasons["source"] = seasons.gauge_code.map(st.set_index('gauge_code').source)
+
+    is_ykut = pd.Series([k in ykut_keys for k in zip(seasons["gauge_code"], seasons["hydro_year"])], index=seasons.index)
+    is_ne = seasons["gauge_code"].isin(northeast.STATIONS) & ~is_ykut
+    seasons["source_type"] = np.where(is_ykut, "бюллетень ЯУГМС", np.where(is_ne, "оценка по толщине", "замер"))
+    st_src = st.set_index("gauge_code")["source"]
+    seasons["source"] = np.where(is_ykut, YKUT_SOURCE, seasons["gauge_code"].map(st_src))
     return st, thick, seasons
 
 
@@ -163,13 +192,17 @@ def main():
     st.to_csv(PROCESSED / "gauges.csv", index=False)
     thick.to_csv(PROCESSED / "hydro_ice_thickness.csv", index=False)
     seasons.to_csv(PROCESSED / "hydro_ice_seasons.csv", index=False)
-    snow=thick[thick.get('snow_on_ice_cm',pd.Series(np.nan,index=thick.index)).notna()].copy()
-    if not snow.empty:
-        snow[['gauge_code','hydro_year','date','snow_on_ice_cm','source']].to_csv(PROCESSED/'hydro_snow_on_ice.csv',index=False)
+    if "snow_on_ice_cm" in thick.columns:
+        snow = thick[thick["snow_on_ice_cm"].notna()].copy()
+        if not snow.empty:
+            snow[["gauge_code", "hydro_year", "date", "snow_on_ice_cm", "source"]].to_csv(
+                PROCESSED / "hydro_snow_on_ice.csv", index=False
+            )
     sat = build_sat()
     sat.to_csv(PROCESSED / "yakutsk_sat_seasons.csv", index=False)
     print(f"gauges: {len(st)} (Якутия: {st['yakutia'].sum()})")
     print(f"thickness rows: {len(thick)}; seasons: {len(seasons)}, valid: {seasons['valid'].sum()}")
+    print(f"by source_type:\n{seasons['source_type'].value_counts().to_string()}")
     print(f"yakutsk satellite seasons: {len(sat)}")
 
 

@@ -50,6 +50,10 @@ jobs:
       - name: Целостность официальных гидрологических данных
         run: python -m unittest tests.test_official_hydro.SavedOfficialDataTests.test_snapshot_preserves_all_regions_and_has_verifiable_originals
 
+      - name: Ледовая фенология ЯУГМС (ежедневные бюллетени)
+        continue-on-error: true   # при недоступности сайта сохраняет прошлый CSV
+        run: python scripts/fetch_ykut_bulletins.py
+
       - name: Прогноз высокой воды GloFAS (четыре региона)
         continue-on-error: true   # старый прогноз станет серым через 48 ч; данные не подменяются
         run: |

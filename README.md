@@ -350,7 +350,7 @@ python scripts/download_weather_forecasts.py --live
 | `data/processed/hydro_ice_seasons.csv` | пост × сезон | даты `first_ice`, `freezeup`, `melt_start`, `drift_start`, `ice_end`; `open_{10,20,30}t_*` — лёд достиг нормативной толщины; `valid`, `flags` | дата / день сезона | замер |
 | `data/processed/yakutsk_sat_seasons.csv` | сезон | `sat_freezeup_*`, `sat_breakup_*`, `sat_ice_duration_days` | дата / день сезона / сут | спутник |
 | `data/processed/m1_dataset_*.csv` | точка × сезон × дата выпуска | признаки М1, `target_day`, `cal_target`, `lead_days` | — | производные |
-| `data/external/road_events.csv` | дорога × сезон × событие | `kind` (`open`/`close`/`limit30`/`limit20`), `announced_date`, `actual_date`, `source_*` (`https://`), `point_id` | ISO-дата | официальные сводки (184 события, 5 регионов) |
+| `data/external/road_events.csv` | дорога × сезон × событие | `kind` (`open`/`close`/`limit30`/`limit20`), `announced_date`, `actual_date`, `source_*` (`https://`), `point_id` | ISO-дата | официальные сводки (241 событие, 5 регионов, сезоны 2016–2027) |
 | `data/external/tariffs.csv` | контракт / тариф | `route`, `mode` (`зимник`/`авиа`/`река`/`ж/д`/`СВП`), `price_rub_per_t`, `deadline`, `penalty`, `url` | ₽/т | ЕИС Закупки / тарифные комитеты (30 записей) |
 | `data/external/incidents.csv` | срыв завоза | `year`, `road`, `what`, `tonnage`, `extra_cost`, `source` | т, ₽ | СМИ / отчёты ведомств (21 кейс) |
 | `data/external/northern_supply_volumes.csv`, `ice_thickness_bulletins.csv` | регион × год / пост × дата | `plan_thousand_t`, `fact_thousand_t` / `ice_cm`, `norm_cm`, `source` | тыс. т / см | отчёты регионов и УГМС/МЧС (>2015 г.) |

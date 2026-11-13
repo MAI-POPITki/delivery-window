@@ -37,10 +37,10 @@ class NortheastDataTests(unittest.TestCase):
 
     def test_new_source_does_not_create_unobserved_freezeup_or_breakup_dates(self):
         seasons=pd.read_csv(ROOT/'data/processed/hydro_ice_seasons.csv')
-        new=seasons[seasons.gauge_code.isin(STATIONS)]
+        new=seasons[seasons.gauge_code.isin(STATIONS)&seasons.source_type.ne('бюллетень ЯУГМС')]
         self.assertTrue(new[['first_ice_date','freezeup_date','melt_start_date','drift_start_date','ice_end_date']].isna().all().all())
         self.assertGreater(new.open_20t_day.notna().sum(),500)
-        old=seasons[seasons.gauge_code.eq(3414)]
+        old=seasons[seasons.gauge_code.eq(3414)&seasons.source_type.ne('бюллетень ЯУГМС')]
         self.assertEqual(old.hydro_year.max(),2012)
 
     def test_correct_regions_and_existing_gauges_remain_available(self):

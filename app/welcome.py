@@ -14,13 +14,13 @@ _STYLES = """
 }
 .st-key-welcome_intro {
     padding: 3.2rem;
-    border: 1px solid #ff4b4b;
+    border: 1px solid #1E78D6;
     border-radius: 24px;
-    background: #ff4b4b;
-    color: #f4f9fc;
+    background: linear-gradient(135deg, #08245C 0%, #0D52B5 55%, #1E78D6 100%);
+    color: #F4F9FF;
 }
 .st-key-welcome_intro h1 {
-    color: #f4f9fc;
+    color: #F4F9FF;
     font-size: clamp(2.6rem, 6vw, 4.4rem);
     font-weight: 700;
     letter-spacing: -0.045em;
@@ -28,7 +28,7 @@ _STYLES = """
     padding: 0.3rem 0 1rem;
 }
 .st-key-welcome_intro .welcome-eyebrow {
-    color: #a6dbe2;
+    color: #B8E3FF;
     font-size: 0.78rem;
     font-weight: 600;
     letter-spacing: 0.16em;
@@ -36,14 +36,14 @@ _STYLES = """
     margin: 0;
 }
 .st-key-welcome_intro .welcome-lead {
-    color: #e1edf3;
+    color: #E3F0FC;
     font-size: clamp(1.1rem, 2.4vw, 1.35rem);
     line-height: 1.65;
     max-width: 760px;
     margin: 0 0 0.5rem;
 }
 .st-key-welcome_intro [data-testid="stCaptionContainer"] p {
-    color: #b8cdd8;
+    color: #C7DDF5;
     font-size: 0.9rem;
 }
 .st-key-welcome_actions button {
@@ -52,16 +52,16 @@ _STYLES = """
     font-weight: 600;
 }
 .st-key-welcome_actions [data-testid="stBaseButton-primary"] {
-    background-color: #ff4b4b;
-    border-color: #ff4b4b;
-    color: white;
+    background-color: #0D52B5;
+    border-color: #0D52B5;
+    color: #FFFFFF;
 }
 .st-key-welcome_actions [data-testid="stBaseButton-primary"]:hover {
-    background-color: #e03e3e;
-    border-color: #e03e3e;
+    background-color: #0A3D8F;
+    border-color: #0A3D8F;
 }
 .st-key-welcome_actions button:focus-visible {
-    outline: 3px solid #ff4b4b;
+    outline: 3px solid #2B8CE8;
     outline-offset: 3px;
 }
 @media (max-width: 640px) {

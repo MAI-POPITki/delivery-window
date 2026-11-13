@@ -41,8 +41,9 @@ def main():
     for kind, name in (("open", "открытие"), ("close", "закрытие")):
         bt = pd.read_csv(REPORTS / f"m1_backtest_{kind}.csv")
         bt = bt[bt.lead_days.between(*LEAD)].copy()
+        extra_names = {"magadan": "Магаданская обл. (PANGAEA)", "chukotka": "Чукотский АО (PANGAEA)"}
         bt["grp"] = np.where(bt.is_satellite == 1, "переправа Якутск (спутник)",
-                             bt["region"].map(lambda r: REGIONS.get(r, {}).get("name", r)))
+                             bt["region"].map(lambda r: REGIONS.get(r, {}).get("name", extra_names.get(r, r))))
         for g, d in bt.groupby("grp"):
             d = d.assign(ec=(d.cal_target - d.target_day).abs(), em=(d.q50 - d.target_day).abs())
             s = d.groupby("hydro_year")[["ec", "em"]].sum()
