@@ -328,7 +328,19 @@ def p_by(q, t):
 
 
 # ------------------------------------------------------------------ боковая панель
-st.sidebar.title("🧊 Окно завоза")
+if _LOGO_PNG.exists():
+    import base64
+    _logo_b64 = base64.b64encode(_LOGO_PNG.read_bytes()).decode("ascii")
+    st.sidebar.markdown(
+        f'<div style="display:flex;align-items:center;gap:10px;margin:0 0 0.5rem 0;">'
+        f'<img src="data:image/png;base64,{_logo_b64}" width="42" height="42" '
+        f'style="object-fit:contain;flex:0 0 auto;">'
+        f'<h1 style="margin:0;padding:0;font-size:1.75rem;font-weight:700;line-height:1.2;">Окно завоза</h1>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+else:
+    st.sidebar.title("🧊 Окно завоза")
 st.sidebar.button("О проекте", key="show_welcome", on_click=show_welcome,
                   icon=":material/arrow_back:", width="stretch")
 st.sidebar.caption("Прогноз окон сезонных путей и график завоза. Открытые данные, без датчиков.")
