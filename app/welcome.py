@@ -5,6 +5,7 @@ from pathlib import Path
 import streamlit as st
 
 PROJECT_PDF = Path(__file__).resolve().parent / "assets" / "project.pdf"
+LOGO_PNG = Path(__file__).resolve().parent / "assets" / "logo.png"
 
 _STYLES = """
 <style>
@@ -99,18 +100,36 @@ def render_welcome():
 
     with st.container(key="welcome"):
         with st.container(key="welcome_intro"):
-            st.markdown(
-                '<p class="welcome-eyebrow">Северный завоз · прогноз и планирование</p>',
-                unsafe_allow_html=True,
-            )
-            st.title("Окно завоза")
-            st.markdown(
-                '<p class="welcome-lead">Помогаем планировать поставки на Север, '
-                'пока сезонные пути открыты. Прогнозируем сроки открытия и закрытия '
-                'зимников и ледовых переправ и строим по ним график завоза.</p>',
-                unsafe_allow_html=True,
-            )
-            st.caption("Пилот в Якутии: зимник на Батагай и переправа Якутск — Нижний Бестях.")
+            if LOGO_PNG.exists():
+                text_col, logo_col = st.columns([4, 1], vertical_alignment="center")
+                with text_col:
+                    st.markdown(
+                        '<p class="welcome-eyebrow">Северный завоз · прогноз и планирование</p>',
+                        unsafe_allow_html=True,
+                    )
+                    st.title("Окно завоза")
+                    st.markdown(
+                        '<p class="welcome-lead">Помогаем планировать поставки на Север, '
+                        'пока сезонные пути открыты. Прогнозируем сроки открытия и закрытия '
+                        'зимников и ледовых переправ и строим по ним график завоза.</p>',
+                        unsafe_allow_html=True,
+                    )
+                    st.caption("Пилот в Якутии: зимник на Батагай и переправа Якутск — Нижний Бестях.")
+                with logo_col:
+                    st.image(str(LOGO_PNG), width=180)
+            else:
+                st.markdown(
+                    '<p class="welcome-eyebrow">Северный завоз · прогноз и планирование</p>',
+                    unsafe_allow_html=True,
+                )
+                st.title("Окно завоза")
+                st.markdown(
+                    '<p class="welcome-lead">Помогаем планировать поставки на Север, '
+                    'пока сезонные пути открыты. Прогнозируем сроки открытия и закрытия '
+                    'зимников и ледовых переправ и строим по ним график завоза.</p>',
+                    unsafe_allow_html=True,
+                )
+                st.caption("Пилот в Якутии: зимник на Батагай и переправа Якутск — Нижний Бестях.")
 
         st.write("")
         with st.container(key="welcome_actions"):
