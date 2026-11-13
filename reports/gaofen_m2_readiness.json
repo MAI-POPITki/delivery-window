@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-11-13T05:33:58.931783+00:00",
+  "point_scene_pairs": 35,
+  "unique_scenes": 33,
+  "points": 7,
+  "phenology_ice": 1,
+  "phenology_water": 0,
+  "teacher_ice": 3,
+  "teacher_water": 4,
+  "raw_channels_in_browse_png": 1,
+  "required_channels_in_existing_model": 2,
+  "existing_model_applied_to_png": false,
+  "new_model_trained": false,
+  "ready_for_validated_gaofen_classification": false
+}
