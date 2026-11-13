@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "pid": "ishim_ishim",
+  "station": {
+    "geometry": {
+      "coordinates": [
+        69.46755,
+        56.1012
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "basin_code": "01",
+      "basin_name": null,
+      "bo_code": "14",
+      "bo_name": null,
+      "catchment_area_km2": 115000.0,
+      "has_discharge": true,
+      "name": "р.Ишим - г.Ишим",
+      "opened": "1932-06-20",
+      "post_code": "11412",
+      "subbasin_code": "03",
+      "subbasin_name": null,
+      "vhu_code": "14.01.03.002",
+      "vhu_name": null
+    },
+    "type": "Feature"
+  },
+  "checked_at": "2026-11-12T23:08:48.601299+00:00",
+  "last_success_at": null,
+  "records": [],
+  "sources": [
+    {
+      "source": "level_satellite",
+      "state": "no_data",
+      "records": 0,
+      "raw_sha256": "56c3b8fb0ed7da7330029946728a53fe9a1d443c0073ce39591bbb07759413a5",
+      "url": "https://level-satellite.ru/api/series",
+      "request": {
+        "post_code": "11412",
+        "date_from": "2026-09-28",
+        "date_to": "2026-11-12"
+      }
+    }
+  ]
+}

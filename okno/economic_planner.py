@@ -32,8 +32,11 @@ class EconomicPlanner:
     free: the constant liability is included in the reported total cost.
     """
 
-    def __init__(self, cfg):
+    def __init__(self, cfg, availability=None):
         self.cfg = cfg
+        self.availability = None if availability is None else np.asarray(availability, dtype=bool).copy()
+        if self.availability is not None and self.availability.shape != (cfg.horizon_days,):
+            raise ValueError("Календарь должен покрывать весь горизонт")
         self._plan = {}
         self._token = None
         self.solves = 0
@@ -68,6 +71,8 @@ class EconomicPlanner:
             is_open[:] = True
         elif not river_open:
             is_open = days >= max(opening, day+1)
+        if self.availability is not None:
+            is_open = self.availability[day:].copy()
         is_open[0] = river_open
         # Seven continuous blocks; a binary eighth block is only needed when
         # overflow is cheaper than primary storage (a non-convex tiered tariff).

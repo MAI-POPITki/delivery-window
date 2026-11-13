@@ -3,7 +3,7 @@
 Today's dispatch sees only dated forecasts already available and today's river
 status. Costs, demand, allocated capacities and overflow space are assumptions.
 """
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 import math
 import numpy as np
 import pandas as pd
@@ -99,7 +99,7 @@ def _forecast_table(frame):
 
 
 def simulate_corridor(cfg,actual_close_day,actual_open_day,planned_close_day,planned_open_day,
-                      use_prestock=True,return_daily=False,*,forecasts=None,economic=False):
+                      use_prestock=True,return_daily=False,*,forecasts=None,economic=False,availability=None):
     """Execute only current hub dispatch. Arrival is dispatch + rail lead.
 
     Unsatisfied demand persists as backlog; penalty is its daily area in t·days.
@@ -107,6 +107,10 @@ def simulate_corridor(cfg,actual_close_day,actual_open_day,planned_close_day,pla
     """
     if not 0<=actual_close_day<=actual_open_day or planned_open_day<planned_close_day:
         raise ValueError("Invalid river window")
+    if availability is not None:
+        availability = np.asarray(availability, dtype=bool).copy()
+        if availability.shape != (cfg.horizon_days,):
+            raise ValueError("Календарь должен покрывать весь горизонт")
     f=_forecast_table(forecasts)
     d,H,lag=cfg.daily_demand_tons,cfg.horizon_days,cfg.rail_lead_time_days
     space=cfg.yak_warehouse_cap_tons+cfg.yak_overflow_capacity_tons
@@ -116,10 +120,10 @@ def simulate_corridor(cfg,actual_close_day,actual_open_day,planned_close_day,pla
     arrivals=np.zeros(H+lag+1)
     in_transit=0.
     seen_closed=False
-    planner=EconomicPlanner(cfg) if economic else None
+    planner=EconomicPlanner(cfg, availability=availability) if economic else None
     records=[]
     for t in range(H):
-        river_open=t<actual_close_day or t>=actual_open_day
+        river_open=bool(availability[t]) if availability is not None else t<actual_close_day or t>=actual_open_day
         reopened=seen_closed and river_open
         seen_closed |= not river_open
         avail=f[f.issue_day<=t]
@@ -278,3 +282,73 @@ def run_sensitivity_check(base_cfg=None,actual_close_day=30,actual_open_day=57,c
             economic_shortage_ton_days=em['shortage_ton_days'],
             economic_effect_positive=em['total_cost_rub']<b['total_cost_rub']))
     return pd.DataFrame(rows)
+
+
+# ---------------------------------------------------------------- режим «сервис»
+SERVICE_PENALTIES = (0., 100., 300., 1000., 2000., 3000., 5000., 8000., 12000., 20000., 40000.)
+
+
+def _economic_calendar(cfg, c):
+    """Экономический план по календарным датам окна (прогноз не участвует)."""
+    return simulate_corridor(cfg, c['ac'], c['ao'], c['cc'], c['co'], use_prestock=False,
+                             return_daily=False, forecasts=None, economic=True)
+
+
+def _service_row(s):
+    """Расходы без условной цены ожидания: перевозка, хранение и оценка довоза — то, что платит оператор."""
+    return dict(operating_cost_rub=s['total_cost_rub'] - s['cost_shortage_rub'],
+                shortage_ton_days=s['shortage_ton_days'], days_with_deficit=s['days_with_deficit'],
+                terminal_backlog_tons=s['terminal_backlog_tons'], tons_alt_transport=s['tons_alt_transport'])
+
+
+def service_frontier(cfg, c, penalties=SERVICE_PENALTIES):
+    """Граница «расходы против ожидания»: оптимизатор при разной внутренней цене дня ожидания.
+
+    Цена ожидания здесь — только рычаг оптимизатора, а не деньги: в расходы она не входит.
+    Возвращает (точки оптимизатора, точка привычного предзавоза по календарю).
+    """
+    base = simulate_corridor(cfg, c['ac'], c['ao'], c['cc'], c['co'], use_prestock=True,
+                             return_daily=False, forecasts=None, economic=False)
+    rows = [dict(penalty=p, **_service_row(_economic_calendar(replace(cfg, shortage_penalty_per_ton_day=float(p)), c)))
+            for p in penalties]
+    return pd.DataFrame(rows), _service_row(base)
+
+
+def service_plan(cfg, c, max_wait_ton_days, frontier=None, tol=100000. / 2 ** 14):
+    """Минимум расходов оператора при ожидании получателя не больше max_wait_ton_days (т·сут).
+
+    Ожидание убывает с ростом внутренней цены дня ожидания, поэтому ищем наименьшую цену, при которой
+    ограничение выполняется (бисекция до точности tol ₽/т·сут). Если передана уже посчитанная граница
+    (service_frontier), бисекция начинается с её интервала — так нужно втрое меньше решений.
+    Возвращает (сводка оптимизатора, найденная цена) или (None, None), если даже при очень высокой цене
+    ожидание не укладывается в предел.
+    """
+    lim = max_wait_ton_days + 1e-6
+    solve = lambda p: _economic_calendar(replace(cfg, shortage_penalty_per_ton_day=float(p)), c)
+    lo, hi, best = 0., 100000., None
+    if frontier is not None and len(frontier):
+        f = frontier.sort_values('penalty')
+        ok, bad = f[f.shortage_ton_days <= lim], f[f.shortage_ton_days > lim]
+        if len(bad):
+            lo = float(bad.penalty.max())
+        if len(ok) and float(ok.penalty.min()) > lo:
+            hi = float(ok.penalty.min())
+            if hi == 0.:
+                return _service_row(solve(0.)), 0.
+            best = solve(hi)
+    if best is None:
+        best = solve(hi)
+        if best['shortage_ton_days'] > lim:
+            return None, None
+        if lo == 0.:
+            s0 = solve(0.)
+            if s0['shortage_ton_days'] <= lim:
+                return _service_row(s0), 0.
+    while hi - lo > tol:
+        mid = (lo + hi) / 2
+        s = solve(mid)
+        if s['shortage_ton_days'] <= lim:
+            hi, best = mid, s
+        else:
+            lo = mid
+    return _service_row(best), hi

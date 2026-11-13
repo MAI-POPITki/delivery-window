@@ -1,0 +1,1407 @@
+{
+  "schema_version": 1,
+  "provider": "NSOAS",
+  "provider_url": "https://osdds.nsoas.org.cn",
+  "checked_at": "2026-11-12T23:12:58.568628+00:00",
+  "query_days": 90,
+  "asset_kind": "browse_png",
+  "ml_ready": false,
+  "points": {
+    "lensk": {
+      "name": "Ленск",
+      "lat": 60.7276,
+      "lon": 114.9322,
+      "coordinate_source": "sentinel_1_index",
+      "bbox": [
+        114.90464231844335,
+        60.71412533237514,
+        114.95975768155664,
+        60.741074667624865
+      ],
+      "checked_at": "2026-11-12T23:12:58.568628+00:00",
+      "catalog": [
+        {
+          "id": "2120120896348688385",
+          "product_name": "GF3_MYC_FSII_053972_E114.9_N60.9_20261110_L1A_HHHV_L10007497486",
+          "acquired_at_source": "2026-11-10 09:55:28",
+          "acquired_date": "2026-11-10",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  113.751978,
+                  61.298998
+                ],
+                [
+                  115.688781,
+                  61.493677
+                ],
+                [
+                  116.100429,
+                  60.469064
+                ],
+                [
+                  114.224614,
+                  60.27748
+                ],
+                [
+                  113.751978,
+                  61.298998
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261110/GF3_FSII_L1A_20261110642866_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        },
+        {
+          "id": "2115775278272679938",
+          "product_name": "GF3_MYC_FSII_053799_E115.7_N61.0_20261029_L1A_HHHV_L10007486812",
+          "acquired_at_source": "2026-10-29 09:52:03",
+          "acquired_date": "2026-10-29",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  114.561547,
+                  61.431966
+                ],
+                [
+                  116.50707,
+                  61.627098
+                ],
+                [
+                  116.920378,
+                  60.604374
+                ],
+                [
+                  115.036301,
+                  60.412373
+                ],
+                [
+                  114.561547,
+                  61.431966
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261029/GF3_FSII_L1A_20261029259680_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        },
+        {
+          "id": "2113963382963900418",
+          "product_name": "GF3_MYC_FSII_053727_E114.1_N60.7_20261024_L1A_HHHV_L10007483025",
+          "acquired_at_source": "2026-10-24 09:58:52",
+          "acquired_date": "2026-10-24",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  112.983273,
+                  61.139735
+                ],
+                [
+                  114.910222,
+                  61.333917
+                ],
+                [
+                  115.294633,
+                  60.371391
+                ],
+                [
+                  113.424448,
+                  60.180074
+                ],
+                [
+                  112.983273,
+                  61.139735
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261024/GF3_FSII_L1A_20261024959514_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        },
+        {
+          "id": "2112477280612585473",
+          "product_name": "GF3_MYC_FSII_053655_E114.2_N60.3_20261019_L1A_HHHV_L10007480309",
+          "acquired_at_source": "2026-10-19 10:05:35",
+          "acquired_date": "2026-10-19",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  113.233838,
+                  60.783847
+                ],
+                [
+                  115.082896,
+                  60.946615
+                ],
+                [
+                  115.424894,
+                  59.936439
+                ],
+                [
+                  113.632285,
+                  59.775438
+                ],
+                [
+                  113.233838,
+                  60.783847
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261020/GF3_FSII_L1A_20261020272081_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        },
+        {
+          "id": "2109607834634145793",
+          "product_name": "GF3_MYC_FSII_053554_E114.9_N60.9_20261012_L1A_HHHV_L10007472406",
+          "acquired_at_source": "2026-10-12 09:55:25",
+          "acquired_date": "2026-10-12",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  113.778408,
+                  61.314943
+                ],
+                [
+                  115.717994,
+                  61.509821
+                ],
+                [
+                  116.127809,
+                  60.490308
+                ],
+                [
+                  114.249025,
+                  60.298514
+                ],
+                [
+                  113.778408,
+                  61.314943
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261012/GF3_FSII_L1A_20261012058353_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        },
+        {
+          "id": "2096565970721034242",
+          "product_name": "GF3_MYC_WSC_053035_E119.0_N59.8_20260906_L1A_VHVV_L10007439580",
+          "acquired_at_source": "2026-09-06 09:44:28",
+          "acquired_date": "2026-09-06",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "WSC",
+          "processing_level": "L1A",
+          "polarization_code": "VHVV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  113.48574,
+                  61.169637
+                ],
+                [
+                  122.547066,
+                  62.030565
+                ],
+                [
+                  123.492942,
+                  58.371281
+                ],
+                [
+                  115.37744,
+                  57.549634
+                ],
+                [
+                  113.48574,
+                  61.169637
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/WSC/L1A/20260906/GF3_WSC_L1A_20260906120877_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        }
+      ],
+      "catalog_count": 6,
+      "covered_count": 6,
+      "scene": {
+        "id": "2120120896348688385",
+        "product_name": "GF3_MYC_FSII_053972_E114.9_N60.9_20261110_L1A_HHHV_L10007497486",
+        "acquired_at_source": "2026-11-10 09:55:28",
+        "acquired_date": "2026-11-10",
+        "time_zone": "unspecified_by_catalogue",
+        "sensor": "FSII",
+        "processing_level": "L1A",
+        "polarization_code": "HHHV",
+        "footprint": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                113.751978,
+                61.298998
+              ],
+              [
+                115.688781,
+                61.493677
+              ],
+              [
+                116.100429,
+                60.469064
+              ],
+              [
+                114.224614,
+                60.27748
+              ],
+              [
+                113.751978,
+                61.298998
+              ]
+            ]
+          ]
+        },
+        "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261110/GF3_FSII_L1A_20261110642866_browse.png",
+        "usage": "visual_review_only",
+        "ml_ready": false,
+        "preview": {
+          "file": "previews/e7388753eabdd389893f0775.png",
+          "sha256": "f444cf9549aea2fa85dced1e152c1505016f65824ffd761ce8dbc26461dba45c",
+          "bytes": 1749619,
+          "width": 1670,
+          "height": 1538,
+          "downloaded_at": "2026-11-12T23:05:13.594151+00:00",
+          "validated_at": "2026-11-12T23:12:58.568628+00:00"
+        }
+      },
+      "status": "ready",
+      "last_success_at": "2026-11-12T23:12:58.568628+00:00"
+    },
+    "olekminsk": {
+      "name": "Олёкминск",
+      "lat": 60.3843,
+      "lon": 120.4483,
+      "coordinate_source": "sentinel_1_index",
+      "bbox": [
+        120.42103328587821,
+        60.37082533237514,
+        120.4755667141218,
+        60.397774667624866
+      ],
+      "checked_at": "2026-11-12T23:12:58.568628+00:00",
+      "catalog": [
+        {
+          "id": "2115079748722823170",
+          "product_name": "GF3_MYC_FSII_053770_E120.4_N60.1_20261027_L1A_HHHV_L10007485486",
+          "acquired_at_source": "2026-10-27 09:34:33",
+          "acquired_date": "2026-10-27",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  119.25747,
+                  60.58367
+                ],
+                [
+                  121.167911,
+                  60.777852
+                ],
+                [
+                  121.598301,
+                  59.669484
+                ],
+                [
+                  119.75103,
+                  59.478413
+                ],
+                [
+                  119.25747,
+                  60.58367
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261027/GF3_FSII_L1A_20261027416849_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        },
+        {
+          "id": "2110702809279090689",
+          "product_name": "GF3_MYC_FSII_053597_E121.1_N60.5_20261015_L1A_HHHV_L10007476456",
+          "acquired_at_source": "2026-10-15 09:31:11",
+          "acquired_date": "2026-10-15",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  119.984891,
+                  60.914104
+                ],
+                [
+                  121.912635,
+                  61.109002
+                ],
+                [
+                  122.349097,
+                  60.000945
+                ],
+                [
+                  120.48586,
+                  59.809263
+                ],
+                [
+                  119.984891,
+                  60.914104
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261015/GF3_FSII_L1A_20261015136900_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        },
+        {
+          "id": "2108888690263576577",
+          "product_name": "GF3_MYC_FSII_053525_E119.6_N59.9_20261010_L1A_HHHV_L10007470454",
+          "acquired_at_source": "2026-10-10 09:37:53",
+          "acquired_date": "2026-10-10",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  118.518704,
+                  60.369014
+                ],
+                [
+                  120.413085,
+                  60.562229
+                ],
+                [
+                  120.839695,
+                  59.453709
+                ],
+                [
+                  119.007467,
+                  59.263529
+                ],
+                [
+                  118.518704,
+                  60.369014
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261010/GF3_FSII_L1A_20261010997781_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        },
+        {
+          "id": "2096565970721034242",
+          "product_name": "GF3_MYC_WSC_053035_E119.0_N59.8_20260906_L1A_VHVV_L10007439580",
+          "acquired_at_source": "2026-09-06 09:44:28",
+          "acquired_date": "2026-09-06",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "WSC",
+          "processing_level": "L1A",
+          "polarization_code": "VHVV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  113.48574,
+                  61.169637
+                ],
+                [
+                  122.547066,
+                  62.030565
+                ],
+                [
+                  123.492942,
+                  58.371281
+                ],
+                [
+                  115.37744,
+                  57.549634
+                ],
+                [
+                  113.48574,
+                  61.169637
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/WSC/L1A/20260906/GF3_WSC_L1A_20260906120877_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        }
+      ],
+      "catalog_count": 4,
+      "covered_count": 4,
+      "scene": {
+        "id": "2115079748722823170",
+        "product_name": "GF3_MYC_FSII_053770_E120.4_N60.1_20261027_L1A_HHHV_L10007485486",
+        "acquired_at_source": "2026-10-27 09:34:33",
+        "acquired_date": "2026-10-27",
+        "time_zone": "unspecified_by_catalogue",
+        "sensor": "FSII",
+        "processing_level": "L1A",
+        "polarization_code": "HHHV",
+        "footprint": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                119.25747,
+                60.58367
+              ],
+              [
+                121.167911,
+                60.777852
+              ],
+              [
+                121.598301,
+                59.669484
+              ],
+              [
+                119.75103,
+                59.478413
+              ],
+              [
+                119.25747,
+                60.58367
+              ]
+            ]
+          ]
+        },
+        "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261027/GF3_FSII_L1A_20261027416849_browse.png",
+        "usage": "visual_review_only",
+        "ml_ready": false,
+        "preview": {
+          "file": "previews/0d2a211dcb6f6e1819d81d04.png",
+          "sha256": "bf04ba5cd89118649c4cecdab5279dc552b4d02879b69e3c1d8a40656ee1c3f4",
+          "bytes": 1999364,
+          "width": 1685,
+          "height": 1663,
+          "downloaded_at": "2026-11-12T23:05:13.594151+00:00",
+          "validated_at": "2026-11-12T23:12:58.568628+00:00"
+        }
+      },
+      "status": "ready",
+      "last_success_at": "2026-11-12T23:12:58.568628+00:00"
+    },
+    "pokrovsk": {
+      "name": "Покровск",
+      "lat": 61.4848,
+      "lon": 129.1651,
+      "coordinate_source": "sentinel_1_index",
+      "bbox": [
+        129.13687440997404,
+        61.47132533237514,
+        129.19332559002595,
+        61.49827466762486
+      ],
+      "checked_at": "2026-11-12T23:12:58.568628+00:00",
+      "catalog": [
+        {
+          "id": "2119749714495606786",
+          "product_name": "GF3_MDJ_FSII_053957_E129.3_N61.5_20261109_L1A_HHHV_L10007496591",
+          "acquired_at_source": "2026-11-09 08:57:03",
+          "acquired_date": "2026-11-09",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  128.099843,
+                  61.918642
+                ],
+                [
+                  130.096372,
+                  62.117187
+                ],
+                [
+                  130.552216,
+                  61.010295
+                ],
+                [
+                  128.625019,
+                  60.815335
+                ],
+                [
+                  128.099843,
+                  61.918642
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261109/GF3_FSII_L1A_20261109618796_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        },
+        {
+          "id": "2113582224187002881",
+          "product_name": "GF3_MYC_FSII_053712_E128.5_N61.0_20261023_L1A_HHHV_L10007482385",
+          "acquired_at_source": "2026-10-23 09:00:21",
+          "acquired_date": "2026-10-23",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  127.469833,
+                  61.464162
+                ],
+                [
+                  129.361112,
+                  61.654235
+                ],
+                [
+                  129.810514,
+                  60.546881
+                ],
+                [
+                  127.983792,
+                  60.360118
+                ],
+                [
+                  127.469833,
+                  61.464162
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261023/GF3_FSII_L1A_20261023932706_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        },
+        {
+          "id": "2109252406951792641",
+          "product_name": "GF3_MH1_FSII_053539_E129.4_N61.4_20261011_L1A_HHHV_L10007471237",
+          "acquired_at_source": "2026-10-11 08:56:58",
+          "acquired_date": "2026-10-11",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  128.187543,
+                  61.805278
+                ],
+                [
+                  130.254308,
+                  62.010582
+                ],
+                [
+                  130.704996,
+                  60.903788
+                ],
+                [
+                  128.709683,
+                  60.702133
+                ],
+                [
+                  128.187543,
+                  61.805278
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261011/GF3_FSII_L1A_20261011028679_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        }
+      ],
+      "catalog_count": 4,
+      "covered_count": 3,
+      "scene": {
+        "id": "2119749714495606786",
+        "product_name": "GF3_MDJ_FSII_053957_E129.3_N61.5_20261109_L1A_HHHV_L10007496591",
+        "acquired_at_source": "2026-11-09 08:57:03",
+        "acquired_date": "2026-11-09",
+        "time_zone": "unspecified_by_catalogue",
+        "sensor": "FSII",
+        "processing_level": "L1A",
+        "polarization_code": "HHHV",
+        "footprint": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                128.099843,
+                61.918642
+              ],
+              [
+                130.096372,
+                62.117187
+              ],
+              [
+                130.552216,
+                61.010295
+              ],
+              [
+                128.625019,
+                60.815335
+              ],
+              [
+                128.099843,
+                61.918642
+              ]
+            ]
+          ]
+        },
+        "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261109/GF3_FSII_L1A_20261109618796_browse.png",
+        "usage": "visual_review_only",
+        "ml_ready": false,
+        "preview": {
+          "file": "previews/cb29f311b4c65c18419cbe8e.png",
+          "sha256": "c31ce75ba853d4e5a34387ac3690f26d55267ae63e2b584fc6108fbe9721cd05",
+          "bytes": 2022253,
+          "width": 1689,
+          "height": 1662,
+          "downloaded_at": "2026-11-12T23:05:13.594151+00:00",
+          "validated_at": "2026-11-12T23:12:58.568628+00:00"
+        }
+      },
+      "status": "ready",
+      "last_success_at": "2026-11-12T23:12:58.568628+00:00"
+    },
+    "yakutsk_crossing": {
+      "name": "Переправа Якутск — Нижний Бестях",
+      "lat": 61.9964,
+      "lon": 129.841,
+      "coordinate_source": "sentinel_1_index",
+      "bbox": [
+        129.81230161523627,
+        61.98292533237514,
+        129.86969838476375,
+        62.009874667624864
+      ],
+      "checked_at": "2026-11-12T23:12:58.568628+00:00",
+      "catalog": [
+        {
+          "id": "2119754481179496449",
+          "product_name": "GF3_MDJ_FSII_053957_E128.7_N62.6_20261109_L1A_HHHV_L10007496592",
+          "acquired_at_source": "2026-11-09 08:57:20",
+          "acquired_date": "2026-11-09",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  127.446558,
+                  63.225811
+                ],
+                [
+                  129.52618,
+                  63.428488
+                ],
+                [
+                  130.150296,
+                  61.994639
+                ],
+                [
+                  128.167895,
+                  61.797192
+                ],
+                [
+                  127.446558,
+                  63.225811
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261109/GF3_FSII_L1A_20261109618928_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        },
+        {
+          "id": "2119749714495606786",
+          "product_name": "GF3_MDJ_FSII_053957_E129.3_N61.5_20261109_L1A_HHHV_L10007496591",
+          "acquired_at_source": "2026-11-09 08:57:03",
+          "acquired_date": "2026-11-09",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  128.099843,
+                  61.918642
+                ],
+                [
+                  130.096372,
+                  62.117187
+                ],
+                [
+                  130.552216,
+                  61.010295
+                ],
+                [
+                  128.625019,
+                  60.815335
+                ],
+                [
+                  128.099843,
+                  61.918642
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261109/GF3_FSII_L1A_20261109618796_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        },
+        {
+          "id": "2115395859406327809",
+          "product_name": "GF3_MH1_FSII_053784_E130.2_N61.6_20261028_L1A_HHHV_L10007486114",
+          "acquired_at_source": "2026-10-28 08:53:38",
+          "acquired_date": "2026-10-28",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  128.91784,
+                  62.02996
+                ],
+                [
+                  130.996232,
+                  62.235706
+                ],
+                [
+                  131.451645,
+                  61.129068
+                ],
+                [
+                  129.445712,
+                  60.927055
+                ],
+                [
+                  128.91784,
+                  62.02996
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261028/GF3_FSII_L1A_20261028793307_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        },
+        {
+          "id": "2109251939127513090",
+          "product_name": "GF3_MH1_FSII_053539_E129.0_N62.3_20261011_L1A_HHHV_L10007471238",
+          "acquired_at_source": "2026-10-11 08:57:15",
+          "acquired_date": "2026-10-11",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  127.707219,
+                  62.785232
+                ],
+                [
+                  129.833094,
+                  62.993209
+                ],
+                [
+                  130.304953,
+                  61.887329
+                ],
+                [
+                  128.255316,
+                  61.683384
+                ],
+                [
+                  127.707219,
+                  62.785232
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261011/GF3_FSII_L1A_20261011028466_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        }
+      ],
+      "catalog_count": 6,
+      "covered_count": 4,
+      "scene": {
+        "id": "2119754481179496449",
+        "product_name": "GF3_MDJ_FSII_053957_E128.7_N62.6_20261109_L1A_HHHV_L10007496592",
+        "acquired_at_source": "2026-11-09 08:57:20",
+        "acquired_date": "2026-11-09",
+        "time_zone": "unspecified_by_catalogue",
+        "sensor": "FSII",
+        "processing_level": "L1A",
+        "polarization_code": "HHHV",
+        "footprint": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                127.446558,
+                63.225811
+              ],
+              [
+                129.52618,
+                63.428488
+              ],
+              [
+                130.150296,
+                61.994639
+              ],
+              [
+                128.167895,
+                61.797192
+              ],
+              [
+                127.446558,
+                63.225811
+              ]
+            ]
+          ]
+        },
+        "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261109/GF3_FSII_L1A_20261109618928_browse.png",
+        "usage": "visual_review_only",
+        "ml_ready": false,
+        "preview": {
+          "file": "previews/91101e5915cd9e5e6d79016e.png",
+          "sha256": "796d59817e0d90022c88e96376df5bab82d5904a1b512ad471ba2653c6ae5d78",
+          "bytes": 2592980,
+          "width": 1685,
+          "height": 2155,
+          "downloaded_at": "2026-11-12T23:05:13.594151+00:00",
+          "validated_at": "2026-11-12T23:12:58.568628+00:00"
+        }
+      },
+      "status": "ready",
+      "last_success_at": "2026-11-12T23:12:58.568628+00:00"
+    },
+    "sangar": {
+      "name": "Сангар",
+      "lat": 63.925,
+      "lon": 127.4904,
+      "coordinate_source": "sentinel_1_index",
+      "bbox": [
+        127.45974421404584,
+        63.911525332375135,
+        127.52105578595415,
+        63.93847466762486
+      ],
+      "checked_at": "2026-11-12T23:12:58.568628+00:00",
+      "catalog": [
+        {
+          "id": "2109250468021522434",
+          "product_name": "GF3_MH1_FSII_053539_E128.0_N64.3_20261011_L1A_HHHV_L10007471240",
+          "acquired_at_source": "2026-10-11 08:57:48",
+          "acquired_date": "2026-10-11",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  126.662495,
+                  64.741303
+                ],
+                [
+                  128.932392,
+                  64.956824
+                ],
+                [
+                  129.453913,
+                  63.852997
+                ],
+                [
+                  127.27178,
+                  63.642423
+                ],
+                [
+                  126.662495,
+                  64.741303
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261011/GF3_FSII_L1A_20261011028122_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        }
+      ],
+      "catalog_count": 1,
+      "covered_count": 1,
+      "scene": {
+        "id": "2109250468021522434",
+        "product_name": "GF3_MH1_FSII_053539_E128.0_N64.3_20261011_L1A_HHHV_L10007471240",
+        "acquired_at_source": "2026-10-11 08:57:48",
+        "acquired_date": "2026-10-11",
+        "time_zone": "unspecified_by_catalogue",
+        "sensor": "FSII",
+        "processing_level": "L1A",
+        "polarization_code": "HHHV",
+        "footprint": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                126.662495,
+                64.741303
+              ],
+              [
+                128.932392,
+                64.956824
+              ],
+              [
+                129.453913,
+                63.852997
+              ],
+              [
+                127.27178,
+                63.642423
+              ],
+              [
+                126.662495,
+                64.741303
+              ]
+            ]
+          ]
+        },
+        "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261011/GF3_FSII_L1A_20261011028122_browse.png",
+        "usage": "visual_review_only",
+        "ml_ready": false,
+        "preview": {
+          "file": "previews/c7705a736c4e093c7b3d0588.png",
+          "sha256": "9a92f8a27cb99a2f6b010d646b4e664aa70770a958b88b1f4781d7ed17b926f5",
+          "bytes": 2244248,
+          "width": 1749,
+          "height": 1658,
+          "downloaded_at": "2026-11-12T23:05:13.594151+00:00",
+          "validated_at": "2026-11-12T23:12:58.568628+00:00"
+        }
+      },
+      "status": "ready",
+      "last_success_at": "2026-11-12T23:12:58.568628+00:00"
+    },
+    "zhigansk": {
+      "name": "Жиганск",
+      "lat": 66.7772,
+      "lon": 123.3451,
+      "coordinate_source": "sentinel_1_index",
+      "bbox": [
+        123.31092701818754,
+        66.76372533237513,
+        123.37927298181246,
+        66.79067466762486
+      ],
+      "checked_at": "2026-11-12T23:12:58.568628+00:00",
+      "catalog": [
+        {
+          "id": "2116129645387517954",
+          "product_name": "GF3_MH1_FSII_053813_E123.3_N66.6_20261030_L1A_HHHV_L10007487666",
+          "acquired_at_source": "2026-10-30 09:12:17",
+          "acquired_date": "2026-10-30",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  121.800451,
+                  67.037235
+                ],
+                [
+                  124.236152,
+                  67.261135
+                ],
+                [
+                  124.834289,
+                  66.160217
+                ],
+                [
+                  122.501881,
+                  65.942563
+                ],
+                [
+                  121.800451,
+                  67.037235
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261030/GF3_FSII_L1A_20261030353641_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        }
+      ],
+      "catalog_count": 1,
+      "covered_count": 1,
+      "scene": {
+        "id": "2116129645387517954",
+        "product_name": "GF3_MH1_FSII_053813_E123.3_N66.6_20261030_L1A_HHHV_L10007487666",
+        "acquired_at_source": "2026-10-30 09:12:17",
+        "acquired_date": "2026-10-30",
+        "time_zone": "unspecified_by_catalogue",
+        "sensor": "FSII",
+        "processing_level": "L1A",
+        "polarization_code": "HHHV",
+        "footprint": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                121.800451,
+                67.037235
+              ],
+              [
+                124.236152,
+                67.261135
+              ],
+              [
+                124.834289,
+                66.160217
+              ],
+              [
+                122.501881,
+                65.942563
+              ],
+              [
+                121.800451,
+                67.037235
+              ]
+            ]
+          ]
+        },
+        "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261030/GF3_FSII_L1A_20261030353641_browse.png",
+        "usage": "visual_review_only",
+        "ml_ready": false,
+        "preview": {
+          "file": "previews/dd66da7bc718d93cff6c42e6.png",
+          "sha256": "4beda66d5e4fa5210a944c3439e884b96b4b32b67bd56299f163159f65e56ed6",
+          "bytes": 2113850,
+          "width": 1717,
+          "height": 1659,
+          "downloaded_at": "2026-11-12T23:05:13.594151+00:00",
+          "validated_at": "2026-11-12T23:12:58.568628+00:00"
+        }
+      },
+      "status": "ready",
+      "last_success_at": "2026-11-12T23:12:58.568628+00:00"
+    },
+    "kyusyur": {
+      "name": "Кюсюр",
+      "lat": 70.6863,
+      "lon": 127.3731,
+      "coordinate_source": "sentinel_1_index",
+      "bbox": [
+        127.33235903924752,
+        70.67282533237514,
+        127.41384096075247,
+        70.69977466762487
+      ],
+      "checked_at": "2026-11-12T23:12:58.568628+00:00",
+      "catalog": [
+        {
+          "id": "2119025140074221569",
+          "product_name": "GF3_MH1_FSII_053928_E128.5_N70.4_20261107_L1A_HHHV_L10007495150",
+          "acquired_at_source": "2026-11-07 08:42:23",
+          "acquired_date": "2026-11-07",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  126.673222,
+                  70.799647
+                ],
+                [
+                  129.548417,
+                  71.05153
+                ],
+                [
+                  130.333775,
+                  69.957652
+                ],
+                [
+                  127.602051,
+                  69.715383
+                ],
+                [
+                  126.673222,
+                  70.799647
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261107/GF3_FSII_L1A_20261107568740_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        },
+        {
+          "id": "2117223326546857986",
+          "product_name": "GF3_MH1_FSII_053856_E126.4_N70.8_20261102_L1A_HHHV_L10007490099",
+          "acquired_at_source": "2026-11-02 08:49:24",
+          "acquired_date": "2026-11-02",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  124.557375,
+                  71.238863
+                ],
+                [
+                  127.474193,
+                  71.49332
+                ],
+                [
+                  128.290058,
+                  70.400532
+                ],
+                [
+                  125.52169,
+                  70.15615
+                ],
+                [
+                  124.557375,
+                  71.238863
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261102/GF3_FSII_L1A_20261102430370_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        },
+        {
+          "id": "2112931883116335105",
+          "product_name": "GF3_MH1_FSII_053683_E127.0_N71.1_20261021_L1A_HHHV_L10007481106",
+          "acquired_at_source": "2026-10-21 08:46:01",
+          "acquired_date": "2026-10-21",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  125.159741,
+                  71.529635
+                ],
+                [
+                  128.119251,
+                  71.786963
+                ],
+                [
+                  128.955758,
+                  70.694921
+                ],
+                [
+                  126.148877,
+                  70.44803
+                ],
+                [
+                  125.159741,
+                  71.529635
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261021/GF3_FSII_L1A_20261021458652_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        },
+        {
+          "id": "2108538730317860865",
+          "product_name": "GF3_MH1_FSII_053510_E128.5_N70.4_20261009_L1A_HHHV_L10007468995",
+          "acquired_at_source": "2026-10-09 08:42:19",
+          "acquired_date": "2026-10-09",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  126.703407,
+                  70.807655
+                ],
+                [
+                  129.581145,
+                  71.059696
+                ],
+                [
+                  130.366816,
+                  69.965791
+                ],
+                [
+                  127.632711,
+                  69.723372
+                ],
+                [
+                  126.703407,
+                  70.807655
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261009/GF3_FSII_L1A_20261009975029_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false
+        }
+      ],
+      "catalog_count": 5,
+      "covered_count": 4,
+      "scene": {
+        "id": "2119025140074221569",
+        "product_name": "GF3_MH1_FSII_053928_E128.5_N70.4_20261107_L1A_HHHV_L10007495150",
+        "acquired_at_source": "2026-11-07 08:42:23",
+        "acquired_date": "2026-11-07",
+        "time_zone": "unspecified_by_catalogue",
+        "sensor": "FSII",
+        "processing_level": "L1A",
+        "polarization_code": "HHHV",
+        "footprint": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                126.673222,
+                70.799647
+              ],
+              [
+                129.548417,
+                71.05153
+              ],
+              [
+                130.333775,
+                69.957652
+              ],
+              [
+                127.602051,
+                69.715383
+              ],
+              [
+                126.673222,
+                70.799647
+              ]
+            ]
+          ]
+        },
+        "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261107/GF3_FSII_L1A_20261107568740_browse.png",
+        "usage": "visual_review_only",
+        "ml_ready": false,
+        "preview": {
+          "file": "previews/691b6dc8f08ba13aab0ff68c.png",
+          "sha256": "c131c542b792314e7d987ffd6410ec65364ece9ffb57f2ddff0947e97d45a797",
+          "bytes": 2325782,
+          "width": 1719,
+          "height": 1658,
+          "downloaded_at": "2026-11-12T23:05:13.594151+00:00",
+          "validated_at": "2026-11-12T23:12:58.568628+00:00"
+        }
+      },
+      "status": "ready",
+      "last_success_at": "2026-11-12T23:12:58.568628+00:00"
+    }
+  }
+}

@@ -80,6 +80,18 @@ def open_dashboard():
 
 def show_welcome():
     st.session_state["dashboard_open"] = False
+    st.query_params.pop("module", None)
+    st.session_state.pop("flood_link_processed", None)
+    st.session_state.pop("journey_link_processed", None)
+
+
+def open_backhaul():
+    """Совместимость старых переходов: общая рабочая вкладка."""
+    st.query_params["module"] = "backhaul"
+
+
+def open_routes():
+    st.query_params["module"] = "routes"
 
 
 def render_welcome():
@@ -129,7 +141,7 @@ def render_welcome():
                         width="stretch",
                     )
 
-        st.caption("В дашборде — карта путей, прогнозы, планировщик отправок и рейтинг риска. "
+        st.caption("В дашборде — карта сезонных путей, прогнозы, риски проезда и экспериментальный прогноз паводков. "
                    "В PDF — подробное описание проекта, методика и результаты.")
         st.divider()
 
@@ -141,5 +153,5 @@ def render_welcome():
             st.markdown("**02 · Прогноз окна**")
             st.write("Диапазон возможных дат открытия и закрытия пути с учётом неопределённости.")
         with plan:
-            st.markdown("**03 · План поставок**")
-            st.write("График отправок по неделям, чтобы оценить риск недовоза и потребность в технике.")
+            st.markdown("**03 · Решения о поездке**")
+            st.write("Проверка даты проезда, полной массы машины и опубликованных ограничений дороги.")

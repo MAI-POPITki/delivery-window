@@ -56,7 +56,9 @@ def load_weather(point_id: str, live: bool = False) -> pd.DataFrame:
             w = w.rename(columns={"temperature_2m_mean": "t", "snowfall_sum": "snow_cm",
                                   "precipitation_sum": "precip_mm"})
             w["hydro_year"] = hydro_year(w["date"])
-            w["season_day"] = (w["date"] - w["hydro_year"].map(season_start)).dt.days
+            # векторно (раньше — season_start на каждую строку, ~1 млн вызовов при открытии дашборда)
+            start = pd.to_datetime(pd.DataFrame({"year": w["hydro_year"] - 1, "month": SEASON_START_MONTH, "day": 1}))
+            w["season_day"] = (w["date"] - start).dt.days
             return w
     raise FileNotFoundError(point_id)
 

@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "enabled": true,
+  "trained_at": "2026-11-13T06:11:37.579559+00:00",
+  "source": "USGS Landsat Collection 2 Level-2 / Microsoft Planetary Computer",
+  "model_sha256": "ddc3bd2d979f19df6e0cd3ede7b1b1870b5079fe91152d2d9d27f42eef43f712",
+  "features": [
+    "blue_p10",
+    "blue_p50",
+    "blue_p90",
+    "blue_std",
+    "green_p10",
+    "green_p50",
+    "green_p90",
+    "green_std",
+    "red_p10",
+    "red_p50",
+    "red_p90",
+    "red_std",
+    "nir08_p10",
+    "nir08_p50",
+    "nir08_p90",
+    "nir08_std",
+    "swir16_p10",
+    "swir16_p50",
+    "swir16_p90",
+    "swir16_std",
+    "swir22_p10",
+    "swir22_p50",
+    "swir22_p90",
+    "swir22_std",
+    "ndsi_p10",
+    "ndsi_p50",
+    "ndsi_p90",
+    "ndwi_p10",
+    "ndwi_p50",
+    "ndwi_p90",
+    "ndvi_p10",
+    "ndvi_p50",
+    "ndvi_p90"
+  ],
+  "training_scenes": 239,
+  "training_class_counts": {
+    "water": 152,
+    "ice": 87
+  },
+  "trained_through_season": 2024,
+  "validation": {
+    "n": 136,
+    "ice": 50,
+    "water": 86,
+    "accuracy": 0.9926470588235294,
+    "balanced_accuracy": 0.99,
+    "f1_ice": 0.98989898989899,
+    "f1_water": 0.9942196531791907,
+    "brier": 0.0074022554853851175,
+    "seasons": 4,
+    "unique_scenes": 122
+  },
+  "validation_protocol": "Forward chaining by hydrological season; masks from summers 2018-2020 only",
+  "reference": "Qiu et al. 2026, doi:10.5281/zenodo.17054619; ±14-day transition exclusion",
+  "mask_calibration_years": [
+    2018,
+    2019,
+    2020
+  ],
+  "masks": {
+    "lensk": {
+      "summer_reference_scenes": [
+        "LC08_L2SP_130017_20180714_02_T1",
+        "LC08_L2SP_131017_20180806_02_T1",
+        "LC08_L2SP_130018_20190717_02_T1",
+        "LC08_L2SP_131017_20190809_02_T1",
+        "LC08_L2SP_129018_20200712_02_T1",
+        "LC08_L2SP_131017_20200827_02_T1"
+      ],
+      "river_pixels": 5891
+    },
+    "olekminsk": {
+      "summer_reference_scenes": [
+        "LC08_L2SP_126018_20180718_02_T1",
+        "LC08_L2SP_126018_20180803_02_T1",
+        "LC08_L2SP_127018_20190728_02_T1",
+        "LC08_L2SP_126018_20190806_02_T1",
+        "LC08_L2SP_127018_20200714_02_T1",
+        "LC08_L2SP_126018_20200824_02_T1"
+      ],
+      "river_pixels": 8814
+    },
+    "pokrovsk": {
+      "summer_reference_scenes": [
+        "LC08_L2SP_122017_20180706_02_T1",
+        "LC08_L2SP_122017_20180807_02_T1",
+        "LC08_L2SP_122017_20190725_02_T1",
+        "LC08_L2SP_122017_20190826_02_T1",
+        "LC08_L2SP_121017_20200720_02_T1",
+        "LC08_L2SP_121017_20200821_02_T1"
+      ],
+      "river_pixels": 16579
+    },
+    "yakutsk_crossing": {
+      "summer_reference_scenes": [
+        "LC08_L2SP_120017_20180708_02_T1",
+        "LC08_L2SP_122016_20180807_02_T1",
+        "LC08_L2SP_120017_20190727_02_T1",
+        "LC08_L2SP_122016_20190826_02_T1",
+        "LC08_L2SP_120017_20200713_02_T1",
+        "LC08_L2SP_121017_20200821_02_T1"
+      ],
+      "river_pixels": 19988
+    },
+    "sangar": {
+      "summer_reference_scenes": [
+        "LC08_L2SP_123015_20180713_02_T1",
+        "LC08_L2SP_124015_20180821_02_T1",
+        "LC08_L2SP_124015_20190723_02_T1",
+        "LC08_L2SP_123015_20190817_02_T1",
+        "LC08_L2SP_124015_20200709_02_T1",
+        "LC08_L2SP_124015_20200826_02_T1"
+      ],
+      "river_pixels": 12420
+    },
+    "zhigansk": {
+      "summer_reference_scenes": [
+        "LC08_L2SP_127013_20180709_02_T1",
+        "LC08_L2SP_128013_20180801_02_T1",
+        "LC08_L2SP_127013_20190712_02_T1",
+        "LC08_L2SP_129013_20190811_02_T1",
+        "LC08_L2SP_127013_20200730_02_T1",
+        "LC08_L2SP_128013_20200806_02_T1"
+      ],
+      "river_pixels": 5799
+    },
+    "kyusyur": {
+      "summer_reference_scenes": [
+        "LC08_L2SP_128010_20180716_02_T1",
+        "LC08_L2SP_127010_20180826_02_T1",
+        "LC08_L2SP_127011_20190728_02_T1",
+        "LC08_L2SP_128010_20190804_02_T1",
+        "LC08_L2SP_127011_20200730_02_T1",
+        "LC08_L2SP_129010_20200829_02_T1"
+      ],
+      "river_pixels": 12587
+    }
+  },
+  "mask_sha256": "94310e62fbc6d36885abacddadde49ec4ab787e888e57c760948c51a361a1f1d",
+  "features_sha256": "b6df6d058e9efc6e35f1a6fac8426630e47633c14220d6e2e53b8ce4a24394cb",
+  "training_windows": 239
+}

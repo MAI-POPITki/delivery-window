@@ -80,10 +80,7 @@ def flag_spikes(thick: pd.DataFrame) -> pd.DataFrame:
     сохраняем в ice_cm_raw, в ice_cm ставим пусто. Стабильно толстый лёд (наледи на горных
     реках, ~300 см много замеров подряд) выбросом не считается."""
     thick = thick.sort_values(["gauge_code", "hydro_year", "date"]).reset_index(drop=True)
-    if "ice_cm_raw" in thick.columns:
-        thick["ice_cm_raw"] = thick["ice_cm_raw"].fillna(thick["ice_cm"])
-    else:
-        thick["ice_cm_raw"] = thick["ice_cm"]
+    thick["ice_cm_raw"] = thick.get("ice_cm_raw", thick["ice_cm"]).fillna(thick["ice_cm"])
     g = thick.groupby(["gauge_code", "hydro_year"])["ice_cm"]
     prev_, next_ = g.shift(1), g.shift(-1)
     neigh = pd.concat([prev_, next_], axis=1).median(axis=1)
@@ -118,7 +115,6 @@ def build_hydro():
     st["yakutia"] = st["region"].str.contains("Sakha")
     st["source_type"] = "замер"
     st["source"] = hydro.SOURCE
-
     if (northeast.DIRECTORY / "ice_snow.tsv").exists():
         extra_st, extra_th = northeast.load_observations()
         st = pd.concat([st, extra_st], ignore_index=True)

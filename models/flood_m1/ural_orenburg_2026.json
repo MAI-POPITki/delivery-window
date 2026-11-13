@@ -1,0 +1,89 @@
+{
+  "year": 2026,
+  "train_until": "2024-12-31",
+  "calibration_year": 2025,
+  "methods": {
+    "1": "catboost",
+    "2": "catboost",
+    "3": "catboost",
+    "4": "catboost",
+    "5": "catboost",
+    "6": "catboost",
+    "7": "catboost"
+  },
+  "widths_cm": {
+    "1": 3.67792571341505,
+    "2": 5.560688913574211,
+    "3": 7.490180223060804,
+    "4": 9.540363245516716,
+    "5": 12.172127840740558,
+    "6": 15.06017679874219,
+    "7": 19.192551573531205
+  },
+  "calibration_mae": {
+    "1": {
+      "catboost": 3.6938540351446676,
+      "persistence": 3.752988047808765,
+      "calendar": 46.20517928286853,
+      "last_year": 162.024
+    },
+    "2": {
+      "catboost": 5.980737342699506,
+      "persistence": 7.352,
+      "calendar": 46.374,
+      "last_year": 162.65060240963857
+    },
+    "3": {
+      "catboost": 7.719854012148451,
+      "persistence": 10.072289156626505,
+      "calendar": 46.54417670682731,
+      "last_year": 163.28225806451613
+    },
+    "4": {
+      "catboost": 9.5525478730149,
+      "persistence": 12.838709677419354,
+      "calendar": 46.707661290322584,
+      "last_year": 163.91093117408906
+    },
+    "5": {
+      "catboost": 12.058755399336498,
+      "persistence": 15.862348178137651,
+      "calendar": 46.87246963562753,
+      "last_year": 164.5528455284553
+    },
+    "6": {
+      "catboost": 14.83955386160885,
+      "persistence": 18.788617886178862,
+      "calendar": 47.03861788617886,
+      "last_year": 165.21224489795918
+    },
+    "7": {
+      "catboost": 17.632678095744733,
+      "persistence": 21.66938775510204,
+      "calendar": 47.20204081632653,
+      "last_year": 165.88114754098362
+    }
+  },
+  "features": [
+    "h0",
+    "h1",
+    "h3",
+    "h7",
+    "h14",
+    "h30",
+    "d1",
+    "d3",
+    "d7",
+    "d14",
+    "mean7",
+    "mean30",
+    "sin",
+    "cos",
+    "lead"
+  ],
+  "interval": "80% residual quantile on previous year; coverage not guaranteed",
+  "point_id": "ural_orenburg",
+  "gauge_code": "19063",
+  "observation_source": "vodinfo",
+  "data_sha256": "107db4260eca4fe8c81def98eda43e0aa83b9022e6188ccc68d1530923283951"
+}

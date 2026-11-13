@@ -1,0 +1,89 @@
+{
+  "source": "https://level-satellite.ru/api/series",
+  "request": {
+    "post_code": "19063",
+    "date_from": "2000-01-01",
+    "date_to": "2026-11-09"
+  },
+  "fetched_at": "2026-11-09T14:00:07.507657+00:00",
+  "sha256": "107db4260eca4fe8c81def98eda43e0aa83b9022e6188ccc68d1530923283951",
+  "station": {
+    "geometry": {
+      "coordinates": [
+        55.1266,
+        51.7546
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "basin_code": "01",
+      "basin_name": null,
+      "bo_code": "12",
+      "bo_name": null,
+      "catchment_area_km2": 82300.0,
+      "has_discharge": true,
+      "name": "р.Урал - г.Оренбург",
+      "opened": "1926-11-01",
+      "post_code": "19063",
+      "subbasin_code": "00",
+      "subbasin_name": null,
+      "vhu_code": "12.01.00.008",
+      "vhu_name": null
+    },
+    "type": "Feature"
+  },
+  "summary": {
+    "b": {
+      "code": "01",
+      "name": null
+    },
+    "bo": {
+      "code": "12",
+      "name": null
+    },
+    "catchment_area_km2": 82300.0,
+    "discharge": {
+      "avg": 72.33095890410955,
+      "max": 433.0,
+      "min": 20.0,
+      "n": 365,
+      "param": "discharge"
+    },
+    "lat": 51.7546,
+    "level": {
+      "avg": 246.54984513020534,
+      "dmax": "2025-09-09",
+      "dmin": "2001-01-11",
+      "max": 1185.0,
+      "min": 0.0,
+      "n": 8717
+    },
+    "lon": 55.1266,
+    "name": "р.Урал - г.Оренбург",
+    "opened": "1926-11-01",
+    "pb": {
+      "code": "00",
+      "name": null
+    },
+    "period_all": {
+      "max": "2025-09-09",
+      "min": "2001-01-11"
+    },
+    "post_code": "19063",
+    "vhu": {
+      "code": "12.01.00.008",
+      "name": null
+    },
+    "zero_marks": [
+      {
+        "height_system": "БС",
+        "is_current": true,
+        "year_from": 2008,
+        "year_to": 2023,
+        "zero_mark_m": 81.6
+      }
+    ]
+  },
+  "attribution": "Головлев П.П., Иннокентьев А.И., Уровень-Спутник (2026); источник записей gmvo — АИС ГМВО",
+  "units": "cm above gauge zero; negative values valid"
+}

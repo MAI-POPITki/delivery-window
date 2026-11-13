@@ -1,0 +1,89 @@
+{
+  "source": "https://level-satellite.ru/api/series",
+  "request": {
+    "post_code": "11412",
+    "date_from": "2000-01-01",
+    "date_to": "2026-11-09"
+  },
+  "fetched_at": "2026-11-09T14:00:06.881242+00:00",
+  "sha256": "4b369dae8a23a490c9784889920f1bfc6752a66e41b782c8096a3156c403efeb",
+  "station": {
+    "geometry": {
+      "coordinates": [
+        69.46755,
+        56.1012
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "basin_code": "01",
+      "basin_name": null,
+      "bo_code": "14",
+      "bo_name": null,
+      "catchment_area_km2": 115000.0,
+      "has_discharge": true,
+      "name": "р.Ишим - г.Ишим",
+      "opened": "1932-06-20",
+      "post_code": "11412",
+      "subbasin_code": "03",
+      "subbasin_name": null,
+      "vhu_code": "14.01.03.002",
+      "vhu_name": null
+    },
+    "type": "Feature"
+  },
+  "summary": {
+    "b": {
+      "code": "01",
+      "name": null
+    },
+    "bo": {
+      "code": "14",
+      "name": null
+    },
+    "catchment_area_km2": 115000.0,
+    "discharge": {
+      "avg": 78.19500342231333,
+      "max": 2310.0,
+      "min": 8.26,
+      "n": 5844,
+      "param": "discharge"
+    },
+    "lat": 56.1012,
+    "level": {
+      "avg": 0.4945027794935145,
+      "dmax": "2024-04-26",
+      "dmin": "2001-01-11",
+      "max": 1064.0,
+      "min": -152.0,
+      "n": 8095
+    },
+    "lon": 69.46755,
+    "name": "р.Ишим - г.Ишим",
+    "opened": "1932-06-20",
+    "pb": {
+      "code": "03",
+      "name": null
+    },
+    "period_all": {
+      "max": "2024-04-26",
+      "min": "2001-01-11"
+    },
+    "post_code": "11412",
+    "vhu": {
+      "code": "14.01.03.002",
+      "name": null
+    },
+    "zero_marks": [
+      {
+        "height_system": "БС | БС 77",
+        "is_current": true,
+        "year_from": 2008,
+        "year_to": 2023,
+        "zero_mark_m": 69.54
+      }
+    ]
+  },
+  "attribution": "Головлев П.П., Иннокентьев А.И., Уровень-Спутник (2026); источник записей gmvo — АИС ГМВО",
+  "units": "cm above gauge zero; negative values valid"
+}

@@ -1,0 +1,89 @@
+{
+  "year": 2024,
+  "train_until": "2022-12-31",
+  "calibration_year": 2023,
+  "methods": {
+    "1": "persistence",
+    "2": "catboost",
+    "3": "catboost",
+    "4": "catboost",
+    "5": "catboost",
+    "6": "catboost",
+    "7": "catboost"
+  },
+  "widths_cm": {
+    "1": 2.0,
+    "2": 3.05496986773241,
+    "3": 4.255457773938986,
+    "4": 5.692434578020425,
+    "5": 6.4494672935780955,
+    "6": 7.3366948289452125,
+    "7": 8.04413280614611
+  },
+  "calibration_mae": {
+    "1": {
+      "catboost": 3.2266332449213233,
+      "persistence": 2.684065934065934,
+      "calendar": 21.320054945054945,
+      "last_year": 15.192307692307692
+    },
+    "2": {
+      "catboost": 4.386460566942672,
+      "persistence": 4.964187327823692,
+      "calendar": 21.356749311294767,
+      "last_year": 15.212121212121213
+    },
+    "3": {
+      "catboost": 5.926023232746007,
+      "persistence": 6.886740331491713,
+      "calendar": 21.390883977900554,
+      "last_year": 15.237569060773481
+    },
+    "4": {
+      "catboost": 7.326368084171789,
+      "persistence": 8.800554016620499,
+      "calendar": 21.42797783933518,
+      "last_year": 15.265927977839334
+    },
+    "5": {
+      "catboost": 8.78773204387775,
+      "persistence": 10.552777777777777,
+      "calendar": 21.46527777777778,
+      "last_year": 15.297222222222222
+    },
+    "6": {
+      "catboost": 10.415104150527513,
+      "persistence": 12.164345403899722,
+      "calendar": 21.50557103064067,
+      "last_year": 15.331476323119777
+    },
+    "7": {
+      "catboost": 12.202507881687414,
+      "persistence": 13.539106145251397,
+      "calendar": 21.54608938547486,
+      "last_year": 15.368715083798882
+    }
+  },
+  "features": [
+    "h0",
+    "h1",
+    "h3",
+    "h7",
+    "h14",
+    "h30",
+    "d1",
+    "d3",
+    "d7",
+    "d14",
+    "mean7",
+    "mean30",
+    "sin",
+    "cos",
+    "lead"
+  ],
+  "interval": "80% residual quantile on previous year; coverage not guaranteed",
+  "point_id": "ural_orsk",
+  "gauge_code": "19054",
+  "observation_source": "vodinfo",
+  "data_sha256": "c6c122fcbb65b192ef3bba80bfda4a51ce5eac2092f9d3a2fada96e17109e0b8"
+}

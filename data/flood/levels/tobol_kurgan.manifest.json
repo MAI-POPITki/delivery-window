@@ -1,0 +1,89 @@
+{
+  "source": "https://level-satellite.ru/api/series",
+  "request": {
+    "post_code": "12014",
+    "date_from": "2000-01-01",
+    "date_to": "2026-11-09"
+  },
+  "fetched_at": "2026-11-09T14:00:07.200438+00:00",
+  "sha256": "c48747992a8eee9ca14eb10d90f84994fe80c6754950d03c02aa40727d347117",
+  "station": {
+    "geometry": {
+      "coordinates": [
+        65.39389,
+        55.43206
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "basin_code": "01",
+      "basin_name": null,
+      "bo_code": "14",
+      "bo_name": null,
+      "catchment_area_km2": 159000.0,
+      "has_discharge": true,
+      "name": "р.Тобол - г.Курган",
+      "opened": "1911-09-14",
+      "post_code": "12014",
+      "subbasin_code": "05",
+      "subbasin_name": null,
+      "vhu_code": "14.01.05.003",
+      "vhu_name": null
+    },
+    "type": "Feature"
+  },
+  "summary": {
+    "b": {
+      "code": "01",
+      "name": null
+    },
+    "bo": {
+      "code": "14",
+      "name": null
+    },
+    "catchment_area_km2": 159000.0,
+    "discharge": {
+      "avg": 15.561753424657539,
+      "max": 66.3,
+      "min": 4.97,
+      "n": 365,
+      "param": "discharge"
+    },
+    "lat": 55.43206,
+    "level": {
+      "avg": 120.93200740055504,
+      "dmax": "2024-05-13",
+      "dmin": "2001-01-11",
+      "max": 1013.0,
+      "min": -80.0,
+      "n": 2162
+    },
+    "lon": 65.39389,
+    "name": "р.Тобол - г.Курган",
+    "opened": "1911-09-14",
+    "pb": {
+      "code": "05",
+      "name": null
+    },
+    "period_all": {
+      "max": "2024-05-13",
+      "min": "2001-01-11"
+    },
+    "post_code": "12014",
+    "vhu": {
+      "code": "14.01.05.003",
+      "name": null
+    },
+    "zero_marks": [
+      {
+        "height_system": "БС",
+        "is_current": true,
+        "year_from": 2008,
+        "year_to": 2023,
+        "zero_mark_m": 62.8
+      }
+    ]
+  },
+  "attribution": "Головлев П.П., Иннокентьев А.И., Уровень-Спутник (2026); источник записей gmvo — АИС ГМВО",
+  "units": "cm above gauge zero; negative values valid"
+}

@@ -63,13 +63,13 @@ def sample_quantiles(q10, q50, q90, n, rng):
     return np.where(u < 0.5, q50 - (0.5 - u) * lo_slope, q50 + (u - 0.5) * hi_slope)
 
 
-def plan_week_volumes(weeks, p_closed, remaining, p: Params, R):
+def plan_week_volumes(weeks, p_closed, remaining, p: Params, R, capacities=None):
     """Оптимальный при данном распределении план на оставшиеся недели: (x_base, x_extra)."""
     hold = p.c_hold_week * np.maximum(R - weeks, 0) / WEEK
     opts = []
     for j, (cap, extra) in enumerate(((p.K_t_week, 0.0), (p.K_extra_t_week, p.c_extra))):
         cost = (1 - p_closed) * (p.c_road + extra + hold) + p_closed * p.c_exp
-        opts += [(c, i, j, cap) for i, c in enumerate(cost)]
+        opts += [(c, i, j, cap if capacities is None else capacities[j][i]) for i, c in enumerate(cost)]
     x = np.zeros((len(weeks), 2))
     left = remaining
     for c, i, j, cap in sorted(opts, key=lambda o: (o[0], o[1], o[2])):
@@ -131,7 +131,7 @@ def expected_plan_cost(weeks, base, extra, p_closed, p: Params, reference_day):
         backup_cost_rub=backup_cost, expected_cost_rub=road_cost+extra_cost+holding_cost+backup_cost)
 
 
-def compare_ml_weekly_plans(forecast, issue_day, p: Params, *, end_day=300):
+def compare_ml_weekly_plans(forecast, issue_day, p: Params, *, end_day=300,availability=None,handling_capacity=None):
     """Plan the remaining order using only the forecast issued by decision day.
 
     Ordinary ML spreads the order over its median closing window. Economic ML
@@ -151,19 +151,50 @@ def compare_ml_weekly_plans(forecast, issue_day, p: Params, *, end_day=300):
     q10, q50, q90, calendar = [float(forecast[c]) for c in ('q10', 'q50', 'q90', 'calendar')]
     if not np.isfinite([q10, q50, q90, calendar]).all() or not q10 <= q50 <= q90:
         raise ValueError('Invalid forecast quantiles')
-    weeks = np.arange(max(issue_day, p.start_day), end_day, WEEK, dtype=float)
+    step=WEEK if handling_capacity is None else 1
+    weeks = np.arange(max(issue_day, p.start_day), end_day, step, dtype=float)
     scenarios = sample_quantiles(q10, q50, q90, int(p.n_scenarios),
                                  np.random.default_rng(p.seed)) - p.close_margin_days
     # A future planned start is not an observation that the road will be open.
     p_closed = np.array([(scenarios < w+p.transit_days).mean() for w in weeks])
     reference_day = calendar - p.close_margin_days + 14
-    normal = ml_window_plan(weeks, q50-p.close_margin_days, p)
-    economic = plan_week_volumes(weeks, p_closed, p.Q_t, p, reference_day)
+    allowed=np.ones(len(weeks),dtype=bool) if availability is None else np.asarray(
+        availability(weeks,weeks+p.transit_days) if callable(availability) else availability,dtype=bool)
+    if allowed.shape!=weeks.shape:
+        raise ValueError('Календарь должен соответствовать неделям плана')
+    def expand(pair):
+        result=[]
+        for values in pair:
+            full=np.zeros(len(weeks));full[allowed]=values;result.append(full)
+        return tuple(result)
+    if handling_capacity is None:
+        normal = expand(ml_window_plan(weeks[allowed], q50-p.close_margin_days, p))
+        economic = expand(plan_week_volumes(weeks[allowed], p_closed[allowed], p.Q_t, p, reference_day))
+        handling=np.full(len(weeks),np.nan)
+    else:
+        handling=np.asarray(handling_capacity(weeks,weeks+p.transit_days),dtype=float)
+        if handling.shape!=weeks.shape or not np.isfinite(handling).all() or (handling<0).any():
+            raise ValueError('Некорректные суточные мощности обработки груза')
+        base_cap=np.minimum(p.K_t_week/WEEK,handling)
+        extra_cap=np.minimum(p.K_extra_t_week/WEEK,np.maximum(handling-base_cap,0))
+        eligible=allowed&(weeks+p.transit_days<=q50-p.close_margin_days)
+        total=np.where(eligible,base_cap+extra_cap,0.)
+        # Equal allocation with redistribution when individual daily caps bind.
+        volume=np.zeros(len(weeks));left=p.Q_t
+        for _ in range(len(weeks)+1):
+            active=total-volume>1e-9
+            if not active.any() or left<=1e-9:break
+            add=np.minimum(total[active]-volume[active],left/active.sum())
+            volume[active]+=add;left-=add.sum()
+        normal=(np.minimum(volume,base_cap),np.maximum(volume-base_cap,0))
+        economic=expand(plan_week_volumes(weeks[allowed],p_closed[allowed],p.Q_t,p,reference_day,
+                                        (base_cap[allowed],extra_cap[allowed])))
     rows, summaries = [], []
     for rule, (base, extra) in (('ml', normal), ('economic_ml', economic)):
         rows.append(pd.DataFrame(dict(rule=rule, week=np.arange(1, len(weeks)+1),
             dispatch_day=weeks, arrival_day=weeks+p.transit_days, base_t=base, extra_t=extra,
-            shipped_t=base+extra, p_closed=p_closed,
+            shipped_t=base+extra, p_closed=p_closed,allowed_by_calendar=allowed,
+            handling_capacity_t=handling,
             expected_delivered_t=(base+extra)*(1-p_closed), at_risk_t=(base+extra)*p_closed)))
         summaries.append(dict(rule=rule, **expected_plan_cost(weeks, base, extra, p_closed, p, reference_day)))
     return pd.concat(rows, ignore_index=True), pd.DataFrame(summaries).set_index('rule')

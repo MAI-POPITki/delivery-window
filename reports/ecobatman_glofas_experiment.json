@@ -1,0 +1,53 @@
+{
+  "19063": {
+    "name": "Урал — Оренбург",
+    "train_months": 168,
+    "test_months": 120,
+    "test_years": [
+      2011,
+      2012,
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020
+    ],
+    "calibration_available": true,
+    "mae_reduction_ci95_m3s": [
+      -1.6440736200833745,
+      3.812048352578624
+    ],
+    "approximate_distance_km": 5.293019054906308,
+    "source_url": "https://ecobatman.ru/programs/db_hydraposts/hydropost_q.php?cod=19063",
+    "source_sha256": "eaa9e02a4654ae86e720965ea36577109d04bc047e117471fd99042f53b69531",
+    "glofas_url": "https://flood-api.open-meteo.com/v1/flood?latitude=51.725006&longitude=55.125015&daily=river_discharge&timezone=GMT&models=seamless_v4&start_date=1991-01-01&end_date=2020-12-31",
+    "glofas_sha256": "b6440548a8e552d1290aee623056c72ee315a0ef4833ed2609a8950251c10d2f"
+  },
+  "11412": {
+    "name": "Ишим — Ишим",
+    "train_months": 48,
+    "test_months": 120,
+    "test_years": [
+      2011,
+      2012,
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020
+    ],
+    "calibration_available": false,
+    "mae_reduction_ci95_m3s": null,
+    "approximate_distance_km": 7.079090040540597,
+    "source_url": "https://ecobatman.ru/programs/db_hydraposts/hydropost_q.php?cod=11412",
+    "source_sha256": "748ff14c94e27b84bccdc6b23690b483d09a7eeabcdac791e4a9658cf9d09182",
+    "glofas_url": "https://flood-api.open-meteo.com/v1/flood?latitude=56.125&longitude=69.57501&daily=river_discharge&timezone=GMT&models=seamless_v4&start_date=1991-01-01&end_date=2020-12-31",
+    "glofas_sha256": "4b0d2671148b3a5838c67174f5a699e1307ef76923748bf4da50dd4d24948fa2"
+  }
+}

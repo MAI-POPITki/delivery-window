@@ -1,0 +1,167 @@
+{
+  "year": 2023,
+  "train_until": "2021-12-31",
+  "calibration_year": 2022,
+  "methods": {
+    "1": "catboost",
+    "2": "catboost",
+    "3": "catboost",
+    "4": "catboost",
+    "5": "catboost",
+    "6": "catboost",
+    "7": "catboost"
+  },
+  "calibration_mae": {
+    "1": {
+      "catboost": 1.1920093039241213,
+      "persistence": 2.340659340659341,
+      "calendar": 101.89010989010988,
+      "last_year": 76.31043956043956
+    },
+    "2": {
+      "catboost": 2.2176649121159664,
+      "persistence": 4.641873278236915,
+      "calendar": 102.15702479338843,
+      "last_year": 76.51515151515152
+    },
+    "3": {
+      "catboost": 3.4234525383127505,
+      "persistence": 6.848066298342541,
+      "calendar": 102.42265193370166,
+      "last_year": 76.72099447513813
+    },
+    "4": {
+      "catboost": 4.796721402970304,
+      "persistence": 8.994459833795014,
+      "calendar": 102.69113573407202,
+      "last_year": 76.93074792243767
+    },
+    "5": {
+      "catboost": 6.0955973497912685,
+      "persistence": 11.047222222222222,
+      "calendar": 102.95694444444445,
+      "last_year": 77.14444444444445
+    },
+    "6": {
+      "catboost": 7.546111522503847,
+      "persistence": 13.052924791086351,
+      "calendar": 103.22423398328691,
+      "last_year": 77.35933147632312
+    },
+    "7": {
+      "catboost": 9.00883557623049,
+      "persistence": 15.013966480446927,
+      "calendar": 103.48882681564245,
+      "last_year": 77.57262569832402
+    }
+  },
+  "corrections": {
+    "1": {
+      "spring": {
+        "cm": 0.5472543195490829,
+        "n": 122,
+        "fallback_all_year": false
+      },
+      "other": {
+        "cm": 0.20943127115702964,
+        "n": 242,
+        "fallback_all_year": false
+      }
+    },
+    "2": {
+      "spring": {
+        "cm": 0.2320739944886867,
+        "n": 122,
+        "fallback_all_year": false
+      },
+      "other": {
+        "cm": 0.11047078728323356,
+        "n": 241,
+        "fallback_all_year": false
+      }
+    },
+    "3": {
+      "spring": {
+        "cm": 0.0,
+        "n": 122,
+        "fallback_all_year": false
+      },
+      "other": {
+        "cm": 0.0,
+        "n": 240,
+        "fallback_all_year": false
+      }
+    },
+    "4": {
+      "spring": {
+        "cm": 0.7788812563783836,
+        "n": 122,
+        "fallback_all_year": false
+      },
+      "other": {
+        "cm": 0.0,
+        "n": 239,
+        "fallback_all_year": false
+      }
+    },
+    "5": {
+      "spring": {
+        "cm": 1.5199664147908152,
+        "n": 122,
+        "fallback_all_year": false
+      },
+      "other": {
+        "cm": 0.0,
+        "n": 238,
+        "fallback_all_year": false
+      }
+    },
+    "6": {
+      "spring": {
+        "cm": 2.6283444902752677,
+        "n": 122,
+        "fallback_all_year": false
+      },
+      "other": {
+        "cm": 0.0,
+        "n": 237,
+        "fallback_all_year": false
+      }
+    },
+    "7": {
+      "spring": {
+        "cm": 7.592562182628171,
+        "n": 122,
+        "fallback_all_year": false
+      },
+      "other": {
+        "cm": 0.0,
+        "n": 236,
+        "fallback_all_year": false
+      }
+    }
+  },
+  "features": [
+    "h0",
+    "h1",
+    "h3",
+    "h7",
+    "h14",
+    "h30",
+    "d1",
+    "d3",
+    "d7",
+    "d14",
+    "mean7",
+    "mean30",
+    "sin",
+    "cos",
+    "lead"
+  ],
+  "version": "quantile-v2",
+  "interval": "q10/q90 + previous-year seasonal CQR; coverage not guaranteed",
+  "point_id": "ishim_ishim",
+  "gauge_code": "11412",
+  "observation_source": "gmvo",
+  "data_sha256": "4b369dae8a23a490c9784889920f1bfc6752a66e41b782c8096a3156c403efeb"
+}

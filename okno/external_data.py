@@ -39,6 +39,8 @@ ROAD_EVENTS_COLS = (
     "comment",
 )
 VALID_REGIONS = frozenset(REGIONS.keys())
+# регионы, по которым обязательны официальные даты зимников; экспериментальные (посты PANGAEA без трасс) — нет
+CORE_REGIONS = frozenset(k for k, r in REGIONS.items() if not r.get("experimental"))
 VALID_ROAD_KINDS = frozenset({"open", "close", "limit30", "limit20"})
 
 TARIFFS_COLS = (
@@ -241,9 +243,9 @@ def validate_road_events(path: Path | None = None) -> tuple[list[dict], dict]:
     add("все регионы входят в okno/regions.py", not bad_regions,
         f"регионы: {sorted(set(df['region']))}" + (f", лишние: {bad_regions}" if bad_regions else ""))
 
-    covered_regions = set(df["region"]) & VALID_REGIONS
-    add("покрыты все 5 регионов сервиса", covered_regions == VALID_REGIONS,
-        f"покрыто {len(covered_regions)} из {len(VALID_REGIONS)}: {sorted(covered_regions)}")
+    covered_regions = set(df["region"]) & CORE_REGIONS
+    add("покрыты все 5 регионов сервиса", covered_regions == CORE_REGIONS,
+        f"покрыто {len(covered_regions)} из {len(CORE_REGIONS)}: {sorted(covered_regions)}")
 
     bad_kinds = sorted(set(df["kind"]) - VALID_ROAD_KINDS)
     add("допустимые значения kind (open|close|limit30|limit20)", not bad_kinds,

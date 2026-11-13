@@ -1,0 +1,10 @@
+# PANGAEA TSVs are preserved verbatim; trailing tab fields encode missing data.
+data/raw/pangaea_river_ice/*.tsv -text whitespace=-blank-at-eol
+# Satellite manifests hash exact bytes: preserve XML/STAC/crop files across Windows/Linux.
+data/flood/satellite/** -text whitespace=cr-at-eol
+data/flood/benchmark/** -text whitespace=cr-at-eol
+data/flood/benchmark/flood_*_data.csv -text whitespace=-blank-at-eol
+# XML is archived byte-for-byte, including whitespace supplied by Copernicus.
+data/flood/satellite/**/product.xml -text whitespace=-blank-at-eol,cr-at-eol
+# Эксперимент с ветром М2 сверяет SHA-256 входных таблиц: байты одинаковы на Windows и Linux.
+data/s1/wind/** -text

@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "pid": "irtysh_omsk",
+  "station": {
+    "geometry": {
+      "coordinates": [
+        73.32482,
+        55.00222
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "basin_code": "01",
+      "basin_name": null,
+      "bo_code": "14",
+      "bo_name": null,
+      "catchment_area_km2": 769000.0,
+      "has_discharge": true,
+      "name": "р.Иртыш - г.Омск",
+      "opened": "1891-01-01",
+      "post_code": "11048",
+      "subbasin_code": "01",
+      "subbasin_name": null,
+      "vhu_code": "14.01.01.003",
+      "vhu_name": null
+    },
+    "type": "Feature"
+  },
+  "checked_at": "2026-11-12T23:08:52.244880+00:00",
+  "last_success_at": null,
+  "records": [],
+  "sources": [
+    {
+      "source": "level_satellite",
+      "state": "no_data",
+      "records": 0,
+      "raw_sha256": "71f61945834aac1d1afc986a0989ba8926dcd39afa83703d3c0b7a9b307282b9",
+      "url": "https://level-satellite.ru/api/series",
+      "request": {
+        "post_code": "11048",
+        "date_from": "2026-09-28",
+        "date_to": "2026-11-12"
+      }
+    }
+  ]
+}

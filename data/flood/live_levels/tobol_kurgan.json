@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "pid": "tobol_kurgan",
+  "station": {
+    "geometry": {
+      "coordinates": [
+        65.39389,
+        55.43206
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "basin_code": "01",
+      "basin_name": null,
+      "bo_code": "14",
+      "bo_name": null,
+      "catchment_area_km2": 159000.0,
+      "has_discharge": true,
+      "name": "р.Тобол - г.Курган",
+      "opened": "1911-09-14",
+      "post_code": "12014",
+      "subbasin_code": "05",
+      "subbasin_name": null,
+      "vhu_code": "14.01.05.003",
+      "vhu_name": null
+    },
+    "type": "Feature"
+  },
+  "checked_at": "2026-11-12T23:08:49.457869+00:00",
+  "last_success_at": null,
+  "records": [],
+  "sources": [
+    {
+      "source": "level_satellite",
+      "state": "no_data",
+      "records": 0,
+      "raw_sha256": "529a3720f2cdc35b6f3d5a1f36a195043422a3f045f7494ac4ec7553d5a48907",
+      "url": "https://level-satellite.ru/api/series",
+      "request": {
+        "post_code": "12014",
+        "date_from": "2026-09-28",
+        "date_to": "2026-11-12"
+      }
+    }
+  ]
+}

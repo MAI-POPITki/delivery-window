@@ -11,3 +11,22 @@ data/raw/*.zip
 
 # вырезки Sentinel-1 для М2 (сотни МБ) — генерируются scripts/s1_chips.py
 data/s1/chips/
+data/flood/benchmark/cache/
+data/flood/refresh/locks/
+data/flood/satellite/**/.staging/
+docs/build/
+
+# Обзорные PNG Гаофэнь-3 восстанавливаются загрузчиком; метаданные остаются в git.
+data/gaofen/previews/
+data/gaofen/.update.lock
+
+# Восстанавливаемые спектральные вырезки и изображения Landsat.
+data/landsat/chips/
+data/landsat/previews/
+data/landsat/.update.lock
+
+data/handling_wind/
+
+# Ежедневные обзорные PNG NASA GIBS; каталог и даты сохраняются в git.
+data/daily_imagery/previews/
+data/daily_imagery/.update.lock

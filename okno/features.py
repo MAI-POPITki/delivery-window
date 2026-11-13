@@ -154,7 +154,7 @@ def point_rows(point_id, meta, targets: pd.DataFrame, alphas: dict, kind: str):
         for d in issue_days:
             if d >= target:
                 continue
-            f = season_features(T, S, y, d, clim, alphas.get(y, load_alpha()),
+            f = season_features(T, S, y, d, clim, alphas[y] if y in alphas else load_alpha(),
                                 targets.loc[y, "freezeup_day"], theta.get(y, np.nan))
             phys = f.pop("phys_open") if kind == "open" else f.pop("phys_close")
             f.pop("phys_close" if kind == "open" else "phys_open")

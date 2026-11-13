@@ -1,0 +1,89 @@
+{
+  "year": 2019,
+  "train_until": "2017-12-31",
+  "calibration_year": 2018,
+  "methods": {
+    "1": "persistence",
+    "2": "catboost",
+    "3": "catboost",
+    "4": "catboost",
+    "5": "catboost",
+    "6": "catboost",
+    "7": "catboost"
+  },
+  "widths_cm": {
+    "1": 2.0,
+    "2": 2.795616851776259,
+    "3": 4.128286668837376,
+    "4": 5.555873569885762,
+    "5": 6.739394435293718,
+    "6": 8.805179902976874,
+    "7": 10.376840920228915
+  },
+  "calibration_mae": {
+    "1": {
+      "catboost": 2.839583154345147,
+      "persistence": 2.302197802197802,
+      "calendar": 28.42445054945055,
+      "last_year": 50.714285714285715
+    },
+    "2": {
+      "catboost": 3.5032081019154724,
+      "persistence": 4.3911845730027546,
+      "calendar": 28.488980716253444,
+      "last_year": 50.81267217630854
+    },
+    "3": {
+      "catboost": 4.700256627061481,
+      "persistence": 6.237569060773481,
+      "calendar": 28.553867403314918,
+      "last_year": 50.91160220994475
+    },
+    "4": {
+      "catboost": 6.204456235781272,
+      "persistence": 7.955678670360111,
+      "calendar": 28.6191135734072,
+      "last_year": 51.011080332409975
+    },
+    "5": {
+      "catboost": 7.78228310938164,
+      "persistence": 9.605555555555556,
+      "calendar": 28.681944444444444,
+      "last_year": 51.11666666666667
+    },
+    "6": {
+      "catboost": 9.164814220825914,
+      "persistence": 11.253481894150418,
+      "calendar": 28.740947075208915,
+      "last_year": 51.231197771587745
+    },
+    "7": {
+      "catboost": 10.3629363913081,
+      "persistence": 12.80167597765363,
+      "calendar": 28.797486033519554,
+      "last_year": 51.35195530726257
+    }
+  },
+  "features": [
+    "h0",
+    "h1",
+    "h3",
+    "h7",
+    "h14",
+    "h30",
+    "d1",
+    "d3",
+    "d7",
+    "d14",
+    "mean7",
+    "mean30",
+    "sin",
+    "cos",
+    "lead"
+  ],
+  "interval": "80% residual quantile on previous year; coverage not guaranteed",
+  "point_id": "ural_orenburg",
+  "gauge_code": "19063",
+  "observation_source": "vodinfo",
+  "data_sha256": "107db4260eca4fe8c81def98eda43e0aa83b9022e6188ccc68d1530923283951"
+}

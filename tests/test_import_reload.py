@@ -10,6 +10,30 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class ImportReloadTests(unittest.TestCase):
+    def test_dashboard_refreshes_flood_dependencies(self):
+        script = textwrap.dedent("""
+            import importlib
+            from streamlit.testing.v1 import AppTest
+            flood = importlib.import_module('okno.flood')
+            view = importlib.import_module('app.flood_view')
+            def stale(*args, **kwargs):
+                raise RuntimeError('Stale flood module')
+            flood.load_points = stale
+            view.load_points = stale
+            flood._loaded_mtime_ns = 0
+            view._loaded_mtime_ns = 0
+            app = AppTest.from_file('app/dashboard.py', default_timeout=90)
+            app.query_params['module'] = 'flood'
+            app.run()
+            assert not app.exception, [error.message for error in app.exception]
+            assert app.title[0].value == 'Паводки'
+            assert flood.load_points is not stale
+            assert view.load_points is flood.load_points
+        """)
+        result = subprocess.run([sys.executable, "-c", script], cwd=ROOT,
+                                capture_output=True, text=True, timeout=120)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_dashboard_refreshes_dependencies_before_importing_new_weather_module(self):
         # Отдельный процесс: не повреждаем sys.modules других тестов.
         script = textwrap.dedent("""

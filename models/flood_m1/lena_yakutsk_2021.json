@@ -1,0 +1,89 @@
+{
+  "year": 2021,
+  "train_until": "2019-12-31",
+  "calibration_year": 2020,
+  "methods": {
+    "1": "catboost",
+    "2": "catboost",
+    "3": "catboost",
+    "4": "catboost",
+    "5": "catboost",
+    "6": "catboost",
+    "7": "catboost"
+  },
+  "widths_cm": {
+    "1": 12.84221912776215,
+    "2": 15.077742367056146,
+    "3": 22.654763035365193,
+    "4": 34.53147098734354,
+    "5": 45.46682022315281,
+    "6": 50.938031572436785,
+    "7": 61.11679574644006
+  },
+  "calibration_mae": {
+    "1": {
+      "catboost": 9.417450636303368,
+      "persistence": 12.161643835616438,
+      "calendar": 72.0054794520548,
+      "last_year": 106.25205479452055
+    },
+    "2": {
+      "catboost": 12.863850857216693,
+      "persistence": 23.74175824175824,
+      "calendar": 72.01098901098901,
+      "last_year": 106.36813186813187
+    },
+    "3": {
+      "catboost": 19.11190664635585,
+      "persistence": 34.603305785123965,
+      "calendar": 72.01652892561984,
+      "last_year": 106.49035812672176
+    },
+    "4": {
+      "catboost": 24.56638301564864,
+      "persistence": 44.08839779005525,
+      "calendar": 72.02486187845304,
+      "last_year": 106.61878453038673
+    },
+    "5": {
+      "catboost": 30.488339038730043,
+      "persistence": 52.634349030470915,
+      "calendar": 72.0387811634349,
+      "last_year": 106.75623268698061
+    },
+    "6": {
+      "catboost": 35.65041737872633,
+      "persistence": 60.077777777777776,
+      "calendar": 72.05694444444444,
+      "last_year": 106.9
+    },
+    "7": {
+      "catboost": 42.292733951743074,
+      "persistence": 66.35097493036211,
+      "calendar": 72.08217270194986,
+      "last_year": 107.05571030640668
+    }
+  },
+  "features": [
+    "h0",
+    "h1",
+    "h3",
+    "h7",
+    "h14",
+    "h30",
+    "d1",
+    "d3",
+    "d7",
+    "d14",
+    "mean7",
+    "mean30",
+    "sin",
+    "cos",
+    "lead"
+  ],
+  "interval": "80% residual quantile on previous year; coverage not guaranteed",
+  "point_id": "lena_yakutsk",
+  "gauge_code": "3045",
+  "observation_source": "gmvo",
+  "data_sha256": "b57f4aa5d500a1a82af9c665ba3eac7a7bce899088b9056f31e12c59b3f49b63"
+}

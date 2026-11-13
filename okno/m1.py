@@ -81,9 +81,6 @@ def metrics(bt: pd.DataFrame) -> pd.DataFrame:
     for key, r in REGIONS.items():  # остальные регионы — отдельными строками
         if key != "yakutia":
             groups[f"{r['name']} (гидропосты)"] = bt[(bt.is_satellite == 0) & (reg == key)]
-    extra_ne = bt[(bt.is_satellite == 0) & reg.isin(["magadan", "chukotka"])]
-    if not extra_ne.empty:
-        groups["Магаданская обл. и Чукотка (обучение PANGAEA)"] = extra_ne
     for gname, g in groups.items():
         if g.empty:
             continue
