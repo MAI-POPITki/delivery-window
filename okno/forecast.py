@@ -126,7 +126,9 @@ def _ahead(point_id):
     return _matrices_v(point_id, _mtime(_weather_path(point_id)), _mtime(RECENT / f"{point_id}.csv"))[3]
 
 
-@lru_cache(maxsize=32)
+# Карта перебирает все точки региона (до ~80 с притоками Лены) на каждом действии пользователя:
+# кэш меньше числа точек вытеснял сам себя, и погода перечитывалась с диска при каждом клике.
+@lru_cache(maxsize=256)
 def _matrices_v(point_id, _ver, _ver_recent):
     w = load_weather(point_id, live=True)
     obs, fut = w[~w["is_forecast"]], w[w["is_forecast"]]
@@ -158,6 +160,11 @@ def _alpha(gauge, hydro_year):
 
 
 def last_weather_day(point_id: str, hydro_year: int):
+    return _last_weather_day_v(point_id, hydro_year, _mtime(_weather_path(point_id)), _mtime(RECENT / f"{point_id}.csv"))
+
+
+@lru_cache(maxsize=4096)
+def _last_weather_day_v(point_id, hydro_year, _ver, _ver_recent):
     T_all, _, _ = _matrices(point_id)
     if hydro_year not in T_all.index:
         return None

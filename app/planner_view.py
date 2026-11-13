@@ -12,7 +12,6 @@ def render_planner(forecast, hydro_year, issue_day, margin, point_name, *, trans
     st.subheader('Планировщик отправок (М3)')
     st.caption('Оба графика используют путь, сезон и дату решения из левой панели и параметры ниже. '
                'Цены и мощности — сценарные значения; результат показывает ожидаемые расходы.')
-    decision_panel = st.container()
     if quantity_t is not None and quantity_t>0:
         st.session_state['planner_quantity']=float(quantity_t)
         st.caption(f'Объём завоза взят из ваших заявок: {quantity_t:g} т. Для изменения объёма исправьте заявки выше.')
@@ -59,9 +58,6 @@ def render_planner(forecast, hydro_year, issue_day, margin, point_name, *, trans
         st.info('Ограничения обработки включены: отправки рассчитываются по суткам. Недельная мощность техники делится на 7; '
                 'мощность обработки ограничивает её дополнительно. За пределами прогноза ветра отправки не планируются. '
                 'Оба сравниваемых способа получают одинаковые ограничения.')
-    from app.decision_view import render_decisions
-    with decision_panel:
-        render_decisions(forecast, issue_day, p, hydro_year,availability=availability,handling_capacity=handling_capacity)
     weekly, summary = compare_ml_weekly_plans(forecast, issue_day, p,availability=availability,handling_capacity=handling_capacity)
     if require_quantity: st.session_state['journey_m3_summary']=summary.copy()
     if availability is not None:
@@ -134,4 +130,7 @@ def render_planner(forecast, hydro_year, issue_day, margin, point_name, *, trans
             for name,value in calendar.attrs.get('wind',{}).items():export[label+'_'+name]=value
     st.download_button('Скачать оба ML-плана'+(' по дням' if wind is not None else ' по неделям'), export.to_csv(index=False).encode('utf-8-sig'),
                        'planner-ml-weekly.csv', 'text/csv', key='planner_weekly_download', on_click='ignore')
+    from app.decision_view import render_decisions
+    with st.expander('Что изменить, чтобы успеть: сравнить дату начала отправок и устойчивость к тарифам', expanded=False):
+        render_decisions(forecast, issue_day, p, hydro_year,availability=availability,handling_capacity=handling_capacity)
     return p

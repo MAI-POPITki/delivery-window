@@ -255,6 +255,22 @@ def _journal(ver):
             for r in j.itertuples(index=False)}
 
 
+@st.cache_resource(show_spinner=False)
+def _road_arrays(path, _mtime, region):
+    """Линии зимников OSM для карты: читаются один раз на файл и регион. Массивы numpy с NaN-разрывами
+    plotly проверяет сразу целиком, а не поэлементно, — карта перестраивается быстрее при каждом действии."""
+    import json as _json
+    lat, lon, txt = [], [], []
+    for r in _json.loads(Path(path).read_text(encoding="utf-8")):
+        if r.get("region", region) != region:  # только выбранный регион — карта легче
+            continue
+        nm = r["name"] or ("ледовая переправа" if r["kind"] == "ice_road" else "зимник")
+        lat += r["lat"] + [np.nan]
+        lon += r["lon"] + [np.nan]
+        txt += [nm] * len(r["lat"]) + [""]
+    return np.asarray(lat, dtype=float), np.asarray(lon, dtype=float), np.asarray(txt, dtype=object)
+
+
 def fc_map(pid, hy, day, kind):
     """Прогноз для карты: если на эту дату он уже есть в журнале (те же модели и данные) — берём готовый,
     иначе считаем. Совпадение даты выпуска гарантирует, что прогноз построен по тем же наблюдениям."""
@@ -383,15 +399,19 @@ if last is not None and last < issue_day:
 if st.session_state.get("main_tab") in ("Рейтинг риска", "Маршрут и план завоза"):  # прежние названия
     st.session_state["main_tab"] = "Риски и рекомендации"
 
-tabs = st.tabs([
+# Вкладки по пользе: обзор → прогноз пути → доказанный денежный эффект коридора → проверка проезда по приказам →
+# сценарный планировщик (нужны цифры оператора) → проверка «до/после» → источники. Код ниже обращается
+# к вкладкам по прежним номерам (0 — карта, 3 — планировщик, 4 — риски), порядок показа задаётся здесь.
+_tab_widgets = st.tabs([
     "Карта путей",
     "Карточка пути",
     "Сквозной коридор (А3)",
-    "Планировщик",
     "Риски и рекомендации",
+    "Планировщик",
     "До / после",
     "О данных",
 ], key="main_tab", on_change="rerun")
+tabs = [_tab_widgets[0], _tab_widgets[1], _tab_widgets[2], _tab_widgets[4], _tab_widgets[3], _tab_widgets[5], _tab_widgets[6]]
 # Streamlit выполняет код всех вкладок сразу; тяжёлые (коридор, риски и рекомендации) считаем только когда
 # вкладка открыта — первое открытие дашборда не ждёт расчётов, которые пользователь может и не смотреть.
 def _tab_open(i):
@@ -442,15 +462,7 @@ with tabs[0]:
     # 1) зимники OSM — фоном, приглушённо, чтобы не спорить с точками
     _roads_file = Path(PROCESSED).parent / "osm" / "winter_roads.json"
     if show_roads and _roads_file.exists():
-        import json as _json
-        _lat, _lon, _txt = [], [], []
-        for r in _json.loads(_roads_file.read_text(encoding="utf-8")):
-            if r.get("region", region) != region:  # только выбранный регион — карта легче
-                continue
-            nm = r["name"] or ("ледовая переправа" if r["kind"] == "ice_road" else "зимник")
-            _lat += r["lat"] + [None]
-            _lon += r["lon"] + [None]
-            _txt += [nm] * len(r["lat"]) + [None]
+        _lat, _lon, _txt = _road_arrays(str(_roads_file), _roads_file.stat().st_mtime, region)
         fmap.add_trace(go.Scattermap(lat=_lat, lon=_lon, mode="lines", text=_txt, hoverinfo="text",
                                      line=dict(width=2, color="#4f7cac"), name="🛣️ зимники и переправы", opacity=0.6))
     # 2) притоки Лены — мелкие бирюзовые точки без подписей
@@ -606,7 +618,12 @@ with tabs[1]:
     # как менялся прогноз закрытия в течение сезона
     days = list(range(150, 271, 7))
     path = fc_path(pid, hy, "close", tuple(days))
-    if not path.empty:
+    if not path.empty:  # до начала окна все даты решения сводятся к одной последней дате погоды
+        path = path.drop_duplicates("issue_day").reset_index(drop=True)
+    if len(path) == 1:
+        st.caption("Как менялся прогноз начала таяния: график появится, когда в сезоне будет хотя бы две даты решения "
+                   "(прогноз пересчитывается раз в неделю с начала сезона).")
+    if len(path) > 1:
         x = [from_season_day(d, hy) for d in path.issue_day]
         f = go.Figure()
         experimental=path[['weather_model_applied','snow_model_applied','updated_model_applied']].any().any()
@@ -619,7 +636,8 @@ with tabs[1]:
         if not np.isnan(path.actual.iloc[0]):
             f.add_hline(y=from_season_day(path.actual.iloc[0], hy), line_color="black", annotation_text="факт")
         f.update_layout(title="Как менялся прогноз начала таяния в течение сезона", xaxis_title="дата решения",
-                        yaxis_title="прогноз даты", height=420)
+                        yaxis_title="прогноз даты", height=420, xaxis=dict(type="date", tickformat="%d.%m"),
+                        yaxis=dict(tickformat="%d.%m"))
         st.plotly_chart(f, width="stretch")
     hist = FC.history(pid)
     if hist["close_day"].notna().any():
@@ -639,17 +657,22 @@ with tabs[1]:
             _last["снимок"] = _last.date.dt.strftime("%d.%m.%Y")
             _last["состояние"] = np.where(_last.p_ice >= 0.8, "лёд", np.where(_last.p_ice <= 0.2, "вода", "неясно"))
             _last["P(лёд)"] = _last.p_ice.round(2)
+            st.subheader("Спутники: что на реке сейчас")
+            st.caption("Радар Sentinel-1 — основная проверка «лёд или вода», работает сквозь облака и ночью. "
+                       "Ниже в раскрывающихся блоках — дополнительные снимки: Landsat (оптика, отдельная модель), "
+                       "MODIS/VIIRS (ежедневные цветные снимки для глаз) и Гаофэнь-3 (редкие кадры, только просмотр).")
             st.markdown("**Лена по радарным снимкам Sentinel-1 (М2)** — что на реке по последнему снимку")
             st.dataframe(_last.sort_values("date", ascending=False)[["точка на Лене", "снимок", "состояние", "P(лёд)"]],
                          hide_index=True, width="stretch")
             st.caption("Классификатор лёд/вода: точность 0,95 на годах вне обучения. Снимок примерно раз в 12 дней; "
                        "даты вскрытия по ряду снимков — с точностью ≈ 9 сут.")
-        from app.gaofen_view import render_gaofen
-        render_gaofen(pid)
+        # дополнительные снимки — от полезного к справочному: оптическая модель, ежедневный обзор, разовые радарные кадры
         from app.landsat_view import render_landsat
         render_landsat(pid)
         from app.daily_imagery_view import render_daily_imagery
         render_daily_imagery(pid)
+        from app.gaofen_view import render_gaofen
+        render_gaofen(pid)
 
 # ------------------------------------------------------------------ 3. сквозной коридор (А3)
 with tabs[2]:

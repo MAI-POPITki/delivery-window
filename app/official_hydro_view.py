@@ -30,7 +30,7 @@ def _date(value):
 
 def render_point(point_id, issue_date):
     snapshot = H.load_snapshot()
-    with st.expander("Официальные наблюдения и сводки", expanded=True):
+    with st.expander("Официальные наблюдения и сводки Росгидромета по этой точке", expanded=False):
         if not snapshot:
             st.info("Официальные источники проверяются. Измерений пока нет.")
             return

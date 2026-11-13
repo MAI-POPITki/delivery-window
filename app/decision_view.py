@@ -6,8 +6,7 @@ from okno.ice import from_season_day
 
 
 def render_decisions(forecast, issue_day, p, hydro_year,availability=None,handling_capacity=None):
-    st.markdown('### Что изменить, чтобы успеть?')
-    st.caption('Расчёт М3 для выбранного участка. Объём и мощности берутся из параметров ниже; это ввод пользователя, а не подтверждённые данные перевозчика. Разрешение на проезд проверяется отдельно.')
+    st.caption('Расчёт М3 для выбранного участка. Объём и мощности берутся из параметров выше; это ввод пользователя, а не подтверждённые данные перевозчика. Разрешение на проезд проверяется отдельно.')
     floor = math.ceil(max(issue_day, p.start_day))
     a, b = st.columns(2)
     delay = a.number_input('Через сколько дней планируете начать отправки?', 0, 90, 7, key='decision_delay')
@@ -18,13 +17,17 @@ def render_decisions(forecast, issue_day, p, hydro_year,availability=None,handli
     view = table[['start_day', 'planned_road_t', 'expected_backup_t', 'expected_cost_rub']].copy()
     view['start_day'] = view.start_day.map(lambda d: from_season_day(d, hydro_year).date())
     view.columns = ['Начало отправок', 'План по зимнику, т', 'Ожидаемый остаток для резерва, т', 'Ожидаемые расходы, ₽']
+    view['Ожидаемые расходы, ₽'] = view['Ожидаемые расходы, ₽'].round(0)
     st.dataframe(view, hide_index=True, width='stretch')
     st.caption('Одинаковый прогноз и тарифы во всех вариантах. Остаток для резерва не означает доставку к сроку: расписание резервного канала здесь не моделируется. Масса машины не меняется автоматически: для этого нужны число машин и время их оборота.')
     st.markdown('**Насколько устойчив результат?**')
     spread = st.slider('Изменение неизвестных тарифов, ±%', 0, 100, 30, key='decision_spread')
     sensitivity = start_sensitivity(forecast, issue_day, p, planned, early, spread/100,availability=availability,handling_capacity=handling_capacity)
     low, high = -sensitivity.saving_rub.max(), -sensitivity.saving_rub.min()
-    st.write(f'Изменение ожидаемых расходов при самом раннем старте: от {low:+,.0f} до {high:+,.0f} ₽ относительно исходного начала.')
+    if max(abs(low), abs(high)) < 1:
+        st.write('Ранний старт не меняет ожидаемые расходы ни при одном проверенном варианте тарифов.')
+    else:
+        st.write(f'Изменение ожидаемых расходов при самом раннем старте: от {low:+,.0f} до {high:+,.0f} ₽ относительно исходного начала.'.replace(',', ' '))
     st.caption('Минус — расходы снижаются; плюс — растут. Диапазон относится только к проверенным вариантам тарифов.')
     if early == planned:
         st.info('Начало не изменено: варианты совпадают. Чтобы сравнить решения, укажите доступное приближение старта.')
