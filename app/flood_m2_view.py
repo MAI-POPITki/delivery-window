@@ -17,6 +17,15 @@ def set_observation_date(key, value):
     st.session_state[key]=value
 
 
+def follow_latest(state,key,latest,today):
+    """Follow new scenes only while the user is looking at the latest scene."""
+    current=min(latest,today)
+    previous=state.get(key+'_latest_seen',current)
+    if key not in state or (state[key]==previous and current>previous):
+        state[key]=current
+    state[key+'_latest_seen']=current
+
+
 def render_m2():
     st.title('Паводки · М2: вода со спутника')
     st.caption('Sentinel-2 · наблюдение открытой воды и её расширения относительно более ранних снимков')
@@ -27,6 +36,8 @@ def render_m2():
         st.session_state['m2_flood_point']=points[0]
     pid=st.sidebar.selectbox('Участок М2',points,key='m2_flood_point',
         format_func=lambda p:f"{POINTS[p]['river']} · {POINTS[p]['name']}")
+    from app.flood_live_view import render_live
+    render_live(pid)
     runs=M.available_runs(pid)
     if not runs:
         st.info('Для этого участка снимки ещё не обработаны. Отсутствие снимка не означает отсутствие воды.')
@@ -36,7 +47,7 @@ def render_m2():
         latest=max(pd.Timestamp(m['product_generated_at']).date() for m in metadata)
         earliest=min(pd.Timestamp(m['acquired_at']).date() for m in metadata)
         key='m2_as_of_'+pid
-        st.session_state.setdefault(key,min(latest,date.today()))
+        follow_latest(st.session_state,key,latest,date.today())
         archive=[pd.Timestamp(m['product_generated_at']).date() for m in metadata if m['acquired_at'].startswith('2024-')]
         if archive:
             st.sidebar.button('Архивный снимок 2024',key='m2_example_'+pid,

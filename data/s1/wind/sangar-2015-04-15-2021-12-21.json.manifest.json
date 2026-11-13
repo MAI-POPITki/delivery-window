@@ -1,0 +1,13 @@
+{
+  "source": "Open-Meteo Historical Weather API / ERA5",
+  "model": "era5",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=63.925&longitude=127.4904&start_date=2015-04-15&end_date=2021-12-21&hourly=wind_speed_10m%2Cwind_direction_10m&models=era5&timezone=UTC&wind_speed_unit=ms",
+  "requested_point": {
+    "lat": 63.925,
+    "lon": 127.4904
+  },
+  "fetched_at": "2026-11-12T22:44:23.556303+00:00",
+  "sha256": "62163a63487083dd2a7f63aa6deb20aa07beb2f9ed60eb3f8bbad09c1a5c3151",
+  "timezone": "UTC",
+  "speed_unit": "m/s"
+}

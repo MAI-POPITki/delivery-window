@@ -6,6 +6,7 @@
   "dated_ice": 3,
   "new_opening_targets": 0,
   "new_closing_targets": 0,
+  "closing_targets_status": "not_implemented",
   "weights_overwritten": false,
   "candidates": [
     {

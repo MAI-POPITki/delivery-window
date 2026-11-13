@@ -86,6 +86,9 @@ def render_optimizer(d, route, pid, decision, travel, start_date=None):
                'source':st.column_config.TextColumn('Основание / источник'),
                'published':st.column_config.DateColumn('Сведения получены',format='DD.MM.YYYY')})
     saved[context] = edited.copy()
+    from app.handling_wind_view import render_wind,CAPACITY_LABELS
+    wind=render_wind('external_m3_wind',decision,list(days),
+                     [(pd.Timestamp(day)+pd.Timedelta(days=travel-1)).date() for day in days])
     if not st.button('Рассчитать план', key='flood_optimize', type='primary'):
         return
     if any(v is None for v in (quantity,road_cost,backup,holding)) or not quantity:
@@ -96,6 +99,9 @@ def render_optimizer(d, route, pid, decision, travel, start_date=None):
                                       decision, travel, limit/100, allow_without)
         if start_date is not None:
             calendar.loc[calendar.date < start_date,'policy_allowed'] = False
+        if wind is not None:
+            from okno.handling_wind import constrain
+            calendar=constrain(calendar,*wind)
         if not calendar.confirmed.any():
             st.info('Нет дней с подтверждённым допуском на весь рейс. Заполните основание и даты; неизвестный путь не считается открытым.')
             return
@@ -120,7 +126,8 @@ def render_optimizer(d, route, pid, decision, travel, start_date=None):
     output = plan.rename(columns={'date':'Дата отправки','arrival':'Окончание проезда','capacity_t':'Мощность, т',
                'confirmed':'Допуск подтверждён','policy_allowed':'Проходит политику','fraction':'Сценарии высокой воды',
                'optimized_t':'Оптимальный план, т','uniform_t':'Равномерный план, т'})
-    st.dataframe(output,hide_index=True,width='stretch')
+    output=output.rename(columns=CAPACITY_LABELS)
+    st.dataframe(output[[c for c in output if not c.startswith(('wind_load_','wind_unload_'))]],hide_index=True,width='stretch')
     st.download_button('Скачать план',output.to_csv(index=False).encode('utf-8-sig'),'flood-plan.csv','text/csv')
     st.caption('Это условный расчёт по введённым данным. Он не подтверждает фактический допуск, '
                'свободную технику или доставку остатка другим способом; выигрыш прогноза на реальных рейсах не доказан.')

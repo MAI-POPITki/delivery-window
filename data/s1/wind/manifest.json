@@ -1,0 +1,112 @@
+{
+  "protocol": "docs/M2_WIND_EXPERIMENT.md",
+  "records": 1126,
+  "matched": 1126,
+  "missing": [],
+  "sources": [
+    {
+      "path": "data/s1/wind/kyusyur-2015-04-11-2021-12-19.json.gz",
+      "source": "Open-Meteo Historical Weather API / ERA5",
+      "model": "era5",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=70.6863&longitude=127.3731&start_date=2015-04-11&end_date=2021-12-19&hourly=wind_speed_10m%2Cwind_direction_10m&models=era5&timezone=UTC&wind_speed_unit=ms",
+      "requested_point": {
+        "lat": 70.6863,
+        "lon": 127.3731
+      },
+      "fetched_at": "2026-11-12T22:44:21.188199+00:00",
+      "sha256": "03858eea0246a8bc688376cba3141244e56a36742032341e3ff0beba68e0cf6c",
+      "timezone": "UTC",
+      "speed_unit": "m/s"
+    },
+    {
+      "path": "data/s1/wind/lensk-2016-09-06-2021-07-24.json.gz",
+      "source": "Open-Meteo Historical Weather API / ERA5",
+      "model": "era5",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=60.7276&longitude=114.9322&start_date=2016-09-06&end_date=2021-07-24&hourly=wind_speed_10m%2Cwind_direction_10m&models=era5&timezone=UTC&wind_speed_unit=ms",
+      "requested_point": {
+        "lat": 60.7276,
+        "lon": 114.9322
+      },
+      "fetched_at": "2026-11-12T22:44:22.352044+00:00",
+      "sha256": "2fcf1583721d4562d31fd6b8fb8fb9eb589da607894912f07359620215ff9b4f",
+      "timezone": "UTC",
+      "speed_unit": "m/s"
+    },
+    {
+      "path": "data/s1/wind/olekminsk-2015-04-23-2021-12-17.json.gz",
+      "source": "Open-Meteo Historical Weather API / ERA5",
+      "model": "era5",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=60.3843&longitude=120.4483&start_date=2015-04-23&end_date=2021-12-17&hourly=wind_speed_10m%2Cwind_direction_10m&models=era5&timezone=UTC&wind_speed_unit=ms",
+      "requested_point": {
+        "lat": 60.3843,
+        "lon": 120.4483
+      },
+      "fetched_at": "2026-11-12T22:44:22.430324+00:00",
+      "sha256": "617701dbcb48596742b8d8d2743e22fa8f217cd96368c26bd80a086ba4d94dd8",
+      "timezone": "UTC",
+      "speed_unit": "m/s"
+    },
+    {
+      "path": "data/s1/wind/pokrovsk-2015-04-15-2021-12-21.json.gz",
+      "source": "Open-Meteo Historical Weather API / ERA5",
+      "model": "era5",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=61.4848&longitude=129.1651&start_date=2015-04-15&end_date=2021-12-21&hourly=wind_speed_10m%2Cwind_direction_10m&models=era5&timezone=UTC&wind_speed_unit=ms",
+      "requested_point": {
+        "lat": 61.4848,
+        "lon": 129.1651
+      },
+      "fetched_at": "2026-11-12T22:44:23.205057+00:00",
+      "sha256": "a9438b4aaaf7c9e17c52d7460d5fad71ba92fdd2937b0d7f3c9ccb9a94706796",
+      "timezone": "UTC",
+      "speed_unit": "m/s"
+    },
+    {
+      "path": "data/s1/wind/sangar-2015-04-15-2021-12-21.json.gz",
+      "source": "Open-Meteo Historical Weather API / ERA5",
+      "model": "era5",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=63.925&longitude=127.4904&start_date=2015-04-15&end_date=2021-12-21&hourly=wind_speed_10m%2Cwind_direction_10m&models=era5&timezone=UTC&wind_speed_unit=ms",
+      "requested_point": {
+        "lat": 63.925,
+        "lon": 127.4904
+      },
+      "fetched_at": "2026-11-12T22:44:23.556303+00:00",
+      "sha256": "62163a63487083dd2a7f63aa6deb20aa07beb2f9ed60eb3f8bbad09c1a5c3151",
+      "timezone": "UTC",
+      "speed_unit": "m/s"
+    },
+    {
+      "path": "data/s1/wind/yakutsk_crossing-2015-04-15-2021-12-21.json.gz",
+      "source": "Open-Meteo Historical Weather API / ERA5",
+      "model": "era5",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=61.9964&longitude=129.841&start_date=2015-04-15&end_date=2021-12-21&hourly=wind_speed_10m%2Cwind_direction_10m&models=era5&timezone=UTC&wind_speed_unit=ms",
+      "requested_point": {
+        "lat": 61.9964,
+        "lon": 129.841
+      },
+      "fetched_at": "2026-11-12T22:44:24.124435+00:00",
+      "sha256": "1550bedc63b135365af3203b119d390e50521b6696d18bf765cefd2b76bc23fb",
+      "timezone": "UTC",
+      "speed_unit": "m/s"
+    },
+    {
+      "path": "data/s1/wind/zhigansk-2015-04-23-2021-12-17.json.gz",
+      "source": "Open-Meteo Historical Weather API / ERA5",
+      "model": "era5",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=66.7772&longitude=123.3451&start_date=2015-04-23&end_date=2021-12-17&hourly=wind_speed_10m%2Cwind_direction_10m&models=era5&timezone=UTC&wind_speed_unit=ms",
+      "requested_point": {
+        "lat": 66.7772,
+        "lon": 123.3451
+      },
+      "fetched_at": "2026-11-12T22:44:24.647069+00:00",
+      "sha256": "439a2e71df5721cbb2a00864be83784fdc227b0dee714ffeaece3dfaab0545bc",
+      "timezone": "UTC",
+      "speed_unit": "m/s"
+    }
+  ],
+  "inputs": {
+    "data/s1/predictions.csv": "b9b172482d35e1632f2fb75860c2268390c09c8258b6fbd06938f2588377490a",
+    "data/s1/index.csv": "41b8c9d94e55002c59b642459f34533dfd8cad98a7d2fcaff168dadaa25a4aa2"
+  },
+  "features_sha256": "4e9238bc599f2c0c10143b9c34351a62cb1c4d890cc3830e82ac1afd5e8c59d6",
+  "radar_features_sha256": "3f00fdf46c0918fe8b93b64433091b2b897cd087f321dcc91103cdb72c4b91b3"
+}

@@ -12,6 +12,8 @@ data/raw/*.zip
 # вырезки Sentinel-1 для М2 (сотни МБ) — генерируются scripts/s1_chips.py
 data/s1/chips/
 data/flood/benchmark/cache/
+data/flood/refresh/locks/
+data/flood/satellite/**/.staging/
 docs/build/
 
 # Обзорные PNG Гаофэнь-3 восстанавливаются загрузчиком; метаданные остаются в git.
@@ -22,3 +24,5 @@ data/gaofen/.update.lock
 data/landsat/chips/
 data/landsat/previews/
 data/landsat/.update.lock
+
+data/handling_wind/

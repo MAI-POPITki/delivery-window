@@ -3,6 +3,10 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta, timezone
 import json
+import hashlib
+import os
+import shutil
+import tempfile
 from pathlib import Path
 import sys
 import xml.etree.ElementTree as ET
@@ -98,6 +102,34 @@ def choose_scene(scenes,location):
     return current,ranking
 
 
+def save_stac(item, folder):
+    """Keep every catalog revision immutable so shared reference scenes stay valid."""
+    payload=json.dumps(item, indent=2).encode('utf-8')
+    digest=hashlib.sha256(payload).hexdigest()
+    path=folder/f'stac-{digest}.json'
+    if not path.exists():
+        path.write_bytes(payload)
+    elif path.read_bytes()!=payload:
+        raise ValueError('Повреждена сохранённая версия STAC')
+    # Compatibility with older scene readers; never replace a prior capture.
+    legacy=folder/'stac.json'
+    if not legacy.exists():
+        legacy.write_bytes(payload)
+    return path
+
+
+def saved_stac(destination, scene):
+    """Read the exact catalog revision referenced by the run, including legacy runs."""
+    names=[name for name in scene['files']
+           if Path(name).name=='stac.json' or (Path(name).name.startswith('stac-') and name.endswith('.json'))]
+    if len(names)!=1:
+        raise ValueError('Неоднозначная версия STAC в результате М2')
+    path=(destination/names[0]).resolve()
+    if not path.is_relative_to(destination.resolve()) or M.sha256(path)!=scene['files'][names[0]]:
+        raise ValueError('Повреждены метаданные исходного снимка')
+    return json.loads(path.read_text(encoding='utf-8'))
+
+
 def read_scene(item, location, destination):
     import planetary_computer as pc
     import rasterio
@@ -106,7 +138,7 @@ def read_scene(item, location, destination):
     from rasterio.vrt import WarpedVRT
     folder = destination / 'scenes' / item['id']
     folder.mkdir(parents=True, exist_ok=True)
-    raw, xmlpath, stacpath = folder / 'dn.npz', folder / 'product.xml', folder / 'stac.json'
+    raw, xmlpath = folder / 'dn.npz', folder / 'product.xml'
     cachemeta = folder / 'crop.json'
     if raw.exists() and xmlpath.exists() and cachemeta.exists():
         cached = json.loads(cachemeta.read_text())
@@ -132,7 +164,7 @@ def read_scene(item, location, destination):
         cachemeta.write_text(json.dumps(dict(grid=location, sha256=M.sha256(raw),
             resampling='bilinear spectral DN / nearest SCL', nodata=0,
             fetched_at=datetime.now(timezone.utc).isoformat()), indent=2), encoding='utf-8')
-    stacpath.write_text(json.dumps(item, indent=2), encoding='utf-8')
+    stacpath=save_stac(item,folder)
     radi = radiometry(xmlpath.read_bytes(), item['properties']['s2:processing_baseline'])
     reflectance = {b: np.where(arrays[b] > 0, (arrays[b].astype('float64') + radi['offsets'][b]) / radi['quantification'], np.nan)
                    for b in BANDS if b != 'SCL'}
@@ -167,6 +199,21 @@ def overlay(mask, location, out):
     return [[west, north], [east, north], [east, south], [west, south]]
 
 
+def publish_run(folder,final,mask,reference):
+    """Validate a complete hidden run before atomically making it visible."""
+    meta=M.load_run(folder/'manifest.json')
+    final.parent.mkdir(parents=True,exist_ok=True)
+    if final.exists():
+        saved=M.load_run(final/'manifest.json')
+        with np.load(final/'mask.npz',allow_pickle=False) as old:
+            np.testing.assert_array_equal(mask,old['mask'])
+            np.testing.assert_array_equal(reference,old['reference'])
+        shutil.rmtree(folder)
+        return saved
+    os.replace(folder,final)
+    return meta
+
+
 def process(pid, start, end, selected=None, available_by=None):
     station = json.loads((M.ROOT / f'data/flood/levels/{pid}.manifest.json').read_text(encoding='utf-8'))
     lon, lat = station['station']['geometry']['coordinates']
@@ -182,6 +229,9 @@ def process(pid, start, end, selected=None, available_by=None):
         if not scenes:
             raise ValueError('Нет сцен за указанный период')
         current,ranking = choose_scene(scenes,location)
+        existing=M.DATA/pid/'runs'/current['id']/'manifest.json'
+        if existing.exists():
+            return M.load_run(existing)
         tile = current['properties']['s2:mgrs_tile']
         year = int(current['properties']['datetime'][:4]) - 1
         references = search(lon, lat, f'{year}-06-01', f'{year}-08-31', tile=tile)
@@ -211,8 +261,9 @@ def process(pid, start, end, selected=None, available_by=None):
     bands, scl, meta = read_scene(current, location, destination)
     valid, water = M.classify(bands, scl)
     mask, stats = M.compare(valid, water, reference)
-    folder = destination / 'runs' / current['id']
-    folder.mkdir(parents=True, exist_ok=True)
+    staging=destination/'.staging'
+    staging.mkdir(parents=True,exist_ok=True)
+    folder=Path(tempfile.mkdtemp(prefix=current['id']+'-',dir=staging))
     np.savez_compressed(folder / 'mask.npz', mask=mask, reference=reference)
     Image.fromarray(rgb(bands)).save(folder / 'rgb.png')
     with __import__('warnings').catch_warnings():
@@ -233,8 +284,10 @@ def process(pid, start, end, selected=None, available_by=None):
                    if ranking else 'rebuild of frozen saved selection'),selection_candidates=ranking,
         files={name: M.sha256(folder / name) for name in ['mask.npz', 'rgb.png', 'baseline.png', 'overlay.png']})
     (folder / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf-8')
-    M.load_run(folder / 'manifest.json')
+    final=destination/'runs'/current['id']
+    published=publish_run(folder,final,mask,reference)
     print(pid, current['id'], json.dumps(stats), flush=True)
+    return published
 
 
 def main():
@@ -267,7 +320,7 @@ def main():
                             target=(destination/name).resolve()
                             if not target.is_relative_to(destination.resolve()) or M.sha256(target)!=digest:
                                 raise ValueError('Повреждены исходные файлы')
-                        selected.append(json.loads((destination/'scenes'/scene['item_id']/'stac.json').read_text(encoding='utf-8')))
+                        selected.append(saved_stac(destination,scene))
                     process(pid,*record['selection_window'],selected=(selected[0],selected[1:]))
             else:
                 process(pid, start, end,available_by=args.available_by)

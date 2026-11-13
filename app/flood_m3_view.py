@@ -44,11 +44,14 @@ def render_m3(pid,decision,forecast):
             'source':st.column_config.TextColumn('Основание допуска'),
             'published':st.column_config.DateColumn('Сведения получены',format='DD.MM.YYYY')})
     saved[context]=edited.copy()
+    from app.handling_wind_view import render_wind,CAPACITY_LABELS
+    wind=render_wind('own_m3_wind',decision,list(edited.date),
+                     list(pd.to_datetime(edited.date).add(pd.Timedelta(days=int(travel)-1)).dt.date))
     if not st.button('Рассчитать план доставки',key='own_m3_run',type='primary'):return
     if not route.strip() or not evidence.strip() or any(x is None for x in [threshold,quantity,road,backup,holding]):
         st.info('Введите маршрут, порог с основанием, объём и тарифы. Неизвестные условия не заменяются примерами.');return
     try:
-        variants=plan_variants(edited,forecast,decision,int(travel),threshold,quantity,road,backup,holding)
+        variants=plan_variants(edited,forecast,decision,int(travel),threshold,quantity,road,backup,holding,wind=wind)
     except ValueError as exc:
         st.error(str(exc));return
     plan,summary=variants['upper']
@@ -64,5 +67,6 @@ def render_m3(pid,decision,forecast):
     output=plan.drop(columns=['fraction']).rename(columns={'date':'Отправка','arrival':'Окончание проезда',
         'capacity_t':'Мощность, т','confirmed':'Допуск подтверждён','policy_allowed':'Проходит политику',
         'max_level_cm':'Максимум верхней границы, см','optimized_t':'М3, т','uniform_t':'Равномерно, т'})
-    st.dataframe(output,hide_index=True)
+    output=output.rename(columns=CAPACITY_LABELS)
+    st.dataframe(output[[c for c in output if not c.startswith(('wind_load_','wind_unload_'))]],hide_index=True)
     st.download_button('Скачать план М3',output.to_csv(index=False).encode('utf-8-sig'),'flood-m3.csv','text/csv')

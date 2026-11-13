@@ -48,17 +48,30 @@ def road_rows(point_id,hydro_year):
     return frame[(frame.point_id==point_id)&(frame.hydro_year==hydro_year)].drop(columns='point_id').copy()
 
 
-def planned_opening(point_id,hydro_year,decision):
-    """Самое раннее открытие дорог точки в сезоне, известное на дату решения: (день сезона, пояснение) или None.
+def planned_opening(point_id,hydro_year,decision,*,road=None,gross_t=20.):
+    """Открытие выбранной дороги, известное на дату решения, или None.
 
-    Факт используется, если он уже опубликован; иначе опубликованный график. Ничего не додумывается."""
+    Без выбора дороги допускается только единственная дорога точки. Открытие
+    для 10 т не задаёт начало сезона для более тяжёлой машины. Это ориентир
+    начала отправок, а не проверка допуска на каждый день рейса.
+    """
+    if not math.isfinite(gross_t) or gross_t<=0:
+        raise ValueError('Полная масса должна быть положительным конечным числом')
     decision=pd.Timestamp(decision).normalize()
     frame=road_rows(point_id,hydro_year)
+    roads=frame.road.unique()
+    if road is None:
+        if len(roads)!=1: return None
+        road=roads[0]
+    frame=frame[frame.road.eq(road)]
     best=None
     for _,row in frame[frame.kind.isin(['open','open10'])].iterrows():
-        for basis,effective,published in (('факт','actual_date','actual_published'),('график','announced_date','announced_published')):
+        if row.kind=='open10' and gross_t>10: continue
+        for basis,effective,published,source in (
+                ('факт','actual_date','actual_published','source_actual'),
+                ('график','announced_date','announced_published','source_announced')):
             when=pd.to_datetime(row[effective],errors='coerce');known=pd.to_datetime(row[published],errors='coerce')
-            if pd.isna(when) or pd.isna(known) or known>decision: continue
+            if pd.isna(when) or pd.isna(known) or known>decision or not row[source]: continue
             if basis=='факт' and when>decision: continue
             if best is None or when<best[0]: best=(when,basis,row['road'])
             break

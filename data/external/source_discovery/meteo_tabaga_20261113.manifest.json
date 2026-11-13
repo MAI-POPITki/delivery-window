@@ -1,0 +1,9 @@
+{
+  "url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3042&date_loc=2026-11-13+00%3A00&time_offset=0",
+  "fetched_at": "2026-11-12T23:45:41.524750+00:00",
+  "sha256": "e50282a75040fa3836d7f7d48e9c9ac4c08e4df6c32f2c9dd6b37892ddf3d334",
+  "purpose": "Source feasibility probe; not ingested into Yakutsk observations",
+  "post_code": "3042",
+  "source_name": "Лена, Табага",
+  "records": 7
+}
