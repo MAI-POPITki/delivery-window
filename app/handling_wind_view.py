@@ -41,6 +41,12 @@ def known_sites():
     except (OSError,ValueError,KeyError,IndexError,TypeError):
         pass
     try:
+        from okno.flood import POINTS as FLOOD
+        for pid,m in FLOOD.items():
+            sites.setdefault(f"{m['river']} — {m['name']} (участок паводков)",(round(m['lat'],4),round(m['lon'],4)))
+    except Exception:
+        pass
+    try:
         from okno import forecast as FC
         from okno.regions import REGIONS, label, points_of
         for region in REGIONS:
@@ -60,6 +66,12 @@ def site_for_point(point_id):
         return None
     if point_id=='yakutsk_crossing':
         return 'Нижний Бестях — берег ледовой переправы (OSM)'
+    try:
+        from okno.flood import POINTS as FLOOD
+        if point_id in FLOOD:
+            m=FLOOD[point_id]; return f"{m['river']} — {m['name']} (участок паводков)"
+    except Exception:
+        pass
     from okno.regions import label
     return label(point_id)+' — пост пути'
 
@@ -121,8 +133,11 @@ def render_wind(key,decision,days,arrival_days,default_point=None):
                         if pressed:get_wind.clear()
                         st.session_state[prefix+'_data']=(signature,get_wind(lat,lon))
                 except Exception as exc:st.error('Загрузка погоды не удалась: '+type(exc).__name__)
+            if lat is None or lon is None:
+                st.caption('Кнопка станет доступна, когда выбрана площадка или введены координаты.')
             if not today:
-                st.caption('Для архивной даты решения прогноз тех дней не скачивается заново: загрузите сохранённый выпуск ниже.')
+                st.caption('Дата решения архивная: прогноз погоды на прошлые дни заново не скачать, поэтому кнопка выключена. '
+                           'Поставьте дату решения на сегодня или загрузите сохранённый выпуск ниже.')
             loaded=st.session_state.get(prefix+'_data')
             if loaded and loaded[0]==signature:
                 st.success('Прогноз погоды загружен автоматически: '+str(loaded[1].get('fetched_at',''))[:16].replace('T',' ')+' UTC, 7 дней по часам.')

@@ -46,7 +46,7 @@ def render_m3(pid,decision,forecast):
     saved[context]=edited.copy()
     from app.handling_wind_view import render_wind,CAPACITY_LABELS
     wind=render_wind('own_m3_wind',decision,list(edited.date),
-                     list(pd.to_datetime(edited.date).add(pd.Timedelta(days=int(travel)-1)).dt.date))
+                     list(pd.to_datetime(edited.date).add(pd.Timedelta(days=int(travel)-1)).dt.date),default_point=pid)
     if not st.button('Рассчитать план доставки',key='own_m3_run',type='primary'):return
     if not route.strip() or not evidence.strip() or any(x is None for x in [threshold,quantity,road,backup,holding]):
         st.info('Введите маршрут, порог с основанием, объём и тарифы. Неизвестные условия не заменяются примерами.');return

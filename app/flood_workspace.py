@@ -88,7 +88,7 @@ def render_optimizer(d, route, pid, decision, travel, start_date=None):
     saved[context] = edited.copy()
     from app.handling_wind_view import render_wind,CAPACITY_LABELS
     wind=render_wind('external_m3_wind',decision,list(days),
-                     [(pd.Timestamp(day)+pd.Timedelta(days=travel-1)).date() for day in days])
+                     [(pd.Timestamp(day)+pd.Timedelta(days=travel-1)).date() for day in days],default_point=pid)
     if not st.button('Рассчитать план', key='flood_optimize', type='primary'):
         return
     if any(v is None for v in (quantity,road_cost,backup,holding)) or not quantity:
