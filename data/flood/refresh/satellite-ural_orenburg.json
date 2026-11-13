@@ -1,0 +1,13 @@
+{
+  "kind": "satellite",
+  "pid": "ural_orenburg",
+  "state": "ok",
+  "checked_at": "2026-11-13T11:30:21.789443+00:00",
+  "last_success_at": "2026-11-13T11:30:21.789443+00:00",
+  "result": {
+    "state": "ok",
+    "acquired_at": "2026-11-02T07:20:41.025000Z",
+    "observed_fraction": 0.9833027777777777,
+    "version": "S2C_MSIL2A_20261102T072041_R006_T40UCC_20261102T103105"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "kind": "satellite",
+  "pid": "tobol_kurgan",
+  "state": "ok",
+  "checked_at": "2026-11-13T11:30:18.830378+00:00",
+  "last_success_at": "2026-11-13T11:30:18.830378+00:00",
+  "result": {
+    "state": "ok",
+    "acquired_at": "2026-11-06T07:00:51.025000Z",
+    "observed_fraction": 0.6768916666666667,
+    "version": "S2C_MSIL2A_20261106T070051_R063_T41UPB_20261106T095605"
+  }
+}

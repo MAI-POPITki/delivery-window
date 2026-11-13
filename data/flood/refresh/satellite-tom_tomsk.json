@@ -1,0 +1,13 @@
+{
+  "kind": "satellite",
+  "pid": "tom_tomsk",
+  "state": "ok",
+  "checked_at": "2026-11-13T11:30:29.645967+00:00",
+  "last_success_at": "2026-11-13T11:30:29.645967+00:00",
+  "result": {
+    "state": "ok",
+    "acquired_at": "2026-11-02T05:40:01.025000Z",
+    "observed_fraction": 0.0,
+    "version": "S2C_MSIL2A_20261102T054001_R005_T45VUC_20261102T085705"
+  }
+}

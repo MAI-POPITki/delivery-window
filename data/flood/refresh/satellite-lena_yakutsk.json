@@ -1,7 +1,13 @@
 {
   "kind": "satellite",
   "pid": "lena_yakutsk",
-  "state": "error",
-  "checked_at": "2026-11-12T23:43:28.787395+00:00",
-  "error": "RasterioIOError"
+  "state": "ok",
+  "checked_at": "2026-11-13T11:30:14.553995+00:00",
+  "last_success_at": "2026-11-13T11:30:14.553995+00:00",
+  "result": {
+    "state": "ok",
+    "acquired_at": "2026-11-06T02:49:09.024000Z",
+    "observed_fraction": 0.002575,
+    "version": "S2B_MSIL2A_20261106T024909_R132_T52VEP_20261106T113706"
+  }
 }
