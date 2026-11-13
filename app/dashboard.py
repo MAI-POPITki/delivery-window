@@ -85,7 +85,7 @@ def place_labels(df, zoom, obstacles=()):
     return df[df.label_txt != ""]
 
 
-LEGEND_HTML = '\n<style>.okno-legend{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 10px}\n.okno-legend div{flex:1 1 220px;border:1px solid rgba(128,128,128,.25);border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.35}\n.okno-legend b{font-size:14px}.okno-sw{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle;margin:0 3px 0 0;border:2px solid #fff;box-shadow:0 0 0 1px #999}\n.okno-bar{display:inline-block;width:70px;height:10px;border-radius:5px;vertical-align:middle;background:linear-gradient(90deg,#a50026,#fdae61,#ffffbf,#a6d96a,#006837)}</style>\n<div class="okno-legend">\n<div>🚚 <b>Пути с прогнозом</b><br>крупные точки с подписью; цвет — вероятность, что путь открыт через N дней<br>\n<span class="okno-bar"></span> 0% → 100% &nbsp; <span class="okno-sw" style="background:#9e9e9e"></span>нет данных</div>\n<div>🛰️ <b>Лена со спутника (М2)</b><br>что на реке по последнему радарному снимку<br>\n<span class="okno-sw" style="background:#bfe9ff"></span>лёд &nbsp; <span class="okno-sw" style="background:#0b3d91"></span>вода &nbsp;\n<span class="okno-sw" style="background:#0b3d91;opacity:.35"></span>снимок старше 14 дней</div>\n<div>🌊 <b>Притоки Лены</b><br>мелкие бирюзовые точки — прогноз даты вскрытия (отдельная модель)<br>\n<span class="okno-sw" style="background:#0f9d8a"></span>точка на реке</div>\n<div>🛣️ <b>Зимники и переправы</b><br>линии из OpenStreetMap: где проходят сезонные пути региона</div>\n</div>'
+LEGEND_HTML = '\n<style>.okno-legend{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 10px}\n.okno-legend div{flex:1 1 220px;border:1px solid rgba(128,128,128,.25);border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.35}\n.okno-legend b{font-size:14px}.okno-sw{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle;margin:0 3px 0 0;border:2px solid #fff;box-shadow:0 0 0 1px #999}\n.okno-bar{display:inline-block;width:70px;height:10px;border-radius:5px;vertical-align:middle;background:linear-gradient(90deg,#a50026,#fdae61,#ffffbf,#a6d96a,#006837)}</style>\n<div class="okno-legend">\n<div>🚚 <b>Пути с прогнозом</b><br>крупные точки с подписью; цвет — вероятность, что путь открыт через N дней<br>\n<span class="okno-bar"></span> 0% → 100% &nbsp; <span class="okno-sw" style="background:#9e9e9e"></span>нет данных</div>\n<div>🛰️ <b>Лена со спутника (М2)</b><br>что на реке по последнему пригодному снимку Sentinel-1 или Landsat<br>\n<span class="okno-sw" style="background:#bfe9ff"></span>лёд &nbsp; <span class="okno-sw" style="background:#0b3d91"></span>вода &nbsp;\n<span class="okno-sw" style="background:#0b3d91;opacity:.35"></span>снимок старше 14 дней</div>\n<div>🌊 <b>Притоки Лены</b><br>мелкие бирюзовые точки — прогноз даты вскрытия (отдельная модель)<br>\n<span class="okno-sw" style="background:#0f9d8a"></span>точка на реке</div>\n<div>🛣️ <b>Зимники и переправы</b><br>линии из OpenStreetMap: где проходят сезонные пути региона</div>\n</div>'
 
 st.set_page_config(page_title="Окно завоза", page_icon="🧊", layout="wide")
 
@@ -138,7 +138,7 @@ if _service == "Паводки":
 # остаются в памяти процесса. Сначала обновляем зависимости, затем импортируем зависимые
 # модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
 _MODULE_NAMES = (
-    "okno.paths", "okno.northeast", "okno.regions", "okno.official_hydro", "app.official_hydro_view", "okno.gaofen", "app.gaofen_view", "okno.report", "okno.ice", "okno.calib", "okno.features", "okno.snow",
+    "okno.paths", "okno.northeast", "okno.regions", "okno.official_hydro", "app.official_hydro_view", "okno.gaofen", "app.gaofen_view", "okno.landsat", "okno.m2_landsat", "okno.m2_observations", "app.landsat_view", "okno.report", "okno.ice", "okno.calib", "okno.features", "okno.snow",
     "okno.planner", "okno.decision_support", "app.decision_view", "okno.truck_load", "okno.backhaul", "okno.backhaul_io", "okno.routing", "okno.journey", "okno.risk_advice", "app.truck_load_view", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "okno.bottlenecks", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
     "okno.yakutsk_replay", "app.yakutsk_experiment", "app.backhaul_view", "app.journey_view",
 )
@@ -182,6 +182,8 @@ from app.official_hydro_view import watch_updates, render_point as render_offici
 watch_updates()
 from okno.gaofen_refresh import start_auto_update as start_gaofen_update
 start_gaofen_update()
+from app.landsat_view import watch_updates as watch_landsat_updates
+watch_landsat_updates()
 
 
 @st.cache_data(show_spinner=False, max_entries=5000, ttl=3600)
@@ -435,17 +437,20 @@ with tabs[0]:
                                      marker=dict(size=9, color="#0f9d8a", opacity=0.85),
                                      name=f"🌊 притоки Лены ({len(_b)})"))
     # 3) Лена со спутника (М2): белое кольцо + цвет; старше 14 дней — полупрозрачно, дата снимка в подписи
-    _pp = Path(PROCESSED).parent / "s1" / "predictions.csv"
-    if show_s1 and _pp.exists():
+    if show_s1:
         from okno.s1_points import LENA_NAMES
-        _p = pd.read_csv(_pp, parse_dates=["date"]).dropna(subset=["p_ice"])
-        _idx = pd.read_csv(Path(PROCESSED).parent / "s1" / "index.csv", usecols=["item_id", "lat", "lon"])
-        _s = _p.merge(_idx, on="item_id").sort_values("date").groupby("point").tail(1).copy()
+        from okno.s1_points import river_points
+        from okno.m2_observations import observations
+        _p = observations(as_of=issue_date)
+        _idx = pd.DataFrame([{"point": key, "lat": row["lat"], "lon": row["lon"]} for key, row in river_points().items()])
+        _s = _p.merge(_idx, on="point").copy() if len(_p) else pd.DataFrame(columns=["point", "lat", "lon", "date", "p_ice", "source"])
+        _s["date"] = pd.to_datetime(_s["date"])
         _s["age"] = (pd.Timestamp(issue_date) - _s.date).dt.days
         _s["state"] = np.where(_s.p_ice >= 0.8, "лёд", np.where(_s.p_ice <= 0.2, "вода", "неясно"))
         _s["col"] = np.where(_s.p_ice >= 0.8, "#bfe9ff", np.where(_s.p_ice <= 0.2, "#0b3d91", "#8aa5c8"))
-        _s["hover"] = [f"<b>{LENA_NAMES.get(a, a)}</b><br>Sentinel-1, снимок {d:%d.%m.%Y} ({ag} дн. назад): <b>{st_}</b>"
-                       f"<br>P(лёд) = {pi:.2f}" for a, d, ag, st_, pi in zip(_s.point, _s.date, _s.age, _s.state, _s.p_ice)]
+        _s["hover"] = [f"<b>{LENA_NAMES.get(a, a)}</b><br>{src}, снимок {d:%d.%m.%Y} ({ag} дн. назад): <b>{st_}</b>"
+                       + (f"<br>P(лёд) = {pi:.2f}" if pd.notna(pi) else "<br>Оценки спутников расходятся")
+                       for a, d, ag, st_, pi, src in zip(_s.point, _s.date, _s.age, _s.state, _s.p_ice, _s.source)]
         _s["lbl"] = [f"\u00a0\u00a0\u00a0{st_} · {d:%d.%m}" for st_, d in zip(_s.state, _s.date)]
         # Подписи всегда тёмные и непрозрачные: давность передаётся цветом точки, а не бледным текстом.
         for fresh, g in _s.groupby(_s.age <= 14):
@@ -480,7 +485,7 @@ with tabs[0]:
             for la, lo in zip(_b.lat, _b.lon):
                 x, y = _px(la, lo, _z)
                 _obst.append((x - 5, y - 5, x + 5, y + 5))
-        if show_s1 and _pp.exists():  # точки Лены и их подписи справа
+        if show_s1:  # точки Лены и их подписи справа
             for la, lo, t in zip(_s.lat, _s.lon, _s.lbl):
                 x, y = _px(la, lo, _z)
                 _obst += [(x - 8, y - 8, x + 8, y + 8), (x + 8, y - 8, x + 8 + 7 * len(t), y + 8)]
@@ -547,20 +552,19 @@ with tabs[1]:
                 fact_label='Оценка достижения толщины по замерам' if is_new_gauge else 'Факт'
                 st.success(f"{fact_label}: {q['actual_date']:%d.%m.%Y}")
             if kind == "close" and pid == "yakutsk_crossing":
-                _sp = Path(PROCESSED).parent / "s1" / "predictions.csv"
-                if _sp.exists():
-                    from okno.m2 import check_against_m1
-                    _sn = pd.read_csv(_sp, parse_dates=["date"]).dropna(subset=["p_ice"])
-                    _sn = _sn[(_sn.point == pid) & (_sn.date <= pd.Timestamp(issue_date))
-                              & (_sn.date >= pd.Timestamp(issue_date) - pd.Timedelta(days=14))]
-                    if len(_sn):
-                        _o = _sn.sort_values("date").iloc[-1]
-                        _st, _txt = check_against_m1(q["q10"], q["q50"], q["q90"],
-                                                     to_season_day(_o.date, hy), float(_o.p_ice))
-                        _msg = f"М1 и снимок {_o.date:%d.%m}: {_txt}"
-                        {"conflict": st.error, "warn": st.warning}.get(_st, st.caption)(_msg)
-                    else:
-                        st.caption("М1 и снимок: свежего снимка (≤ 14 сут) нет — сверка невозможна")
+                from okno.m2 import check_against_m1
+                from okno.m2_observations import observations
+                _sn = observations(point=pid, as_of=issue_date, max_age=14)
+                if len(_sn):
+                    _o = _sn.sort_values("date").iloc[-1]
+                    _st, _txt = check_against_m1(q["q10"], q["q50"], q["q90"],
+                                                 to_season_day(_o.date, hy), float(_o.p_ice))
+                    _msg = f"М1 и снимок {_o.date:%d.%m} ({_o.source}): {_txt}"
+                    if _o.get("conflict", False):
+                        _st, _msg = "warn", "Свежие наблюдения спутников расходятся. Уверенная сверка с М1 не выполняется."
+                    {"conflict": st.error, "warn": st.warning}.get(_st, st.caption)(_msg)
+                else:
+                    st.caption("М1 и снимок: свежего снимка (≤ 14 сут) нет — сверка невозможна")
     render_official_point(pid, issue_date)
     if is_new_gauge:
         with st.expander('Архив измерений льда и снега на посту'):
@@ -619,6 +623,8 @@ with tabs[1]:
                        "даты вскрытия по ряду снимков — с точностью ≈ 9 сут.")
         from app.gaofen_view import render_gaofen
         render_gaofen(pid)
+        from app.landsat_view import render_landsat
+        render_landsat(pid)
 
 # ------------------------------------------------------------------ 3. сквозной коридор (А3)
 with tabs[2]:
@@ -659,6 +665,7 @@ with tabs[5]:
                     ("Толщина снега: проверка новой модели", REPORTS / "snow_model.md"),
                     ("Квантильная модель окна CatBoost (2001–2024)", REPORTS / "window_model_report.md"),
                     ("М1: точность прогноза", REPORTS / "m1_metrics.md"),
+                    ("М2: Landsat 8/9 — проверка на последующих сезонах", REPORTS / "m2_landsat_metrics.md"),
                     ("Погодная модель закрытия: эксперимент", REPORTS / "weather_close.md"),
                     ("«До/после» по складскому М3", REPORTS / "before_after.md"),
                     ("Стресс-тест допущений", REPORTS / "stress_test.md"),

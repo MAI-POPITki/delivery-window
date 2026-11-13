@@ -73,6 +73,10 @@ jobs:
         continue-on-error: true
         run: python scripts/download_gaofen.py
 
+      - name: Landsat 8/9 — спектральные снимки и оптическая М2
+        continue-on-error: true
+        run: python scripts/download_landsat.py --days 90
+
       - name: Есть ли новые данные
         id: diff
         run: |

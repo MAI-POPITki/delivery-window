@@ -15,3 +15,8 @@ data/s1/chips/
 # Обзорные PNG Гаофэнь-3 восстанавливаются загрузчиком; метаданные остаются в git.
 data/gaofen/previews/
 data/gaofen/.update.lock
+
+# Восстанавливаемые спектральные вырезки и изображения Landsat.
+data/landsat/chips/
+data/landsat/previews/
+data/landsat/.update.lock
