@@ -236,7 +236,7 @@ class DashboardMapTests(unittest.TestCase):
         from streamlit.testing.v1 import AppTest
 
         root = Path(__file__).resolve().parents[1]
-        with patch.dict("os.environ", {"OKNO_LANDSAT_AUTO_REFRESH": "0", "OKNO_GAOFEN_AUTO_REFRESH": "0",
+        with patch.dict("os.environ", {"OKNO_DAILY_IMAGERY_AUTO_REFRESH": "0", "OKNO_LANDSAT_AUTO_REFRESH": "0", "OKNO_GAOFEN_AUTO_REFRESH": "0",
                                       "OKNO_HYDRO_AUTO_REFRESH": "0"}):
             app = AppTest.from_file(str(root/"app/dashboard.py"), default_timeout=120)
             app.session_state["dashboard_open"] = True

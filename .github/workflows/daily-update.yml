@@ -87,6 +87,10 @@ jobs:
         continue-on-error: true
         run: python scripts/download_landsat.py --days 90
 
+      - name: Ежедневные цветные снимки MODIS и VIIRS (NASA GIBS)
+        continue-on-error: true
+        run: python scripts/download_daily_imagery.py --days 7
+
       - name: Есть ли новые данные
         id: diff
         run: |
