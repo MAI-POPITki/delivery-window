@@ -30,10 +30,13 @@ def calendar_for_levels(records, forecast, decision, travel_days, limit_cm, boun
     return calendar
 
 
-def plan_variants(records,forecast,decision,travel_days,limit_cm,quantity,road_cost,backup_cost,holding_cost):
+def plan_variants(records,forecast,decision,travel_days,limit_cm,quantity,road_cost,backup_cost,holding_cost,*,wind=None):
     result={}
     for name,bound in [('lower','lower_cm'),('median','predicted_cm'),('upper','upper_cm')]:
         calendar=calendar_for_levels(records,forecast,decision,travel_days,limit_cm,bound)
+        if wind is not None:
+            from .handling_wind import constrain
+            calendar=constrain(calendar,*wind)
         plan,summary=optimize_dispatch(calendar,quantity,road_cost,backup_cost,holding_cost)
         result[name]=(plan,summary)
     return result

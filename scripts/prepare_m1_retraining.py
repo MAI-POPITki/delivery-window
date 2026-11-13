@@ -46,7 +46,8 @@ def main():
     status=dict(checked_at=now.isoformat(),status="eligible_targets_found" if targets else "blocked_missing_event_targets",
                 measured_water_levels=counts[("water_level_cm","measured")],
                 undated_ice=counts[("ice_cm","undated")],dated_ice=len(dated),
-                new_opening_targets=len(targets),new_closing_targets=0,weights_overwritten=False,
+                new_opening_targets=len(targets),new_closing_targets=0,
+                closing_targets_status='not_implemented',weights_overwritten=False,
                 candidates=candidates,targets=targets)
     (REPORTS/"m1_retraining_readiness.json").write_text(json.dumps(status,ensure_ascii=False,indent=2)+'\n')
     lines=["# Подготовка переобучения М1 на новых официальных данных","",
@@ -59,6 +60,7 @@ def main():
            "Значение Якутска относится к городскому гидропосту, а не к обследованию переправы.","",
            md_table(candidate_frame),"",
            f"Новых пригодных целей открытия: **{len(targets)}**. Новых подтверждённых целей начала таяния: **0**.","",
+           "Автоматическое извлечение целей начала таяния в этой подготовке не реализовано; ноль не является результатом отдельного поиска таких дат.","",
            "Для открытия используется прежнее определение цели: достижение порога толщины для 20 т "
            "по серии минимум из трёх замеров с переходом через порог. Одиночное значение не определяет дату перехода. "
            "Для закрытия нужны датированные ледовые фазы конкретного поста. Дата публикации и первая встреча слова "

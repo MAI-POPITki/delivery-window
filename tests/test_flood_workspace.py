@@ -86,7 +86,8 @@ class FloodWorkspaceTests(unittest.TestCase):
             next(w for w in at.sidebar.date_input if w.label=='Дата оценки / проезда').set_value(last).run()
             self.assertFalse(at.exception,[e.message for e in at.exception])
             self.assertNotEqual(before,at.metric[0].value)
-            self.assertTrue(any(row.value['Выбранная дата'].iloc[-1] for row in at.dataframe))
+            self.assertTrue(any(row.value['Выбранная дата'].iloc[-1] for row in at.dataframe
+                                if 'Выбранная дата' in row.value.columns))
 
     def test_march_date_explains_missing_archive_and_opens_available_forecast(self):
         with patch('app.flood_view.load_points',side_effect=lambda **kw:F.load_points(self.now,**kw)):

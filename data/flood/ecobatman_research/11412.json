@@ -1,0 +1,11 @@
+{
+  "url": "https://ecobatman.ru/programs/db_hydraposts/hydropost_q.php?cod=11412",
+  "snapshot_saved_at": "2026-11-12T23:21:09.725113+00:00",
+  "sha256": "748ff14c94e27b84bccdc6b23690b483d09a7eeabcdac791e4a9658cf9d09182",
+  "post_code": "11412",
+  "pid": "ishim_ishim",
+  "encoding": "utf-8",
+  "provenance": "HTML snapshot saved during preceding source inspection; exact HTTP retrieval timestamp/headers not retained. SHA256 refers to saved UTF-8 HTML, not wire bytes. Repeat retrieval returned 403 during experiment.",
+  "repeat_fetch_status": 403,
+  "purpose": "Research only; source restricts use to educational/research purposes; not official hydrological information"
+}

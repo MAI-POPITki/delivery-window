@@ -32,6 +32,8 @@ def render_m1():
         st.session_state['m1_flood_point']=points[0]
     pid=st.sidebar.selectbox('Участок реки',points,key='m1_flood_point',
                             format_func=lambda p:f"{POINTS[p]['river']} · {POINTS[p]['name']}")
+    from app.flood_live_view import render_live
+    render_live(pid)
     if pid not in M.STATIONS:
         from app.flood_overview import render_overview,open_satellite
         render_overview(st.session_state.get('flood_overview_date',date(2023,5,1)),7,pid)
@@ -69,9 +71,11 @@ def render_m1():
     st.caption('Вероятностный прогноз доступен на 1–7 суток после даты исходных измерений. '
                'Дату исходных измерений можно изменить слева для архивной проверки.')
     st.sidebar.caption(f"Наблюдения: {valid.index.min():%d.%m.%Y} — {valid.index.max():%d.%m.%Y}. "
-                       f"Источник ряда: {M.STATIONS[pid][1]}. Данные за 2026 год отсутствуют.")
+                       f"Источник модельного архива: {M.STATIONS[pid][1]}. "
+                       'Новые наблюдения показаны отдельно в блоке актуальных данных.')
     st.info('Исторический расчёт по реальным измерениям. Модель использует только данные до выбранной даты. '
-            'Свежего собственного прогноза на 2026 год нет: не получены текущие уровни гидропостов.')
+            'Новые наблюдения показаны отдельно. Для оперативного собственного прогноза '
+            'нужно проверить совместимость ряда и подготовить пакет модели для текущего года.')
     try:
         forecast,meta=engine.forecast(pid,issue)
     except ValueError as exc:

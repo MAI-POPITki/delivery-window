@@ -129,6 +129,8 @@ def render_flood():
         st.session_state['flood_point'] = ids[0]
     pid = st.sidebar.selectbox('Река и населённый пункт', ids, key='flood_point',
                               format_func=lambda p:f"{indexed.loc[p,'river']} · {indexed.loc[p,'name']}")
+    from app.flood_live_view import render_live
+    render_live(pid)
     saved_dates = available_forecast_dates(pid)
     st.sidebar.caption('Сохранены данные, полученные: '+(', '.join(day.strftime('%d.%m.%Y') for day in saved_dates[-5:]) or 'нет выпусков'))
     try:

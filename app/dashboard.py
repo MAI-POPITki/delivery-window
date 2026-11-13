@@ -89,6 +89,9 @@ LEGEND_HTML = '\n<style>.okno-legend{display:flex;flex-wrap:wrap;gap:8px;margin:
 
 st.set_page_config(page_title="Окно завоза", page_icon="🧊", layout="wide")
 
+from app.local_preview import render_local_preview
+render_local_preview()
+
 # Старые ссылки открывают общую рабочую вкладку, не отдельные страницы.
 _requested_module = st.query_params.get("module")
 if _requested_module == "flood" and not st.session_state.get("flood_link_processed"):
@@ -118,7 +121,7 @@ import plotly.graph_objects as go
 _service = st.sidebar.radio("Направление", ["Зимники и переправы", "Паводки"], key="service_mode")
 if _service == "Паводки":
     # Обновляем зависимости и представление в живом процессе Streamlit после git pull.
-    for _name in ("okno.map_style", "okno.flood", "okno.flood_sites", "okno.flood_routes", "okno.flood_planning", "okno.flood_m1", "okno.flood_m1_quantile", "okno.flood_m2",
+    for _name in ("okno.map_style", "okno.handling_wind", "app.handling_wind_view", "okno.flood", "okno.flood_sites", "okno.flood_routes", "okno.flood_planning", "okno.flood_m1", "okno.flood_m1_quantile", "okno.flood_m2",
                   "okno.flood_probability", "okno.flood_day", "app.flood_day_view", "okno.flood_m3", "okno.flood_road_window", "app.flood_road_window_view", "okno.flood_assessment", "app.flood_assessment_view", "app.flood_overview", "app.flood_workspace", "app.flood_view", "app.flood_m1_view", "app.flood_m2_view", "app.flood_m3_view"):
         _mod = sys.modules.get(_name)
         if _mod is None:
@@ -155,6 +158,7 @@ if _service == "Паводки":
 # остаются в памяти процесса. Сначала обновляем зависимости, затем импортируем зависимые
 # модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
 _MODULE_NAMES = (
+    "okno.handling_wind", "app.handling_wind_view",
     "okno.paths", "okno.northeast", "okno.regions", "okno.official_hydro", "app.official_hydro_view", "okno.gaofen", "app.gaofen_view", "okno.landsat", "okno.m2_landsat", "okno.m2_observations", "app.landsat_view", "okno.report", "okno.ice", "okno.calib", "okno.features", "okno.snow",
     "okno.planner", "okno.decision_support", "app.decision_view", "okno.truck_load", "okno.backhaul", "okno.backhaul_io", "okno.routing", "okno.journey", "okno.risk_advice", "app.truck_load_view", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "okno.bottlenecks", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
     "okno.yakutsk_replay", "app.yakutsk_experiment", "app.backhaul_view", "app.journey_view",
@@ -654,14 +658,17 @@ with tabs[3]:
     from app.planner_view import render_planner
     q = fc_cached(pid, hy, issue_day, "close")
     # Начало сезона отправок: опубликованный факт или график открытия → прогноз открытия М1 → прежнее допущение (29 января).
-    from okno.journey import planned_opening
-    _opening = planned_opening(pid, hy, issue_date)
+    from okno.journey import planned_opening, road_rows
+    _planner_roads = sorted(road_rows(pid, hy).road.unique())
+    _planner_road = (st.selectbox('Дорога для начала сезона', _planner_roads,
+                                key=f'planner_road_{pid}_{hy}') if _planner_roads else None)
+    _opening = planned_opening(pid, hy, issue_date, road=_planner_road)
     if _opening:
         _start_day, _start_note = _opening
     else:
         _qo = fc_cached(pid, hy, issue_day, "open")
         if _qo and "error" not in _qo and np.isfinite(_qo.get("q50", np.nan)):
-            _start_day, _start_note = int(round(_qo["q50"])), f"прогноз М1 (лёд держит 20 т) — {_qo['q50_date']:%d.%m.%Y}; официального графика в реестре нет"
+            _start_day, _start_note = int(round(_qo["q50"])), f"прогноз М1 (лёд держит 20 т) — {_qo['q50_date']:%d.%m.%Y}; подходящего открытия в реестре нет, требуется подтверждение допуска"
         else:
             _start_day, _start_note = None, "нет ни графика, ни прогноза открытия — принято 29 января (допущение)"
     P = render_planner(q, hy, issue_day, margin, label(pid), start_day=_start_day, start_note=_start_note)
