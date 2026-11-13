@@ -15,3 +15,4 @@ data/flood/benchmark/cache/
 data/flood/refresh/locks/
 data/flood/satellite/**/.staging/
 docs/build/
+data/handling_wind/

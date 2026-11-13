@@ -45,10 +45,24 @@ def render_planner(forecast, hydro_year, issue_day, margin, point_name, *, trans
     if not forecast or 'error' in forecast:
         st.info('Нет прогноза закрытия для этой точки.')
         return p
+    from app.handling_wind_view import render_wind
+    from okno.handling_wind import constrain
+    days=[from_season_day(d,hydro_year).date() for d in range(int(issue_day),300)]
+    arrivals=sorted({from_season_day(d+p.transit_days,hydro_year).date() for d in range(int(issue_day),300)})
+    wind=render_wind('winter_m3_wind',from_season_day(issue_day,hydro_year).date(),days,arrivals)
+    handling_capacity=None
+    if wind is not None:
+        def handling_capacity(starts,ends):
+            calendar=pd.DataFrame(dict(date=[from_season_day(d,hydro_year).date() for d in starts],
+                arrival=[from_season_day(d,hydro_year).date() for d in ends],capacity_t=[1e30]*len(starts)))
+            return constrain(calendar,*wind).capacity_t.to_numpy()
+        st.info('Ограничения обработки включены: отправки рассчитываются по суткам. Недельная мощность техники делится на 7; '
+                'мощность обработки ограничивает её дополнительно. За пределами прогноза ветра отправки не планируются. '
+                'Оба сравниваемых способа получают одинаковые ограничения.')
     from app.decision_view import render_decisions
     with decision_panel:
-        render_decisions(forecast, issue_day, p, hydro_year,availability=availability)
-    weekly, summary = compare_ml_weekly_plans(forecast, issue_day, p,availability=availability)
+        render_decisions(forecast, issue_day, p, hydro_year,availability=availability,handling_capacity=handling_capacity)
+    weekly, summary = compare_ml_weekly_plans(forecast, issue_day, p,availability=availability,handling_capacity=handling_capacity)
     if require_quantity: st.session_state['journey_m3_summary']=summary.copy()
     if availability is not None:
         st.caption('Оба плана и рекомендации изменения старта исключают недели, для которых реестр не подтверждает массу или сообщает закрытие. '
@@ -84,8 +98,8 @@ def render_planner(forecast, hydro_year, issue_day, margin, point_name, *, trans
             chart = go.Figure()
             chart.add_bar(x=dates, y=plan.base_t, name='Своя техника')
             chart.add_bar(x=dates, y=plan.extra_t, name='Дополнительная техника')
-            chart.update_layout(barmode='stack', title=f'{names[rule]}: отправки по неделям',
-                height=400, yaxis=dict(title='т/нед', range=[0, max_volume*1.1]),
+            chart.update_layout(barmode='stack', title=f'{names[rule]}: отправки '+('по дням' if wind is not None else 'по неделям'),
+                height=400, yaxis=dict(title='т/сут' if wind is not None else 'т/нед', range=[0, max_volume*1.1]),
                 xaxis=dict(title='Дата отправки', tickformat='%d.%m'),
                 legend=dict(orientation='h', y=-.3))
             st.plotly_chart(chart, width='stretch', key=f'planner_chart_{rule}')
@@ -101,10 +115,11 @@ def render_planner(forecast, hydro_year, issue_day, margin, point_name, *, trans
     table = weekly[weekly.rule.eq('ml')].set_index('week')
     other = weekly[weekly.rule.eq('economic_ml')].set_index('week')
     dates = [from_season_day(day, hydro_year).date() for day in table.dispatch_day]
-    shipments = pd.DataFrame({'Неделя':table.index, 'Дата отправки':dates,
+    shipments = pd.DataFrame({'День' if wind is not None else 'Неделя':table.index, 'Дата отправки':dates,
         'Обычный ML: своя, т':table.base_t, 'Обычный ML: доп., т':table.extra_t,
         'Экономический ML: своя, т':other.base_t, 'Экономический ML: доп., т':other.extra_t,
         'Риск не успеть за рейс, %':100*table.p_closed}).reset_index(drop=True)
+    if wind is not None:shipments['Мощность обработки, т/сут']=table.handling_capacity_t.to_numpy()
     st.dataframe(shipments.round(2), width='stretch', hide_index=True, key='planner_weekly')
     st.caption('Дорогой канал включает остаток, не назначенный на зимник, и ожидаемый объём рейсов, '
                'которые не успеют до закрытия. При нехватке мощности этот объём не исчезает из расходов. '
@@ -114,6 +129,9 @@ def render_planner(forecast, hydro_year, issue_day, margin, point_name, *, trans
     export = weekly.copy()
     export['dispatch_date'] = [from_season_day(day, hydro_year).date().isoformat() for day in export.dispatch_day]
     export['arrival_date'] = [from_season_day(day, hydro_year).date().isoformat() for day in export.arrival_day]
-    st.download_button('Скачать оба ML-плана по неделям', export.to_csv(index=False).encode('utf-8-sig'),
+    if wind is not None:
+        for label,calendar in zip(['loading','unloading'],wind):
+            for name,value in calendar.attrs.get('wind',{}).items():export[label+'_'+name]=value
+    st.download_button('Скачать оба ML-плана'+(' по дням' if wind is not None else ' по неделям'), export.to_csv(index=False).encode('utf-8-sig'),
                        'planner-ml-weekly.csv', 'text/csv', key='planner_weekly_download', on_click='ignore')
     return p

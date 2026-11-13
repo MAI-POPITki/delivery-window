@@ -121,7 +121,7 @@ import plotly.graph_objects as go
 _service = st.sidebar.radio("Направление", ["Зимники и переправы", "Паводки"], key="service_mode")
 if _service == "Паводки":
     # Обновляем зависимости и представление в живом процессе Streamlit после git pull.
-    for _name in ("okno.map_style", "okno.flood", "okno.flood_sites", "okno.flood_routes", "okno.flood_planning", "okno.flood_m1", "okno.flood_m1_quantile", "okno.flood_m2",
+    for _name in ("okno.map_style", "okno.handling_wind", "app.handling_wind_view", "okno.flood", "okno.flood_sites", "okno.flood_routes", "okno.flood_planning", "okno.flood_m1", "okno.flood_m1_quantile", "okno.flood_m2",
                   "okno.flood_probability", "okno.flood_day", "app.flood_day_view", "okno.flood_m3", "okno.flood_road_window", "app.flood_road_window_view", "okno.flood_assessment", "app.flood_assessment_view", "app.flood_overview", "app.flood_workspace", "app.flood_view", "app.flood_m1_view", "app.flood_m2_view", "app.flood_m3_view"):
         _mod = sys.modules.get(_name)
         if _mod is None:
@@ -158,6 +158,7 @@ if _service == "Паводки":
 # остаются в памяти процесса. Сначала обновляем зависимости, затем импортируем зависимые
 # модули: иначе новый weather_forecast падает ещё до reload из-за старого paths в памяти.
 _MODULE_NAMES = (
+    "okno.handling_wind", "app.handling_wind_view",
     "okno.paths", "okno.northeast", "okno.regions", "okno.official_hydro", "app.official_hydro_view", "okno.report", "okno.ice", "okno.calib", "okno.features", "okno.snow",
     "okno.planner", "okno.decision_support", "app.decision_view", "okno.truck_load", "okno.backhaul", "okno.backhaul_io", "okno.routing", "okno.journey", "okno.risk_advice", "app.truck_load_view", "app.planner_view", "okno.economic_planner", "okno.corridor", "okno.corridor_data", "okno.bottlenecks", "app.corridor_view", "okno.m1", "okno.weather_forecast", "okno.forecast",
     "okno.yakutsk_replay", "app.yakutsk_experiment", "app.backhaul_view", "app.journey_view",
