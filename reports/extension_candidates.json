@@ -1,0 +1,109 @@
+{
+  "waterbody": {
+    "aoi_km2": 19.2068,
+    "common_km2": 16.1864,
+    "common_fraction": 0.8427431951183956,
+    "before_common_km2": 13.940000000000001,
+    "after_common_km2": 13.940800000000001,
+    "delta_common_km2": 0.0008,
+    "delta_common_percent": 0.005738880918220947,
+    "gain_km2": 0.0008,
+    "loss_km2": 0.0,
+    "before_observed_fraction": 0.8798342253785117,
+    "after_observed_fraction": 0.8614032530145573,
+    "before_observed_water_km2": 14.118,
+    "after_observed_water_km2": 14.0952,
+    "before_full_area_bounds_km2": [
+      14.118,
+      16.426000000000002
+    ],
+    "after_full_area_bounds_km2": [
+      14.0952,
+      16.7572
+    ],
+    "full_area_delta_bounds_km2": [
+      -2.3308,
+      2.6392
+    ],
+    "comparable": true,
+    "full_area_direction": "unknown"
+  },
+  "mndwi_sensitivity": [
+    {
+      "mndwi_min": 0.05,
+      "delta_common_km2": 0.0012000000000000001,
+      "common_fraction": 0.8437011891621717
+    },
+    {
+      "mndwi_min": 0.1,
+      "delta_common_km2": 0.0008,
+      "common_fraction": 0.8427431951183956
+    },
+    {
+      "mndwi_min": 0.15000000000000002,
+      "delta_common_km2": 0.0008,
+      "common_fraction": 0.8414519857550451
+    }
+  ],
+  "road_mass": [
+    {
+      "case": "24 т против 20 т",
+      "gross_t": 24,
+      "excess_t": 4,
+      "excess_pct": 20.0,
+      "cargo_limit_t": 8,
+      "within_mass_limit": false,
+      "tare_exceeds_limit": false
+    },
+    {
+      "case": "Ровно 20 т",
+      "gross_t": 20,
+      "excess_t": 0.0,
+      "excess_pct": 0.0,
+      "cargo_limit_t": 10,
+      "within_mass_limit": true,
+      "tare_exceeds_limit": false
+    },
+    {
+      "case": "Пустая машина тяжелее лимита",
+      "gross_t": 24,
+      "excess_t": 4,
+      "excess_pct": 20.0,
+      "cargo_limit_t": 0.0,
+      "within_mass_limit": false,
+      "tare_exceeds_limit": true
+    }
+  ],
+  "handling": [
+    {
+      "case": "Без помех",
+      "expected_capacity_t": 20,
+      "actual_capacity_t": 20.0
+    },
+    {
+      "case": "Порыв на пределе",
+      "expected_capacity_t": 10,
+      "actual_capacity_t": 10.0
+    },
+    {
+      "case": "Мороз ниже сценарного предела",
+      "expected_capacity_t": 10,
+      "actual_capacity_t": 10.0
+    },
+    {
+      "case": "Осадки выше сценарного предела",
+      "expected_capacity_t": 10,
+      "actual_capacity_t": 10.0
+    },
+    {
+      "case": "Бюджет часов меньше длительности партии",
+      "expected_capacity_t": 0,
+      "actual_capacity_t": 0.0
+    },
+    {
+      "case": "Неизвестный час",
+      "expected_capacity_t": 0,
+      "actual_capacity_t": 0.0
+    }
+  ]
+}

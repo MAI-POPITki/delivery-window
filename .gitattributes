@@ -8,3 +8,5 @@ data/flood/benchmark/flood_*_data.csv -text whitespace=-blank-at-eol
 data/flood/satellite/**/product.xml -text whitespace=-blank-at-eol,cr-at-eol
 # Эксперимент с ветром М2 сверяет SHA-256 входных таблиц: байты одинаковы на Windows и Linux.
 data/s1/wind/** -text
+# Водоёмы: SHA-256 вырезок и каталогов сверяется по байтам.
+data/waterbodies/** -text
