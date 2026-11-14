@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-13T11:31:01.302327+00:00",
+  "checked_at": "2026-11-14T10:01:55.749788+00:00",
   "source": "USGS Landsat Collection 2 Level-2 / Microsoft Planetary Computer",
   "points": {
     "lensk": {
@@ -16,7 +16,7 @@
       "valid_pixels": 3241,
       "river_pixels": 5891,
       "status": "ready",
-      "checked_at": "2026-11-13T11:31:01.302327+00:00"
+      "checked_at": "2026-11-14T10:01:55.749788+00:00"
     },
     "olekminsk": {
       "item_id": "LC08_L2SP_126018_20261028_02_T1",
@@ -24,14 +24,14 @@
       "observed_at": "2026-10-28T03:06:34.285210Z",
       "platform": "landsat-8",
       "scene_cloud_cover": 7.35,
-      "published_at": "2026-11-12T15:24:42.957558Z",
+      "published_at": "2026-11-14T09:20:11.487336Z",
       "catalog_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/landsat-c2-l2/items/LC08_L2SP_126018_20261028_02_T1",
       "quality": "usable",
       "valid_fraction": 0.8804,
       "valid_pixels": 7760,
       "river_pixels": 8814,
       "status": "ready",
-      "checked_at": "2026-11-13T11:31:01.302327+00:00"
+      "checked_at": "2026-11-14T10:01:55.749788+00:00"
     },
     "pokrovsk": {
       "item_id": "LC08_L2SP_121017_20261009_02_T1",
@@ -46,7 +46,7 @@
       "valid_pixels": 16571,
       "river_pixels": 16579,
       "status": "ready",
-      "checked_at": "2026-11-13T11:31:01.302327+00:00"
+      "checked_at": "2026-11-14T10:01:55.749788+00:00"
     },
     "yakutsk_crossing": {
       "item_id": "LC09_L2SP_120017_20261010_02_T1",
@@ -61,7 +61,7 @@
       "valid_pixels": 17729,
       "river_pixels": 19988,
       "status": "ready",
-      "checked_at": "2026-11-13T11:31:01.302327+00:00"
+      "checked_at": "2026-11-14T10:01:55.749788+00:00"
     },
     "sangar": {
       "item_id": "LC09_L2SP_124015_20261022_02_T1",
@@ -76,7 +76,7 @@
       "valid_pixels": 12036,
       "river_pixels": 12420,
       "status": "ready",
-      "checked_at": "2026-11-13T11:31:01.302327+00:00"
+      "checked_at": "2026-11-14T10:01:55.749788+00:00"
     },
     "zhigansk": {
       "item_id": "LC09_L2SP_127013_20261011_02_T1",
@@ -91,7 +91,7 @@
       "valid_pixels": 3145,
       "river_pixels": 5799,
       "status": "ready",
-      "checked_at": "2026-11-13T11:31:01.302327+00:00"
+      "checked_at": "2026-11-14T10:01:55.749788+00:00"
     },
     "kyusyur": {
       "item_id": "LC09_L2SP_128010_20260916_02_T1",
@@ -106,7 +106,7 @@
       "valid_pixels": 12375,
       "river_pixels": 12587,
       "status": "ready",
-      "checked_at": "2026-11-13T11:31:01.302327+00:00"
+      "checked_at": "2026-11-14T10:01:55.749788+00:00"
     }
   }
 }

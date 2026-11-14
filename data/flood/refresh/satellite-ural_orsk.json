@@ -2,8 +2,8 @@
   "kind": "satellite",
   "pid": "ural_orsk",
   "state": "ok",
-  "checked_at": "2026-11-13T11:30:24.124830+00:00",
-  "last_success_at": "2026-11-13T11:30:24.124830+00:00",
+  "checked_at": "2026-11-14T10:01:21.626959+00:00",
+  "last_success_at": "2026-11-14T10:01:21.626959+00:00",
   "result": {
     "state": "ok",
     "acquired_at": "2026-11-09T07:11:11.025000Z",
