@@ -2,14 +2,14 @@
   "kind": "glofas",
   "pid": "tobol_kurgan",
   "state": "ok",
-  "checked_at": "2026-11-14T10:00:35.492096+00:00",
-  "last_success_at": "2026-11-14T10:00:35.492096+00:00",
+  "checked_at": "2026-11-15T10:57:08.190908+00:00",
+  "last_success_at": "2026-11-15T10:57:08.190908+00:00",
   "result": {
     "state": "ok",
-    "fetched_at": "2026-11-14T10:00:35.485765+00:00",
-    "start": "2026-11-15",
-    "end": "2026-11-21",
+    "fetched_at": "2026-11-15T10:57:08.182764+00:00",
+    "start": "2026-11-16",
+    "end": "2026-11-22",
     "members": 50,
-    "version": "6e820bad2576e420ac33cc5a7a67a9df27fa8967a0de7543fc4ec1905376e7f9"
+    "version": "7a94f125d0a459ed822c4054a2994df0c0cd2addc60b49d3a15780f45da06a39"
   }
 }
