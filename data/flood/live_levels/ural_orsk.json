@@ -26,7 +26,7 @@
     },
     "type": "Feature"
   },
-  "checked_at": "2026-11-15T10:57:04.779886+00:00",
+  "checked_at": "2026-11-16T10:50:17.483339+00:00",
   "last_success_at": null,
   "records": [],
   "sources": [
@@ -34,12 +34,12 @@
       "source": "level_satellite",
       "state": "no_data",
       "records": 0,
-      "raw_sha256": "3d4372c159f4fb949a9edd714090d1086758d05b94f11ba5f3a61a56316949e8",
+      "raw_sha256": "4bcce58b396a8a94216fe9bd6f2b19f284246d9acac35f2597a3de56002990c1",
       "url": "https://level-satellite.ru/api/series",
       "request": {
         "post_code": "19054",
-        "date_from": "2026-10-01",
-        "date_to": "2026-11-15"
+        "date_from": "2026-10-02",
+        "date_to": "2026-11-16"
       }
     }
   ]
