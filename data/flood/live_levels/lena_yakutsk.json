@@ -26,8 +26,8 @@
     },
     "type": "Feature"
   },
-  "checked_at": "2026-11-16T10:50:15.283758+00:00",
-  "last_success_at": "2026-11-16T10:50:15.283758+00:00",
+  "checked_at": "2026-11-17T12:04:58.746929+00:00",
+  "last_success_at": "2026-11-17T12:04:58.746929+00:00",
   "records": [
     {
       "id": "d6bedfbb7697e2d21d3199ab",
@@ -529,8 +529,8 @@
       "available_at": "2026-11-13T11:22:21.339330+00:00",
       "first_seen_at": "2026-11-13T11:22:21.339330+00:00",
       "source": "meteo_dv",
-      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-16+00%3A00&time_offset=0",
-      "raw_sha256": "f4b4fb25d1545822dea2c1a0a82ccc45a9d23ece52021f97b0100d469febaaf4",
+      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-17+00%3A00&time_offset=0",
+      "raw_sha256": "60ce7121b4a9a59aeb0e380858135ac0a06e9bab15d8e828d42c9a9e884df439",
       "units": "cm above gauge zero"
     },
     {
@@ -557,8 +557,8 @@
       "available_at": "2026-11-13T11:22:21.339330+00:00",
       "first_seen_at": "2026-11-13T11:22:21.339330+00:00",
       "source": "meteo_dv",
-      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-16+00%3A00&time_offset=0",
-      "raw_sha256": "f4b4fb25d1545822dea2c1a0a82ccc45a9d23ece52021f97b0100d469febaaf4",
+      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-17+00%3A00&time_offset=0",
+      "raw_sha256": "60ce7121b4a9a59aeb0e380858135ac0a06e9bab15d8e828d42c9a9e884df439",
       "units": "cm above gauge zero"
     },
     {
@@ -571,8 +571,8 @@
       "available_at": "2026-11-12T23:02:13.669214+00:00",
       "first_seen_at": "2026-11-12T23:02:13.669214+00:00",
       "source": "meteo_dv",
-      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-16+00%3A00&time_offset=0",
-      "raw_sha256": "f4b4fb25d1545822dea2c1a0a82ccc45a9d23ece52021f97b0100d469febaaf4",
+      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-17+00%3A00&time_offset=0",
+      "raw_sha256": "60ce7121b4a9a59aeb0e380858135ac0a06e9bab15d8e828d42c9a9e884df439",
       "units": "cm above gauge zero"
     },
     {
@@ -585,8 +585,36 @@
       "available_at": "2026-11-13T11:22:21.339330+00:00",
       "first_seen_at": "2026-11-13T11:22:21.339330+00:00",
       "source": "meteo_dv",
-      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-16+00%3A00&time_offset=0",
-      "raw_sha256": "f4b4fb25d1545822dea2c1a0a82ccc45a9d23ece52021f97b0100d469febaaf4",
+      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-17+00%3A00&time_offset=0",
+      "raw_sha256": "60ce7121b4a9a59aeb0e380858135ac0a06e9bab15d8e828d42c9a9e884df439",
+      "units": "cm above gauge zero"
+    },
+    {
+      "id": "df32ff6a463b0300acbbaf15",
+      "pid": "lena_yakutsk",
+      "station_code": "3045",
+      "value_cm": -166.0,
+      "observed_at": "2026-11-13T23:00:00+00:00",
+      "observation_precision": "instant",
+      "available_at": "2026-11-17T12:04:57.924835+00:00",
+      "first_seen_at": "2026-11-17T12:04:57.924835+00:00",
+      "source": "meteo_dv",
+      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-17+00%3A00&time_offset=0",
+      "raw_sha256": "60ce7121b4a9a59aeb0e380858135ac0a06e9bab15d8e828d42c9a9e884df439",
+      "units": "cm above gauge zero"
+    },
+    {
+      "id": "3469b7714b1ab8b9a357392e",
+      "pid": "lena_yakutsk",
+      "station_code": "3045",
+      "value_cm": -162.0,
+      "observed_at": "2026-11-14T23:00:00+00:00",
+      "observation_precision": "instant",
+      "available_at": "2026-11-17T12:04:57.924835+00:00",
+      "first_seen_at": "2026-11-17T12:04:57.924835+00:00",
+      "source": "meteo_dv",
+      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-17+00%3A00&time_offset=0",
+      "raw_sha256": "60ce7121b4a9a59aeb0e380858135ac0a06e9bab15d8e828d42c9a9e884df439",
       "units": "cm above gauge zero"
     },
     {
@@ -599,8 +627,8 @@
       "available_at": "2026-11-16T10:50:14.480465+00:00",
       "first_seen_at": "2026-11-16T10:50:14.480465+00:00",
       "source": "meteo_dv",
-      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-16+00%3A00&time_offset=0",
-      "raw_sha256": "f4b4fb25d1545822dea2c1a0a82ccc45a9d23ece52021f97b0100d469febaaf4",
+      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-17+00%3A00&time_offset=0",
+      "raw_sha256": "60ce7121b4a9a59aeb0e380858135ac0a06e9bab15d8e828d42c9a9e884df439",
       "units": "cm above gauge zero"
     }
   ],
@@ -608,12 +636,12 @@
     {
       "source": "meteo_dv",
       "state": "ok",
-      "records": 6,
-      "raw_sha256": "f4b4fb25d1545822dea2c1a0a82ccc45a9d23ece52021f97b0100d469febaaf4",
-      "url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-16+00%3A00&time_offset=0",
+      "records": 7,
+      "raw_sha256": "60ce7121b4a9a59aeb0e380858135ac0a06e9bab15d8e828d42c9a9e884df439",
+      "url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-17+00%3A00&time_offset=0",
       "request": {
         "station_code": "3045",
-        "date_loc": "2026-11-16 00:00",
+        "date_loc": "2026-11-17 00:00",
         "time_offset": 0
       }
     },
@@ -621,12 +649,12 @@
       "source": "level_satellite",
       "state": "no_data",
       "records": 0,
-      "raw_sha256": "ba714d286ed7d4a8ccc229498f95f9673f226f516ba9ea1d736ee2e339633508",
+      "raw_sha256": "953f1efa084792a585094753cb1a95170314a514c98a30b181101efde3c334eb",
       "url": "https://level-satellite.ru/api/series",
       "request": {
         "post_code": "3045",
-        "date_from": "2026-10-02",
-        "date_to": "2026-11-16"
+        "date_from": "2026-10-03",
+        "date_to": "2026-11-17"
       }
     }
   ]

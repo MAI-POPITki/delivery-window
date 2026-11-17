@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-16T10:52:20.383663+00:00",
+  "checked_at": "2026-11-17T12:17:25.263846+00:00",
   "url": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/1.0.0/WMTSCapabilities.xml",
   "layers": {
     "modis_aqua": {
@@ -24,7 +24,7 @@
         "2003-12-24/2008-12-20/P1D",
         "2008-12-23/2016-02-18/P1D",
         "2016-02-27/2022-10-10/P1D",
-        "2022-10-23/2026-11-16/P1D"
+        "2022-10-23/2026-11-17/P1D"
       ],
       "title": "Corrected Reflectance (True Color, MODIS, Terra)"
     },

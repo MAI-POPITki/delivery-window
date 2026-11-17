@@ -2,12 +2,12 @@
   "kind": "satellite",
   "pid": "lena_yakutsk",
   "state": "ok",
-  "checked_at": "2026-11-16T10:51:19.394660+00:00",
-  "last_success_at": "2026-11-16T10:51:19.394660+00:00",
+  "checked_at": "2026-11-17T12:16:17.762997+00:00",
+  "last_success_at": "2026-11-17T12:16:17.762997+00:00",
   "result": {
     "state": "ok",
-    "acquired_at": "2026-11-06T02:49:09.024000Z",
-    "observed_fraction": 0.002575,
-    "version": "S2B_MSIL2A_20261106T024909_R132_T52VEP_20261106T113706"
+    "acquired_at": "2026-11-16T03:00:11.024000Z",
+    "observed_fraction": 0.0206,
+    "version": "S2A_MSIL2A_20261116T030011_R032_T52VEP_20261116T053902"
   }
 }

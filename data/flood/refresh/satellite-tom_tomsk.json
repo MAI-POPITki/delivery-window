@@ -2,12 +2,12 @@
   "kind": "satellite",
   "pid": "tom_tomsk",
   "state": "ok",
-  "checked_at": "2026-11-16T10:51:39.702556+00:00",
-  "last_success_at": "2026-11-16T10:51:39.702556+00:00",
+  "checked_at": "2026-11-17T12:16:40.045189+00:00",
+  "last_success_at": "2026-11-17T12:16:40.045189+00:00",
   "result": {
     "state": "ok",
-    "acquired_at": "2026-11-02T05:40:01.025000Z",
+    "acquired_at": "2026-11-14T05:30:59.024000Z",
     "observed_fraction": 0.0,
-    "version": "S2C_MSIL2A_20261102T054001_R005_T45VUC_20261102T085705"
+    "version": "S2B_MSIL2A_20261114T053059_R105_T45VUC_20261114T072814"
   }
 }
