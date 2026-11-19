@@ -11635,3 +11635,6 @@ lena_11,2026-11-06,-23.1,-27.3,-16.5,0.0,0.0,ERA5 via Open-Meteo archive API
 lena_11,2026-11-07,-22.6,-26.7,-17.0,0.0,0.0,ERA5 via Open-Meteo archive API
 lena_11,2026-11-08,-21.9,-26.1,-16.1,0.0,0.0,ERA5 via Open-Meteo archive API
 lena_11,2026-11-09,-20.4,-23.6,-16.5,0.77,1.1,ERA5 via Open-Meteo archive API
+lena_11,2026-11-10,-18.8,-24.3,-12.4,0.56,0.8,ERA5 via Open-Meteo archive API
+lena_11,2026-11-11,-12.2,-14.6,-8.5,0.56,0.8,ERA5 via Open-Meteo archive API
+lena_11,2026-11-12,-10.8,-14.0,-6.9,0.98,1.4,ERA5 via Open-Meteo archive API
