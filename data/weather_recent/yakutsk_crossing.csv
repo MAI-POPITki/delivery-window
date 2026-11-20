@@ -1,31 +1,31 @@
 point_id,date,temperature_2m_mean,temperature_2m_min,temperature_2m_max,snowfall_sum,precipitation_sum,is_forecast,source,fetched
-yakutsk_crossing,2026-11-05,-18.4,-21.1,-16.1,1.05,1.4,False,Open-Meteo оперативный анализ,2026-11-19
-yakutsk_crossing,2026-11-06,-23.8,-25.9,-21.1,0.07,0.1,False,Open-Meteo оперативный анализ,2026-11-19
-yakutsk_crossing,2026-11-07,-27.1,-29.5,-24.8,0.0,0.0,False,Open-Meteo оперативный анализ,2026-11-19
-yakutsk_crossing,2026-11-08,-27.5,-29.3,-25.7,0.0,0.0,False,Open-Meteo оперативный анализ,2026-11-19
-yakutsk_crossing,2026-11-09,-19.4,-25.8,-14.5,0.63,0.9,False,Open-Meteo оперативный анализ,2026-11-19
-yakutsk_crossing,2026-11-10,-14.4,-16.9,-11.9,0.63,0.9,False,Open-Meteo оперативный анализ,2026-11-19
-yakutsk_crossing,2026-11-11,-14.5,-16.3,-13.3,0.28,0.4,False,Open-Meteo оперативный анализ,2026-11-19
-yakutsk_crossing,2026-11-12,-16.2,-19.9,-13.8,0.56,0.8,False,Open-Meteo оперативный анализ,2026-11-19
-yakutsk_crossing,2026-11-13,-24.7,-27.4,-19.7,0.0,0.0,False,Open-Meteo оперативный анализ,2026-11-19
-yakutsk_crossing,2026-11-14,-26.0,-28.3,-23.3,0.07,0.0,False,Open-Meteo оперативный анализ,2026-11-19
-yakutsk_crossing,2026-11-15,-27.0,-29.6,-24.2,0.63,1.0,False,Open-Meteo оперативный анализ,2026-11-19
-yakutsk_crossing,2026-11-16,-33.2,-35.2,-28.9,0.0,0.0,False,Open-Meteo оперативный анализ,2026-11-19
-yakutsk_crossing,2026-11-17,-35.5,-36.8,-34.0,0.0,0.0,False,Open-Meteo оперативный анализ,2026-11-19
-yakutsk_crossing,2026-11-18,-36.5,-38.2,-35.1,0.0,0.0,False,Open-Meteo оперативный анализ,2026-11-19
-yakutsk_crossing,2026-11-19,-34.1,-36.3,-32.7,0.0,0.0,False,Open-Meteo оперативный анализ,2026-11-19
-yakutsk_crossing,2026-11-20,-29.2,-32.8,-22.3,0.49,0.7,True,Open-Meteo прогноз,2026-11-19
-yakutsk_crossing,2026-11-21,-28.3,-32.9,-22.4,0.21,0.3,True,Open-Meteo прогноз,2026-11-19
-yakutsk_crossing,2026-11-22,-33.2,-34.3,-31.9,0.0,0.0,True,Open-Meteo прогноз,2026-11-19
-yakutsk_crossing,2026-11-23,-32.5,-33.8,-30.7,0.0,0.0,True,Open-Meteo прогноз,2026-11-19
-yakutsk_crossing,2026-11-24,-32.7,-33.4,-31.8,0.0,0.0,True,Open-Meteo прогноз,2026-11-19
-yakutsk_crossing,2026-11-25,-33.2,-34.2,-32.1,0.0,0.0,True,Open-Meteo прогноз,2026-11-19
-yakutsk_crossing,2026-11-26,-29.3,-33.1,-26.0,0.42,0.6,True,Open-Meteo прогноз,2026-11-19
-yakutsk_crossing,2026-11-27,-31.3,-32.4,-28.0,0.0,0.0,True,Open-Meteo прогноз,2026-11-19
-yakutsk_crossing,2026-11-28,-33.1,-35.4,-31.9,0.0,0.0,True,Open-Meteo прогноз,2026-11-19
-yakutsk_crossing,2026-11-29,-35.6,-36.5,-33.9,0.0,0.0,True,Open-Meteo прогноз,2026-11-19
-yakutsk_crossing,2026-11-30,-33.1,-35.2,-31.9,0.0,0.0,True,Open-Meteo прогноз,2026-11-19
-yakutsk_crossing,2026-12-01,-33.8,-35.3,-32.7,0.0,0.0,True,Open-Meteo прогноз,2026-11-19
-yakutsk_crossing,2026-12-02,-34.8,-35.3,-33.8,0.0,0.0,True,Open-Meteo прогноз,2026-11-19
-yakutsk_crossing,2026-12-03,-34.3,-35.3,-33.1,0.0,0.0,True,Open-Meteo прогноз,2026-11-19
-yakutsk_crossing,2026-12-04,-32.2,-35.0,-28.2,0.0,0.0,True,Open-Meteo прогноз,2026-11-19
+yakutsk_crossing,2026-11-06,-23.8,-25.9,-21.1,0.07,0.1,False,Open-Meteo оперативный анализ,2026-11-20
+yakutsk_crossing,2026-11-07,-27.1,-29.5,-24.8,0.0,0.0,False,Open-Meteo оперативный анализ,2026-11-20
+yakutsk_crossing,2026-11-08,-27.5,-29.3,-25.7,0.0,0.0,False,Open-Meteo оперативный анализ,2026-11-20
+yakutsk_crossing,2026-11-09,-19.4,-25.8,-14.5,0.63,0.9,False,Open-Meteo оперативный анализ,2026-11-20
+yakutsk_crossing,2026-11-10,-14.4,-16.9,-11.9,0.63,0.9,False,Open-Meteo оперативный анализ,2026-11-20
+yakutsk_crossing,2026-11-11,-14.5,-16.3,-13.3,0.28,0.4,False,Open-Meteo оперативный анализ,2026-11-20
+yakutsk_crossing,2026-11-12,-16.2,-19.9,-13.8,0.56,0.8,False,Open-Meteo оперативный анализ,2026-11-20
+yakutsk_crossing,2026-11-13,-24.7,-27.4,-19.7,0.0,0.0,False,Open-Meteo оперативный анализ,2026-11-20
+yakutsk_crossing,2026-11-14,-26.0,-28.3,-23.3,0.07,0.0,False,Open-Meteo оперативный анализ,2026-11-20
+yakutsk_crossing,2026-11-15,-27.0,-29.6,-24.2,0.63,1.0,False,Open-Meteo оперативный анализ,2026-11-20
+yakutsk_crossing,2026-11-16,-33.2,-35.2,-28.9,0.0,0.0,False,Open-Meteo оперативный анализ,2026-11-20
+yakutsk_crossing,2026-11-17,-35.5,-36.8,-34.0,0.0,0.0,False,Open-Meteo оперативный анализ,2026-11-20
+yakutsk_crossing,2026-11-18,-36.5,-38.2,-35.1,0.0,0.0,False,Open-Meteo оперативный анализ,2026-11-20
+yakutsk_crossing,2026-11-19,-34.5,-36.3,-32.7,0.0,0.0,False,Open-Meteo оперативный анализ,2026-11-20
+yakutsk_crossing,2026-11-20,-32.5,-36.0,-26.1,0.42,0.7,False,Open-Meteo оперативный анализ,2026-11-20
+yakutsk_crossing,2026-11-21,-30.8,-34.1,-26.1,0.14,0.2,True,Open-Meteo прогноз,2026-11-20
+yakutsk_crossing,2026-11-22,-34.2,-35.2,-33.2,0.0,0.0,True,Open-Meteo прогноз,2026-11-20
+yakutsk_crossing,2026-11-23,-32.9,-34.1,-30.9,0.0,0.0,True,Open-Meteo прогноз,2026-11-20
+yakutsk_crossing,2026-11-24,-30.1,-33.0,-26.5,0.14,0.2,True,Open-Meteo прогноз,2026-11-20
+yakutsk_crossing,2026-11-25,-28.6,-31.5,-25.9,0.28,0.4,True,Open-Meteo прогноз,2026-11-20
+yakutsk_crossing,2026-11-26,-29.3,-30.8,-27.5,0.0,0.0,True,Open-Meteo прогноз,2026-11-20
+yakutsk_crossing,2026-11-27,-28.9,-30.2,-27.4,0.0,0.0,True,Open-Meteo прогноз,2026-11-20
+yakutsk_crossing,2026-11-28,-29.9,-34.6,-28.3,0.0,0.0,True,Open-Meteo прогноз,2026-11-20
+yakutsk_crossing,2026-11-29,-34.8,-35.5,-33.1,0.0,0.0,True,Open-Meteo прогноз,2026-11-20
+yakutsk_crossing,2026-11-30,-34.1,-35.8,-31.8,0.0,0.0,True,Open-Meteo прогноз,2026-11-20
+yakutsk_crossing,2026-12-01,-30.4,-33.9,-28.6,0.0,0.2,True,Open-Meteo прогноз,2026-11-20
+yakutsk_crossing,2026-12-02,-30.4,-32.9,-29.1,0.0,0.4,True,Open-Meteo прогноз,2026-11-20
+yakutsk_crossing,2026-12-03,-32.2,-32.9,-31.7,0.0,0.0,True,Open-Meteo прогноз,2026-11-20
+yakutsk_crossing,2026-12-04,-31.8,-32.8,-29.5,0.0,0.0,True,Open-Meteo прогноз,2026-11-20
+yakutsk_crossing,2026-12-05,-33.2,-36.5,-29.5,0.0,0.0,True,Open-Meteo прогноз,2026-11-20

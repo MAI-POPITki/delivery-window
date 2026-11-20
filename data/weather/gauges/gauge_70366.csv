@@ -17480,3 +17480,6 @@ gauge_70366,2026-11-07,0.1,-2.3,1.1,0.7,1.0,ERA5 via Open-Meteo archive API
 gauge_70366,2026-11-08,0.1,-2.5,1.9,2.24,3.7,ERA5 via Open-Meteo archive API
 gauge_70366,2026-11-09,1.6,-2.5,5.1,0.0,0.2,ERA5 via Open-Meteo archive API
 gauge_70366,2026-11-10,3.1,1.8,5.1,0.0,0.6,ERA5 via Open-Meteo archive API
+gauge_70366,2026-11-11,-0.9,-3.8,2.6,0.0,0.6,ERA5 via Open-Meteo archive API
+gauge_70366,2026-11-12,-2.0,-4.8,0.1,1.47,2.2,ERA5 via Open-Meteo archive API
+gauge_70366,2026-11-13,-0.5,-1.9,0.8,1.12,1.6,ERA5 via Open-Meteo archive API

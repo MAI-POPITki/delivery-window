@@ -1,0 +1,219 @@
+{
+  "algorithm": "s2-water-v1.1",
+  "parameters": {
+    "mndwi_min": 0.1,
+    "ndvi_max": 0.3,
+    "nir_max": 0.15,
+    "buffer_pixels": 2,
+    "pixel_size_m": 20,
+    "baseline_min_observations": 2,
+    "abstain_scl_water_conflict": true
+  },
+  "pid": "ishim_ishim",
+  "acquired_at": "2026-11-18T06:51:49.024000Z",
+  "product_generated_at": "2026-11-18T08:57:26.000000Z",
+  "processed_at": "2026-11-20T11:31:13.310033+00:00",
+  "source": "Copernicus Sentinel-2 L2A / Microsoft Planetary Computer",
+  "station": {
+    "geometry": {
+      "coordinates": [
+        69.46755,
+        56.1012
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "basin_code": "01",
+      "basin_name": null,
+      "bo_code": "14",
+      "bo_name": null,
+      "catchment_area_km2": 115000.0,
+      "has_discharge": true,
+      "name": "р.Ишим - г.Ишим",
+      "opened": "1932-06-20",
+      "post_code": "11412",
+      "subbasin_code": "03",
+      "subbasin_name": null,
+      "vhu_code": "14.01.03.002",
+      "vhu_name": null
+    },
+    "type": "Feature"
+  },
+  "grid": {
+    "crs": "EPSG:32642",
+    "transform": [
+      20.0,
+      0.0,
+      523080.0,
+      0.0,
+      -20.0,
+      6223460.0
+    ],
+    "width": 600,
+    "height": 600
+  },
+  "overlay_coordinates": [
+    [
+      69.37052095533147,
+      56.15560160704593
+    ],
+    [
+      69.56464140897607,
+      56.15560160704593
+    ],
+    [
+      69.56464140897607,
+      56.04712253000925
+    ],
+    [
+      69.37052095533147,
+      56.04712253000925
+    ]
+  ],
+  "statistics": {
+    "total_km2": 144.0,
+    "observed_fraction": 0.0,
+    "observed_km2": 0.0,
+    "water_km2": 0.0,
+    "new_water_km2": 0.0,
+    "comparable_km2": 0.0,
+    "water_unknown_baseline_km2": 0.0,
+    "scl_water_agreement_iou": null
+  },
+  "observation": {
+    "item_id": "S2B_MSIL2A_20261118T065149_R020_T42VWH_20261118T085726",
+    "acquired_at": "2026-11-18T06:51:49.024000Z",
+    "fetched_at": "2026-11-20T11:31:12.666257+00:00",
+    "generated_at": "2026-11-18T08:57:26.000000Z",
+    "cloud_scene_percent": 99.814266,
+    "stac_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-2-l2a/items/S2B_MSIL2A_20261118T065149_R020_T42VWH_20261118T085726",
+    "files": {
+      "scenes/S2B_MSIL2A_20261118T065149_R020_T42VWH_20261118T085726/dn.npz": "08c595624adc33c86e0ee02d605f439f9c6bda6487cdfdec8adc3c47c417b9bb",
+      "scenes/S2B_MSIL2A_20261118T065149_R020_T42VWH_20261118T085726/product.xml": "bb11be95a9a8bca4ea07ff02cba93e640ee70ad1fcb32112dbff5248ab91209b",
+      "scenes/S2B_MSIL2A_20261118T065149_R020_T42VWH_20261118T085726/stac-bbb8b321fcf841d73316dbf5cac5f688955ac6fe76c292d29758bd9cb70e4c3e.json": "bbb8b321fcf841d73316dbf5cac5f688955ac6fe76c292d29758bd9cb70e4c3e",
+      "scenes/S2B_MSIL2A_20261118T065149_R020_T42VWH_20261118T085726/crop.json": "0019ef8e511e6b2b50e6dd2ff9ffef2bf9a3812179aa7dc4497bcd2d941194e9"
+    },
+    "radiometry": {
+      "quantification": 10000.0,
+      "offsets": {
+        "B02": -1000.0,
+        "B03": -1000.0,
+        "B04": -1000.0,
+        "B08": -1000.0,
+        "B11": -1000.0
+      }
+    }
+  },
+  "references": [
+    {
+      "item_id": "S2C_MSIL2A_20250608T063651_R120_T42VWH_20250608T102014",
+      "acquired_at": "2025-06-08T06:36:51.025000Z",
+      "fetched_at": null,
+      "generated_at": "2025-06-08T10:20:14.000000Z",
+      "cloud_scene_percent": 0.832944,
+      "stac_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-2-l2a/items/S2C_MSIL2A_20250608T063651_R120_T42VWH_20250608T102014",
+      "files": {
+        "scenes/S2C_MSIL2A_20250608T063651_R120_T42VWH_20250608T102014/dn.npz": "b300231caaef0726f44025df1e4d38ef9224e53b633f773970923316fc6acc65",
+        "scenes/S2C_MSIL2A_20250608T063651_R120_T42VWH_20250608T102014/product.xml": "23269175d363f166ccb8d1dd443758c20a24d7715d29c108a26ee4a205bede4a",
+        "scenes/S2C_MSIL2A_20250608T063651_R120_T42VWH_20250608T102014/stac-eae27e097470fc8327feb59d6d9c52d331a20663aa0daabd829b3555b35f085d.json": "eae27e097470fc8327feb59d6d9c52d331a20663aa0daabd829b3555b35f085d",
+        "scenes/S2C_MSIL2A_20250608T063651_R120_T42VWH_20250608T102014/crop.json": "01ade353ab6f0c77fb3047c9a07ecce21d1cd656ab74bfa961b2c27c9ca9d561"
+      },
+      "radiometry": {
+        "quantification": 10000.0,
+        "offsets": {
+          "B02": -1000.0,
+          "B03": -1000.0,
+          "B04": -1000.0,
+          "B08": -1000.0,
+          "B11": -1000.0
+        }
+      }
+    },
+    {
+      "item_id": "S2B_MSIL2A_20250603T063629_R120_T42VWH_20250603T084512",
+      "acquired_at": "2025-06-03T06:36:29.024000Z",
+      "fetched_at": null,
+      "generated_at": "2025-06-03T08:45:12.000000Z",
+      "cloud_scene_percent": 5.567301,
+      "stac_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-2-l2a/items/S2B_MSIL2A_20250603T063629_R120_T42VWH_20250603T084512",
+      "files": {
+        "scenes/S2B_MSIL2A_20250603T063629_R120_T42VWH_20250603T084512/dn.npz": "f261f31036c527a2f4fee9a5c8e4b6d299ade199b69fca3e865ca9b59a52d128",
+        "scenes/S2B_MSIL2A_20250603T063629_R120_T42VWH_20250603T084512/product.xml": "36ed64f6ecba86c4e652249876d51ce551803ab672697428d580fa59ece37bf1",
+        "scenes/S2B_MSIL2A_20250603T063629_R120_T42VWH_20250603T084512/stac-fdf7278fa8c3600df2223c0273a108517bea5c8718a787cc04aef44a44002716.json": "fdf7278fa8c3600df2223c0273a108517bea5c8718a787cc04aef44a44002716",
+        "scenes/S2B_MSIL2A_20250603T063629_R120_T42VWH_20250603T084512/crop.json": "e96c29efa38d540b886e4646348d0e0d6983366395994da58067a885e7b40cf4"
+      },
+      "radiometry": {
+        "quantification": 10000.0,
+        "offsets": {
+          "B02": -1000.0,
+          "B03": -1000.0,
+          "B04": -1000.0,
+          "B08": -1000.0,
+          "B11": -1000.0
+        }
+      }
+    },
+    {
+      "item_id": "S2A_MSIL2A_20250610T064321_R120_T42VWH_20250610T092820",
+      "acquired_at": "2025-06-10T06:43:21.024000Z",
+      "fetched_at": null,
+      "generated_at": "2025-06-10T09:28:20.000000Z",
+      "cloud_scene_percent": 15.186234,
+      "stac_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-2-l2a/items/S2A_MSIL2A_20250610T064321_R120_T42VWH_20250610T092820",
+      "files": {
+        "scenes/S2A_MSIL2A_20250610T064321_R120_T42VWH_20250610T092820/dn.npz": "c40fe229ab1a1073f7cbd57295c7f3ace2e4fb27446c15913adeeb1fb95ec8a8",
+        "scenes/S2A_MSIL2A_20250610T064321_R120_T42VWH_20250610T092820/product.xml": "480c558c1ff7acd64919f8e4008d4e2c3b272af131581213840bfe2e188b1650",
+        "scenes/S2A_MSIL2A_20250610T064321_R120_T42VWH_20250610T092820/stac-9e4ed155cbb1c33a411052d0fecc2806882af87df3a9db98fc7809a43b730308.json": "9e4ed155cbb1c33a411052d0fecc2806882af87df3a9db98fc7809a43b730308",
+        "scenes/S2A_MSIL2A_20250610T064321_R120_T42VWH_20250610T092820/crop.json": "e4b8c64717c0815d09c7e49387279782d98e9eaf89c5b31ac02517280f907c20"
+      },
+      "radiometry": {
+        "quantification": 10000.0,
+        "offsets": {
+          "B02": -1000.0,
+          "B03": -1000.0,
+          "B04": -1000.0,
+          "B08": -1000.0,
+          "B11": -1000.0
+        }
+      }
+    }
+  ],
+  "selection_window": [
+    "2026-11-06",
+    "2026-11-20"
+  ],
+  "selection": "latest scene with local SCL visibility >=50%, otherwise maximum local visibility",
+  "selection_candidates": [
+    {
+      "item_id": "S2B_MSIL2A_20261118T065149_R020_T42VWH_20261118T085726",
+      "acquired_at": "2026-11-18T06:51:49.024000Z",
+      "local_scl_visible_fraction": 0.0
+    },
+    {
+      "item_id": "S2B_MSIL2A_20261115T064139_R120_T42VWH_20261115T101246",
+      "acquired_at": "2026-11-15T06:41:39.024000Z",
+      "local_scl_visible_fraction": 0.0
+    },
+    {
+      "item_id": "S2C_MSIL2A_20261113T065121_R020_T42VWH_20261113T094755",
+      "acquired_at": "2026-11-13T06:51:21.025000Z",
+      "local_scl_visible_fraction": 0.0
+    },
+    {
+      "item_id": "S2C_MSIL2A_20261110T064101_R120_T42VWH_20261110T094801",
+      "acquired_at": "2026-11-10T06:41:01.025000Z",
+      "local_scl_visible_fraction": 0.0
+    },
+    {
+      "item_id": "S2B_MSIL2A_20261108T065109_R020_T42VWH_20261108T091235",
+      "acquired_at": "2026-11-08T06:51:09.024000Z",
+      "local_scl_visible_fraction": 0.0
+    }
+  ],
+  "files": {
+    "mask.npz": "72043c2bce56460c5a7412ba611e875349cd40920de8669f2e78d25c888ce167",
+    "rgb.png": "a6ba2693e931b04f625e6bd95f9c3a11540a0029153e366367aab871edf73daf",
+    "baseline.png": "1f92fe3f9374a638a06232247b3fba8e3331072d4ce47872b61404e08c56b229",
+    "overlay.png": "d656837caa0f5077dd1de8c56ac442659ecd9ba7f344f4d44ad7435ae3d7b193"
+  }
+}
