@@ -26,8 +26,8 @@
     },
     "type": "Feature"
   },
-  "checked_at": "2026-11-21T11:55:12.503074+00:00",
-  "last_success_at": "2026-11-21T11:55:12.503074+00:00",
+  "checked_at": "2026-11-22T10:50:09.348444+00:00",
+  "last_success_at": "2026-11-22T10:50:09.348444+00:00",
   "records": [
     {
       "id": "d6bedfbb7697e2d21d3199ab",
@@ -613,8 +613,8 @@
       "available_at": "2026-11-17T12:04:57.924835+00:00",
       "first_seen_at": "2026-11-17T12:04:57.924835+00:00",
       "source": "meteo_dv",
-      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-21+00%3A00&time_offset=0",
-      "raw_sha256": "e038ea68eb1816fabb10333a3d4bf2db0162cdb4c38fc206745bccb0ed207b70",
+      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-22+00%3A00&time_offset=0",
+      "raw_sha256": "ee41efe6ac099a33a29e359a800877a149a8a7998fd9217f53cb481772698f6b",
       "units": "cm above gauge zero"
     },
     {
@@ -627,8 +627,8 @@
       "available_at": "2026-11-16T10:50:14.480465+00:00",
       "first_seen_at": "2026-11-16T10:50:14.480465+00:00",
       "source": "meteo_dv",
-      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-21+00%3A00&time_offset=0",
-      "raw_sha256": "e038ea68eb1816fabb10333a3d4bf2db0162cdb4c38fc206745bccb0ed207b70",
+      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-22+00%3A00&time_offset=0",
+      "raw_sha256": "ee41efe6ac099a33a29e359a800877a149a8a7998fd9217f53cb481772698f6b",
       "units": "cm above gauge zero"
     },
     {
@@ -641,8 +641,8 @@
       "available_at": "2026-11-21T11:55:11.766817+00:00",
       "first_seen_at": "2026-11-21T11:55:11.766817+00:00",
       "source": "meteo_dv",
-      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-21+00%3A00&time_offset=0",
-      "raw_sha256": "e038ea68eb1816fabb10333a3d4bf2db0162cdb4c38fc206745bccb0ed207b70",
+      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-22+00%3A00&time_offset=0",
+      "raw_sha256": "ee41efe6ac099a33a29e359a800877a149a8a7998fd9217f53cb481772698f6b",
       "units": "cm above gauge zero"
     },
     {
@@ -655,8 +655,8 @@
       "available_at": "2026-11-19T12:24:21.015918+00:00",
       "first_seen_at": "2026-11-19T12:24:21.015918+00:00",
       "source": "meteo_dv",
-      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-21+00%3A00&time_offset=0",
-      "raw_sha256": "e038ea68eb1816fabb10333a3d4bf2db0162cdb4c38fc206745bccb0ed207b70",
+      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-22+00%3A00&time_offset=0",
+      "raw_sha256": "ee41efe6ac099a33a29e359a800877a149a8a7998fd9217f53cb481772698f6b",
       "units": "cm above gauge zero"
     },
     {
@@ -669,8 +669,8 @@
       "available_at": "2026-11-19T12:24:21.015918+00:00",
       "first_seen_at": "2026-11-19T12:24:21.015918+00:00",
       "source": "meteo_dv",
-      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-21+00%3A00&time_offset=0",
-      "raw_sha256": "e038ea68eb1816fabb10333a3d4bf2db0162cdb4c38fc206745bccb0ed207b70",
+      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-22+00%3A00&time_offset=0",
+      "raw_sha256": "ee41efe6ac099a33a29e359a800877a149a8a7998fd9217f53cb481772698f6b",
       "units": "cm above gauge zero"
     },
     {
@@ -683,8 +683,8 @@
       "available_at": "2026-11-20T11:16:10.886896+00:00",
       "first_seen_at": "2026-11-20T11:16:10.886896+00:00",
       "source": "meteo_dv",
-      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-21+00%3A00&time_offset=0",
-      "raw_sha256": "e038ea68eb1816fabb10333a3d4bf2db0162cdb4c38fc206745bccb0ed207b70",
+      "source_url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-22+00%3A00&time_offset=0",
+      "raw_sha256": "ee41efe6ac099a33a29e359a800877a149a8a7998fd9217f53cb481772698f6b",
       "units": "cm above gauge zero"
     }
   ],
@@ -692,12 +692,12 @@
     {
       "source": "meteo_dv",
       "state": "ok",
-      "records": 7,
-      "raw_sha256": "e038ea68eb1816fabb10333a3d4bf2db0162cdb4c38fc206745bccb0ed207b70",
-      "url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-21+00%3A00&time_offset=0",
+      "records": 6,
+      "raw_sha256": "ee41efe6ac099a33a29e359a800877a149a8a7998fd9217f53cb481772698f6b",
+      "url": "https://meteo-dv.ru/hydro_dfo/cgi/get_hydro_graph.php?station_code=3045&date_loc=2026-11-22+00%3A00&time_offset=0",
       "request": {
         "station_code": "3045",
-        "date_loc": "2026-11-21 00:00",
+        "date_loc": "2026-11-22 00:00",
         "time_offset": 0
       }
     },
@@ -705,12 +705,12 @@
       "source": "level_satellite",
       "state": "no_data",
       "records": 0,
-      "raw_sha256": "9e90ecb4c8cc48c8fb56ff2d1105499dd0a5c2abb40f67954b3cbc2d865564c6",
+      "raw_sha256": "c0cbb56c0b02d4cced02590608fdbf020a6f2f94b390544bacf0bda54f6eebcd",
       "url": "https://level-satellite.ru/api/series",
       "request": {
         "post_code": "3045",
-        "date_from": "2026-10-07",
-        "date_to": "2026-11-21"
+        "date_from": "2026-10-08",
+        "date_to": "2026-11-22"
       }
     }
   ]

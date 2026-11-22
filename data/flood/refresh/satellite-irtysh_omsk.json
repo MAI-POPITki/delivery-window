@@ -2,12 +2,12 @@
   "kind": "satellite",
   "pid": "irtysh_omsk",
   "state": "ok",
-  "checked_at": "2026-11-21T12:04:58.797555+00:00",
-  "last_success_at": "2026-11-21T12:04:58.797555+00:00",
+  "checked_at": "2026-11-22T10:51:40.125539+00:00",
+  "last_success_at": "2026-11-22T10:51:40.125539+00:00",
   "result": {
     "state": "ok",
-    "acquired_at": "2026-11-07T06:30:41.025000Z",
-    "observed_fraction": 0.9614666666666667,
-    "version": "S2C_MSIL2A_20261107T063041_R077_T43UCB_20261107T093914"
+    "acquired_at": "2026-11-17T06:31:41.025000Z",
+    "observed_fraction": 0.03316388888888889,
+    "version": "S2C_MSIL2A_20261117T063141_R077_T43UCB_20261117T095504"
   }
 }

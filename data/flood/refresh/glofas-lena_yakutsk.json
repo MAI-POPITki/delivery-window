@@ -2,14 +2,14 @@
   "kind": "glofas",
   "pid": "lena_yakutsk",
   "state": "ok",
-  "checked_at": "2026-11-21T11:55:16.892119+00:00",
-  "last_success_at": "2026-11-21T11:55:16.892119+00:00",
+  "checked_at": "2026-11-22T10:50:13.364167+00:00",
+  "last_success_at": "2026-11-22T10:50:13.364167+00:00",
   "result": {
     "state": "ok",
-    "fetched_at": "2026-11-21T11:55:16.875913+00:00",
-    "start": "2026-11-22",
-    "end": "2026-11-28",
+    "fetched_at": "2026-11-22T10:50:13.353619+00:00",
+    "start": "2026-11-23",
+    "end": "2026-11-29",
     "members": 50,
-    "version": "a3f0b2c8c56bb3880825daf1854bd30590cd477ba663cea82fec8d6000266417"
+    "version": "eb3f71dd74c801c50450da35e2ffcd5dabc07a1d371212d523df267bd6c9a720"
   }
 }
