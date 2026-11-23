@@ -2,12 +2,12 @@
   "kind": "satellite",
   "pid": "ural_orenburg",
   "state": "ok",
-  "checked_at": "2026-11-22T10:51:25.808135+00:00",
-  "last_success_at": "2026-11-22T10:51:25.808135+00:00",
+  "checked_at": "2026-11-23T12:13:41.886995+00:00",
+  "last_success_at": "2026-11-23T12:13:41.886995+00:00",
   "result": {
     "state": "ok",
-    "acquired_at": "2026-11-20T07:31:29.024000Z",
+    "acquired_at": "2026-11-22T07:22:21.025000Z",
     "observed_fraction": 0.0,
-    "version": "S2B_MSIL2A_20261120T073129_R049_T40UCC_20261120T092824"
+    "version": "S2C_MSIL2A_20261122T072221_R006_T40UCC_20261122T103210"
   }
 }

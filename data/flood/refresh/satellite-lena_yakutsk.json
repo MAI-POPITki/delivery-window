@@ -2,8 +2,8 @@
   "kind": "satellite",
   "pid": "lena_yakutsk",
   "state": "ok",
-  "checked_at": "2026-11-22T10:51:08.603075+00:00",
-  "last_success_at": "2026-11-22T10:51:08.603075+00:00",
+  "checked_at": "2026-11-23T12:13:27.049458+00:00",
+  "last_success_at": "2026-11-23T12:13:27.049458+00:00",
   "result": {
     "state": "ok",
     "acquired_at": "2026-11-16T03:00:11.024000Z",
