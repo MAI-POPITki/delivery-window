@@ -2,8 +2,8 @@
   "kind": "satellite",
   "pid": "irtysh_omsk",
   "state": "ok",
-  "checked_at": "2026-11-23T12:13:45.752807+00:00",
-  "last_success_at": "2026-11-23T12:13:45.752807+00:00",
+  "checked_at": "2026-11-24T14:45:15.350222+00:00",
+  "last_success_at": "2026-11-24T14:45:15.350222+00:00",
   "result": {
     "state": "ok",
     "acquired_at": "2026-11-17T06:31:41.025000Z",

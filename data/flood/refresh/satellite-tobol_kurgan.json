@@ -2,12 +2,12 @@
   "kind": "satellite",
   "pid": "tobol_kurgan",
   "state": "ok",
-  "checked_at": "2026-11-23T12:13:35.180363+00:00",
-  "last_success_at": "2026-11-23T12:13:35.180363+00:00",
+  "checked_at": "2026-11-24T14:45:05.070000+00:00",
+  "last_success_at": "2026-11-24T14:45:05.070000+00:00",
   "result": {
     "state": "ok",
-    "acquired_at": "2026-11-21T07:02:09.024000Z",
+    "acquired_at": "2026-11-23T06:52:01.025000Z",
     "observed_fraction": 0.0,
-    "version": "S2B_MSIL2A_20261121T070209_R063_T41UPB_20261121T092036"
+    "version": "S2C_MSIL2A_20261123T065201_R020_T41UPB_20261123T095719"
   }
 }
