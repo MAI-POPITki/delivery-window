@@ -2,14 +2,14 @@
   "kind": "glofas",
   "pid": "ural_orenburg",
   "state": "ok",
-  "checked_at": "2026-11-24T14:33:44.413748+00:00",
-  "last_success_at": "2026-11-24T14:33:44.413748+00:00",
+  "checked_at": "2026-11-25T12:09:59.422538+00:00",
+  "last_success_at": "2026-11-25T12:09:59.422538+00:00",
   "result": {
     "state": "ok",
-    "fetched_at": "2026-11-24T14:33:44.405152+00:00",
-    "start": "2026-11-25",
-    "end": "2026-12-01",
+    "fetched_at": "2026-11-25T12:09:59.414125+00:00",
+    "start": "2026-11-26",
+    "end": "2026-12-02",
     "members": 50,
-    "version": "5b9b0fe85e766523cab88a07d49927b1860d2170d9f19245447ccb2acb59a6bf"
+    "version": "9f7260ab53676d14c8c478b33304772a7f110ede9c08b7d71b2ef4a0540c7bec"
   }
 }

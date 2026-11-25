@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-24T14:45:57.876402+00:00",
+  "checked_at": "2026-11-25T12:15:14.254227+00:00",
   "source": "USGS Landsat Collection 2 Level-2 / Microsoft Planetary Computer",
   "points": {
     "lensk": {
@@ -9,14 +9,14 @@
       "observed_at": "2026-10-16T03:31:20.572785Z",
       "platform": "landsat-9",
       "scene_cloud_cover": 77.71,
-      "published_at": "2026-11-12T09:51:33.139624Z",
+      "published_at": "2026-10-28T09:11:39.132716Z",
       "catalog_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/landsat-c2-l2/items/LC09_L2SP_130018_20261016_02_T1",
       "quality": "usable",
-      "valid_fraction": 0.5502,
-      "valid_pixels": 3241,
+      "valid_fraction": 0.551,
+      "valid_pixels": 3246,
       "river_pixels": 5891,
       "status": "ready",
-      "checked_at": "2026-11-24T14:45:57.876402+00:00"
+      "checked_at": "2026-11-25T12:15:14.254227+00:00"
     },
     "olekminsk": {
       "item_id": "LC08_L2SP_126018_20261028_02_T1",
@@ -24,14 +24,14 @@
       "observed_at": "2026-10-28T03:06:34.285210Z",
       "platform": "landsat-8",
       "scene_cloud_cover": 7.35,
-      "published_at": "2026-11-14T09:20:11.487336Z",
+      "published_at": "2026-11-16T09:11:58.485869Z",
       "catalog_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/landsat-c2-l2/items/LC08_L2SP_126018_20261028_02_T1",
       "quality": "usable",
-      "valid_fraction": 0.8804,
-      "valid_pixels": 7760,
+      "valid_fraction": 0.8814,
+      "valid_pixels": 7769,
       "river_pixels": 8814,
       "status": "ready",
-      "checked_at": "2026-11-24T14:45:57.876402+00:00"
+      "checked_at": "2026-11-25T12:15:14.254227+00:00"
     },
     "pokrovsk": {
       "item_id": "LC08_L2SP_121017_20261009_02_T1",
@@ -39,14 +39,14 @@
       "observed_at": "2026-10-09T02:35:13.882979Z",
       "platform": "landsat-8",
       "scene_cloud_cover": 4.5,
-      "published_at": "2026-11-12T09:41:01.414485Z",
+      "published_at": "2026-10-24T09:09:49.172120Z",
       "catalog_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/landsat-c2-l2/items/LC08_L2SP_121017_20261009_02_T1",
       "quality": "usable",
-      "valid_fraction": 0.9995,
-      "valid_pixels": 16571,
+      "valid_fraction": 0.9993,
+      "valid_pixels": 16568,
       "river_pixels": 16579,
       "status": "ready",
-      "checked_at": "2026-11-24T14:45:57.876402+00:00"
+      "checked_at": "2026-11-25T12:15:14.254227+00:00"
     },
     "yakutsk_crossing": {
       "item_id": "LC09_L2SP_120017_20261010_02_T1",
@@ -54,14 +54,14 @@
       "observed_at": "2026-10-10T02:29:08.643788Z",
       "platform": "landsat-9",
       "scene_cloud_cover": 24.01,
-      "published_at": "2026-11-05T09:56:20.780892Z",
+      "published_at": "2026-10-26T09:10:00.505084Z",
       "catalog_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/landsat-c2-l2/items/LC09_L2SP_120017_20261010_02_T1",
       "quality": "usable",
-      "valid_fraction": 0.887,
-      "valid_pixels": 17729,
+      "valid_fraction": 0.8872,
+      "valid_pixels": 17734,
       "river_pixels": 19988,
       "status": "ready",
-      "checked_at": "2026-11-24T14:45:57.876402+00:00"
+      "checked_at": "2026-11-25T12:15:14.254227+00:00"
     },
     "sangar": {
       "item_id": "LC09_L2SP_124015_20261022_02_T1",
@@ -69,14 +69,14 @@
       "observed_at": "2026-10-22T02:53:02.561970Z",
       "platform": "landsat-9",
       "scene_cloud_cover": 21.13,
-      "published_at": "2026-11-12T09:43:52.651760Z",
+      "published_at": "2026-11-04T09:12:18.333439Z",
       "catalog_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/landsat-c2-l2/items/LC09_L2SP_124015_20261022_02_T1",
       "quality": "usable",
-      "valid_fraction": 0.9691,
-      "valid_pixels": 12036,
+      "valid_fraction": 0.9693,
+      "valid_pixels": 12039,
       "river_pixels": 12420,
       "status": "ready",
-      "checked_at": "2026-11-24T14:45:57.876402+00:00"
+      "checked_at": "2026-11-25T12:15:14.254227+00:00"
     },
     "zhigansk": {
       "item_id": "LC09_L2SP_127013_20261011_02_T1",
@@ -84,14 +84,14 @@
       "observed_at": "2026-10-11T03:10:48.921869Z",
       "platform": "landsat-9",
       "scene_cloud_cover": 46.49,
-      "published_at": "2026-11-12T09:55:06.672250Z",
+      "published_at": "2026-10-24T09:09:45.085579Z",
       "catalog_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/landsat-c2-l2/items/LC09_L2SP_127013_20261011_02_T1",
       "quality": "usable",
-      "valid_fraction": 0.5423,
-      "valid_pixels": 3145,
+      "valid_fraction": 0.5425,
+      "valid_pixels": 3146,
       "river_pixels": 5799,
       "status": "ready",
-      "checked_at": "2026-11-24T14:45:57.876402+00:00"
+      "checked_at": "2026-11-25T12:15:14.254227+00:00"
     },
     "kyusyur": {
       "item_id": "LC09_L2SP_128010_20260916_02_T1",
@@ -99,14 +99,14 @@
       "observed_at": "2026-09-16T03:15:38.085821Z",
       "platform": "landsat-9",
       "scene_cloud_cover": 66.11,
-      "published_at": "2026-11-12T10:06:33.191741Z",
+      "published_at": "2026-10-22T19:26:52.343878Z",
       "catalog_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/landsat-c2-l2/items/LC09_L2SP_128010_20260916_02_T1",
       "quality": "usable",
-      "valid_fraction": 0.9832,
-      "valid_pixels": 12375,
+      "valid_fraction": 0.9833,
+      "valid_pixels": 12377,
       "river_pixels": 12587,
       "status": "ready",
-      "checked_at": "2026-11-24T14:45:57.876402+00:00"
+      "checked_at": "2026-11-25T12:15:14.254227+00:00"
     }
   }
 }
