@@ -13,451 +13,451 @@
       "latitude": 62.11,
       "longitude": 148.47,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "f0bf8de353b9995a407aadcae7186c6bb1c9ad1ed55cc977c951ec21a6aadd10"
+      "sha256": "370105c81a7ed3491015511a2dacc715ea38201f6280ef8ee5d8d078a59d4b69"
     },
     "gauge_1010.csv": {
       "latitude": 62.45,
       "longitude": 152.3,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "939d68eb21e66a1c32d491687a2af18283b3153ecf6fabb56641d0458166edb7"
+      "sha256": "9266176c16439fd915cfe41d68d1462ebbbf3da4d0462825af1b1c3bc3a79e4b"
     },
     "gauge_1018.csv": {
       "latitude": 65.72,
       "longitude": 150.83,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "88a24bd03f97fc2eeca4db8f3adf065695c887c91bb2bb71d488c7f09b9f322e"
+      "sha256": "00e008bc1dfa90798af44f1ca30800d2b8c66b7edb1f46f1c6ed65c8cb476a8b"
     },
     "gauge_11558.csv": {
       "latitude": 66.03,
       "longitude": 68.73,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "43b779a333b3fd963a9084da36c33d305ca0c4b9f4d749eeb04f5496fdbcee18"
+      "sha256": "e113cccdd2590e5cbe5e5d720f22ab1b230588c59013f07732afb1e8655a6dc2"
     },
     "gauge_11574.csv": {
       "latitude": 64.93,
       "longitude": 77.8,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "8a6a94d8d778fe57bad30a425dc733d8c0ffe4498698b6ee40056b11f3ad7204"
+      "sha256": "9edbb556b9385314ce56ee0bdfa20a84597d7baa025e2bbb10c059889468d7c1"
     },
     "gauge_1176.csv": {
       "latitude": 62.1,
       "longitude": 150.68,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "399a0126fe304cdace87e960d93c8ae299ee0f0f4cee901d2e2e433975e6f219"
+      "sha256": "50c23c59b387a7e6b49cc0596e3f25d7d0c1e867a4328fd2a7604b2164a76ba9"
     },
     "gauge_1367.csv": {
       "latitude": 67.13,
       "longitude": 156.55,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "e14ce6176db5d3a0a76806a51c19d3ce79a24ae9acdeb38af67d374a9ca07e6c"
+      "sha256": "53fda509e9cc9fe5164bad4ed9c1d47cc723cb51787f75410dbc3660e72252f5"
     },
     "gauge_1397.csv": {
       "latitude": 68.13,
       "longitude": 164.17,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "abaa0c88527131eae136ba250f122478ca82d0ad13cacc15aa6ed60d61dcb84d"
+      "sha256": "c0605fe2ab35c37405c400dc9c62bee21dc973e60930b6fb15b33cfe38fdb861"
     },
     "gauge_1398.csv": {
       "latitude": 68.35,
       "longitude": 161.55,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "34c573352035e61a1d47adfb580241e32b3f40bf24f04fca464128d8fbc54729"
+      "sha256": "18e72cab4c0103c41710d9627c107d0f63440df126f0989861e60e18316649be"
     },
     "gauge_1496.csv": {
       "latitude": 65.54,
       "longitude": 168.9,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "8e87956e340c4c261e1a5d144ffd952fd4bde20c04a8d8e857007cdc6c77969b"
+      "sha256": "c474624fada8b2d02425242b227a31e3864bc8ae7007d712311be9870fe4f62e"
     },
     "gauge_1497.csv": {
       "latitude": 64.84,
       "longitude": 168.76,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "1f14503d12175430e101757263f036729f304f96649fb6fdc400bd7e37c71427"
+      "sha256": "dfca6cd5e9076fd58a02af206da84c7534298ed9c4e3eabc3ed555d790bf697d"
     },
     "gauge_1500.csv": {
       "latitude": 65.51,
       "longitude": 173.27,
       "first_date": "1995-01-01",
-      "last_date": "2026-11-18",
-      "rows": 11645,
+      "last_date": "2026-11-19",
+      "rows": 11646,
       "missing_depth": 0,
-      "sha256": "f7d2ba77a2acf54126f6e48acfaac3d50f3b6968f29b417e06f8a8091b6cb81d"
+      "sha256": "18c83f69fa76013b024d84774d6456e0671f28b0e9a58113c5baf70c87911543"
     },
     "gauge_1502.csv": {
       "latitude": 65.18,
       "longitude": 167.95,
       "first_date": "1995-01-01",
-      "last_date": "2026-11-18",
-      "rows": 11645,
+      "last_date": "2026-11-19",
+      "rows": 11646,
       "missing_depth": 0,
-      "sha256": "66a0582710336ebc609e3d41cf33a5199793b8aad43f6d6da1489c97ee44f33c"
+      "sha256": "96cf2182c9c50c18d2ecaafae81cb6f7b5a235db019a4fb64f765bfd9b13330a"
     },
     "gauge_1504.csv": {
       "latitude": 64.04,
       "longitude": 170.83,
       "first_date": "1995-01-01",
-      "last_date": "2026-11-18",
-      "rows": 11645,
+      "last_date": "2026-11-19",
+      "rows": 11646,
       "missing_depth": 0,
-      "sha256": "e486dc70b1a6e41e0156e5b113a16e7790ace67d86b20a707ff3b8a56110cf28"
+      "sha256": "849fc17e977403ca358923e5a32c26b022e6f58df1ebbb0abc8f58bba6b2d5b2"
     },
     "gauge_1508.csv": {
       "latitude": 66.4,
       "longitude": 173.32,
       "first_date": "1995-01-01",
-      "last_date": "2026-11-18",
-      "rows": 11645,
+      "last_date": "2026-11-19",
+      "rows": 11646,
       "missing_depth": 0,
-      "sha256": "fa344bfe8d9604b3fa85cb4b2f2f2c1a191ca06a05010410a7ddb8915a653023"
+      "sha256": "63323a278f7acd0b65ba01f634d8e242dfddb5521ad51e2ae5653f45d941ffe6"
     },
     "gauge_1566.csv": {
       "latitude": 59.75,
       "longitude": 148.66,
       "first_date": "1995-01-01",
-      "last_date": "2026-11-18",
-      "rows": 11645,
+      "last_date": "2026-11-19",
+      "rows": 11646,
       "missing_depth": 0,
-      "sha256": "ea29c776e380e0e65b74b3b29f969378ba8beb03a88e9e68bbce0526a1dfcb89"
+      "sha256": "727b13ec820b1795b613db43a4c25f65738110b7e095cac2963621cbbe858a7d"
     },
     "gauge_1578.csv": {
       "latitude": 65.48,
       "longitude": 151.0,
       "first_date": "1995-01-01",
-      "last_date": "2026-11-18",
-      "rows": 11645,
+      "last_date": "2026-11-19",
+      "rows": 11646,
       "missing_depth": 0,
-      "sha256": "9114a8c7c59680a5bcd29c73161754da8f44b567f9882ed46f78080a9af9ae5f"
+      "sha256": "65023f07408f45e5e647423d93d62029a13ad06ce23bb515ffebc4849fb608c4"
     },
     "gauge_1596.csv": {
       "latitude": 68.17,
       "longitude": 161.08,
       "first_date": "1995-01-01",
-      "last_date": "2026-11-18",
-      "rows": 11645,
+      "last_date": "2026-11-19",
+      "rows": 11646,
       "missing_depth": 0,
-      "sha256": "99e19c90c919234c3f400fd2dc8027a45053c05465875d1ef3eca5b812f7cdbf"
+      "sha256": "eea445839318ee4cd0f03343f42871e6db6ae3a8ee8d1acc87ec3c11bf806f7c"
     },
     "gauge_1801.csv": {
       "latitude": 67.45,
       "longitude": 153.73,
       "first_date": "1995-01-01",
-      "last_date": "2026-11-18",
-      "rows": 11645,
+      "last_date": "2026-11-19",
+      "rows": 11646,
       "missing_depth": 0,
-      "sha256": "0baee2cfc729bb403fb94207c7178eca2a4807292abff6638d567a28b61de891"
+      "sha256": "e9922c2c9c33a1dc6b2b5f363e333df8bb7af46a93325722cb17f8d9598ba5b0"
     },
     "gauge_1802.csv": {
       "latitude": 68.73,
       "longitude": 158.69,
       "first_date": "1995-01-01",
-      "last_date": "2026-11-18",
-      "rows": 11645,
+      "last_date": "2026-11-19",
+      "rows": 11646,
       "missing_depth": 0,
-      "sha256": "eee49feb18cfaf611084795fb214fe5e490eb82cdddfe9e1ee051b897b49486c"
+      "sha256": "cf1acd594455b11876fac9b37ff972a3d95b23e4940faab0af9c2cf74975a26b"
     },
     "gauge_1805.csv": {
       "latitude": 68.74,
       "longitude": 161.32,
       "first_date": "1995-01-01",
-      "last_date": "2026-11-18",
-      "rows": 11645,
+      "last_date": "2026-11-19",
+      "rows": 11646,
       "missing_depth": 0,
-      "sha256": "9dd4b03ac513615dcb5d04287fcc37566db23e7970223ae06ed1892c04bacd29"
+      "sha256": "b8416aed8cddea6cd7d0b88e139177dd5f95008bb2ca29d448feeb2edf643e81"
     },
     "gauge_3003.csv": {
       "latitude": 53.97,
       "longitude": 105.88,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "ad98556e4a44b5c48f7f654890ec3d0c89d3dba1347513e3720e31280e2aaa58"
+      "sha256": "3ba76d4a3fbbb20253776688ed0ec68b2673e2a685fb769fe32d0ba310dd2382"
     },
     "gauge_3074.csv": {
       "latitude": 56.85,
       "longitude": 105.07,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "8ab7348208bee4a6928856a55bb9c90668615a1363667fe5de479171454cf9ec"
+      "sha256": "b5eb3cefe480270b3c2da0d8124056afe6fdc5f1faf2281eedca2ebcffdd5816"
     },
     "gauge_3087.csv": {
       "latitude": 57.63,
       "longitude": 108.12,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "bdff66d38833a3411d0ad4e43cfd4e50e00ae1810e24c21bc1c53e97a3386a06"
+      "sha256": "59bf169ee1a93b127d7ffb946f52bf916be77e02b71a77e2e11ef78e6945d61b"
     },
     "gauge_3156.csv": {
       "latitude": 60.27,
       "longitude": 114.73,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "42edbf9853614b36a9740132cfcbee1487a71c5f79631369f3c1b5c9cccc99e0"
+      "sha256": "4abf1020c6e8bf05cc33e1c87ff574dbf86a9d78ba9864afb8a1cfd71d35dbed"
     },
     "gauge_3157.csv": {
       "latitude": 60.17,
       "longitude": 116.8,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "1eea038fd480146cb812d6137731d31b1ede1799956dafa29aede9aac158770a"
+      "sha256": "e011e825cf05fd507bca0f7f5610496c7965fce02242c10d181c81a7aa3ef6be"
     },
     "gauge_3198.csv": {
       "latitude": 58.42,
       "longitude": 116.02,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "2e6bfcaeee8785b731a028699217a31967edcf2e8c814ad8c325ecabc8c35803"
+      "sha256": "35a7e70ececfb4311537714965409d6438634425889c9bceda977c124e82ae91"
     },
     "gauge_3202.csv": {
       "latitude": 60.9,
       "longitude": 120.8,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "961ee21a708ca00aeaca26611916bceb5933af34ed1516afffc6020e9d94ddc7"
+      "sha256": "f1ab7283307be52decad972fd774843334d551ea7b9c47eaf3d463cbe1331235"
     },
     "gauge_3210.csv": {
       "latitude": 61.05,
       "longitude": 128.65,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "a8886570c10b0731668f2e42a4eb4c972380de02a94bad4cdaed0089fe4312ef"
+      "sha256": "55b5d591d7e2d8ab5aeb913b4559fc85553d0cfd59994f4529e76965c30c7d5e"
     },
     "gauge_3219.csv": {
       "latitude": 58.97,
       "longitude": 126.27,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "5f89b92f6d18b42a35a34dda826f8ec19bc6ef17d55d0df552c0e7a4e88a8c8b"
+      "sha256": "918f1312ae0273d6cb36b5c3a5f93687a372340b5dbadc5fe0418ac80d2f9709"
     },
     "gauge_3248.csv": {
       "latitude": 58.65,
       "longitude": 127.05,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "cf38c94db6a2be6f508ba8c3f887d6c33f676271249e2fe5265df438a4ef2cc1"
+      "sha256": "66a996fe1ee078787d8c44eb8119a660d13d6867952792eb7705e8b15628a025"
     },
     "gauge_3277.csv": {
       "latitude": 60.68,
       "longitude": 135.03,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "787a8b6e7b1fd8e485304c362f6a9a9a5f3a2cf748cc5530e6594b6b56a48431"
+      "sha256": "2fe87634fa19bad3a7258b3afa37718e4be009f4b2b5050766be80b5a2977acd"
     },
     "gauge_3403.csv": {
       "latitude": 70.13,
       "longitude": 113.97,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "917527851aa50b23fd8979c2d4c2144ef08ccf390cab67ca159dddf490e7aba2"
+      "sha256": "787a92404d8fc0ed1d030fcf9ef4a422dac50807063ca62bc50ff139b8b0f115"
     },
     "gauge_3414.csv": {
       "latitude": 67.34,
       "longitude": 133.38,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "2039501ca63351ae316a3be2a8b365ebff20120182015dee99f3efdda0c7ab8d"
+      "sha256": "279914e2c9266bd25c734d0c4a8c2366b2d925f9173487cdb51387668b2f9986"
     },
     "gauge_3483.csv": {
       "latitude": 68.62,
       "longitude": 134.12,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "dfbf1bdfd2a062095c5a7e5124461213c2852b0fb1b6140d635c9992b1a5d2c2"
+      "sha256": "e01e1f7a1392c5395851818ceb2a833f9bc87f575a84f3abf741a625d5e7aeb5"
     },
     "gauge_3489.csv": {
       "latitude": 64.53,
       "longitude": 143.12,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "aa0e6c11ce85649ee0b04ea81cae91b97190a2bcc1387ec66a9d62bd75a6b96a"
+      "sha256": "33b78bc5dd0e35d5d23eff79330a5e0832400677c9dc91b3e41fc43dbdf5590f"
     },
     "gauge_3507.csv": {
       "latitude": 64.4,
       "longitude": 142.0,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "c9c4a60683f82f37c62f5bc0d2de39ff7e76992dc80cc010f1cbf873b49f7f1e"
+      "sha256": "52a9d72437fd23d4d01e9e552e869c09e4da1115ebc2e9c246bdf62a583b8ad8"
     },
     "gauge_3518.csv": {
       "latitude": 64.43,
       "longitude": 144.37,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "d59674b8a786768df65949c9e6ff0c5d2e711de64706b69faa631768e86328ff"
+      "sha256": "0502222b91f4ecb29cad795f2a7805654b171bd79f1d9d17d3f837d8411a820f"
     },
     "gauge_70043.csv": {
       "latitude": 63.72,
       "longitude": 39.62,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "86aa685928e75fb708d102baa442012193a5486fe545886ef04546932eb4fa4d"
+      "sha256": "eda09431ecc2893871b008eba299290a10b0882df3f18f42b1d76459990927a2"
     },
     "gauge_70047.csv": {
       "latitude": 64.38,
       "longitude": 39.4,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "9817c1b74ffb208fa0c156003c1f0cc84cd254fe127a903fa224f9fdbb7caffa"
+      "sha256": "b029ee2e122acd3c2fc657d1dc52f5c761c3f37bfe28759b7adcb25f0cf0c419"
     },
     "gauge_70275.csv": {
       "latitude": 61.12,
       "longitude": 42.18,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "f21d8e85257de8b82e2b08dce1c63274a0447f6cfcd2a15e6aa88b1bc451c05f"
+      "sha256": "13285d57a245b841fcf6b6e122e53da026d7bfeac3675a2cfd2aea2943a6defb"
     },
     "gauge_70302.csv": {
       "latitude": 62.25,
       "longitude": 42.67,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "21521eecf1c97d1eda4b9b0d4fe56f2405e5279e2a80be055d8b0012ee5f98fd"
+      "sha256": "14e93462cc41a7cb345d7dca5b55465d5d43dcd3ac58ce3b31be8024b98fa753"
     },
     "gauge_70334.csv": {
       "latitude": 64.72,
       "longitude": 43.48,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "652b2b3f37c64738ce9f4f51ddc37b85a3a30f05645fd8da169aa8fc75d39d12"
+      "sha256": "27a0da65726300e5812dfc25cb7376a9dec55446c8bb9878ace5952d7c424d23"
     },
     "gauge_70366.csv": {
       "latitude": 64.97,
       "longitude": 43.52,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "4141d96f606740e03155a32ffe9b621b0713b443c2db8e60059d9b650cb621c8"
+      "sha256": "40e82efc0e297f167c9c34c21d564d8bab1794eaa7c9b232dcc81621e9d910c5"
     },
     "gauge_9372.csv": {
       "latitude": 59.12,
       "longitude": 93.48,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "5b05c57be022878b5511f74d1c0888826e09f7ca18dd9407c321fcaeb57c25ac"
+      "sha256": "20e3d81ffbf5a4cfbabb57c75f887e714eb5ec07ef38a8e93ef815f8f8433cea"
     },
     "gauge_9380.csv": {
       "latitude": 59.42,
       "longitude": 89.3,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "c3f5a18a62d02cd0fa79eb1ffceaf628c1fd77a80c3d7262bcefd513a2e9a565"
+      "sha256": "cd330669e0562c0e44d8109c32561c8d288eda35580226b56864b4ba9cc88b39"
     },
     "gauge_9384.csv": {
       "latitude": 60.35,
       "longitude": 88.33,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "47a837022474ede21316deb01ff7eb4db37ab979001ed8e5a101ef5c1e3e0107"
+      "sha256": "042407bd55fdb6ad371492a641152baf22db1796a0e5a2de1ff6b1f95abca837"
     },
     "gauge_9422.csv": {
       "latitude": 65.65,
       "longitude": 90.12,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "04e30eb800721642bd67feb52062c7667cb65d6ffaf1d9c5790bcbee9ef8122c"
+      "sha256": "f832b7123171d9fd48cafeee0436bd33336f5bcaef00ee3bf8959a9ceefdefea"
     },
     "gauge_9425.csv": {
       "latitude": 65.98,
       "longitude": 84.27,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "2dd6534a7df7f2d43432069e95a408bc2c74e6baecfba6e0c5f63e6ea87ceb7a"
+      "sha256": "57c10bdeba4cf7950e3c7dfe1c97ef3f0f1a69d0aefa2fb596140c393b4c836b"
     },
     "yakutsk_crossing.csv": {
       "latitude": 62.0,
       "longitude": 129.82,
       "first_date": "1979-01-01",
-      "last_date": "2026-11-18",
-      "rows": 17489,
+      "last_date": "2026-11-19",
+      "rows": 17490,
       "missing_depth": 0,
-      "sha256": "b1def780eff90cbf783e9678c49cf9b892fb1c1c34eab49f2eba8ca8eafc178c"
+      "sha256": "2e7766c741a02374bf8a812ecc34ccec392da9c0a38b5be5b5c738300466c4c9"
     }
   }
 }

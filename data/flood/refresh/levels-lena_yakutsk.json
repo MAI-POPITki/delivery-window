@@ -2,12 +2,12 @@
   "kind": "levels",
   "pid": "lena_yakutsk",
   "state": "ok",
-  "checked_at": "2026-11-25T12:09:53.902457+00:00",
-  "last_success_at": "2026-11-25T12:09:53.902457+00:00",
+  "checked_at": "2026-11-26T12:58:15.669813+00:00",
+  "last_success_at": "2026-11-26T12:58:15.669813+00:00",
   "result": {
     "state": "ok",
-    "records": 48,
-    "observed_at": "2026-11-24T23:00:00+00:00",
-    "version": "d8e8b1038f2821fedb6f519b4a64ea9c769e4fbccb6d8e6f842079b50983d721"
+    "records": 52,
+    "observed_at": "2026-11-25T23:00:00+00:00",
+    "version": "6208b178dabc3a337d42bc9b951ecc6a287c9ecdb4fb8903c29075aef1c6b077"
   }
 }

@@ -2,8 +2,8 @@
   "kind": "satellite",
   "pid": "tobol_kurgan",
   "state": "ok",
-  "checked_at": "2026-11-25T12:14:10.072674+00:00",
-  "last_success_at": "2026-11-25T12:14:10.072674+00:00",
+  "checked_at": "2026-11-26T13:14:13.718727+00:00",
+  "last_success_at": "2026-11-26T13:14:13.718727+00:00",
   "result": {
     "state": "ok",
     "acquired_at": "2026-11-23T06:52:01.025000Z",

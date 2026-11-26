@@ -2,12 +2,12 @@
   "kind": "satellite",
   "pid": "ishim_ishim",
   "state": "ok",
-  "checked_at": "2026-11-25T12:14:08.523897+00:00",
-  "last_success_at": "2026-11-25T12:14:08.523897+00:00",
+  "checked_at": "2026-11-26T13:14:11.070931+00:00",
+  "last_success_at": "2026-11-26T13:14:11.070931+00:00",
   "result": {
     "state": "ok",
-    "acquired_at": "2026-11-23T06:52:01.025000Z",
-    "observed_fraction": 0.0,
-    "version": "S2C_MSIL2A_20261123T065201_R020_T42VWH_20261123T095719"
+    "acquired_at": "2026-11-25T06:42:19.024000Z",
+    "observed_fraction": 0.0001361111111111111,
+    "version": "S2B_MSIL2A_20261125T064219_R120_T42VWH_20261125T085923"
   }
 }
