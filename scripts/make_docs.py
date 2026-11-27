@@ -26,7 +26,7 @@ REPO = "https://github.com/MAI-POPITki/delivery-window"
 BLOB = REPO + "/blob/main/"
 TREE = REPO + "/tree/main/"
 SITE = "https://mai-popitki.github.io/delivery-window/"
-APP = "https://okno-zavoza-dmitrii.streamlit.app/"
+APP = "https://okno-zavoza.streamlit.app/"
 ACCENT = RGBColor(0x1F, 0x4E, 0x79)
 GREY = RGBColor(0x55, 0x55, 0x55)
 
