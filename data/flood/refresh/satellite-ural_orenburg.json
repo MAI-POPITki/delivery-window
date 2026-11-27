@@ -2,8 +2,8 @@
   "kind": "satellite",
   "pid": "ural_orenburg",
   "state": "ok",
-  "checked_at": "2026-11-26T13:14:23.094812+00:00",
-  "last_success_at": "2026-11-26T13:14:23.094812+00:00",
+  "checked_at": "2026-11-27T11:58:54.693524+00:00",
+  "last_success_at": "2026-11-27T11:58:54.693524+00:00",
   "result": {
     "state": "ok",
     "acquired_at": "2026-11-25T07:32:31.025000Z",

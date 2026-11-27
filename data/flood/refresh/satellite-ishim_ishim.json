@@ -2,8 +2,8 @@
   "kind": "satellite",
   "pid": "ishim_ishim",
   "state": "ok",
-  "checked_at": "2026-11-26T13:14:11.070931+00:00",
-  "last_success_at": "2026-11-26T13:14:11.070931+00:00",
+  "checked_at": "2026-11-27T11:58:44.745338+00:00",
+  "last_success_at": "2026-11-27T11:58:44.745338+00:00",
   "result": {
     "state": "ok",
     "acquired_at": "2026-11-25T06:42:19.024000Z",

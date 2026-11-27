@@ -2,14 +2,14 @@
   "kind": "glofas",
   "pid": "ishim_ishim",
   "state": "ok",
-  "checked_at": "2026-11-26T12:58:21.896877+00:00",
-  "last_success_at": "2026-11-26T12:58:21.896877+00:00",
+  "checked_at": "2026-11-27T11:49:22.033226+00:00",
+  "last_success_at": "2026-11-27T11:49:22.033226+00:00",
   "result": {
     "state": "ok",
-    "fetched_at": "2026-11-26T12:58:21.890762+00:00",
-    "start": "2026-11-27",
-    "end": "2026-12-03",
+    "fetched_at": "2026-11-27T11:49:22.027055+00:00",
+    "start": "2026-11-28",
+    "end": "2026-12-04",
     "members": 50,
-    "version": "98067deb213b3bbfe37fb65a23bacd7045d676921c4e8d2f526314af5ed0ebda"
+    "version": "a9bf0fa357ac9d2e5e5d0a6787c4ff2dacfb47bedf231d472e40cca919d7c49b"
   }
 }
