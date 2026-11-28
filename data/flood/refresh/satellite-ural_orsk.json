@@ -2,12 +2,12 @@
   "kind": "satellite",
   "pid": "ural_orsk",
   "state": "ok",
-  "checked_at": "2026-11-27T11:58:56.867008+00:00",
-  "last_success_at": "2026-11-27T11:58:56.867008+00:00",
+  "checked_at": "2026-11-28T12:46:37.267421+00:00",
+  "last_success_at": "2026-11-28T12:46:37.267421+00:00",
   "result": {
     "state": "ok",
-    "acquired_at": "2026-11-24T07:12:29.024000Z",
+    "acquired_at": "2026-11-27T07:22:39.024000Z",
     "observed_fraction": 0.0,
-    "version": "S2B_MSIL2A_20261124T071229_R106_T40UFB_20261124T092153"
+    "version": "S2B_MSIL2A_20261127T072239_R006_T40UFB_20261127T093224"
   }
 }

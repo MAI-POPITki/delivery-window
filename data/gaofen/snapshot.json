@@ -2,7 +2,7 @@
   "schema_version": 1,
   "provider": "NSOAS",
   "provider_url": "https://osdds.nsoas.org.cn",
-  "checked_at": "2026-11-27T11:59:11.152520+00:00",
+  "checked_at": "2026-11-28T12:47:01.400888+00:00",
   "query_days": 90,
   "asset_kind": "browse_png",
   "ml_ready": false,
@@ -18,7 +18,7 @@
         114.95975768155664,
         60.741074667624865
       ],
-      "checked_at": "2026-11-27T11:59:11.152520+00:00",
+      "checked_at": "2026-11-28T12:47:01.400888+00:00",
       "catalog": [
         {
           "id": "2124470780359020546",
@@ -268,13 +268,12 @@
           "bytes": 1371176,
           "width": 1674,
           "height": 1186,
-          "downloaded_at": "2026-11-26T13:14:41.190045+00:00",
-          "validated_at": "2026-11-26T13:14:41.190045+00:00"
+          "downloaded_at": "2026-11-28T12:47:01.400888+00:00",
+          "validated_at": "2026-11-28T12:47:01.400888+00:00"
         }
       },
-      "status": "source_unavailable",
-      "last_success_at": "2026-11-26T13:14:41.190045+00:00",
-      "error": "ReadTimeout"
+      "status": "ready",
+      "last_success_at": "2026-11-28T12:47:01.400888+00:00"
     },
     "olekminsk": {
       "name": "Олёкминск",
@@ -287,7 +286,7 @@
         120.4755667141218,
         60.397774667624866
       ],
-      "checked_at": "2026-11-27T11:59:11.152520+00:00",
+      "checked_at": "2026-11-28T12:47:01.400888+00:00",
       "catalog": [
         {
           "id": "2125574109537439745",
@@ -327,16 +326,7 @@
           },
           "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261125/GF3_FSII_L1A_20261125027753_browse.png",
           "usage": "visual_review_only",
-          "ml_ready": false,
-          "preview": {
-            "file": "previews/dbe71007a14059abeb0da496.png",
-            "sha256": "b5ef4c7c754123bb7ca2080efff66b55801e7d2b77d8aabf3795333037ae510a",
-            "bytes": 2005268,
-            "width": 1681,
-            "height": 1663,
-            "downloaded_at": "2026-11-26T13:14:41.190045+00:00",
-            "validated_at": "2026-11-26T13:14:41.190045+00:00"
-          }
+          "ml_ready": false
         },
         {
           "id": "2121200730223087618",
@@ -466,13 +456,12 @@
           "bytes": 2005268,
           "width": 1681,
           "height": 1663,
-          "downloaded_at": "2026-11-26T13:14:41.190045+00:00",
-          "validated_at": "2026-11-26T13:14:41.190045+00:00"
+          "downloaded_at": "2026-11-28T12:47:01.400888+00:00",
+          "validated_at": "2026-11-28T12:47:01.400888+00:00"
         }
       },
-      "status": "source_unavailable",
-      "last_success_at": "2026-11-26T13:14:41.190045+00:00",
-      "error": "ReadTimeout"
+      "status": "ready",
+      "last_success_at": "2026-11-28T12:47:01.400888+00:00"
     },
     "pokrovsk": {
       "name": "Покровск",
@@ -485,7 +474,7 @@
         129.19332559002595,
         61.49827466762486
       ],
-      "checked_at": "2026-11-27T11:59:11.152520+00:00",
+      "checked_at": "2026-11-28T12:47:01.400888+00:00",
       "catalog": [
         {
           "id": "2124106613869449217",
@@ -608,7 +597,7 @@
           "ml_ready": false
         }
       ],
-      "catalog_count": 4,
+      "catalog_count": 5,
       "covered_count": 3,
       "scene": {
         "id": "2124106613869449217",
@@ -655,13 +644,12 @@
           "bytes": 2044355,
           "width": 1761,
           "height": 1659,
-          "downloaded_at": "2026-11-26T13:14:41.190045+00:00",
-          "validated_at": "2026-11-26T13:14:41.190045+00:00"
+          "downloaded_at": "2026-11-28T12:47:01.400888+00:00",
+          "validated_at": "2026-11-28T12:47:01.400888+00:00"
         }
       },
-      "status": "source_unavailable",
-      "last_success_at": "2026-11-26T13:14:41.190045+00:00",
-      "error": "ReadTimeout"
+      "status": "ready",
+      "last_success_at": "2026-11-28T12:47:01.400888+00:00"
     },
     "yakutsk_crossing": {
       "name": "Переправа Якутск — Нижний Бестях",
@@ -674,8 +662,57 @@
         129.86969838476375,
         62.009874667624864
       ],
-      "checked_at": "2026-11-27T11:59:11.152520+00:00",
+      "checked_at": "2026-11-28T12:47:01.400888+00:00",
       "catalog": [
+        {
+          "id": "2125913375824089089",
+          "product_name": "GF3_MH1_FSII_054202_E130.2_N61.6_20261126_L1A_HHHV_L10007509832",
+          "acquired_at_source": "2026-11-26 08:53:37",
+          "acquired_date": "2026-11-26",
+          "time_zone": "unspecified_by_catalogue",
+          "sensor": "FSII",
+          "processing_level": "L1A",
+          "polarization_code": "HHHV",
+          "footprint": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  128.898754,
+                  62.027217
+                ],
+                [
+                  130.977464,
+                  62.233004
+                ],
+                [
+                  131.432978,
+                  61.126458
+                ],
+                [
+                  129.426772,
+                  60.924411
+                ],
+                [
+                  128.898754,
+                  62.027217
+                ]
+              ]
+            ]
+          },
+          "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261126/GF3_FSII_L1A_20261126057123_browse.png",
+          "usage": "visual_review_only",
+          "ml_ready": false,
+          "preview": {
+            "file": "previews/979265c161c2561496b0cdbc.png",
+            "sha256": "462d84c85633958a2f2b5234a552698bddca72aae6c741b38d8811044ac0755c",
+            "bytes": 2122576,
+            "width": 1757,
+            "height": 1659,
+            "downloaded_at": "2026-11-28T12:47:01.400888+00:00",
+            "validated_at": "2026-11-28T12:47:01.400888+00:00"
+          }
+        },
         {
           "id": "2123353048834052098",
           "product_name": "GF3_MDJ_FSII_054029_E130.8_N61.8_20261114_L1A_HHHV_L10007504187",
@@ -837,13 +874,13 @@
           "ml_ready": false
         }
       ],
-      "catalog_count": 5,
-      "covered_count": 4,
+      "catalog_count": 7,
+      "covered_count": 5,
       "scene": {
-        "id": "2123353048834052098",
-        "product_name": "GF3_MDJ_FSII_054029_E130.8_N61.8_20261114_L1A_HHHV_L10007504187",
-        "acquired_at_source": "2026-11-14 08:50:15",
-        "acquired_date": "2026-11-14",
+        "id": "2125913375824089089",
+        "product_name": "GF3_MH1_FSII_054202_E130.2_N61.6_20261126_L1A_HHHV_L10007509832",
+        "acquired_at_source": "2026-11-26 08:53:37",
+        "acquired_date": "2026-11-26",
         "time_zone": "unspecified_by_catalogue",
         "sensor": "FSII",
         "processing_level": "L1A",
@@ -853,44 +890,43 @@
           "coordinates": [
             [
               [
-                129.658651,
-                62.238677
+                128.898754,
+                62.027217
               ],
               [
-                131.679397,
-                62.438681
+                130.977464,
+                62.233004
               ],
               [
-                132.142071,
-                61.332079
+                131.432978,
+                61.126458
               ],
               [
-                130.192346,
-                61.135792
+                129.426772,
+                60.924411
               ],
               [
-                129.658651,
-                62.238677
+                128.898754,
+                62.027217
               ]
             ]
           ]
         },
-        "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261119/GF3_FSII_L1A_20261119870618_browse.png",
+        "browse_url": "https://osdds.nsoas.org.cn/loadImg/browse///metadata_135/DDS_IMAGES/browse/GF3/FSII/L1A/20261126/GF3_FSII_L1A_20261126057123_browse.png",
         "usage": "visual_review_only",
         "ml_ready": false,
         "preview": {
-          "file": "previews/c741ffb65307ada86bdaf7c9.png",
-          "sha256": "88e3a64f75e2a988a182485a213c294dd5b95636432e9e8b4f2129b4077897be",
-          "bytes": 2032481,
-          "width": 1692,
-          "height": 1662,
-          "downloaded_at": "2026-11-26T13:14:41.190045+00:00",
-          "validated_at": "2026-11-26T13:14:41.190045+00:00"
+          "file": "previews/979265c161c2561496b0cdbc.png",
+          "sha256": "462d84c85633958a2f2b5234a552698bddca72aae6c741b38d8811044ac0755c",
+          "bytes": 2122576,
+          "width": 1757,
+          "height": 1659,
+          "downloaded_at": "2026-11-28T12:47:01.400888+00:00",
+          "validated_at": "2026-11-28T12:47:01.400888+00:00"
         }
       },
-      "status": "source_unavailable",
-      "last_success_at": "2026-11-26T13:14:41.190045+00:00",
-      "error": "ReadTimeout"
+      "status": "ready",
+      "last_success_at": "2026-11-28T12:47:01.400888+00:00"
     },
     "sangar": {
       "name": "Сангар",
@@ -903,7 +939,7 @@
         127.52105578595415,
         63.93847466762486
       ],
-      "checked_at": "2026-11-27T11:59:11.152520+00:00",
+      "checked_at": "2026-11-28T12:47:01.400888+00:00",
       "catalog": [
         {
           "id": "2124103199701798913",
@@ -993,13 +1029,12 @@
           "bytes": 2218039,
           "width": 1735,
           "height": 1659,
-          "downloaded_at": "2026-11-26T13:14:41.190045+00:00",
-          "validated_at": "2026-11-26T13:14:41.190045+00:00"
+          "downloaded_at": "2026-11-28T12:47:01.400888+00:00",
+          "validated_at": "2026-11-28T12:47:01.400888+00:00"
         }
       },
-      "status": "source_unavailable",
-      "last_success_at": "2026-11-26T13:14:41.190045+00:00",
-      "error": "ReadTimeout"
+      "status": "ready",
+      "last_success_at": "2026-11-28T12:47:01.400888+00:00"
     },
     "zhigansk": {
       "name": "Жиганск",
@@ -1012,7 +1047,7 @@
         123.37927298181246,
         66.79067466762486
       ],
-      "checked_at": "2026-11-27T11:59:11.152520+00:00",
+      "checked_at": "2026-11-28T12:47:01.400888+00:00",
       "catalog": [
         {
           "id": "2122290223902560258",
@@ -1142,13 +1177,12 @@
           "bytes": 2105474,
           "width": 1718,
           "height": 1659,
-          "downloaded_at": "2026-11-26T13:14:41.190045+00:00",
-          "validated_at": "2026-11-26T13:14:41.190045+00:00"
+          "downloaded_at": "2026-11-28T12:47:01.400888+00:00",
+          "validated_at": "2026-11-28T12:47:01.400888+00:00"
         }
       },
-      "status": "source_unavailable",
-      "last_success_at": "2026-11-26T13:14:41.190045+00:00",
-      "error": "ReadTimeout"
+      "status": "ready",
+      "last_success_at": "2026-11-28T12:47:01.400888+00:00"
     },
     "kyusyur": {
       "name": "Кюсюр",
@@ -1161,7 +1195,7 @@
         127.41384096075247,
         70.69977466762487
       ],
-      "checked_at": "2026-11-27T11:59:11.152520+00:00",
+      "checked_at": "2026-11-28T12:47:01.400888+00:00",
       "catalog": [
         {
           "id": "2119025140074221569",
@@ -1331,13 +1365,12 @@
           "bytes": 2325782,
           "width": 1719,
           "height": 1658,
-          "downloaded_at": "2026-11-26T13:14:41.190045+00:00",
-          "validated_at": "2026-11-26T13:14:41.190045+00:00"
+          "downloaded_at": "2026-11-28T12:47:01.400888+00:00",
+          "validated_at": "2026-11-28T12:47:01.400888+00:00"
         }
       },
-      "status": "source_unavailable",
-      "last_success_at": "2026-11-26T13:14:41.190045+00:00",
-      "error": "ReadTimeout"
+      "status": "ready",
+      "last_success_at": "2026-11-28T12:47:01.400888+00:00"
     }
   }
 }
